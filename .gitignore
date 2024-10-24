@@ -7,3 +7,9 @@ frontend/build
 frontend/env
 frontend/dev.vars
 frontend/wrangler
+
+### IntelliJ project files
+.idea/
+*.iml
+/target/*
+/**/target/
