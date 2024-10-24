@@ -1,6 +1,7 @@
 import { InputHTMLAttributes } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
-import { useFetcher, useLocation } from '@remix-run/react';
+import { useFetcher, useLocation, useNavigate } from '@remix-run/react';
+import { getForm } from '~/utils/form/form';
 
 interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
     logo?: string;
@@ -9,9 +10,17 @@ interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 Github 用户名...', ...props }) => {
     const fetcher = useFetcher();
+    const navigate = useNavigate();
     const { pathname } = useLocation();
     return (
-        <fetcher.Form action="/user" method="post">
+        <fetcher.Form
+            action="/user"
+            method="post"
+            onSubmit={(e) => {
+                e.preventDefault();
+                const { value: name } = getForm<HTMLInputElement>(e, 'name');
+                name.trim() ? navigate(`/user/${name}`) : navigate('/user');
+            }}>
             <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white">
                 {logo && <img alt="logo" src={logo} className="m-2 h-7 w-7" />}
                 <input
