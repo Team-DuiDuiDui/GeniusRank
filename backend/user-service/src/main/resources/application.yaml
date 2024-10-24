@@ -1,0 +1,56 @@
+server:
+  port: 9010
+
+spring:
+  profiles:
+    active: prod
+  application:
+    name: project-user
+  datasource:
+    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+    url: jdbc:shardingsphere:classpath:shardingsphere-config-${spring.profiles.active}.yaml
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${project.nacos.host}:${project.nacos.port}
+  data:
+    redis:
+      host: ${project.redis.host}
+      port: ${project.redis.port}
+    # password: ${project.redis.password}
+      database: ${project.redis.database}
+  mail:
+    enable: ${project.mail.enable}
+    host: ${project.mail.host}
+    default-encoding: UTF-8
+    username: ${project.mail.username}
+    password: ${project.mail.password}
+    project-name: ${project.mail.project-name}
+    properties:
+      mail.smtp.ssl.enable: ${project.mail.ssl.enable}
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: delFlag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+rocketmq:
+  name-server: ${project.rocketmq.name-server}
+  producer:
+    group: ${project.rocketmq.producer.group}
+    send-message-timeout: 2000
+    retry-times-when-send-failed: 1
+    retry-times-when-send-async-failed: 1
+
+project:
+  alioss:
+    enable: ${project.alioss.enable}
+    endpoint: ${project.alioss.endpoint}
+    access-key-id: ${project.alioss.access-key-id}
+    access-key-secret: ${project.alioss.access-key-secret}
+    bucket-name: ${project.alioss.bucket-name}
+    domain: ${project.alioss.domain}

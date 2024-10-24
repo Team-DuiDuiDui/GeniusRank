@@ -1,0 +1,28 @@
+project:
+  nacos:
+    host: 127.0.0.1
+    port: 8848
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0
+  mail:
+    enable: false #是否开启邮箱验证码服务
+    host: smtp.qq.com #邮箱服务器地址
+    username:  #发送者邮箱
+    password:  #发送者邮箱授权码
+    project-name: General-Project
+    ssl:
+      enable: true #启用SSL加密，这是为了确保邮件传输的安全性。
+  rocketmq:
+    name-server: 127.0.0.1:9876
+    producer:
+      group: common-message-execute_pg
+  alioss:
+    enable: false #是否开启阿里云 OSS 服务，如不开启则采用本地存储
+    endpoint:  #阿里云 OSS（对象存储服务）的访问域名
+    access-key-id: #用于访问 OSS 的标识用户的唯一标识符
+    access-key-secret:  #用于访问 OSS 的配对密钥
+    bucket-name:  #OSS 中的存储空间名称
+    domain: 127.0.0.1:9000 #本地存储空间域名，如不采用 alioss，则该存储空间为兜底
