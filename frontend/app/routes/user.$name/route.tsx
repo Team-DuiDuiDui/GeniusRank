@@ -6,9 +6,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
     const t = await i18nServer.getFixedT(request);
-    return json({ title: t('title'), description: t('user.description') });
+    console.log(params);
+    return json({ title: `${params?.name ?? ''} | Genius Rank`, description: t('user.description') });
 }
 
 export default function Index() {

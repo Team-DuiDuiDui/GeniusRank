@@ -1,3 +1,10 @@
 {
-    "react-i18n.i18nPaths": "app\\locales"
+    "react-i18n.i18nPaths": "app/locales",
+    "editor.formatOnSave": true,
+    "css.customData": [
+        ".vscode/tailwindcss.json"
+    ],
+    "cSpell.words": [
+        "loginbg"
+    ],
 }

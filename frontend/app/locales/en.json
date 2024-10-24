@@ -1,6 +1,13 @@
 {
   "common": {
-    "title": "Program",
-    "languages": "Languages"
+    "title": "Genius Rank - Github user analysis",
+    "languages": "Languages",
+    "search": {
+      "placeholder": "Input the username on Github..."
+    },
+    "user": {
+      "description": "GitHub User Analysis",
+      "title": "Search for user  | Genius Rank"
+    }
   }
 }

@@ -12,6 +12,8 @@
     "typegen": "wrangler types"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.5.1",
+    "@headlessui/react": "^2.1.10",
     "@remix-run/cloudflare": "^2.13.1",
     "@remix-run/cloudflare-pages": "^2.13.1",
     "@remix-run/react": "^2.13.1",

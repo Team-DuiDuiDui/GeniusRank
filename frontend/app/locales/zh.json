@@ -1,6 +1,13 @@
 {
   "common": {
-    "title": "项目",
-    "languages": "语言"
+    "title": "Genius Rank - Github 用户分析",
+    "languages": "语言",
+    "search": {
+      "placeholder": "请输入 Github 用户名称..."
+    },
+    "user": {
+      "description": "Github 用户分析",
+      "title": "用户搜索 | Genius Rank"
+    }
   }
 }
