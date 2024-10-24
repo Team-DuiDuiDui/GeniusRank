@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
+    "@formkit/auto-animate": "^0.8.2",
     "@headlessui/react": "^2.1.10",
     "@remix-run/cloudflare": "^2.13.1",
     "@remix-run/cloudflare-pages": "^2.13.1",

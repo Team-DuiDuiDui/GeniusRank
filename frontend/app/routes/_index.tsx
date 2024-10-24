@@ -15,7 +15,7 @@ export default function Index() {
     return (
         <>
             <SearchCurtain />
-            <div className="flex h-screen items-center justify-center">
+            <div className="flex h-screen items-center justify-center overflow-auto">
                 <div className="flex flex-row items-center gap-16 w-full justify-center"></div>
             </div>
         </>

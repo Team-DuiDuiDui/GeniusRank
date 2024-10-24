@@ -1238,6 +1238,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@formkit/auto-animate@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "@formkit/auto-animate@npm:0.8.2"
+  checksum: 10c0/0b24af241c229f37643cd62ea78fd7fddf621c06516cf62452035ea0bf489b6b53068eea47abb40b6bb3653bb91c1efad8b7257014a3559d26ad77b47b5337cb
+  languageName: node
+  linkType: hard
+
 "@headlessui/react@npm:^2.1.10":
   version: 2.1.10
   resolution: "@headlessui/react@npm:2.1.10"
@@ -8113,6 +8120,7 @@ __metadata:
   dependencies:
     "@ant-design/icons": "npm:^5.5.1"
     "@cloudflare/workers-types": "npm:^4.20240512.0"
+    "@formkit/auto-animate": "npm:^0.8.2"
     "@headlessui/react": "npm:^2.1.10"
     "@remix-run/cloudflare": "npm:^2.13.1"
     "@remix-run/cloudflare-pages": "npm:^2.13.1"
