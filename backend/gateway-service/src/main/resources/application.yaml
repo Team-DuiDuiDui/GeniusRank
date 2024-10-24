@@ -1,0 +1,18 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: project-gateway
+  profiles:
+    active: aggregation
+    # active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${project.nacos.host}:${project.nacos.port}
+  data:
+    redis:
+      host: ${project.redis.host}
+      port: ${project.redis.port}
+      # password: ${project.redis.password}
+      database: ${project.redis.database}

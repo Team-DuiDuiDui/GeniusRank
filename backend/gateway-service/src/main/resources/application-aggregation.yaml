@@ -1,0 +1,40 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: project-user-aggregation
+          uri: lb://project-aggregation/api/user/**
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - name: TokenValidate
+              args:
+                whitePathList:
+                  - /api/user/code
+                  - /api/user/has-email
+                  - /api/user/has-username
+                  - /api/user/register
+                  - /api/user/loginByCode
+                  - /api/user/login
+                  - /api/user/forget-password
+
+        - id: project-common-aggregation
+          uri: lb://project-aggregation/api/common/**
+          predicates:
+            - Path=/api/common/**
+          filters:
+            - name: TokenValidate
+              args:
+                whitePathList:
+                  - /api/common/ping
+                  - /api/common/files/**
+
+project:
+  nacos:
+    host: 127.0.0.1
+    port: 8848
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    database: 1
