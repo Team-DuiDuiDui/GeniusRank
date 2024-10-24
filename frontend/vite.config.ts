@@ -3,6 +3,7 @@ import {
   cloudflareDevProxyVitePlugin as remixCloudflareDevProxy,
 } from "@remix-run/dev";
 import { defineConfig } from "vite";
+import { envOnlyMacros } from "vite-env-only";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 declare module "@remix-run/cloudflare" {
@@ -12,7 +13,7 @@ declare module "@remix-run/cloudflare" {
 }
 
 export default defineConfig({
-  plugins: [
+  plugins: [envOnlyMacros(),
     remixCloudflareDevProxy(),
     remix({
       future: {
