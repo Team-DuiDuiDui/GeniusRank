@@ -15,6 +15,12 @@
             <artifactId>project-user</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>project-analyze</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

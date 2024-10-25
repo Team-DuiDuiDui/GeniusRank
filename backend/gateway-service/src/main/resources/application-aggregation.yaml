@@ -29,6 +29,16 @@ spring:
                   - /api/common/ping
                   - /api/common/files/**
 
+        - id: project-analyze-aggregation
+          uri: lb://project-aggregation/api/analyze/**
+          predicates:
+            - Path=/api/analyze/**
+          filters:
+            - name: TokenValidate
+              args:
+                whitePathList:
+                  - /api/analyze/ping
+
 project:
   nacos:
     host: 127.0.0.1
