@@ -2,12 +2,12 @@ import { json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
 import axios from 'axios';
 import { ZodError } from 'zod';
 import i18nServer from '~/modules/i18n.server';
-import { githubUser } from '~/utils/requests/github/user';
+import { githubUserServerOnly } from '~/utils/requests/github/user.server';
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
     const t = await i18nServer.getFixedT(request);
     if (params.name) {
-        const user = new githubUser(params.name);
+        const user = new githubUserServerOnly(params.name);
         try {
             const data = await user.getUser();
             return json({
