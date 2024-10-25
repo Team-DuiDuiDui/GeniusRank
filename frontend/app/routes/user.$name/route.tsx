@@ -1,8 +1,10 @@
 import { type MetaFunction } from '@remix-run/cloudflare';
 import { loader } from './loader';
-import { isRouteErrorResponse, useLoaderData, useRouteError } from '@remix-run/react';
+import { isRouteErrorResponse, useLoaderData, useParams, useRouteError } from '@remix-run/react';
 import UserBasic from '~/components/userinfo/basic';
 import UserInfo from '~/components/userinfo/info';
+import { githubUser } from '~/utils/requests/ghapis/user';
+import { useEffect } from 'react';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
@@ -12,6 +14,12 @@ export { loader };
 
 export default function Index() {
     const data = useLoaderData<typeof loader>();
+    const params = useParams();
+    const user = new githubUser(params?.name ?? '');
+    useEffect(() => {
+        console.log(user.getUserPrs());
+        // console.log(user.getUserInfo());
+    }, []);
     return (
         <>
             <div className="flex h-screen items-center justify-center w-full">

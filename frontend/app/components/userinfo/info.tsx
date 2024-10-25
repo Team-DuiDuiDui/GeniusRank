@@ -1,11 +1,11 @@
 import { Avatar } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { user } from '~/utils/requests/ghapis/typings/user';
+import { User } from '~/utils/requests/ghapis/typings/user';
 import InfoLink, { InfoIcon } from '../infoLink';
 import { EnvironmentOutlined, ShopOutlined, XOutlined } from '@ant-design/icons';
 
 interface userInfo {
-    data: user;
+    data: User;
 }
 
 const UserInfo: React.FC<userInfo> = ({ data }) => {
