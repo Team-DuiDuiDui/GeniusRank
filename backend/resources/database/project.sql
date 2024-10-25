@@ -148,7 +148,7 @@ CREATE TABLE t_github_user_tech_cap_assessment (
 # 9. 创建 AI Prompt 表(Prompt)
 CREATE TABLE t_prompt (
    id             BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,
-   prompt_name    VARCHAR(255) COMMENT 'Prompt 名称',
+   prompt_type    INT NOT NULL COMMENT 'Prompt 类型 1: 流式prompt 2: 同步prompt',
    prompt_text    VARCHAR(1000) COMMENT 'Prompt 描述',
 
    create_time    DATETIME NULL COMMENT '创建时间',
