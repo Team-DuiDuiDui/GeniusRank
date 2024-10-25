@@ -19,7 +19,6 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 Github 用�
             onSubmit={(e) => {
                 e.preventDefault();
                 const { value: name } = getForm<HTMLInputElement>(e, 'name');
-                console.log('js');
                 name.trim() ? navigate(`/user/${name}`) : pathname.includes('user/') && navigate('/user');
             }}>
             <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white">

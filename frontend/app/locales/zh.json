@@ -7,7 +7,8 @@
     },
     "user": {
       "description": "Github 用户分析",
-      "title": "用户搜索 | Genius Rank"
+      "title": "用户搜索 | Genius Rank",
+      "no_description": "用户暂无简介"
     }
   }
 }

@@ -7,7 +7,8 @@
     },
     "user": {
       "description": "GitHub User Analysis",
-      "title": "Search for user  | Genius Rank"
+      "title": "Search for user  | Genius Rank",
+      "no_description": "This user has no descriptions"
     }
   }
 }
