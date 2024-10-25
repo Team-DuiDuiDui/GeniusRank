@@ -19,13 +19,14 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 Github 用�
             onSubmit={(e) => {
                 e.preventDefault();
                 const { value: name } = getForm<HTMLInputElement>(e, 'name');
+                console.log('js');
                 name.trim() ? navigate(`/user/${name}`) : pathname.includes('user/') && navigate('/user');
             }}>
             <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white">
                 {logo && <img alt="logo" src={logo} className="m-2 h-7 w-7" />}
                 <input
                     {...props}
-                    type="text"
+                    // type="text"
                     name="name"
                     defaultValue={pathname.includes('user/') ? decodeURIComponent(pathname.split('/')[2]) : ''}
                     placeholder={placeholder}

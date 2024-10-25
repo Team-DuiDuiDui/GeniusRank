@@ -1,7 +1,6 @@
 import { json, LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
 import SearchCurtain from '~/components/searchCurtain';
 import i18nServer from '~/modules/i18n.server';
-
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };
@@ -16,7 +15,9 @@ export default function Index() {
         <>
             <SearchCurtain />
             <div className="flex h-screen items-center justify-center overflow-auto">
-                <div className="flex flex-row items-center gap-16 w-full justify-center"></div>
+                <div className="flex flex-row items-center gap-16 w-full justify-center">
+                    <div className="w-1/2"></div>
+                </div>
             </div>
         </>
     );
