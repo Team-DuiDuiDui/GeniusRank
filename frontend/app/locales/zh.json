@@ -1,14 +1,22 @@
 {
-  "common": {
-    "title": "Genius Rank - Github 用户分析",
-    "languages": "语言",
-    "search": {
-      "placeholder": "请输入 Github 用户名称..."
-    },
-    "user": {
-      "description": "Github 用户分析",
-      "title": "用户搜索 | Genius Rank",
-      "no_description": "用户暂无简介"
+    "common": {
+        "title": "Genius Rank - Github 用户分析",
+        "languages": "语言",
+        "search": {
+            "placeholder": "请输入 Github 用户名称..."
+        },
+        "user": {
+            "description": "Github 用户分析",
+            "title": "用户搜索 | Genius Rank",
+            "no_description": "用户暂无简介",
+            "followers": "位粉丝",
+            "following": "个正在关注",
+            "err": {
+                "not_found": "找不到用户",
+                "parse_error": "解析错误",
+                "something_wrong": "出错了",
+                "rate_limit": "请求频率过快"
+            }
+        }
     }
-  }
 }

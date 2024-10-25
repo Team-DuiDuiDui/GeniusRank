@@ -32,15 +32,12 @@ export function ErrorBoundary() {
         if (error.status === 404)
             return (
                 <div>
-                    <div>没找到用户</div>
+                    <div>未找到用户</div>
                 </div>
             );
         else
             return (
                 <div>
-                    <h1>
-                        {error.status} {error.statusText}
-                    </h1>
                     <p>{error.data}</p>
                 </div>
             );
