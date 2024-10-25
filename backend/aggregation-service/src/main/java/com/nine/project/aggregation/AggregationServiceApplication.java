@@ -11,10 +11,12 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * 聚合服务应用启动器
  */
 @SpringBootApplication(scanBasePackages = {
-        "com.nine.project.user"
+        "com.nine.project.user",
+        "com.nine.project.analyze"
 })
 @MapperScan(value = {
-        "com.nine.project.user.dao.mapper"
+        "com.nine.project.user.dao.mapper",
+        "com.nine.project.analyze.dao.mapper"
 })
 @EnableDiscoveryClient
 public class AggregationServiceApplication {
