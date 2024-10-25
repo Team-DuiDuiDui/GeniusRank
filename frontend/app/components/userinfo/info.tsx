@@ -23,7 +23,15 @@ const UserInfo: React.FC<userInfo> = ({ data }) => {
                     </p>
                 </div>
                 <div className="ml-auto flex flex-col">
-                    {data.location && <InfoIcon icon={<EnvironmentOutlined />}>{data.location}</InfoIcon>}
+                    {data.location && (
+                        <InfoIcon icon={<EnvironmentOutlined />}>
+                            {data.location
+                                .replaceAll('Taiwan', 'Taiwan, China')
+                                .replaceAll('taiwan', 'Taiwan, China')
+                                .replaceAll('台灣', '中国台湾')
+                                .replaceAll('臺灣', '中国台湾')}
+                        </InfoIcon>
+                    )}
                     {data.company && (
                         <InfoIcon
                             href={
