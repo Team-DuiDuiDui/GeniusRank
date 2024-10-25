@@ -9,7 +9,6 @@ import com.nine.project.framework.web.Results;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 /**
  * Prompt 控制层

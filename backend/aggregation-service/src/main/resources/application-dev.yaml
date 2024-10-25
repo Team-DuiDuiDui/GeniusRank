@@ -26,3 +26,5 @@ project:
     access-key-secret:  #用于访问 OSS 的配对密钥
     bucket-name:  #OSS 中的存储空间名称
     domain: 127.0.0.1:9000 #本地存储空间域名，如不采用 alioss，则该存储空间为兜底
+  ai:
+    apiKey: d0e025b0e9be15f6e5c4e9396d5326ad.AbL2roLYtVh8VirS

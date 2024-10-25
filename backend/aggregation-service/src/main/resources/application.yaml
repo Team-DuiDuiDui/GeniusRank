@@ -54,3 +54,6 @@ project:
     access-key-secret: ${project.alioss.access-key-secret}
     bucket-name: ${project.alioss.bucket-name}
     domain: ${project.alioss.domain}
+
+ai:
+  apiKey: ${project.ai.apiKey}

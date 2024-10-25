@@ -64,6 +64,7 @@ public enum BaseErrorCode implements IErrorCode {
     SMS_SERVICE_ERROR("C0101", "短信服务出错"),
     MESSAGE_QUEUE_ERROR("C0102", "消息队列出错"),
     OSS_SERVICE_ERROR("C0103", "对象存储服务出错"),
+    AI_SERVICE_ERROR("C0104", "AI 服务出错"),
 
     // ========== 二级宏观错误码 RPC服务出错 ==========
     RPC_SERVICE_ERROR("C0110", "RPC服务出错"),
