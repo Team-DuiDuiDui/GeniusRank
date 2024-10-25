@@ -1,6 +1,6 @@
 import { Avatar } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { user } from '~/utils/requests/github/typings/user';
+import { user } from '~/utils/requests/ghapis/typings/user';
 import InfoLink, { InfoIcon } from '../infoLink';
 import { EnvironmentOutlined, ShopOutlined, XOutlined } from '@ant-design/icons';
 
