@@ -37,11 +37,19 @@ public class PromptController {
     }
 
     /**
+     * 根据 type 查询 Prompt 接口
+     */
+    @GetMapping("/api/analyze/prompt/type/{type}")
+    public Result<PromptDO> getPromptByType(@PathVariable Integer type) {
+        return Results.success(promptService.getPromptByType(type));
+    }
+
+    /**
      * 新增 Prompt 接口
     */
     @PostMapping("/api/analyze/prompt")
     public Result<Void> addUser(@RequestBody PromptDO prompt) {
-        promptService.save(prompt);
+        promptService.create(prompt);
         return Results.success();
     }
 
@@ -50,7 +58,7 @@ public class PromptController {
      */
     @PutMapping("/api/analyze/prompt")
     public Result<Void> updateUser(@RequestBody PromptDO prompt) {
-        promptService.updateById(prompt);
+        promptService.update(prompt);
         return Results.success();
     }
 
@@ -59,7 +67,7 @@ public class PromptController {
      */
     @DeleteMapping("/api/analyze/prompt/{id}")
     public Result<Void> deleteUser(@PathVariable Long id) {
-        promptService.removeById(id);
+        promptService.remove(id);
         return Results.success();
     }
 }

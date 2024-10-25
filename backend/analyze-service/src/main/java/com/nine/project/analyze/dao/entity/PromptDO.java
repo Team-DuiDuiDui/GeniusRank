@@ -17,9 +17,9 @@ public class PromptDO extends BaseDO {
     private Long id;
 
     /**
-     * prompt 名字
+     * prompt 类型
      */
-    private String promptName;
+    private int promptType;
 
     /**
      * prompt 内容
