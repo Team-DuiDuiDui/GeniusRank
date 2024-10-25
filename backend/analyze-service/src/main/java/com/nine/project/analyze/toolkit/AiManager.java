@@ -25,7 +25,7 @@ public class AiManager {
 
     public static final float TEMPERATURE = 0.95f;
 
-    public static final String SYNC_PROMPT = "请回复用户的问题，回复内容不要超过100字。";
+    public static final String GENERAL_PROMPT = "你是一个乐于解答各种问题的助手，你的任务是为用户提供专业、准确、有见地的建议。";
 
     /**
      * 流式请求
