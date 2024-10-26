@@ -1,18 +1,17 @@
-import toast from "react-hot-toast";
-
+import toast from 'react-hot-toast';
 
 export const handleGithubReq = async <T, U>(
-    req: ()=>Promise<U>,
+    req: () => Promise<U>,
     success: (data: U) => Promise<T>,
-    errorResolve?: (error: any) => void,
+    errorResolve?: (error: unknown) => void,
     toast_error: boolean = true,
-    toast_success?: boolean,
-) :Promise<T | undefined> => {
+    toast_success?: boolean
+): Promise<T | undefined> => {
     if (!errorResolve) {
         errorResolve = (error) => {
             console.error(error);
             throw error;
-        }
+        };
     }
 
     try {
@@ -28,4 +27,4 @@ export const handleGithubReq = async <T, U>(
         }
         errorResolve(error);
     }
-}
+};

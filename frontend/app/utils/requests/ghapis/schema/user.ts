@@ -69,10 +69,10 @@ export const userAsFollowerSchema = z.object({
   events_url: z.string(),
   received_events_url: z.string(),
   type: z.string(),
-  site_admin: z.boolean()
-})
+  site_admin: z.boolean(),
+});
 
-export const userAsFollowerArraySchema = z.array(userAsFollowerSchema)
+export const userAsFollowerArraySchema = z.array(userAsFollowerSchema);
 
 export const searchResultTextMatchesSchema = z.array(
   z.record(z.unknown()).and(
@@ -327,6 +327,16 @@ export const simpleUser4Schema = z.record(z.unknown()).and(
   }),
 );
 
+export const codeOfConductSchema = z.record(z.unknown()).and(
+  z.object({
+    key: z.string(),
+    name: z.string(),
+    url: z.string(),
+    body: z.string().optional(),
+    html_url: z.string().nullable(),
+  }),
+);
+
 export const milestoneSchema = z.record(z.unknown()).and(
   z.object({
     url: z.string(),
@@ -471,6 +481,188 @@ export const repositorySchema = z.record(z.unknown()).and(
   }),
 );
 
+export const minimalRepositorySchema = z.record(z.unknown()).and(
+  z.object({
+    id: z.number(),
+    node_id: z.string(),
+    name: z.string(),
+    full_name: z.string(),
+    owner: simpleUserSchema,
+    private: z.boolean(),
+    html_url: z.string(),
+    description: z.string().nullable(),
+    fork: z.boolean(),
+    url: z.string(),
+    archive_url: z.string(),
+    assignees_url: z.string(),
+    blobs_url: z.string(),
+    branches_url: z.string(),
+    collaborators_url: z.string(),
+    comments_url: z.string(),
+    commits_url: z.string(),
+    compare_url: z.string(),
+    contents_url: z.string(),
+    contributors_url: z.string(),
+    deployments_url: z.string(),
+    downloads_url: z.string(),
+    events_url: z.string(),
+    forks_url: z.string(),
+    git_commits_url: z.string(),
+    git_refs_url: z.string(),
+    git_tags_url: z.string(),
+    git_url: z.string().optional(),
+    issue_comment_url: z.string(),
+    issue_events_url: z.string(),
+    issues_url: z.string(),
+    keys_url: z.string(),
+    labels_url: z.string(),
+    languages_url: z.string(),
+    merges_url: z.string(),
+    milestones_url: z.string(),
+    notifications_url: z.string(),
+    pulls_url: z.string(),
+    releases_url: z.string(),
+    ssh_url: z.string().optional(),
+    stargazers_url: z.string(),
+    statuses_url: z.string(),
+    subscribers_url: z.string(),
+    subscription_url: z.string(),
+    tags_url: z.string(),
+    teams_url: z.string(),
+    trees_url: z.string(),
+    clone_url: z.string().optional(),
+    mirror_url: z.string().optional().nullable(),
+    hooks_url: z.string(),
+    svn_url: z.string().optional(),
+    homepage: z.string().optional().nullable(),
+    language: z.string().optional().nullable(),
+    forks_count: z.number().optional(),
+    stargazers_count: z.number().optional(),
+    watchers_count: z.number().optional(),
+    size: z.number().optional(),
+    default_branch: z.string().optional(),
+    open_issues_count: z.number().optional(),
+    is_template: z.boolean().optional(),
+    topics: z.array(z.string()).optional(),
+    has_issues: z.boolean().optional(),
+    has_projects: z.boolean().optional(),
+    has_wiki: z.boolean().optional(),
+    has_pages: z.boolean().optional(),
+    has_downloads: z.boolean().optional(),
+    has_discussions: z.boolean().optional(),
+    archived: z.boolean().optional(),
+    disabled: z.boolean().optional(),
+    visibility: z.string().optional(),
+    pushed_at: z.string().optional().nullable(),
+    created_at: z.string().optional().nullable(),
+    updated_at: z.string().optional().nullable(),
+    permissions: z
+      .record(z.unknown())
+      .and(
+        z.object({
+          admin: z.boolean().optional(),
+          maintain: z.boolean().optional(),
+          push: z.boolean().optional(),
+          triage: z.boolean().optional(),
+          pull: z.boolean().optional(),
+        }),
+      )
+      .optional(),
+    role_name: z.string().optional(),
+    temp_clone_token: z.string().optional(),
+    delete_branch_on_merge: z.boolean().optional(),
+    subscribers_count: z.number().optional(),
+    network_count: z.number().optional(),
+    code_of_conduct: codeOfConductSchema.optional(),
+    license: z
+      .record(z.unknown())
+      .and(
+        z.object({
+          key: z.string().optional(),
+          name: z.string().optional(),
+          spdx_id: z.string().optional(),
+          url: z.string().optional().nullable(),
+          node_id: z.string().optional(),
+        }),
+      )
+      .optional()
+      .nullable(),
+    forks: z.number().optional(),
+    open_issues: z.number().optional(),
+    watchers: z.number().optional(),
+    allow_forking: z.boolean().optional(),
+    web_commit_signoff_required: z.boolean().optional(),
+    security_and_analysis: z
+      .record(z.unknown())
+      .and(
+        z.object({
+          advanced_security: z
+            .record(z.unknown())
+            .and(
+              z.object({
+                status: z
+                  .union([z.literal("enabled"), z.literal("disabled")])
+                  .optional(),
+              }),
+            )
+            .optional(),
+          dependabot_security_updates: z
+            .record(z.unknown())
+            .and(
+              z.object({
+                status: z
+                  .union([z.literal("enabled"), z.literal("disabled")])
+                  .optional(),
+              }),
+            )
+            .optional(),
+          secret_scanning: z
+            .record(z.unknown())
+            .and(
+              z.object({
+                status: z
+                  .union([z.literal("enabled"), z.literal("disabled")])
+                  .optional(),
+              }),
+            )
+            .optional(),
+          secret_scanning_push_protection: z
+            .record(z.unknown())
+            .and(
+              z.object({
+                status: z
+                  .union([z.literal("enabled"), z.literal("disabled")])
+                  .optional(),
+              }),
+            )
+            .optional(),
+          secret_scanning_non_provider_patterns: z
+            .record(z.unknown())
+            .and(
+              z.object({
+                status: z
+                  .union([z.literal("enabled"), z.literal("disabled")])
+                  .optional(),
+              }),
+            )
+            .optional(),
+          secret_scanning_ai_detection: z
+            .record(z.unknown())
+            .and(
+              z.object({
+                status: z
+                  .union([z.literal("enabled"), z.literal("disabled")])
+                  .optional(),
+              }),
+            )
+            .optional(),
+        }),
+      )
+      .optional()
+      .nullable(),
+  }),
+);
+
 export const issueSearchResultItemSchema = z.record(z.unknown()).and(
   z.object({
     url: z.string(),
@@ -533,6 +725,8 @@ export const issueSearchResultItemSchema = z.record(z.unknown()).and(
     reactions: reactionRollupSchema.optional(),
   }),
 );
+
+export const userReposSchema = z.array(minimalRepositorySchema);
 
 export const issueSearchResultSchema = z.record(z.unknown()).and(
   z.object({
