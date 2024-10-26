@@ -23,6 +23,7 @@
         "@remix-run/cloudflare-pages": "^2.13.1",
         "@remix-run/react": "^2.13.1",
         "axios": "^1.7.7",
+        "cheerio": "^1.0.0",
         "dayjs": "^1.11.13",
         "i18next": "^23.16.2",
         "i18next-browser-languagedetector": "^8.0.0",

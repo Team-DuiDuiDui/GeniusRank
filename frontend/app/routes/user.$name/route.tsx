@@ -62,11 +62,12 @@ export default function Index() {
     const getAndSetUserRegion = async () => {
         const axiosInstance = createInstanceForGithub(localStorage.GITHUB_ACCESS_TOKEN);
         setUserRegion(await guessRegion({userData: data.userData, axiosInstance}))
+        console.log(userRegion);
     }
     useEffect(() => {
         setUserPRs(null);
         getAndSetUserInfos();
-        getAndSetUserRegion();
+        // getAndSetUserRegion();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
     return (

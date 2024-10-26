@@ -12,17 +12,17 @@ export const handleRequest = async <T, U>(
 
     if (!errorResolve) {
         errorResolve = (error) => {
-            console.error(error);
             throw error;
         };
     }
 
     let attempt = 0;
 
-    while (attempt < maxRetries) {
+    while (attempt <= maxRetries) {
         try {
             const res = await req();
             const result = await success(res);
+            console.log(result)
             if (toast_success) {
                 toast.success('Success');
             }
@@ -33,7 +33,7 @@ export const handleRequest = async <T, U>(
             if (shouldRetryCondition) {
                 attempt++;
                 if (attempt < maxRetries) {
-                    continue; // 重试
+                    continue;
                 }
             }
 
@@ -96,5 +96,5 @@ export const handleServerReq = async <T, U>(
     req: () => Promise<U>,
     success: (data: U) => Promise<T>,
 ): Promise<T | undefined> => {
-    return handleRequest(req, success, undefined,0 , false, false);
+    return handleRequest(req, success, undefined, 0, false, false);
 }
