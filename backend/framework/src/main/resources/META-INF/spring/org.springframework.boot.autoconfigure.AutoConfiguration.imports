@@ -1,0 +1,3 @@
+com.nine.project.framework.config.WebAutoConfiguration
+com.nine.project.framework.config.UserConfiguration
+com.nine.project.framework.database.config.MybatisPlusAutoConfiguration
