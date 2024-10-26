@@ -15,8 +15,9 @@ export class GithubUserServerOnly extends GithubUser {
             baseURL: 'https://api.github.com',
             headers: {
                 Authorization: `token ${this.token}`,
+                'User-Agent': 'Team-Duiduidui: Genius Rank',
             },
-        })
+        });
     }
 
     async getUser(): Promise<User | undefined> {

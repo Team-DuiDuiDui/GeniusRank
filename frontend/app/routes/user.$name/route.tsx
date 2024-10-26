@@ -6,12 +6,13 @@ import UserInfo from '~/components/userinfo/info';
 import { githubUser } from '~/utils/requests/ghapis/user';
 import { useEffect, useState } from 'react';
 import UserPRs from '~/components/userinfo/prs';
-import { IssueSearchResult } from '~/utils/requests/ghapis/typings/user';
+import { IssueSearchResult, UserRepos } from '~/utils/requests/ghapis/typings/user';
 import UserIssues from '~/components/userinfo/issues';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { ZodError } from 'zod';
 import { useTranslation } from 'react-i18next';
+import UserRepositories from '~/components/userinfo/repos';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -32,7 +33,7 @@ export default function Index() {
     const user = new githubUser(params?.name ?? '');
     const [userPRs, setUserPRs] = useState<null | IssueSearchResult>(null);
     const [userIssues, setUserIssues] = useState<null | IssueSearchResult>(null);
-    const [userRegion, setUserRegion] = useState<null | string>(null);
+    const [userRepositories, setUserRepositories] = useState<null | UserRepos>(null);
     const getAndSetUserInfos = async () => {
         try {
             console.log(localStorage)
@@ -40,7 +41,9 @@ export default function Index() {
             setUserPRs(prs);
             const issues = await user.getUserIssues();
             setUserIssues(issues);
+            setUserRepositories(await user.getUserRepos());
         } catch (e) {
+            console.error(e);
             // eslint-disable-next-line import/no-named-as-default-member
             if (axios.isAxiosError(e)) {
                 console.log(e);
@@ -66,6 +69,7 @@ export default function Index() {
                         <UserInfo data={data.userData} />
                         <UserPRs data={userPRs} />
                         <UserIssues data={userIssues} />
+                        <UserRepositories data={userRepositories} userData={data.userData} />
                     </UserBasic>
                 </div>
             </div>

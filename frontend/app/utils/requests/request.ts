@@ -12,7 +12,7 @@ export const handleRequest = async <T, U>(
         errorResolve = (error) => {
             console.error(error);
             throw error;
-        }
+        };
     }
 
     try {
