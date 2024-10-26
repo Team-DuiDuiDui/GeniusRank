@@ -2,6 +2,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { IssueSearchResult, UserRepos } from './typings/user';
 import { issueSearchResultSchema, userReposSchema } from './schema/user';
+import { createInstanceForGithub } from '../instance';
 
 export class githubUser {
     public name: string;
@@ -12,12 +13,7 @@ export class githubUser {
 
     constructor(name: string, token?: string) {
         this.name = name;
-        this.axiosInstance = axios.create({
-            baseURL: 'https://api.github.com',
-            headers: token ? {
-                Authorization: `token ${token}`,
-            } : {},
-        });
+        this.axiosInstance = createInstanceForGithub(token);
         this.isAuthorized = true;
     }
 

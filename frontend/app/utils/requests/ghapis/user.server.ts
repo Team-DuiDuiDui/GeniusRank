@@ -3,6 +3,7 @@ import { User } from './typings/user';
 import { githubUser as GithubUser } from './user';
 import axios, { AxiosInstance } from 'axios';
 import { handleServerReq } from '../request';
+import { createInstanceForGithub } from '../instance';
 
 export class GithubUserServerOnly extends GithubUser {
     private token: string;
@@ -11,13 +12,7 @@ export class GithubUserServerOnly extends GithubUser {
     constructor(name: string, token: string) {
         super(name);
         this.token = token;
-        this.axiosInstanceWithServerToken = axios.create({
-            baseURL: 'https://api.github.com',
-            headers: {
-                Authorization: `token ${this.token}`,
-                'User-Agent': 'Team-Duiduidui: Genius Rank',
-            },
-        });
+        this.axiosInstanceWithServerToken = createInstanceForGithub(token);
     }
 
     async getUser(): Promise<User | undefined> {
