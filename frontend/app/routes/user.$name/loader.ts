@@ -4,10 +4,10 @@ import { ZodError } from 'zod';
 import i18nServer from '~/modules/i18n.server';
 import { GithubUserServerOnly } from '~/utils/requests/ghapis/user.server';
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const t = await i18nServer.getFixedT(request);
     if (params.name) {
-        const user = new GithubUserServerOnly(params.name);
+        const user = new GithubUserServerOnly(params.name, context.cloudflare.env.GITHUB_ACCESS_TOKEN);
         try {
             const data = await user.getUser();
             return json({
