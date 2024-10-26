@@ -4,6 +4,7 @@ import i18nServer, { localeCookie } from './modules/i18n.server';
 import { useChangeLanguage } from 'remix-i18next/react';
 import { Toaster } from 'react-hot-toast';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { ClientOnly } from 'remix-utils/client-only';
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
 import './tailwind.css';
@@ -28,7 +29,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <ColorSchemeScript />
             </head>
             <body>
-                <Toaster />
                 <MantineProvider>{children}</MantineProvider>
                 <ScrollRestoration />
                 <Scripts />
@@ -40,5 +40,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
     const { locale } = useLoaderData<typeof loader>();
     useChangeLanguage(locale);
-    return <Outlet />;
+    return (
+        <>
+            <ClientOnly>{() => <Toaster />}</ClientOnly>
+            <Outlet />
+        </>
+    );
 }

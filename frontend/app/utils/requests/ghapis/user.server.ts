@@ -6,12 +6,12 @@ import { handleGithubReq } from '../request';
 
 export class GithubUserServerOnly extends GithubUser {
     private token: string;
-    private axiosInstance: AxiosInstance
+    private axiosInstanceWithToken: AxiosInstance
     
     constructor(name: string, token: string) {
         super(name);
         this.token = token;
-        this.axiosInstance = axios.create({
+        this.axiosInstanceWithToken = axios.create({
             baseURL: 'https://api.github.com',
             headers: {
                 Authorization: `token ${this.token}`,
@@ -21,13 +21,13 @@ export class GithubUserServerOnly extends GithubUser {
 
     async getUser(): Promise<User | undefined> {
         return await handleGithubReq<User, any>(
-            () => this.axiosInstance.get(`/users/${this.name}`),
+            () => this.axiosInstanceWithToken.get(`/users/${this.name}`),
             (res) => userSchema.parseAsync(res.data))
     }
 
     async getFollowers(): Promise<UserAsFollowerArray | undefined> {
         return await handleGithubReq<UserAsFollowerArray, any>(
-            () => this.axiosInstance.get(`/users/${this.name}/followers`),
+            () => this.axiosInstanceWithToken.get(`/users/${this.name}/followers`),
             (res) => userAsFollowerArraySchema.parseAsync(res.data))
     }
 }

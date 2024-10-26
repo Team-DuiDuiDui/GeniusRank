@@ -21,7 +21,7 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 Github 用�
                 const { value: name } = getForm<HTMLInputElement>(e, 'name');
                 name.trim() ? navigate(`/user/${name}`) : pathname.includes('user/') && navigate('/user');
             }}>
-            <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white">
+            <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white shadow-md hover:shadow-2xl transition-all">
                 {logo && <img alt="logo" src={logo} className="m-2 h-7 w-7" />}
                 <input
                     {...props}
