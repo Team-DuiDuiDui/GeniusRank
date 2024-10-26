@@ -14,6 +14,7 @@ export class GithubUserServerOnly extends GithubUser {
         this.axiosInstanceWithToken = axios.create({
             baseURL: 'https://api.github.com',
             headers: {
+                Authorization: `token ${this.token}`,
                 'User-Agent': 'Team-Duiduidui: Genius Rank',
             },
         });
@@ -21,10 +22,7 @@ export class GithubUserServerOnly extends GithubUser {
 
     async getUser(): Promise<User | undefined> {
         return await handleGithubReq<User, any>(
-            () =>
-                this.axiosInstanceWithToken.get(`/users/${this.name}`, {
-                    headers: { Authorization: `token ${this.token}` },
-                }),
+            () => this.axiosInstanceWithToken.get(`/users/${this.name}`),
             (res) => userSchema.parseAsync(res.data)
         );
     }
