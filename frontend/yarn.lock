@@ -3538,6 +3538,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.13":
+  version: 1.11.13
+  resolution: "dayjs@npm:1.11.13"
+  checksum: 10c0/a3caf6ac8363c7dade9d1ee797848ddcf25c1ace68d9fe8678ecf8ba0675825430de5d793672ec87b24a69bf04a1544b176547b2539982275d5542a7955f35b7
+  languageName: node
+  linkType: hard
+
 "debug@npm:2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -8666,6 +8673,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"remix-utils@npm:^7.7.0":
+  version: 7.7.0
+  resolution: "remix-utils@npm:7.7.0"
+  dependencies:
+    type-fest: "npm:^4.18.1"
+  peerDependencies:
+    "@remix-run/cloudflare": ^2.0.0
+    "@remix-run/node": ^2.0.0
+    "@remix-run/react": ^2.0.0
+    "@remix-run/router": ^1.7.2
+    crypto-js: ^4.1.1
+    intl-parse-accept-language: ^1.0.0
+    is-ip: ^5.0.1
+    react: ^18.0.0
+    zod: ^3.22.4
+  peerDependenciesMeta:
+    "@remix-run/cloudflare":
+      optional: true
+    "@remix-run/node":
+      optional: true
+    "@remix-run/react":
+      optional: true
+    "@remix-run/router":
+      optional: true
+    crypto-js:
+      optional: true
+    intl-parse-accept-language:
+      optional: true
+    is-ip:
+      optional: true
+    react:
+      optional: true
+    zod:
+      optional: true
+  checksum: 10c0/09789e9565b6d2171022b3a6ba70cbdd84d8bf6d57338f8ad727ad9f8d90f6b81dc48cf946a14150d2594a2aa23255326b4809b1452e3a36dda3c833522cf12e
+  languageName: node
+  linkType: hard
+
 "require-like@npm:>= 0.1.1":
   version: 0.1.2
   resolution: "require-like@npm:0.1.2"
@@ -8894,6 +8939,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^6.7.4"
     autoprefixer: "npm:^10.4.19"
     axios: "npm:^1.7.7"
+    dayjs: "npm:^1.11.13"
     eslint: "npm:^8.38.0"
     eslint-import-resolver-typescript: "npm:^3.6.1"
     eslint-plugin-import: "npm:^2.28.1"
@@ -8914,6 +8960,7 @@ __metadata:
     react-i18next: "npm:^15.1.0"
     recharts: "npm:2"
     remix-i18next: "npm:^6.4.1"
+    remix-utils: "npm:^7.7.0"
     tailwindcss: "npm:^3.4.4"
     ts-to-zod: "npm:^3.13.0"
     typescript: "npm:^5.1.6"
@@ -9911,7 +9958,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^4.12.0":
+"type-fest@npm:^4.12.0, type-fest@npm:^4.18.1":
   version: 4.26.1
   resolution: "type-fest@npm:4.26.1"
   checksum: 10c0/d2719ff8d380befe8a3c61068f37f28d6fa2849fd140c5d2f0f143099e371da6856aad7c97e56b83329d45bfe504afe9fd936a7cff600cc0d46aa9ffb008d6c6

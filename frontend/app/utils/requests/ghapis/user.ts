@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { IssueSearchResult } from './typings/user';
 import { issueSearchResultSchema } from './schema/user';
+import { userPRsEX } from '~/utils/EXAMPLES';
 
 export class githubUser {
     public name: string;
@@ -13,8 +14,9 @@ export class githubUser {
         const res = await axios.get(
             `https://api.github.com/search/issues?q=type:pr+is:merged+author:${this.name}+state:closed&sort=updated&per_page=50`
         );
-        console.log(res);
         const data = await issueSearchResultSchema.parseAsync(res.data);
+        localStorage.setItem('prs', JSON.stringify(data));
         return data;
+        return userPRsEX;
     }
 }

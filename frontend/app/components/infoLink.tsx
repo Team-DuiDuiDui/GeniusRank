@@ -8,7 +8,11 @@ const InfoLink: React.FC<linkProps> = ({ children }) => {
     return (
         <div className="flex items-center">
             <LinkOutlined className="text-gray-600 text-sm" />
-            <a href={children} className="ml-1 text-sm text-gray-600 hover:underline">
+            <a
+                href={children}
+                className="text-sm text-gray-600 hover:bg-gray-200 transition-all px-1 rounded-md"
+                target="_blank"
+                rel="noreferrer">
                 {children}
             </a>
         </div>
@@ -26,7 +30,11 @@ export const InfoIcon: React.FC<infoIconProps> = ({ children, icon, href }) => {
         <div className="flex items-center">
             <span className="text-gray-600 text-sm">{icon}</span>
             {href ? (
-                <a href={href} className="ml-1 text-sm text-gray-600 hover:underline">
+                <a
+                    href={href}
+                    className="text-sm text-gray-600 hover:bg-gray-200 transition-all px-1 rounded-md"
+                    target="_blank"
+                    rel="noreferrer">
                     {children}
                 </a>
             ) : (
