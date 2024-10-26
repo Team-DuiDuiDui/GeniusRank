@@ -1,3 +1,4 @@
+### Frontend Files
 frontend/node_modules
 frontend/build
 frontend/env
@@ -8,3 +9,9 @@ frontend/env
 frontend/dev.vars
 frontend/wrangler
 frontend/.env
+
+### IntelliJ project files
+.idea/
+*.iml
+/target/*
+/**/target/
