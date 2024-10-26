@@ -13,6 +13,8 @@ import axios from 'axios';
 import { ZodError } from 'zod';
 import { useTranslation } from 'react-i18next';
 import UserRepositories from '~/components/userinfo/repos';
+import { GuessNationProps as GuessRegionProps, guessRegion } from '~/utils/region/main';
+import { createInstanceForGithub } from '~/utils/requests/instance';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -33,10 +35,11 @@ export default function Index() {
     const user = new githubUser(params?.name ?? '');
     const [userPRs, setUserPRs] = useState<null | IssueSearchResult>(null);
     const [userIssues, setUserIssues] = useState<null | IssueSearchResult>(null);
+    const [userRegion, setUserRegion] = useState<null | unknown>(null);
     const [userRepositories, setUserRepositories] = useState<null | UserRepos>(null);
+
     const getAndSetUserInfos = async () => {
         try {
-            console.log(localStorage)
             const prs = await user.getUserPrs();
             setUserPRs(prs);
             const issues = await user.getUserIssues();
@@ -55,10 +58,15 @@ export default function Index() {
             else toast.error(t('user.err.something_wrong'));
         }
     };
+
+    const getAndSetUserRegion = async () => {
+        const axiosInstance = createInstanceForGithub(localStorage.GITHUB_ACCESS_TOKEN);
+        setUserRegion(await guessRegion({userData: data.userData, axiosInstance}))
+    }
     useEffect(() => {
         setUserPRs(null);
         getAndSetUserInfos();
-
+        getAndSetUserRegion();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
     return (
