@@ -36,8 +36,8 @@ export default function Index() {
             setUserIssues(issues);
             setUserRepositories(await user.getUserRepos());
         } catch (e) {
-            // eslint-disable-next-line import/no-named-as-default-member
             console.error(e);
+            // eslint-disable-next-line import/no-named-as-default-member
             if (axios.isAxiosError(e)) {
                 console.log(e);
                 if (e.status === 404) toast.error(t('user.err.not_found'));

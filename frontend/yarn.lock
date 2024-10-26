@@ -8673,7 +8673,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remix-utils@npm:^7.5.0":
+"remix-utils@npm:^7.7.0":
   version: 7.7.0
   resolution: "remix-utils@npm:7.7.0"
   dependencies:
@@ -8960,7 +8960,7 @@ __metadata:
     react-i18next: "npm:^15.1.0"
     recharts: "npm:2"
     remix-i18next: "npm:^6.4.1"
-    remix-utils: "npm:^7.5.0"
+    remix-utils: "npm:^7.7.0"
     tailwindcss: "npm:^3.4.4"
     ts-to-zod: "npm:^3.13.0"
     typescript: "npm:^5.1.6"
