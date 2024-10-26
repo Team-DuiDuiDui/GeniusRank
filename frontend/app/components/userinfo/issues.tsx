@@ -5,11 +5,11 @@ import { Loader, Skeleton } from '@mantine/core';
 import { useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
-interface userPRs {
+interface userIssues {
     data: IssueSearchResult | null;
 }
 
-const UserPRs: React.FC<userPRs> = ({ data }) => {
+const UserIssues: React.FC<userIssues> = ({ data }) => {
     const { t } = useTranslation();
     const titleRef = useRef(null);
     useEffect(() => {
@@ -18,7 +18,7 @@ const UserPRs: React.FC<userPRs> = ({ data }) => {
     return (
         <div className="flex flex-col w-full bg-white p-8 pt-0 rounded-lg gap-4 max-h-96 overflow-y-auto">
             <h2 className="text-lg font-bold sticky top-0 mt-4 bg-white py-1">
-                {t('user.userRecentPrs')}
+                {t('user.userRecentIssues')}
                 <span className="font-normal ml-4 text-base" ref={titleRef}>
                     {!data ? <Loader size="xs" /> : `${data?.items.length ?? '_'} / ${data?.total_count ?? '_'}`}
                 </span>
@@ -29,13 +29,13 @@ const UserPRs: React.FC<userPRs> = ({ data }) => {
                         <tr className="mb-6">
                             <th>{t('user.number')}</th>
                             <th>{t('user.repo')}</th>
-                            <th>{t('user.pr_title')}</th>
+                            <th>{t('user.issue_title')}</th>
                             <th>{t('user.update_time')}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {data.items.map((item, index) => {
-                            return <Pr item={item} index={index + 1} key={index} />;
+                            return <Issue item={item} index={index + 1} key={index} />;
                         })}
                         {data?.items.length === 0 && (
                             <>
@@ -53,12 +53,12 @@ const UserPRs: React.FC<userPRs> = ({ data }) => {
     );
 };
 
-interface pr {
+interface issue {
     item: IssueSearchResultItem;
     index: number;
 }
 
-const Pr: React.FC<pr> = ({ item, index: key }) => {
+const Issue: React.FC<issue> = ({ item, index: key }) => {
     return (
         <tr className="text-sm text-center">
             <td>{key}</td>
@@ -92,4 +92,4 @@ const Pr: React.FC<pr> = ({ item, index: key }) => {
     );
 };
 
-export default UserPRs;
+export default UserIssues;
