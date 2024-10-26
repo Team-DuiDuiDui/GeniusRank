@@ -10,7 +10,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
         const user = new GithubUserServerOnly(params.name, context.cloudflare.env.GITHUB_ACCESS_TOKEN);
         try {
             const data = (await user.getUser())!;
-            return json({
+            return json({   
                 userData: data,
                 title: `${params?.name ?? ''} | Genius Rank`,
                 description: t('user.description'),

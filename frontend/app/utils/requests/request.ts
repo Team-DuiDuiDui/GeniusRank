@@ -1,13 +1,13 @@
 import toast from "react-hot-toast";
 
-
-export const handleGithubReq = async <T, U>(
-    req: ()=>Promise<U>,
+export const handleRequest = async <T, U>(
+    req: () => Promise<U>,
     success: (data: U) => Promise<T>,
-    errorResolve?: (error: any) => void,
-    toast_error: boolean = true,
+    errorResolve?: (error: unknown) => void,
+    toast_error?: boolean,
     toast_success?: boolean,
-) :Promise<T | undefined> => {
+): Promise<T | undefined> => {
+
     if (!errorResolve) {
         errorResolve = (error) => {
             console.error(error);
@@ -28,4 +28,21 @@ export const handleGithubReq = async <T, U>(
         }
         errorResolve(error);
     }
+}
+
+export const handleClientReq = async <T, U>(
+    req: () => Promise<U>,
+    success: (data: U) => Promise<T>,
+    errorResolve?: (error: unknown) => void,
+    toast_error: boolean = true,
+    toast_success?: boolean,
+): Promise<T | undefined> => {
+    return handleRequest(req, success, errorResolve, toast_error, toast_success);
+}
+
+export const handleServerReq = async <T, U>(
+    req: () => Promise<U>,
+    success: (data: U) => Promise<T>,
+): Promise<T | undefined> => {
+    return handleRequest(req, success, undefined, false, false);
 }

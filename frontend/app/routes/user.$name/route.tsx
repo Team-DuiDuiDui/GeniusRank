@@ -20,14 +20,22 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export { loader };
 
 export default function Index() {
+    // const axiosInstance = axios.create({
+    //     baseURL: 'https://api.github.com',
+    //     headers: localStorage.GITHUB_ACCESS_TOKEN ? {
+    //         Authorization: `token ${localStorage.GITHUB_ACCESS_TOKEN}`,
+    //     }: {},
+    // });
     const data = useLoaderData<typeof loader>();
     const { t } = useTranslation();
     const params = useParams();
     const user = new githubUser(params?.name ?? '');
     const [userPRs, setUserPRs] = useState<null | IssueSearchResult>(null);
     const [userIssues, setUserIssues] = useState<null | IssueSearchResult>(null);
+    const [userRegion, setUserRegion] = useState<null | string>(null);
     const getAndSetUserInfos = async () => {
         try {
+            console.log(localStorage)
             const prs = await user.getUserPrs();
             setUserPRs(prs);
             const issues = await user.getUserIssues();
@@ -47,6 +55,7 @@ export default function Index() {
     useEffect(() => {
         setUserPRs(null);
         getAndSetUserInfos();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
     return (
