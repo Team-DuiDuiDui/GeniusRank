@@ -14,7 +14,7 @@ export class GithubUserServerOnly extends GithubUser {
         this.axiosInstanceWithToken = axios.create({
             baseURL: 'https://api.github.com',
             headers: {
-                Authorization: `token ${this.token}`,
+                Authorization: `token ${token}`,
                 'User-Agent': 'Team-Duiduidui: Genius Rank',
             },
         });
