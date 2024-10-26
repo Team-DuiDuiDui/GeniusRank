@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { IssueSearchResult, IssueSearchResultItem } from '~/utils/requests/ghapis/typings/user';
-import dayjs from './../../../node_modules/dayjs/esm/index';
+import dayjs from 'dayjs';
 import { Loader, Skeleton } from '@mantine/core';
 import { useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';

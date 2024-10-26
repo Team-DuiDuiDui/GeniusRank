@@ -1,12 +1,13 @@
-import { userEX } from '~/utils/EXAMPLES';
-import { userSchema } from './schema/user';
-import { User } from './typings/user';
+import { userAsFollowerArraySchema, userSchema } from './schema/user';
+import { User, UserAsFollowerArray } from './typings/user';
 import { githubUser as GithubUser } from './user';
 import axios, { AxiosInstance } from 'axios';
+import { handleGithubReq } from '../request';
 
 export class GithubUserServerOnly extends GithubUser {
     private token: string;
     private axiosInstance: AxiosInstance
+    
     constructor(name: string, token: string) {
         super(name);
         this.token = token;
@@ -17,16 +18,16 @@ export class GithubUserServerOnly extends GithubUser {
             }
         })
     }
-    async getUser(): Promise<User> {
-        const res = await this.axiosInstance.get(`/users/${this.name}`);
-        const data = await userSchema.parseAsync(res.data);
-        return data;
-        return userEX;
+
+    async getUser(): Promise<User | undefined> {
+        return await handleGithubReq<User, any>(
+            () => this.axiosInstance.get(`/users/${this.name}`),
+            (res) => userSchema.parseAsync(res.data))
     }
 
-    async getFollowers(): Promise<User[]> {
-        const res = await this.axiosInstance.get(`/users/${this.name}/followers`);
-        const data = await userSchema.array().parseAsync(res.data);
-        return data;
+    async getFollowers(): Promise<UserAsFollowerArray | undefined> {
+        return await handleGithubReq<UserAsFollowerArray, any>(
+            () => this.axiosInstance.get(`/users/${this.name}/followers`),
+            (res) => userAsFollowerArraySchema.parseAsync(res.data))
     }
 }
