@@ -14,6 +14,7 @@ export class GithubUserServerOnly extends GithubUser {
         const res = await axios.get(`https://api.github.com/users/${this.name}`, {
             headers: {
                 Authorization: `token ${this.token}`,
+                'User-Agent': 'Team-Duiduidui-GeniusRank',
             },
         });
         const data = await userSchema.parseAsync(res.data);

@@ -20,8 +20,9 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             if (axios.isAxiosError(e)) {
                 console.log(e);
                 if (e.status === 404) throw new Response(t('user.err.not_found'), { status: 404 });
-                if (e.status === 403) throw new Response(t('user.err.rate_limit'), { status: 403 });
-                else throw new Response(t('user.err.something_wrong'), { status: 500 });
+                if (e.status === 403) {
+                    throw new Response(t('user.err.rate_limit'), { status: 403 });
+                } else throw new Response(t('user.err.something_wrong'), { status: 500 });
             } else if (e instanceof ZodError) throw new Response(t('user.err.parse_error'), { status: 500 });
             else throw new Response(t('user.err.something_wrong'), { status: 500 });
         }
