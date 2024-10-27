@@ -72,13 +72,9 @@ export default function Index() {
         setUserPRs(null);
         setUserIssues(null);
         setUserRepositories(null);
-        console.log('执行', effectFlag.current);
         if (!effectCache.current) {
-            console.log('没重复执行');
             effectCache.current = true;
             getAndSetUserInfos();
-        } else {
-            console.log('重复执行');
         }
         if (effectFlag.current) {
             // 重新请求前重置

@@ -1,14 +1,12 @@
 /* eslint-disable import/no-named-as-default-member */
-import axios, { AxiosInstance } from 'axios';
+import { AxiosInstance } from 'axios';
 import { IssueSearchResult, UserRepos } from './typings/user';
 import { issueSearchResultSchema, userReposSchema } from './schema/user';
 import { createInstanceForGithub } from '../instance';
 
 export class githubUser {
     public name: string;
-    private axiosInstance: AxiosInstance = axios.create({
-        baseURL: 'https://api.github.com',
-    });
+    private axiosInstance: AxiosInstance = createInstanceForGithub();
     private isAuthorized: boolean = false;
 
     constructor(name: string, token?: string) {
