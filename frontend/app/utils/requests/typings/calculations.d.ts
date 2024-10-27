@@ -4,6 +4,10 @@ export type calculationsReq = {
         name: string;
         followers: number;
         public_repos: number;
+        commit_amount: number;
+        pr_amount: number;
+        issue_amount: number;
+        repo_amount: number;
         type: 'User' | 'Organization';
     };
     repos: {

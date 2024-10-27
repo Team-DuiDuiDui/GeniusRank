@@ -11,6 +11,7 @@ import UserRepositories from '~/components/userinfo/repos';
 import { guessRegion } from '~/utils/region/main';
 import { createInstanceForGithub } from '~/utils/requests/instance';
 import { LoadingOverlay } from '@mantine/core';
+import UserCommits from '~/components/userinfo/commits';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -55,6 +56,7 @@ export default function Index() {
                         <UserRepositories data={data.userData} user={user} />
                         <UserPRs user={user} data={data.userData} />
                         <UserIssues user={user} data={data.userData} />
+                        <UserCommits user={user} data={data.userData} />
                     </UserBasic>
                 </div>
             </div>

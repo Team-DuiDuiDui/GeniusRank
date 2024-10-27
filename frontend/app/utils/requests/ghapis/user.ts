@@ -1,7 +1,7 @@
 /* eslint-disable import/no-named-as-default-member */
 import { AxiosInstance } from 'axios';
-import { IssueSearchResult, User, UserRepos } from './typings/user';
-import { issueSearchResultSchema, userReposSchema } from './schema/user';
+import { CommitsSearchResult, IssueSearchResult, User, UserRepos } from './typings/user';
+import { commitsSearchResultSchema, issueSearchResultSchema, userReposSchema } from './schema/user';
 import { createInstanceForGithub } from '../instance';
 
 export class githubUser {
@@ -45,10 +45,19 @@ export class githubUser {
         this.userIssues = data;
         return data;
     }
+
     async getUserRepos(): Promise<UserRepos> {
         const res = await this.axiosInstance.get(`/users/${this.name}/repos?sort=updated&per_page=80`);
         const data = await userReposSchema.parseAsync(res.data);
         this.userRepos = data;
+        return data;
+    }
+
+    async getUserCommits(): Promise<CommitsSearchResult> {
+        const res = await this.axiosInstance.get(
+            `/search/commits?q=author:${this.name}&sort=committer-date&per_page=20`
+        );
+        const data = await commitsSearchResultSchema.parseAsync(res.data);
         return data;
     }
 }
