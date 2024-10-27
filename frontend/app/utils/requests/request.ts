@@ -1,4 +1,4 @@
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
 
 export const handleRequest = async <T, U>(
     req: () => Promise<U>,
@@ -9,7 +9,6 @@ export const handleRequest = async <T, U>(
     toast_success?: boolean,
     shouldRetry?: (error: unknown) => boolean
 ): Promise<T | undefined> => {
-
     if (!errorResolve) {
         errorResolve = (error) => {
             throw error;
@@ -22,13 +21,12 @@ export const handleRequest = async <T, U>(
         try {
             const res = await req();
             const result = await success(res);
-            console.log(result)
             if (toast_success) {
                 toast.success('Success');
             }
             return result;
         } catch (error) {
-            const shouldRetryCondition = shouldRetry ? shouldRetry(error) : true
+            const shouldRetryCondition = shouldRetry ? shouldRetry(error) : true;
 
             if (shouldRetryCondition) {
                 attempt++;
@@ -46,24 +44,16 @@ export const handleRequest = async <T, U>(
     }
 };
 
-
 export const handleClientReq = async <T, U>(
     req: () => Promise<U>,
     success: (data: U) => Promise<T>,
     errorResolve?: (error: unknown) => void,
     maxRetries: number = 0,
     toast_error: boolean = true,
-    toast_success?: boolean,
+    toast_success?: boolean
 ): Promise<T | undefined> => {
-    return handleRequest(
-        req, 
-        success, 
-        errorResolve, 
-        maxRetries, 
-        toast_error, 
-        toast_success,
-    );
-}
+    return handleRequest(req, success, errorResolve, maxRetries, toast_error, toast_success);
+};
 
 export const handleClientGithubReq = async <T, U>(
     req: () => Promise<U>,
@@ -71,30 +61,22 @@ export const handleClientGithubReq = async <T, U>(
     errorResolve?: (error: unknown) => void,
     maxRetries: number = 0,
     toast_error: boolean = true,
-    toast_success?: boolean,
+    toast_success?: boolean
 ): Promise<T | undefined> => {
-    return handleRequest(
-        req, 
-        success, 
-        errorResolve, 
-        maxRetries, 
-        toast_error, 
-        toast_success, 
-        (error) => {
-            const statusCode = (error as { response?: { status?: number } })?.response?.status; // 假设错误对象中包含响应状态码
+    return handleRequest(req, success, errorResolve, maxRetries, toast_error, toast_success, (error) => {
+        const statusCode = (error as { response?: { status?: number } })?.response?.status; // 假设错误对象中包含响应状态码
 
-            if (statusCode !== 403 && statusCode !== 500) {
-                return true;
-            } else {
-                return false;
-            }
+        if (statusCode !== 403 && statusCode !== 500) {
+            return true;
+        } else {
+            return false;
         }
-    );
-}
+    });
+};
 
 export const handleServerReq = async <T, U>(
     req: () => Promise<U>,
-    success: (data: U) => Promise<T>,
+    success: (data: U) => Promise<T>
 ): Promise<T | undefined> => {
     return handleRequest(req, success, undefined, 0, false, false);
-}
+};

@@ -1,7 +1,8 @@
 import { InputHTMLAttributes } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
-import { useFetcher, useLocation, useNavigate } from '@remix-run/react';
+import { useFetcher, useLocation, useNavigate, useNavigation } from '@remix-run/react';
 import { getForm } from '~/utils/form/form';
+import { LoadingOverlay } from '@mantine/core';
 
 interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
     logo?: string;
@@ -10,6 +11,7 @@ interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 Github 用户名...', ...props }) => {
     const fetcher = useFetcher();
+    const navigation = useNavigation();
     const navigate = useNavigate();
     const { pathname } = useLocation();
     return (
@@ -22,7 +24,15 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 Github 用�
                 name.trim() ? navigate(`/user/${name}`) : pathname.includes('user/') && navigate('/user');
             }}>
             <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white shadow-md hover:shadow-2xl transition-all">
-                {logo && <img alt="logo" src={logo} className="m-2 h-7 w-7" />}
+                <span className="relative flex items-center justify-center ml-1">
+                    <LoadingOverlay
+                        visible={navigation.state === 'loading'}
+                        zIndex={1000}
+                        overlayProps={{ radius: 'sm', blur: 1, center: false }}
+                        loaderProps={{ size: 'sm' }}
+                    />
+                    {logo && <img alt="logo" src={logo} className="m-2 h-7 w-7" />}
+                </span>
                 <input
                     {...props}
                     // type="text"
