@@ -1,38 +1,39 @@
 {
-  "common": {
-    "title": "Genius Rank - Github 用户分析",
-    "languages": "语言",
-    "search": {
-      "placeholder": "请输入 Github 用户名称..."
-    },
-    "user": {
-      "description": "Github 用户分析",
-      "title": "用户搜索 | Genius Rank",
-      "no_description": "用户暂无简介",
-      "followers": "位粉丝",
-      "following": "个正在关注",
-      "err": {
-        "not_found": "找不到用户",
-        "parse_error": "解析错误",
-        "something_wrong": "出错了",
-        "rate_limit": "请求频率过快"
-      },
-      "userRecentPrs": "最近80条已合并的 Pull Requests",
-      "userRecentIssues": "最近80条 Issues",
-      "number": "序号",
-      "repo": "仓库",
-      "pr_title": "PR 标题",
-      "update_time": "更新时间",
-      "issue_title": "Issue 标题",
-      "no_prs": "该用户暂无已合并的 PR",
-      "no_issues": "该用户暂无 Issue",
-      "userRepos": "用户最近 80 个仓库",
-      "lang": "语言",
-      "open_issues": "打开的 Issue",
-      "size": "大小",
-      "no_repos": "该用户暂无仓库",
-      "is_fork": "这是一个 Fork 仓库",
-      "unknown": "未知"
+    "common": {
+        "title": "Genius Rank - GitHub 用户分析",
+        "languages": "语言",
+        "search": {
+            "placeholder": "请输入 GitHub 用户名称..."
+        },
+        "user": {
+            "description": "GitHub 用户分析",
+            "title": "用户搜索 | Genius Rank",
+            "no_description": "用户暂无简介",
+            "followers": "位粉丝",
+            "following": "个正在关注",
+            "err": {
+                "not_found": "找不到用户",
+                "parse_error": "解析错误",
+                "something_wrong": "出错了",
+                "rate_limit": "请求频率过快"
+            },
+            "userRecentPrs": "最近 80 条已合并的 Pull Requests",
+            "userRecentIssues": "最近 80 条 Issues",
+            "number": "序号",
+            "repo": "仓库",
+            "pr_title": "PR 标题",
+            "update_time": "更新时间",
+            "issue_title": "Issue 标题",
+            "no_prs": "该用户暂无已合并的 PR",
+            "no_issues": "该用户暂无 Issue",
+            "userRepos": "最近 80 个仓库",
+            "lang": "语言",
+            "open_issues": "打开的 Issue",
+            "size": "大小",
+            "no_repos": "该用户暂无仓库",
+            "is_fork": "这是一个 Fork 仓库",
+            "unknown": "未知",
+            "not_a_user": "注意：这可能不是一个 GitHub 用户，而是组织或其他实体"
+        }
     }
-  }
 }

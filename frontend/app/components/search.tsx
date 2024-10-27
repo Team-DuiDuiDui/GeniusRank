@@ -9,7 +9,7 @@ interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
     searchText?: string;
 }
 
-const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 Github 用户名...', ...props }) => {
+const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用户名...', ...props }) => {
     const fetcher = useFetcher();
     const navigation = useNavigation();
     const navigate = useNavigate();

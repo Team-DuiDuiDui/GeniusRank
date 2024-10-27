@@ -1,7 +1,10 @@
 export type calculationsReq = {
     user: {
+        id: number;
+        name: string;
         followers: number;
         public_repos: number;
+        type: 'User' | 'Organization';
     };
     repos: {
         name: string;

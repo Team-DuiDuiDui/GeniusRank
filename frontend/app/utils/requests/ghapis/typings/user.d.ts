@@ -788,3 +788,77 @@ export interface CodeOfConduct {
     html_url: string | null;
     [k: string]: unknown;
 }
+
+export interface CommitsSearchResult {
+    total_count: number;
+    incomplete_results: boolean;
+    items: CommitSearchResultItem[];
+    [k: string]: unknown;
+}
+/**
+ * Commit Search Result Item
+ */
+export interface CommitSearchResultItem {
+    url: string;
+    sha: string;
+    html_url: string;
+    comments_url: string;
+    commit: {
+        author: {
+            name: string;
+            email: string;
+            date: string;
+            [k: string]: unknown;
+        };
+        committer: null | GitUser;
+        comment_count: number;
+        message: string;
+        tree: {
+            sha: string;
+            url: string;
+            [k: string]: unknown;
+        };
+        url: string;
+        verification?: Verification;
+        [k: string]: unknown;
+    };
+    author: null | SimpleUser;
+    committer: null | GitUser1;
+    parents: {
+        url?: string;
+        html_url?: string;
+        sha?: string;
+        [k: string]: unknown;
+    }[];
+    repository: MinimalRepository;
+    score: number;
+    node_id: string;
+    text_matches?: SearchResultTextMatches;
+    [k: string]: unknown;
+}
+/**
+ * Metaproperties for Git author/committer information.
+ */
+export interface GitUser {
+    name?: string;
+    email?: string;
+    date?: string;
+    [k: string]: unknown;
+}
+export interface Verification {
+    verified: boolean;
+    reason: string;
+    payload: string | null;
+    signature: string | null;
+    [k: string]: unknown;
+}
+
+/**
+ * Metaproperties for Git author/committer information.
+ */
+export interface GitUser1 {
+    name?: string;
+    email?: string;
+    date?: string;
+    [k: string]: unknown;
+}

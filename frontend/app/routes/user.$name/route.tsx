@@ -6,14 +6,9 @@ import UserInfo from '~/components/userinfo/info';
 import { githubUser } from '~/utils/requests/ghapis/user';
 import { useEffect, useRef, useState } from 'react';
 import UserPRs from '~/components/userinfo/prs';
-import { IssueSearchResult, UserRepos } from '~/utils/requests/ghapis/typings/user';
 import UserIssues from '~/components/userinfo/issues';
-import toast from 'react-hot-toast';
-import axios from 'axios';
-import { ZodError } from 'zod';
-import { useTranslation } from 'react-i18next';
 import UserRepositories from '~/components/userinfo/repos';
-import { GuessNationProps as GuessRegionProps, guessRegion } from '~/utils/region/main';
+import { guessRegion } from '~/utils/region/main';
 import { createInstanceForGithub } from '~/utils/requests/instance';
 import { LoadingOverlay } from '@mantine/core';
 
@@ -25,19 +20,14 @@ export { loader };
 
 export default function Index() {
     const data = useLoaderData<typeof loader>();
-    const { t } = useTranslation();
     const navigation = useNavigation();
     const params = useParams();
-    /** 很抽象，但是是为了 useEffect 最佳实践
-     * Cache 用于减少请求次数
-     */
-    const effectCache = useRef<boolean>(false),
-        /** Flag 在清除机制中改变 */
-        effectFlag = useRef<boolean>(false);
-    const [userPRs, setUserPRs] = useState<null | IssueSearchResult>(null);
-    const [userIssues, setUserIssues] = useState<null | IssueSearchResult>(null);
+    const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData));
     const [userRegion, setUserRegion] = useState<null | unknown>(null);
-    const [userRepositories, setUserRepositories] = useState<null | UserRepos>(null);
+    useEffect(() => {
+        user.current.setUserName(params?.name ?? '');
+        user.current.setUserData(data.userData);
+    }, [data.userData, params?.name]);
     // const axiosInstance = axios.create({
     //     baseURL: 'https://api.github.com',
     //     headers: localStorage.GITHUB_ACCESS_TOKEN ? {
@@ -49,43 +39,6 @@ export default function Index() {
         setUserRegion(await guessRegion({ userData: data.userData, axiosInstance }));
         console.log(userRegion);
     };
-    useEffect(() => {
-        const user = new githubUser(params?.name ?? '');
-        const getAndSetUserInfos = async () => {
-            try {
-                setUserPRs(await user.getUserPrs());
-                setUserIssues(await user.getUserIssues());
-                setUserRepositories(await user.getUserRepos());
-            } catch (e) {
-                console.error(e);
-                // eslint-disable-next-line import/no-named-as-default-member
-                if (axios.isAxiosError(e)) {
-                    console.log(e);
-                    if (e.status === 404) toast.error(t('user.err.not_found'));
-                    if (e.status === 403) {
-                        throw toast.error(t('user.err.rate_limit'));
-                    } else toast.error(t('user.err.something_wrong'));
-                } else if (e instanceof ZodError) toast.error(t('user.err.parse_error'));
-                else toast.error(t('user.err.something_wrong'));
-            }
-        };
-        setUserPRs(null);
-        setUserIssues(null);
-        setUserRepositories(null);
-        if (!effectCache.current) {
-            effectCache.current = true;
-            getAndSetUserInfos();
-        }
-        if (effectFlag.current) {
-            // 重新请求前重置
-            effectCache.current = false;
-            effectFlag.current = false;
-        }
-        return () => {
-            effectFlag.current = true;
-        };
-        // getAndSetUserRegion();
-    }, [data, params?.name, t]);
     return (
         <>
             <div className="flex  items-center justify-center w-full">
@@ -99,9 +52,9 @@ export default function Index() {
                     />
                     <UserBasic>
                         <UserInfo data={data.userData} />
-                        <UserPRs data={userPRs} />
-                        <UserIssues data={userIssues} />
-                        <UserRepositories data={userRepositories} userData={data.userData} />
+                        <UserRepositories data={data.userData} user={user} />
+                        <UserPRs user={user} data={data.userData} />
+                        <UserIssues user={user} data={data.userData} />
                     </UserBasic>
                 </div>
             </div>

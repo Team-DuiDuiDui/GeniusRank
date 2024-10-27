@@ -1,30 +1,73 @@
 import { useTranslation } from 'react-i18next';
 import { MinimalRepository, User, UserRepos } from '~/utils/requests/ghapis/typings/user';
 import { Loader, Skeleton, Tooltip } from '@mantine/core';
-import { useEffect, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { ForkOutlined } from '@ant-design/icons';
+import toast from 'react-hot-toast';
+import { ZodError } from 'zod';
+import axios from 'axios';
+import { githubUser } from '~/utils/requests/ghapis/user';
+import { useParams } from '@remix-run/react';
 
 interface userRepositoriesProps {
-    data: UserRepos | null;
-    userData: User;
+    data: User;
+    user: MutableRefObject<githubUser>;
 }
 
-const UserRepositories: React.FC<userRepositoriesProps> = ({ data, userData }) => {
+const UserRepositories: React.FC<userRepositoriesProps> = ({ data, user }) => {
     const { t } = useTranslation();
     const titleRef = useRef(null);
+    const [repos, setRepos] = useState<null | UserRepos>(null);
+    const params = useParams();
+    const effectCache = useRef<boolean>(false),
+        effectFlag = useRef<boolean>(false);
     useEffect(() => {
         titleRef.current && autoAnimate(titleRef.current);
     }, [titleRef]);
+    useEffect(() => {
+        const getAndSetUserInfos = async () => {
+            try {
+                user.current.setUserName(params?.name ?? '');
+                setRepos(await user.current.getUserRepos());
+            } catch (e) {
+                console.error(e);
+                // eslint-disable-next-line import/no-named-as-default-member
+                if (axios.isAxiosError(e)) {
+                    console.error(e);
+                    if (e.status === 404) toast.error(t('user.err.not_found'));
+                    if (e.status === 403) {
+                        throw toast.error(t('user.err.rate_limit'));
+                    } else toast.error(t('user.err.something_wrong'));
+                } else if (e instanceof ZodError) toast.error(t('user.err.parse_error'));
+                else toast.error(t('user.err.something_wrong'));
+            }
+        };
+        setRepos(null);
+        if (!effectCache.current) {
+            effectCache.current = true;
+            getAndSetUserInfos();
+        }
+        if (effectFlag.current) {
+            // 重新请求前重置
+            effectCache.current = false;
+            effectFlag.current = false;
+        }
+        return () => {
+            effectFlag.current = true;
+        };
+        // getAndSetUserRegion();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data, t, user]);
     return (
         <div className="flex flex-col w-full bg-white p-8 pt-0 rounded-lg gap-4 max-h-96 overflow-y-auto">
             <h2 className="text-lg font-bold sticky top-0 mt-4 bg-white py-1">
                 {t('user.userRepos')}
                 <span className="font-normal ml-4 text-base" ref={titleRef}>
-                    {!data ? <Loader size="xs" /> : `${data?.length ?? '_'} / ${userData.public_repos ?? '_'}`}
+                    {!repos ? <Loader size="xs" /> : `${repos?.length ?? '_'} / ${data.public_repos ?? '_'}`}
                 </span>
             </h2>
-            {data ? (
+            {repos ? (
                 <>
                     <table className="w-full">
                         <thead>
@@ -40,13 +83,13 @@ const UserRepositories: React.FC<userRepositoriesProps> = ({ data, userData }) =
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((item, index) => {
+                            {repos.map((item, index) => {
                                 return <Repo item={item} index={index + 1} key={index} />;
                             })}
-                            {data?.length === 0 && (
+                            {repos?.length === 0 && (
                                 <>
                                     <tr className="text-center text-gray-500">
-                                        <td colSpan={4}>{t('user.no_repos')}</td>
+                                        <td colSpan={8}>{t('user.no_repos')}</td>
                                     </tr>
                                 </>
                             )}

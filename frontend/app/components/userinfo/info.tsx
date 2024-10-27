@@ -13,10 +13,15 @@ const UserInfo: React.FC<userInfo> = ({ data }) => {
     return (
         <div className="flex flex-col w-full bg-white p-8 rounded-lg">
             <div className="flex flex-row items-center justify-left gap-8 w-full">
-                <Avatar src={data.avatar_url} size="xl" />
+                <Avatar src={data.avatar_url} size="xl" radius={data.type !== 'User' ? 'sm' : undefined} />
                 <div className="flex flex-col">
                     {/* data.login 是用户名，data.name 是用户昵称(可选) */}
-                    <h2 className="text-2xl font-bold">{data.name ?? data.login}</h2>
+                    <h2 className="text-2xl font-bold">
+                        {data.name ?? data.login}
+                        {data.type !== 'User' && (
+                            <span className="ml-2 text-gray-400 text-xs font-normal">{t('user.not_a_user')}</span>
+                        )}
+                    </h2>
                     {data.name && <p className="text-sm text-gray-500">{data.login}</p>}
                     <p>{data.bio ?? <span className="text-gray-500"> {t('user.no_description')}</span>}</p>
                     <p className="text-sm">
