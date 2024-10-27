@@ -32,7 +32,7 @@ export default function Index() {
      * Cache 用于减少请求次数
      */
     const effectCache = useRef<boolean>(false),
-        /** Flag 在清除机制中改变，用于减少 setState 渲染次数 */
+        /** Flag 在清除机制中改变 */
         effectFlag = useRef<boolean>(false);
     const [userPRs, setUserPRs] = useState<null | IssueSearchResult>(null);
     const [userIssues, setUserIssues] = useState<null | IssueSearchResult>(null);
@@ -53,9 +53,9 @@ export default function Index() {
         const user = new githubUser(params?.name ?? '');
         const getAndSetUserInfos = async () => {
             try {
-                if (!effectFlag.current) setUserPRs(await user.getUserPrs());
-                if (!effectFlag.current) setUserIssues(await user.getUserIssues());
-                if (!effectFlag.current) setUserRepositories(await user.getUserRepos());
+                setUserPRs(await user.getUserPrs());
+                setUserIssues(await user.getUserIssues());
+                setUserRepositories(await user.getUserRepos());
             } catch (e) {
                 console.error(e);
                 // eslint-disable-next-line import/no-named-as-default-member
@@ -72,9 +72,13 @@ export default function Index() {
         setUserPRs(null);
         setUserIssues(null);
         setUserRepositories(null);
+        console.log('执行', effectFlag.current);
         if (!effectCache.current) {
+            console.log('没重复执行');
             effectCache.current = true;
             getAndSetUserInfos();
+        } else {
+            console.log('重复执行');
         }
         if (effectFlag.current) {
             // 重新请求前重置
