@@ -12,10 +12,12 @@ export interface GuessNationProps {
 }
 
 export const guessRegion = async ({ locale, userData, beInstance, githubInstance }: GuessNationProps): Promise<string> => {
-    return await guessRegionFromFollowers(userData, beInstance, githubInstance, locale);
+    const [nationFromFollowers, confidenceFromFollowers] = await guessRegionFromFollowers(userData, beInstance, githubInstance, locale);
+    const [nationFromFollowings, confidenceFromFollowings] = await guessRegionFromFollowings(userData, beInstance, githubInstance, locale);
+    return nationFromFollowers;
 };
 
-const guessRegionFromFollowers = async (userData: User, beInstance: AxiosInstanceForBe, githubInstance: AxiosInstanceForGithub, locale: string): Promise<string> => {
+const guessRegionFromFollowers = async (userData: User, beInstance: AxiosInstanceForBe, githubInstance: AxiosInstanceForGithub, locale: string): Promise<[string, number]> => {
     interface Followers {
         login: string;
         name: string;
@@ -43,7 +45,7 @@ const guessRegionFromFollowers = async (userData: User, beInstance: AxiosInstanc
                     }
                 }`;
     const variables = { userName: userData.login };
-    const data = await handleClientGithubGraphQLReq<string[]>(
+    const data = (await handleClientGithubGraphQLReq<string[]>(
         { axiosInstance: githubInstance, query, variables },
         async res => {
             const result: string[] = []
@@ -51,9 +53,62 @@ const guessRegionFromFollowers = async (userData: User, beInstance: AxiosInstanc
             data.forEach((follower: Followers) => follower.location ? result.push(follower.location) : null)
             return result
         }
-    );
-    if (!data) {
-        throw new Error("Data is undefined");
+    ))!;
+    return [await syncChatForNation(data.toString(), locale, beInstance), data.length > 30 ? 1 : data.length / 30 ];
+};
+
+const guessRegionFromFollowings = async (
+    userData: User,
+    beInstance: AxiosInstanceForBe,
+    githubInstance: AxiosInstanceForGithub,
+    locale: string
+): Promise<[string, number]> => {
+    interface Following {
+        login: string;
+        name: string;
+        location: string;
+        company: string;
+        followers: {
+            totalCount: number;
+        };
     }
-    return await syncChatForNation(data.toString(), locale, beInstance);
+
+    const query = `
+        query($userName: String!) {
+            user(login: $userName) {
+                following(last: 80) {
+                    nodes {
+                        login
+                        name
+                        location
+                        company
+                        followers {
+                            totalCount
+                        }
+                    }
+                    totalCount 
+                }
+            }
+        }
+    `;
+    const variables = { userName: userData.login };
+
+    const data = (await handleClientGithubGraphQLReq<string[]>( 
+        { axiosInstance: githubInstance, query, variables },
+        async res => {
+            const result: string[] = [];
+            const data = res.data.data.user.following.nodes;
+
+            data.forEach((following: Following) => {
+                if (following.location) {
+                    result.push(following.location);
+                }
+            });
+
+            return result;
+        }
+    ))!;
+
+
+    return [await syncChatForNation(data.toString(), locale, beInstance), data.length > 30 ? 1 : data.length / 30 ];
 };

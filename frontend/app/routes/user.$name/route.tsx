@@ -14,8 +14,6 @@ import UserCommits from '~/components/userinfo/commits';
 import useAxiosInstanceForBe from '~/hooks/useAxiosInstanceForBe';
 import { useLocale } from 'remix-i18next/react';
 import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
-import { AxiosInstanceForBe } from '~/api/instance';
-import { AxiosInstanceForGithub } from '~/utils/requests/instance';
 import { isPromise } from '~/utils/promise';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
