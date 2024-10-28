@@ -11,3 +11,5 @@ project:
     name-server: 127.0.0.1:9876
     producer:
       group: common-message-execute_pg
+  ai:
+    apiKey: your-api-key

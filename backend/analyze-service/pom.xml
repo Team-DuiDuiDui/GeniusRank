@@ -89,5 +89,12 @@
             <artifactId>project-framework</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- AI 相关依赖 -->
+        <dependency>
+            <groupId>cn.bigmodel.openapi</groupId>
+            <artifactId>oapi-java-sdk</artifactId>
+            <version>release-V4-2.3.0</version>
+        </dependency>
     </dependencies>
 </project>
