@@ -4,12 +4,12 @@ import { Loader, Skeleton } from '@mantine/core';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { githubUser } from '~/utils/requests/ghapis/user';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
 import { useParams } from '@remix-run/react';
 import sleep from '~/utils/sleep';
 import { TFunction } from 'i18next';
+import ErrorNote from './error';
 
 interface userPRs {
     data: User;
@@ -20,31 +20,25 @@ const UserCommits: React.FC<userPRs> = ({ data, user }) => {
     const { t } = useTranslation();
     const titleRef = useRef(null);
     const [commits, setCommits] = useState<null | CommitsSearchResult>(null);
+    const [error, setErrors] = useState<null | AxiosError | ZodError | unknown>(null);
     const params = useParams();
     const effectCache = useRef<boolean>(false),
         effectFlag = useRef<boolean>(false);
     useEffect(() => {
         titleRef.current && autoAnimate(titleRef.current);
     }, [titleRef]);
+    const getAndSetUserInfos = async () => {
+        setErrors(null);
+        await sleep(1200);
+        try {
+            user.current.setUserName(params?.name ?? '');
+            setCommits(await user.current.getUserCommits());
+        } catch (e) {
+            console.error(e);
+            setErrors(e);
+        }
+    };
     useEffect(() => {
-        const getAndSetUserInfos = async () => {
-            await sleep(1200);
-            try {
-                user.current.setUserName(params?.name ?? '');
-                setCommits(await user.current.getUserCommits());
-            } catch (e) {
-                console.error(e);
-                // eslint-disable-next-line import/no-named-as-default-member
-                if (axios.isAxiosError(e)) {
-                    console.error(e);
-                    if (e.status === 404) toast.error(t('user.err.not_found'));
-                    if (e.status === 403) {
-                        throw toast.error(t('user.err.rate_limit'));
-                    } else toast.error(t('user.err.something_wrong'));
-                } else if (e instanceof ZodError) toast.error(t('user.err.parse_error'));
-                else toast.error(t('user.err.something_wrong'));
-            }
-        };
         setCommits(null);
         if (!effectCache.current) {
             effectCache.current = true;
@@ -66,11 +60,12 @@ const UserCommits: React.FC<userPRs> = ({ data, user }) => {
             <h2 className="text-lg font-bold sticky top-0 mt-4 bg-white py-1">
                 {t('user.userRecentCommits')}
                 <span className="font-normal ml-4 text-base" ref={titleRef}>
-                    {!commits ? (
-                        <Loader size="xs" />
+                    {!commits && !error ? (
+                        <Loader size={16} />
                     ) : (
                         `${commits?.items.length ?? '_'} / ${commits?.total_count ?? '_'}`
                     )}
+                    <ErrorNote error={error} reload={getAndSetUserInfos} />
                 </span>
             </h2>
             {commits ? (
@@ -98,7 +93,7 @@ const UserCommits: React.FC<userPRs> = ({ data, user }) => {
                     </tbody>
                 </table>
             ) : (
-                <Skeleton height={208} />
+                <Skeleton height={208} animate={!error} />
             )}
         </div>
     );

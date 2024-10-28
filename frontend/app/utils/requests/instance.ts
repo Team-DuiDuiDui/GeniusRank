@@ -31,6 +31,7 @@ export const createInstanceForGithub = (token?: string): AxiosInstanceForGithub 
         const { config } = err;
         const { retry = 3 } = config;
         config._retries = config._retries || 0;
+        console.log(err.response?.data.message);
         if (config._retries++ >= retry) return Promise.reject(err);
         await sleep((Math.pow(3.8, config._retries) / 2 - 1 / 2) * 1000);
         return interceptor(config);
