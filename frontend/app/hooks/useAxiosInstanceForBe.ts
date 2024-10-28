@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { AxiosInstanceForBe, createInstanceForBe } from '~/api/instance'
 
+/**
+ * 用于闭包创建后端 axios 实例，防止重复创建浪费内存
+ * @returns 后端 axios 实例
+ */
 const useAxiosInstanceForBe = (): AxiosInstanceForBe | undefined => {
     const [axiosInstance, setAxiosInstance] = useState<AxiosInstanceForBe>()
     const currentToken = useRef<string | null>(null)

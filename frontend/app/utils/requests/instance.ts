@@ -1,6 +1,13 @@
 import axios, { AxiosInstance } from 'axios';
 import sleep from '../sleep';
 
+/**
+ * 创建一个可重试的 Axios 实例。
+ * 
+ * 该实例在请求失败时会自动重试，最多重试 3 次。每次重试之间会有一个指数级增长的延迟。
+ * 
+ * @returns 可重试的 Axios 实例
+ */
 export const axiosRetriable = (): AxiosInstance => {
     const interceptor = axios.create();
     interceptor.interceptors.response.use(null, async (err) => {
@@ -17,6 +24,15 @@ export const axiosRetriable = (): AxiosInstance => {
 // 防止 baseurl 在不同实例上不同，造成请求失败
 export interface AxiosInstanceForGithub extends AxiosInstance {}
 
+// TODO: 对接 handleRequest ，做一个再恰当时机的重试
+/**
+ * 创建一个用于 GitHub API 的 Axios 实例。
+ * 
+ * 该实例会自动添加 GitHub API 的 baseURL 和可选的授权头。
+ * 
+ * @param token - 可选的 GitHub 访问令牌
+ * @returns 用于 GitHub API 的 Axios 实例
+ */
 export const createInstanceForGithub = (token?: string): AxiosInstanceForGithub => {
     const interceptor = axios.create({
         baseURL: 'https://api.github.com',

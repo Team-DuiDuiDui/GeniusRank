@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { AxiosInstanceForGithub, createInstanceForGithub } from '~/utils/requests/instance'
 
+/**
+ * 用于闭包创建前端与 github 的 api 通信的 axios 实例，防止重复创建浪费内存
+ * @returns axios 实例
+ */
 const useAxiosInstanceForGithub = (): AxiosInstanceForGithub | undefined => {
     const [axiosInstance, setAxiosInstance] = useState<AxiosInstanceForGithub>()
     const currentToken = useRef<string | null>(null)
