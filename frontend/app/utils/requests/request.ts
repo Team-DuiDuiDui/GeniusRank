@@ -1,10 +1,10 @@
-import { AxiosInstance, AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
 import { AxiosInstanceForGithub } from './instance';
+import { AxiosResponse } from 'axios';
 
 export const handleRequest = async <T>(
-    req: () => Promise<unknown>,
-    success: (data: unknown) => Promise<T>,
+    req: () => Promise<AxiosResponse>,
+    success: (data: AxiosResponse) => Promise<T>,
     errorResolve?: (error: unknown) => void,
     maxRetries: number = 0,
     toast_error?: boolean,
@@ -47,8 +47,8 @@ export const handleRequest = async <T>(
 };
 
 export const handleClientReq = async <T>(
-    req: () => Promise<unknown>,
-    success: (data: unknown) => Promise<T>,
+    req: () => Promise<AxiosResponse>,
+    success: (data: AxiosResponse) => Promise<T>,
     errorResolve?: (error: unknown) => void,
     maxRetries: number = 0,
     toast_error: boolean = true,
@@ -58,8 +58,8 @@ export const handleClientReq = async <T>(
 };
 
 export const handleClientGithubReq = async <T>(
-    req: () => Promise<unknown>,
-    success: (data: unknown) => Promise<T>,
+    req: () => Promise<AxiosResponse>,
+    success: (data: AxiosResponse) => Promise<T>,
     errorResolve?: (error: unknown) => void,
     maxRetries: number = 0,
     toast_error: boolean = true,
@@ -77,58 +77,60 @@ export const handleClientGithubReq = async <T>(
 };
 
 export const handleServerReq = async <T>(
-    req: () => Promise<unknown>,
-    success: (data: unknown) => Promise<T>,
+    req: () => Promise<AxiosResponse>,
+    success: (data: AxiosResponse) => Promise<T>
 ): Promise<T | undefined> => {
     return handleRequest(req, success, undefined, 0, false, false);
 };
 
 export const handleServerGraphQLReq = async <T>(
-    req: () => Promise<unknown>,
-    success: (data: unknown) => Promise<T>,
+    req: () => Promise<AxiosResponse>,
+    success: (data: AxiosResponse) => Promise<T>
 ): Promise<T | undefined> => {
     return handleRequest(req, success, undefined, 0, false, false);
 };
 
 export interface GraphQLRequest<T> {
     data: T;
-    errors?: GraphQLError[]
+    errors?: GraphQLError[];
 }
 
 interface GraphQLError {
-    message: string;          // 错误的描述信息
+    message: string; // 错误的描述信息
     locations?: ErrorLocation[]; // 可选，出错位置的行号和列号
-    path?: (string | number)[];  // 可选，导致错误的 GraphQL 路径
+    path?: (string | number)[]; // 可选，导致错误的 GraphQL 路径
     extensions?: ErrorExtensions; // 可选，附加的错误详情
 }
 
 interface ErrorLocation {
-    line: number;              // 错误发生的行号
-    column: number;            // 错误发生的列号
+    line: number; // 错误发生的行号
+    column: number; // 错误发生的列号
 }
 
 interface ErrorExtensions {
-    code?: string;             // 错误代码，如 "UNAUTHENTICATED" 或 "INTERNAL_SERVER_ERROR"
-    classification?: string;   // 错误类别，如 "Validation" 或 "Execution"
+    code?: string; // 错误代码，如 "UNAUTHENTICATED" 或 "INTERNAL_SERVER_ERROR"
+    classification?: string; // 错误类别，如 "Validation" 或 "Execution"
 }
 
-export const handleClientGithubGraphQLReq = async <T, U>(
+export const handleClientGithubGraphQLReq = async <T>(
     req: {
-        axiosInstance: AxiosInstanceForGithub,
-        query: string,
-        variables: Record<string, unknown>,
+        axiosInstance: AxiosInstanceForGithub;
+        query: string;
+        variables: Record<string, unknown>;
     },
-    success: (data: unknown) => Promise<T>,
+    success: (data: unknown) => Promise<T>
 ): Promise<T | undefined> => {
     return handleRequest(
         () => {
-            return req.axiosInstance.post<GraphQLRequest<U>>(
-                '/graphql',
-                {
-                    query: req.query,
-                    variables: req.variables,
-                }
-            )
-        }
-        , success, undefined, 0, true, false);
-}
+            return req.axiosInstance.post('/graphql', {
+                query: req.query,
+                variables: req.variables,
+            });
+        },
+        success,
+        undefined,
+        0,
+        true,
+        false
+    );
+};
