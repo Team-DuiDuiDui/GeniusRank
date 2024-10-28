@@ -14,7 +14,10 @@ export const axiosRetriable = (): AxiosInstance => {
     return interceptor;
 };
 
-export const createInstanceForGithub = (token?: string): AxiosInstance => {
+// 防止 baseurl 在不同实例上不同，造成请求失败
+export interface AxiosInstanceForGithub extends AxiosInstance {}
+
+export const createInstanceForGithub = (token?: string): AxiosInstanceForGithub => {
     const interceptor = axios.create({
         baseURL: 'https://api.github.com',
         headers: token
