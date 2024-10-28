@@ -16,9 +16,9 @@ export class GithubUserServerOnly extends GithubUser {
     }
 
     async getUser(): Promise<User | undefined> {
-        return await handleServerReq<User, { data: unknown }>(
+        return await handleServerReq<User>(
             () => this.axiosInstanceWithServerToken.get(`/users/${this.name}`),
-            (res) => userSchema.parseAsync(res.data)
+            (res) => userSchema.parseAsync((res as {data: unknown}).data)
         );
     }
 }

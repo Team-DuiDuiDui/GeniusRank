@@ -46,9 +46,9 @@ export const handleRequest = async <T>(
     }
 };
 
-export const handleClientReq = async <T, U>(
-    req: () => Promise<U>,
-    success: (data: U) => Promise<T>,
+export const handleClientReq = async <T>(
+    req: () => Promise<unknown>,
+    success: (data: unknown) => Promise<T>,
     errorResolve?: (error: unknown) => void,
     maxRetries: number = 0,
     toast_error: boolean = true,
@@ -57,9 +57,9 @@ export const handleClientReq = async <T, U>(
     return handleRequest(req, success, errorResolve, maxRetries, toast_error, toast_success);
 };
 
-export const handleClientGithubReq = async <T, U>(
-    req: () => Promise<U>,
-    success: (data: U) => Promise<T>,
+export const handleClientGithubReq = async <T>(
+    req: () => Promise<unknown>,
+    success: (data: unknown) => Promise<T>,
     errorResolve?: (error: unknown) => void,
     maxRetries: number = 0,
     toast_error: boolean = true,
@@ -76,16 +76,16 @@ export const handleClientGithubReq = async <T, U>(
     });
 };
 
-export const handleServerReq = async <T, U>(
-    req: () => Promise<U>,
-    success: (data: U) => Promise<T>
+export const handleServerReq = async <T>(
+    req: () => Promise<unknown>,
+    success: (data: unknown) => Promise<T>,
 ): Promise<T | undefined> => {
     return handleRequest(req, success, undefined, 0, false, false);
 };
 
-export const handleServerGraphQLReq = async <T, U>(
-    req: () => Promise<U>,
-    success: (data: unknown) => Promise<T>
+export const handleServerGraphQLReq = async <T>(
+    req: () => Promise<unknown>,
+    success: (data: unknown) => Promise<T>,
 ): Promise<T | undefined> => {
     return handleRequest(req, success, undefined, 0, false, false);
 };
