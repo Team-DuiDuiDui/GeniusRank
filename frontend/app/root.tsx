@@ -3,6 +3,10 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRout
 import i18nServer, { localeCookie } from './modules/i18n.server';
 import { useChangeLanguage } from 'remix-i18next/react';
 import { Toaster } from 'react-hot-toast';
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { ClientOnly } from 'remix-utils/client-only';
+import '@mantine/core/styles.css';
+import '@mantine/charts/styles.css';
 import './tailwind.css';
 
 export const handle = { i18n: ['translation'] };
@@ -22,10 +26,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta />
                 <Links />
+                <ColorSchemeScript />
             </head>
             <body>
-                <Toaster />
-                {children}
+                <MantineProvider>{children}</MantineProvider>
                 <ScrollRestoration />
                 <Scripts />
             </body>
@@ -36,5 +40,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
     const { locale } = useLoaderData<typeof loader>();
     useChangeLanguage(locale);
-    return <Outlet />;
+    return (
+        <>
+            <ClientOnly>{() => <Toaster />}</ClientOnly>
+            <Outlet />
+        </>
+    );
 }

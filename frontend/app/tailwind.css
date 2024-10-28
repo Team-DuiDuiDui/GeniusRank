@@ -4,9 +4,13 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-white dark:bg-gray-950 box-border;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+}
+
+*{
+  box-sizing: border-box;
 }

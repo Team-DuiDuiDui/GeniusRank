@@ -1,6 +1,44 @@
 {
   "common": {
-    "title": "Program",
-    "languages": "Languages"
+    "title": "Genius Rank - GitHub user analysis",
+    "languages": "Languages",
+    "search": {
+      "placeholder": "Input the username on GitHub..."
+    },
+    "user": {
+      "description": "GitHub User Analysis",
+      "title": "Search for user  | Genius Rank",
+      "no_description": "This user has no descriptions",
+      "followers": "followers",
+      "following": "following",
+      "err": {
+        "not_found": "User Not Found",
+        "parse_error": "Parse Error",
+        "something_wrong": "Something Went Wrong",
+        "rate_limit": "API rate limit exceeded"
+      },
+      "userRecentPrs": "Recent 80 Merged Pull Requests",
+      "userRecentIssues": "Recent 80 Issues",
+      "number": "No.",
+      "repo": "Repositories",
+      "pr_title": "Pull Request",
+      "update_time": "Update Time",
+      "issue_title": "Issue Title",
+      "no_prs": "This user has no merged pull requests",
+      "no_issues": "This user has no issues",
+      "userRepos": "Recent 80 Repos",
+      "lang": "Language",
+      "open_issues": "Open Issues",
+      "size": "Size",
+      "no_repos": "This user has no repos",
+      "is_fork": "This is a forked repository",
+      "unknown": "Unknown",
+      "not_a_user": "Note: This may not be a GitHub user, but an organization or another entity.",
+      "commit_message": "Commit Message",
+      "committer": "Committer",
+      "no_commits": "This user has no commits",
+      "userRecentCommits": "Recent 20 Commits",
+      "author": "Author"
+    }
   }
 }
