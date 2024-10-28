@@ -1,18 +1,21 @@
 import { User } from '~/utils/requests/ghapis/typings/user';
-import { AxiosInstance } from 'axios';
 import { handleClientGithubGraphQLReq } from '../requests/request';
+import { AxiosInstanceForGithub } from '../requests/instance';
+import { AxiosInstanceForBe } from '~/api/instance';
+import { syncChatForNation } from '~/api/chat';
 
 export interface GuessNationProps {
-    axiosInstance: AxiosInstance;
+    locale: string;
+    beInstance: AxiosInstanceForBe;
+    githubInstance: AxiosInstanceForGithub;
     userData: User;
 }
 
-export const guessRegion = async ({ userData, axiosInstance }: GuessNationProps): Promise<string> => {
-    guessRegionFromFollowers(userData, axiosInstance);
-    return "";
-};  
+export const guessRegion = async ({ locale, userData, beInstance, githubInstance }: GuessNationProps): Promise<string> => {
+    return await guessRegionFromFollowers(userData, beInstance, githubInstance, locale);
+};
 
-const guessRegionFromFollowers = async (userData: User, axiosInstance: AxiosInstance): Promise<string> => {
+const guessRegionFromFollowers = async (userData: User, beInstance: AxiosInstanceForBe, githubInstance: AxiosInstanceForGithub, locale: string): Promise<string> => {
     interface Followers {
         login: string;
         name: string;
@@ -41,7 +44,7 @@ const guessRegionFromFollowers = async (userData: User, axiosInstance: AxiosInst
                 }`;
     const variables = { userName: userData.login };
     const data = await handleClientGithubGraphQLReq<string[]>(
-        { axiosInstance, query, variables },
+        { axiosInstance: githubInstance, query, variables },
         async res => {
             const result: string[] = []
             const data = res.data.data.user.followers.nodes
@@ -49,6 +52,8 @@ const guessRegionFromFollowers = async (userData: User, axiosInstance: AxiosInst
             return result
         }
     );
-    console.log(data);
-    return '';
+    if (!data) {
+        throw new Error("Data is undefined");
+    }
+    return await syncChatForNation(data.toString(), locale, beInstance);
 };

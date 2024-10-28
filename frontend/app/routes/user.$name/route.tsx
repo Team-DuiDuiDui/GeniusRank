@@ -4,14 +4,19 @@ import { isRouteErrorResponse, useLoaderData, useNavigation, useParams, useRoute
 import UserBasic from '~/components/userinfo/basic';
 import UserInfo from '~/components/userinfo/info';
 import { githubUser } from '~/utils/requests/ghapis/user';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import UserPRs from '~/components/userinfo/prs';
 import UserIssues from '~/components/userinfo/issues';
 import UserRepositories from '~/components/userinfo/repos';
 import { guessRegion } from '~/utils/region/main';
-import { createInstanceForGithub } from '~/utils/requests/instance';
 import { LoadingOverlay } from '@mantine/core';
 import UserCommits from '~/components/userinfo/commits';
+import useAxiosInstanceForBe from '~/hooks/useAxiosInstanceForBe';
+import { useLocale } from 'remix-i18next/react';
+import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
+import { AxiosInstanceForBe } from '~/api/instance';
+import { AxiosInstanceForGithub } from '~/utils/requests/instance';
+import { isPromise } from '~/utils/promise';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -23,17 +28,30 @@ export default function Index() {
     const data = useLoaderData<typeof loader>();
     const navigation = useNavigation();
     const params = useParams();
+    const locale = useLocale();
+    const beInstance = useAxiosInstanceForBe();
+    const githubInstance = useAxiosInstanceForGithub();
     const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData));
-    // const [userRegion, setUserRegion] = useState<null | unknown>(null);
+    const [userRegion, setUserRegion] = useState<null | { nation : string}>(null);
+
+    const getAndSetUserRegion = useCallback(async () => {
+        console.log(`githubInstance: ${githubInstance}`);
+        const nation = await guessRegion({ locale, userData: data.userData, beInstance: beInstance!, githubInstance: githubInstance!});
+        setUserRegion({ nation });
+        console.log(userRegion)
+    }, [beInstance, data.userData, githubInstance, locale, userRegion]);
+
     useEffect(() => {
         user.current.setUserName(params?.name ?? '');
         user.current.setUserData(data.userData);
-        getAndSetUserRegion();
     }, [data.userData, params?.name]);
-    const getAndSetUserRegion = async () => {
-        const axiosInstance = createInstanceForGithub(localStorage.GITHUB_ACCESS_TOKEN?localStorage.GITHUB_ACCESS_TOKEN:undefined);
-        await guessRegion({ userData: data.userData, axiosInstance });
-    };
+
+    useEffect(() => {
+        if (!(isPromise(beInstance) && isPromise(githubInstance)) && beInstance && githubInstance) {
+            getAndSetUserRegion();
+        }
+    }, [beInstance, githubInstance, getAndSetUserRegion]);
+
     return (
         <>
             <div className="flex  items-center justify-center w-full">
