@@ -1,8 +1,6 @@
 import { User } from '~/utils/requests/ghapis/typings/user';
-import { AxiosInstance, AxiosResponse } from 'axios';
-import sleep from '../sleep';
+import { AxiosInstance } from 'axios';
 import { handleClientGithubGraphQLReq } from '../requests/request';
-import UserInfo from '~/components/userinfo/info';
 
 export interface GuessNationProps {
     axiosInstance: AxiosInstance;
@@ -10,14 +8,9 @@ export interface GuessNationProps {
 }
 
 export const guessRegion = async ({ userData, axiosInstance }: GuessNationProps): Promise<string> => {
-    if (userData.followers < 5000) {
-        const followers = userData.followers;
-        const lastPage = Math.trunc(followers % 50);
-        for (let i = lastPage; i >= lastPage - 1; i--) {
-            sleep(1000);
-        }
-    }
-};
+    guessRegionFromFollowers(userData, axiosInstance);
+    return "";
+};  
 
 const guessRegionFromFollowers = async (userData: User, axiosInstance: AxiosInstance): Promise<string> => {
     interface Followers {
@@ -32,7 +25,7 @@ const guessRegionFromFollowers = async (userData: User, axiosInstance: AxiosInst
     const query = `
                 query($userName: String!) {
                     user(login: $userName) {
-                        followers(last: 50) {
+                        followers(last: ${userData.followers <= 80 ? userData.followers : 80}) {
                         nodes {
                             login
                             name
@@ -46,9 +39,16 @@ const guessRegionFromFollowers = async (userData: User, axiosInstance: AxiosInst
                         }
                     }
                 }`;
-    const variables = { userName: userData.name! };
-    const data = handleClientGithubGraphQLReq<Followers[]>(
+    const variables = { userName: userData.login };
+    const data = await handleClientGithubGraphQLReq<string[]>(
         { axiosInstance, query, variables },
-        (res) => (res as AxiosResponse).data.user.followers.nodes
+        async res => {
+            const result: string[] = []
+            const data = res.data.data.user.followers.nodes
+            data.forEach((follower: Followers) => follower.location ? result.push(follower.location) : null)
+            return result
+        }
     );
+    console.log(data);
+    return '';
 };

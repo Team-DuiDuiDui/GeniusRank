@@ -24,21 +24,15 @@ export default function Index() {
     const navigation = useNavigation();
     const params = useParams();
     const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData));
-    const [userRegion, setUserRegion] = useState<null | unknown>(null);
+    // const [userRegion, setUserRegion] = useState<null | unknown>(null);
     useEffect(() => {
         user.current.setUserName(params?.name ?? '');
         user.current.setUserData(data.userData);
+        getAndSetUserRegion();
     }, [data.userData, params?.name]);
-    // const axiosInstance = axios.create({
-    //     baseURL: 'https://api.github.com',
-    //     headers: localStorage.GITHUB_ACCESS_TOKEN ? {
-    //         Authorization: `token ${localStorage.GITHUB_ACCESS_TOKEN}`,
-    //     }: {},
-    // });
     const getAndSetUserRegion = async () => {
-        const axiosInstance = createInstanceForGithub(localStorage.GITHUB_ACCESS_TOKEN);
-        setUserRegion(await guessRegion({ userData: data.userData, axiosInstance }));
-        console.log(userRegion);
+        const axiosInstance = createInstanceForGithub(localStorage.GITHUB_ACCESS_TOKEN?localStorage.GITHUB_ACCESS_TOKEN:undefined);
+        await guessRegion({ userData: data.userData, axiosInstance });
     };
     return (
         <>

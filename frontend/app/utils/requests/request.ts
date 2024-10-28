@@ -118,7 +118,7 @@ export const handleClientGithubGraphQLReq = async <T>(
         query: string;
         variables: Record<string, unknown>;
     },
-    success: (data: unknown) => Promise<T>
+    success: (data: AxiosResponse) => Promise<T>
 ): Promise<T | undefined> => {
     return handleRequest(
         () => {
