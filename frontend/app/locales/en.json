@@ -54,6 +54,11 @@
       "success": {
         "reloadSuccess": "Reload success"
       }
+    },
+    "drawer": {
+      "login": "Login",
+      "login_github": "Login with GitHub",
+      "anonymous": "Anonymous"
     }
   }
 }

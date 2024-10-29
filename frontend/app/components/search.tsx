@@ -27,7 +27,7 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用�
                 <span className="relative flex items-center justify-center ml-1">
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}
-                        zIndex={1000}
+                        zIndex={30}
                         overlayProps={{ radius: 'sm', blur: 1, center: false }}
                         loaderProps={{ size: 'sm' }}
                     />
