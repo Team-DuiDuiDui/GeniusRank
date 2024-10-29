@@ -56,7 +56,8 @@
     },
     "drawer": {
       "login": "登录",
-      "login_github": "使用 GitHub 登录"
+      "login_github": "使用 GitHub 登录",
+      "anonymous": "匿名用户"
     }
   }
 }

@@ -57,7 +57,8 @@
     },
     "drawer": {
       "login": "Login",
-      "login_github": "Login with GitHub"
+      "login_github": "Login with GitHub",
+      "anonymous": "Anonymous"
     }
   }
 }
