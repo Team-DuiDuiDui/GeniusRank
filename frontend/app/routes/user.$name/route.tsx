@@ -30,13 +30,18 @@ export default function Index() {
     const beInstance = useAxiosInstanceForBe();
     const githubInstance = useAxiosInstanceForGithub();
     const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData));
-    const [userRegion, setUserRegion] = useState<null | { nation : string}>(null);
+    const [userRegion, setUserRegion] = useState<null | { nation: string }>(null);
 
     const getAndSetUserRegion = useCallback(async () => {
         console.log(`githubInstance: ${githubInstance}`);
-        const nation = await guessRegion({ locale, userData: data.userData, beInstance: beInstance!, githubInstance: githubInstance!});
+        const nation = await guessRegion({
+            locale,
+            userData: data.userData,
+            beInstance: beInstance!,
+            githubInstance: githubInstance!,
+        });
         setUserRegion({ nation });
-        console.log(userRegion)
+        console.log(userRegion);
     }, [beInstance, data.userData, githubInstance, locale, userRegion]);
 
     useEffect(() => {

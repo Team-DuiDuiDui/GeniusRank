@@ -15,25 +15,25 @@ export class GithubUserServerOnly extends GithubUser {
 
     /**
      * 构造函数，初始化 GithubUserServerOnly 实例。
-     * 
+     *
      * @param name GitHub 用户名
      * @param token GITHUB_ACCESS_TOKEN
      */
     constructor(name: string, token: string) {
-        super(name);
+        super(name, undefined, undefined, true);
         this.token = token;
         this.axiosInstanceWithServerToken = createInstanceForGithub(token);
     }
 
     /**
      * 获取 GitHub 用户信息。
-     * 
+     *
      * @returns 返回包含用户信息的 Promise 对象，如果请求失败则返回 undefined。
      */
     async getUser(): Promise<User | undefined> {
         return await handleServerReq<User>(
             () => this.axiosInstanceWithServerToken.get(`/users/${this.name}`),
-            (res) => userSchema.parseAsync((res as {data: unknown}).data)
+            (res) => userSchema.parseAsync((res as { data: unknown }).data)
         );
     }
 }
