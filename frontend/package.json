@@ -29,6 +29,7 @@
         "i18next-browser-languagedetector": "^8.0.0",
         "i18next-fetch-backend": "^6.0.0",
         "isbot": "^4.1.0",
+        "lodash.clonedeep": "^4.5.0",
         "pretty-cache-header": "^1.0.0",
         "react": "^18.2.0",
         "react-countup": "^6.5.3",
@@ -44,6 +45,7 @@
     "devDependencies": {
         "@cloudflare/workers-types": "^4.20240512.0",
         "@remix-run/dev": "^2.13.1",
+        "@types/lodash.clonedeep": "^4",
         "@types/react": "^18.2.20",
         "@types/react-dom": "^18.2.7",
         "@typescript-eslint/eslint-plugin": "^6.7.4",
