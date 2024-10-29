@@ -4,11 +4,12 @@ import { Loader, Skeleton, Tooltip } from '@mantine/core';
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { ForkOutlined } from '@ant-design/icons';
-import toast from 'react-hot-toast';
 import { ZodError } from 'zod';
-import axios from 'axios';
+import { AxiosError } from 'axios';
 import { githubUser } from '~/utils/requests/ghapis/user';
 import { useParams } from '@remix-run/react';
+import ErrorNote from './error';
+import CardWithScroll from '../constant/cardWithScroll';
 
 interface userRepositoriesProps {
     data: User;
@@ -19,30 +20,24 @@ const UserRepositories: React.FC<userRepositoriesProps> = ({ data, user }) => {
     const { t } = useTranslation();
     const titleRef = useRef(null);
     const [repos, setRepos] = useState<null | UserRepos>(null);
+    const [error, setErrors] = useState<null | AxiosError | ZodError | unknown>(null);
     const params = useParams();
     const effectCache = useRef<boolean>(false),
         effectFlag = useRef<boolean>(false);
     useEffect(() => {
         titleRef.current && autoAnimate(titleRef.current);
     }, [titleRef]);
+    const getAndSetUserInfos = async () => {
+        setErrors(null);
+        try {
+            user.current.setUserName(params?.name ?? '');
+            setRepos(await user.current.getUserRepos());
+        } catch (e) {
+            console.error(e);
+            setErrors(e);
+        }
+    };
     useEffect(() => {
-        const getAndSetUserInfos = async () => {
-            try {
-                user.current.setUserName(params?.name ?? '');
-                setRepos(await user.current.getUserRepos());
-            } catch (e) {
-                console.error(e);
-                // eslint-disable-next-line import/no-named-as-default-member
-                if (axios.isAxiosError(e)) {
-                    console.error(e);
-                    if (e.status === 404) toast.error(t('user.err.not_found'));
-                    if (e.status === 403) {
-                        throw toast.error(t('user.err.rate_limit'));
-                    } else toast.error(t('user.err.something_wrong'));
-                } else if (e instanceof ZodError) toast.error(t('user.err.parse_error'));
-                else toast.error(t('user.err.something_wrong'));
-            }
-        };
         setRepos(null);
         if (!effectCache.current) {
             effectCache.current = true;
@@ -60,18 +55,19 @@ const UserRepositories: React.FC<userRepositoriesProps> = ({ data, user }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, t, user]);
     return (
-        <div className="flex flex-col w-full bg-white p-8 pt-0 rounded-lg gap-4 max-h-96 overflow-y-auto">
+        <CardWithScroll maxHeight='max-h-96'> 
             <h2 className="text-lg font-bold sticky top-0 mt-4 bg-white py-1">
                 {t('user.userRepos')}
                 <span className="font-normal ml-4 text-base" ref={titleRef}>
-                    {!repos ? <Loader size="xs" /> : `${repos?.length ?? '_'} / ${data.public_repos ?? '_'}`}
+                    {!repos && !error ? <Loader size={16} /> : `${repos?.length ?? '_'} / ${data.public_repos ?? '_'}`}
+                    <ErrorNote error={error} reload={getAndSetUserInfos} />
                 </span>
             </h2>
             {repos ? (
                 <>
                     <table className="w-full">
                         <thead>
-                            <tr className="mb-6">
+                            <tr className="mb-6 sticky font-normal top-8 bg-white pb-3">
                                 <th>{t('user.number')}</th>
                                 <th>{t('user.repo')}</th>
                                 <th>{t('user.lang')}</th>
@@ -97,9 +93,9 @@ const UserRepositories: React.FC<userRepositoriesProps> = ({ data, user }) => {
                     </table>
                 </>
             ) : (
-                <Skeleton height={208} />
+                <Skeleton height={208} animate={!error} />
             )}
-        </div>
+        </CardWithScroll>
     );
 };
 

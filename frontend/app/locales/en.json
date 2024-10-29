@@ -15,7 +15,15 @@
         "not_found": "User Not Found",
         "parse_error": "Parse Error",
         "something_wrong": "Something Went Wrong",
-        "rate_limit": "API rate limit exceeded"
+        "rate_limit": "Request rate is too high or more than 60 requests in an hour (logged-in user is 5000)",
+        "network_error": "Network Error",
+        "message": "Error message: ",
+        "may_help": "The following information may be helpful: ",
+        "reload": "Try to reload",
+        "may_hide": "The user may be set to private",
+        "may_reason": "Possible reasons: ",
+        "reloading_after": "Reached the rate limit, try again after",
+        "reloading_after_2": "seconds"
       },
       "userRecentPrs": "Recent 80 Merged Pull Requests",
       "userRecentIssues": "Recent 80 Issues",
@@ -38,7 +46,9 @@
       "committer": "Committer",
       "no_commits": "This user has no commits",
       "userRecentCommits": "Recent 20 Commits",
-      "author": "Author"
+      "author": "Author",
+      "no_message": "No messages",
+      "error": {}
     }
   }
 }

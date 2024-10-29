@@ -15,7 +15,15 @@
         "not_found": "找不到用户",
         "parse_error": "解析错误",
         "something_wrong": "出错了",
-        "rate_limit": "请求频率过快"
+        "rate_limit": "请求频率过快或一小时请求超过60次（登录用户为5000次）",
+        "network_error": "网络错误",
+        "may_help": "以下信息可能有帮助：",
+        "message": "错误信息：",
+        "reload": "尝试重新加载",
+        "may_hide": "用户可能设置为私密状态",
+        "may_reason": "可能原因：",
+        "reloading_after": "达到速率限制，在",
+        "reloading_after_2": "秒后重新尝试"
       },
       "userRecentPrs": "最近 80 条已合并的 Pull Requests",
       "userRecentIssues": "最近 80 条 Issues",
@@ -38,7 +46,8 @@
       "committer": "提交人",
       "no_commits": "该用户暂无提交",
       "userRecentCommits": "最近 20 条提交",
-      "author": "作者"
+      "author": "作者",
+      "no_message": "暂无信息"
     }
   }
 }

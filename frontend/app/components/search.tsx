@@ -23,7 +23,7 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用�
                 const { value: name } = getForm<HTMLInputElement>(e, 'name');
                 name.trim() ? navigate(`/user/${name}`) : pathname.includes('user/') && navigate('/user');
             }}>
-            <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white shadow-md hover:shadow-2xl transition-all">
+            <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all">
                 <span className="relative flex items-center justify-center ml-1">
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}
@@ -31,7 +31,7 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用�
                         overlayProps={{ radius: 'sm', blur: 1, center: false }}
                         loaderProps={{ size: 'sm' }}
                     />
-                    {logo && <img alt="logo" src={logo} className="m-2 h-7 w-7" />}
+                    {logo && <img alt="logo" src={logo} className="m-2 h-8 w-8" />}
                 </span>
                 <input
                     {...props}
