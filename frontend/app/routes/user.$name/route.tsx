@@ -57,7 +57,7 @@ export default function Index() {
 
     return (
         <>
-            <div className="flex  items-center justify-center w-full">
+            <div className="flex items-center justify-center w-full">
                 <div className="flex flex-row items-center gap-16 w-full h-full justify-center relative">
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}
