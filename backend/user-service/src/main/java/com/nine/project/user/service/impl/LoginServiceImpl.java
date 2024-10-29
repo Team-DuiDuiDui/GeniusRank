@@ -14,10 +14,7 @@ import com.nine.project.framework.exception.ServiceException;
 import com.nine.project.user.dao.entity.UserDO;
 import com.nine.project.user.dao.entity.UserInfoDO;
 import com.nine.project.user.dao.mapper.UserMapper;
-import com.nine.project.user.dto.req.UserForgetPwdReqDTO;
-import com.nine.project.user.dto.req.UserLoginByCodeReqDTO;
-import com.nine.project.user.dto.req.UserLoginReqDTO;
-import com.nine.project.user.dto.req.UserRegisterReqDTO;
+import com.nine.project.user.dto.req.*;
 import com.nine.project.user.dto.resp.UserLoginRespDTO;
 import com.nine.project.user.dto.resp.UserRegisterRespDTO;
 import com.nine.project.user.mq.event.VerificationCodeEvent;
@@ -207,6 +204,39 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserDO> implements
 
         // 返回token登录凭证
         return new UserLoginRespDTO(generateToken(userDO));
+    }
+
+    @Override
+    public UserLoginRespDTO loginByOAuth(UserLoginByOAuthDTO requestParam) {
+        // 校验邮箱
+        if (RegexUtil.isEmailInvalid(requestParam.getEmail())) {
+            throw new ClientException(EMAIL_FORMAT_ERROR);
+        }
+
+        // 判断邮箱是否已经存在
+        if (hasUsername(requestParam.getEmail())) {
+            UserDO userDO = baseMapper.selectOne(Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getEmail, requestParam.getEmail()));
+            if (userDO == null) {
+                throw new ServiceException(USER_NOT_FOUND_ERROR);
+            }
+            return new UserLoginRespDTO(generateToken(userDO));
+        }
+
+        // 执行注册逻辑
+        try {
+            UserDO userDO = BeanUtil.toBean(requestParam, UserDO.class);
+
+            // 注册
+            int inserted = baseMapper.insert(userDO);
+            if (inserted < 1) {
+                throw new ServiceException(USER_RECORD_ADD_ERROR);
+            }
+            usernameCachePenetrationBloomFilter.add(requestParam.getUsername());
+            userEmailCachePenetrationBloomFilter.add(requestParam.getEmail());
+            return new UserLoginRespDTO(generateToken(userDO));
+        } catch (DuplicateKeyException ex) {
+            throw new ClientException(USER_RECORD_ADD_ERROR);
+        }
     }
 
     private UserDO Verification4GetUser(String requestParam, String requestParam1) {

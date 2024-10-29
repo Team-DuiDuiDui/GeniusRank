@@ -2,10 +2,7 @@ package com.nine.project.user.controller;
 
 import com.nine.project.framework.result.Result;
 import com.nine.project.framework.web.Results;
-import com.nine.project.user.dto.req.UserForgetPwdReqDTO;
-import com.nine.project.user.dto.req.UserLoginByCodeReqDTO;
-import com.nine.project.user.dto.req.UserLoginReqDTO;
-import com.nine.project.user.dto.req.UserRegisterReqDTO;
+import com.nine.project.user.dto.req.*;
 import com.nine.project.user.dto.resp.UserLoginRespDTO;
 import com.nine.project.user.dto.resp.UserRegisterRespDTO;
 import com.nine.project.user.service.LoginService;
@@ -69,6 +66,15 @@ public class LoginController {
     public Result<UserLoginRespDTO> login(@RequestBody UserLoginReqDTO requestParam) {
         return Results.success(loginService.login(requestParam));
     }
+
+    /**
+     * 用户 OAuth 登录/注册
+     */
+    @PostMapping("/api/user/loginByOAuth")
+    public Result<UserLoginRespDTO> loginByOAuth(@RequestBody UserLoginByOAuthDTO requestParam) {
+        return Results.success(loginService.loginByOAuth(requestParam));
+    }
+
 
     /**
      * 忘记密码

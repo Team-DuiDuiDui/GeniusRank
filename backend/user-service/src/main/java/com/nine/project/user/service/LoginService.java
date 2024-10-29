@@ -2,10 +2,7 @@ package com.nine.project.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.nine.project.user.dao.entity.UserDO;
-import com.nine.project.user.dto.req.UserForgetPwdReqDTO;
-import com.nine.project.user.dto.req.UserLoginByCodeReqDTO;
-import com.nine.project.user.dto.req.UserLoginReqDTO;
-import com.nine.project.user.dto.req.UserRegisterReqDTO;
+import com.nine.project.user.dto.req.*;
 import com.nine.project.user.dto.resp.UserLoginRespDTO;
 import com.nine.project.user.dto.resp.UserRegisterRespDTO;
 
@@ -65,4 +62,11 @@ public interface LoginService extends IService<UserDO> {
      *
      * */
     UserLoginRespDTO forgetPassword(UserForgetPwdReqDTO requestParam);
+
+    /**
+     * 实现 OAuth 用户登录/注册
+     * @param requestParam 用户登录请求参数
+     * @return 用户登录返回参数 Token
+     */
+    UserLoginRespDTO loginByOAuth(UserLoginByOAuthDTO requestParam);
 }

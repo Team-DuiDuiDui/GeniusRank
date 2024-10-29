@@ -18,6 +18,7 @@ spring:
                   - /api/user/loginByCode
                   - /api/user/login
                   - /api/user/forget-password
+                  - /api/user/loginByOAuth
 
         - id: project-common-aggregation
           uri: lb://project-aggregation/api/common/**
