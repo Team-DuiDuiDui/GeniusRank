@@ -34,7 +34,7 @@ export default function Index() {
         <>
             <div className="flex h-screen flex-col justify-around items-center gap-14" ref={parentRef}>
                 <div className="flex flex-row items-center gap-16 w-full justify-center">
-                    <div className="w-1/3 pt-10">
+                    <div className="w-1/3 pt-8">
                         <Search logo={githubCat} placeholder={t('search.placeholder')} />
                     </div>
                 </div>

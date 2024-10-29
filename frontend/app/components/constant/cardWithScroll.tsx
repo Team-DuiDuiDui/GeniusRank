@@ -8,7 +8,7 @@ interface cardWithScrollProps {
 
 const CardWithScroll: React.FC<cardWithScrollProps> = ({ maxHeight, children }) => {
     return (
-        <CardWithNoShrink containerClass={`gap-4 ${maxHeight} overflow-y-auto`}>
+        <CardWithNoShrink containerClass={`gap-4 ${maxHeight} overflow-y-auto pt-0 scrollbar`}>
             {children}
         </CardWithNoShrink>
     )

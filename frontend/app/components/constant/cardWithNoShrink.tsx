@@ -7,7 +7,7 @@ interface cardWithNoShrinkProps {
 
 const cardWithNoShrink: React.FC<cardWithNoShrinkProps> = ({ containerClass, children }) => {
     return (
-        <div className={`flex flex-col w-full bg-white p-8 rounded-xl border border-slate-200 ${containerClass}`}>
+        <div className={`flex flex-col w-full bg-white p-8 rounded-xl border shadow-md border-slate-200 ${containerClass}`}>
             {children}
         </div>
     );

@@ -14,3 +14,19 @@ body {
 *{
   box-sizing: border-box;
 }
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 0.125rem;
+    transform: translate(-1rem, 0.5rem);
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background-color: #4a5568; 
+    border-radius: 4px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    background-color: #e2e8f0;
+  }
+}

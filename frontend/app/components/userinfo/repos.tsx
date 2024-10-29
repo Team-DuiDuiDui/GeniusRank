@@ -67,7 +67,7 @@ const UserRepositories: React.FC<userRepositoriesProps> = ({ data, user }) => {
                 <>
                     <table className="w-full">
                         <thead>
-                            <tr className="mb-6">
+                            <tr className="mb-6 sticky font-normal top-8 bg-white pb-3">
                                 <th>{t('user.number')}</th>
                                 <th>{t('user.repo')}</th>
                                 <th>{t('user.lang')}</th>
