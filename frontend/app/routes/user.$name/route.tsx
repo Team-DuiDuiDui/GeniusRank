@@ -57,12 +57,12 @@ export default function Index() {
 
     return (
         <>
-            <div className="flex  items-center justify-center w-full">
+            <div className="flex items-center justify-center w-full">
                 <div className="flex flex-row items-center gap-16 w-full h-full justify-center relative">
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}
                         className="items-start"
-                        zIndex={1000}
+                        zIndex={30}
                         overlayProps={{ radius: 'sm', blur: 2, center: false }}
                         loaderProps={{ type: 'dots' }}
                     />
