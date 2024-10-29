@@ -62,7 +62,7 @@ export default function Index() {
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}
                         className="items-start"
-                        zIndex={1000}
+                        zIndex={30}
                         overlayProps={{ radius: 'sm', blur: 2, center: false }}
                         loaderProps={{ type: 'dots' }}
                     />

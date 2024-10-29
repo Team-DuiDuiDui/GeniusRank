@@ -53,6 +53,10 @@
       "success": {
         "reloadSuccess": "重试成功"
       }
+    },
+    "drawer": {
+      "login": "登录",
+      "login_github": "使用 GitHub 登录"
     }
   }
 }
