@@ -7,6 +7,7 @@ spring:
           predicates:
             - Path=/api/user/**
           filters:
+            - name: CORSGatewayFilterFactory
             - name: TokenValidate
               args:
                 whitePathList:
@@ -17,12 +18,14 @@ spring:
                   - /api/user/loginByCode
                   - /api/user/login
                   - /api/user/forget-password
+                  - /api/user/loginByOAuth
 
         - id: project-common
           uri: lb://project-user/api/common/**
           predicates:
             - Path=/api/common/**
           filters:
+            - name: CORSGatewayFilterFactory
             - name: TokenValidate
               args:
                 whitePathList:
@@ -34,6 +37,7 @@ spring:
           predicates:
             - Path=/api/analyze/**
           filters:
+            - name: CORSGatewayFilterFactory
             - name: TokenValidate
               args:
                 whitePathList:
