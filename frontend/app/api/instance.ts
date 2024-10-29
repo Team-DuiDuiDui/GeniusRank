@@ -12,7 +12,6 @@ export const createInstanceForBe = (token?: string): AxiosInstanceForBe => {
         baseURL: 'https://7fac-2409-8938-c88-2955-4541-68be-4e48-a266.ngrok-free.app/api',
         headers: token ? {
             Authorization: token ,
-            'User-Agent': 'Team-Duiduidui: Genius Rank',
         }: {}
     });
 }
