@@ -26,7 +26,7 @@ CREATE TABLE t_user (
 # 2. 创建 GitHub 用户分数表 (GithubUserScores)
 CREATE TABLE t_github_user_score (
    id             BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,
-   github_user_id BIGINT NOT NULL COMMENT 'GitHub 用户 ID',
+   github_user_id VARCHAR(256) NOT NULL COMMENT 'GitHub 用户 ID',
    score          DOUBLE NOT NULL COMMENT '算法所得分数',
 
    create_time    DATETIME NULL COMMENT '创建时间',
@@ -40,7 +40,7 @@ CREATE TABLE t_github_user_score (
 # 3. 创建 Github 用户所在国家/地区猜测表 (GithubUserCountryGuess)
 CREATE TABLE t_github_user_country_guess (
   id             BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,
-  github_user_id BIGINT NOT NULL COMMENT 'GitHub 用户 ID',
+  github_user_id VARCHAR(256) NOT NULL COMMENT 'GitHub 用户 ID',
   country        VARCHAR(50) COMMENT '国家/地区',
 
   create_time    DATETIME NULL COMMENT '创建时间',
@@ -54,7 +54,7 @@ CREATE TABLE t_github_user_country_guess (
 # 4. 创建 Github 用户开发者领域猜测表 (GithubUserDeveloperTypeGuess)
 CREATE TABLE t_github_user_developer_type_guess (
     id             BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,
-    github_user_id BIGINT NOT NULL COMMENT 'GitHub 用户 ID',
+    github_user_id VARCHAR(256) NOT NULL COMMENT 'GitHub 用户 ID',
     developer_type VARCHAR(255) COMMENT '开发者领域',
 
     create_time    DATETIME NULL COMMENT '创建时间',
@@ -68,7 +68,7 @@ CREATE TABLE t_github_user_developer_type_guess (
 # 5. 创建 Github 用户技术能力评估信息整理表(GithubUserTechCapAssessment)
 CREATE TABLE t_github_user_tech_cap_assessment (
    id             BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,
-   github_user_id BIGINT NOT NULL COMMENT 'GitHub 用户 ID',
+   github_user_id VARCHAR(256) NOT NULL COMMENT 'GitHub 用户 ID',
 
    # 开发者技术能力评估信息自动整理，有的开发者在 GitHub 上有博客链接，甚至有一些用 GitHub 搭建的网站，也有一些在 GitHub 本身有账号相关介绍，基于类 ChatGLM 应用整理出的开发者评估信息。
    technical_capability     VARCHAR(1000) COMMENT 'AI 所提供的技术能力评估信息',
