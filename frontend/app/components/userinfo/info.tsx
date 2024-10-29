@@ -1,8 +1,9 @@
-import { Avatar } from '@mantine/core';
+import { Avatar, Card } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { User } from '~/utils/requests/ghapis/typings/user';
 import InfoLink, { InfoIcon } from '../infoLink';
 import { EnvironmentOutlined, ShopOutlined, XOutlined } from '@ant-design/icons';
+import CardWithNoShrink from '../constant/cardWithNoShrink';
 
 interface userInfo {
     data: User;
@@ -11,7 +12,7 @@ interface userInfo {
 const UserInfo: React.FC<userInfo> = ({ data }) => {
     const { t } = useTranslation();
     return (
-        <div className="flex flex-col w-full bg-white p-8 rounded-lg">
+        <CardWithNoShrink>
             <div className="flex flex-row items-center justify-left gap-8 w-full">
                 <Avatar src={data.avatar_url} size="xl" radius={data.type !== 'User' ? 'sm' : undefined} />
                 <div className="flex flex-col">
@@ -57,7 +58,7 @@ const UserInfo: React.FC<userInfo> = ({ data }) => {
                     )}
                 </div>
             </div>
-        </div>
+        </CardWithNoShrink>
     );
 };
 

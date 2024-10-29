@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { AxiosInstanceForBe, createInstanceForBe } from '~/api/instance'
 
 /**
- * 用于闭包创建后端 axios 实例，防止重复创建浪费内存
+ * 用于【 闭包 】创建后端 axios 实例，防止重复创建浪费内存
  * @returns 后端 axios 实例
  */
 const useAxiosInstanceForBe = (): AxiosInstanceForBe | undefined => {
@@ -19,7 +19,6 @@ const useAxiosInstanceForBe = (): AxiosInstanceForBe | undefined => {
         // 仅在客户端运行
         if (!isClient) return
 
-        // 获取 token
         const token = localStorage.getItem('token')
         if (token && token !== currentToken.current) {
             const newAxiosInstance = createInstanceForBe(token)
@@ -27,7 +26,6 @@ const useAxiosInstanceForBe = (): AxiosInstanceForBe | undefined => {
             currentToken.current = token
         }
 
-        // 监听 localStorage 的变化
         const handleStorageChange = (event: StorageEvent) => {
             if (event.key === 'token') {
                 const newToken = event.newValue
@@ -41,11 +39,10 @@ const useAxiosInstanceForBe = (): AxiosInstanceForBe | undefined => {
 
         window.addEventListener('storage', handleStorageChange)
 
-        // 清理事件监听器
         return () => {
             window.removeEventListener('storage', handleStorageChange)
         }
-    }, [isClient]) // 依赖于 isClient
+    }, [isClient])
 
     return axiosInstance
 }

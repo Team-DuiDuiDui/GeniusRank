@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { AxiosInstanceForGithub, createInstanceForGithub } from '~/utils/requests/instance'
 
 /**
- * 用于闭包创建前端与 github 的 api 通信的 axios 实例，防止重复创建浪费内存
+ * 用于【 闭包 】创建前端与 github 的 api 通信的 axios 实例，防止重复创建浪费内存
  * @returns axios 实例
  */
 const useAxiosInstanceForGithub = (): AxiosInstanceForGithub | undefined => {
@@ -19,7 +19,6 @@ const useAxiosInstanceForGithub = (): AxiosInstanceForGithub | undefined => {
         // 仅在客户端运行
         if (!isClient) return
 
-        // 获取 token
         const token = localStorage.getItem('GITHUB_ACCESS_TOKEN')
         if (token && token !== currentToken.current) {
             const newAxiosInstance = createInstanceForGithub(token)
@@ -27,7 +26,6 @@ const useAxiosInstanceForGithub = (): AxiosInstanceForGithub | undefined => {
             currentToken.current = token
         }
 
-        // 监听 localStorage 的变化
         const handleStorageChange = (event: StorageEvent) => {
             if (event.key === 'GITHUB_ACCESS_TOKEN') {
                 const newToken = event.newValue
@@ -41,11 +39,10 @@ const useAxiosInstanceForGithub = (): AxiosInstanceForGithub | undefined => {
 
         window.addEventListener('storage', handleStorageChange)
 
-        // 清理事件监听器
         return () => {
             window.removeEventListener('storage', handleStorageChange)
         }
-    }, [isClient]) // 依赖于 isClient
+    }, [isClient])
 
     return axiosInstance
 }

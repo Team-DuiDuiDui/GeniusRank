@@ -10,6 +10,7 @@ import { ZodError } from 'zod';
 import { useParams } from '@remix-run/react';
 import sleep from '~/utils/sleep';
 import ErrorNote from './error';
+import CardWithScroll from '../constant/cardWithScroll';
 
 interface userIssues {
     data: User;
@@ -56,7 +57,7 @@ const UserIssues: React.FC<userIssues> = ({ data, user }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, t, user]);
     return (
-        <div className="flex flex-col w-full bg-white p-8 pt-0 rounded-lg gap-4 max-h-96 overflow-y-auto">
+        <CardWithScroll maxHeight='max-h-96'> 
             <h2 className="text-lg font-bold sticky top-0 mt-4 bg-white py-1">
                 {t('user.userRecentIssues')}
                 <span className="font-normal ml-4 text-base" ref={titleRef}>
@@ -94,7 +95,7 @@ const UserIssues: React.FC<userIssues> = ({ data, user }) => {
             ) : (
                 <Skeleton height={208} animate={!error} />
             )}
-        </div>
+        </CardWithScroll>
     );
 };
 
