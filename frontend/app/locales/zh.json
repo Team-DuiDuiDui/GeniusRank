@@ -23,7 +23,9 @@
         "may_hide": "用户可能设置为私密状态",
         "may_reason": "可能原因：",
         "reloading_after": "达到速率限制，在",
-        "reloading_after_2": "秒后重新尝试"
+        "reloading_after_2": "秒后重新尝试",
+        "reloading": "重试中...",
+        "reloadFailed": "重试失败"
       },
       "userRecentPrs": "最近 80 条已合并的 Pull Requests",
       "userRecentIssues": "最近 80 条 Issues",
@@ -47,7 +49,10 @@
       "no_commits": "该用户暂无提交",
       "userRecentCommits": "最近 20 条提交",
       "author": "作者",
-      "no_message": "暂无信息"
+      "no_message": "暂无信息",
+      "success": {
+        "reloadSuccess": "重试成功"
+      }
     }
   }
 }

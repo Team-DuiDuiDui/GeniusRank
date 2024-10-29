@@ -5,6 +5,7 @@
         ".vscode/tailwindcss.json"
     ],
     "cSpell.words": [
+        "countup",
         "flowbite",
         "loginbg",
         "ratelimit",

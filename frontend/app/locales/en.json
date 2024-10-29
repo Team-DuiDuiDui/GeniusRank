@@ -23,7 +23,9 @@
         "may_hide": "The user may be set to private",
         "may_reason": "Possible reasons: ",
         "reloading_after": "Reached the rate limit, try again after",
-        "reloading_after_2": "seconds"
+        "reloading_after_2": "seconds",
+        "reloading": "Reloading...",
+        "reloadFailed": "Reload failed"
       },
       "userRecentPrs": "Recent 80 Merged Pull Requests",
       "userRecentIssues": "Recent 80 Issues",
@@ -48,7 +50,10 @@
       "userRecentCommits": "Recent 20 Commits",
       "author": "Author",
       "no_message": "No messages",
-      "error": {}
+      "error": {},
+      "success": {
+        "reloadSuccess": "Reload success"
+      }
     }
   }
 }
