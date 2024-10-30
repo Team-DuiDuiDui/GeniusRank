@@ -14,7 +14,6 @@ import UserCommits from '~/components/userinfo/commits';
 import useAxiosInstanceForBe from '~/hooks/useAxiosInstanceForBe';
 import { useLocale } from 'remix-i18next/react';
 import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
-import { isPromise } from '~/utils/chore';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -33,7 +32,6 @@ export default function Index() {
     const [userRegion, setUserRegion] = useState<null | { nation: string }>(null);
 
     const getAndSetUserRegion = useCallback(async () => {
-        console.log(`githubInstance: ${githubInstance}`);
         const nation = await guessRegion({
             locale,
             userData: data.userData,
@@ -50,7 +48,7 @@ export default function Index() {
     }, [data.userData, params?.name]);
 
     useEffect(() => {
-        if (!(isPromise(beInstance) && isPromise(githubInstance)) && beInstance && githubInstance) {
+        if (beInstance && githubInstance) {
             getAndSetUserRegion();
         }
     }, [beInstance, githubInstance, getAndSetUserRegion]);
