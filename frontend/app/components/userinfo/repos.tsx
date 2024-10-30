@@ -45,7 +45,7 @@ const UserRepositories: React.FC<userRepositoriesProps> = ({ data, user }) => {
             effectCache.current = true;
             getAndSetUserInfos();
         }
-    }, [data, t, user, getAndSetUserInfos]);
+    }, [data, user, getAndSetUserInfos]);
 
     return (
         <CardWithScrollableTable
@@ -58,15 +58,13 @@ const UserRepositories: React.FC<userRepositoriesProps> = ({ data, user }) => {
                 'Stars',
                 'Watchers',
                 'Forks',
-                t('user.open_issues')
+                t('user.open_issues'),
             ]}
             data={repos}
             dataCount={data.public_repos ?? 0}
             error={error}
             reload={getAndSetUserInfos}
-            renderRow={(item: MinimalRepository, index: number) => (
-                <Repo item={item} index={index + 1} key={index} />
-            )}
+            renderRow={(item: MinimalRepository, index: number) => <Repo item={item} index={index + 1} key={index} />}
         />
     );
 };

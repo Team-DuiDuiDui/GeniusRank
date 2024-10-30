@@ -44,7 +44,7 @@ const UserCommits: React.FC<userCommitsProps> = ({ data, user }) => {
             effectCache.current = true;
             getAndSetUserInfos();
         }
-    }, [data, t, user, getAndSetUserInfos]);
+    }, [data, user, getAndSetUserInfos]);
 
     return (
         <CardWithScrollableTable
@@ -54,7 +54,7 @@ const UserCommits: React.FC<userCommitsProps> = ({ data, user }) => {
                 t('user.repo'),
                 t('user.commit_message'),
                 t('user.author'),
-                t('user.committer')
+                t('user.committer'),
             ]}
             data={commits?.items}
             dataCount={commits?.total_count ?? 0}
@@ -73,7 +73,7 @@ interface commitProps {
     data: User;
     item: CommitSearchResultItem;
     index: number;
-    t: TFunction<"translation", undefined>;
+    t: TFunction<'translation', undefined>;
 }
 
 const Commit: React.FC<commitProps> = ({ data, item, index: key, t }) => {

@@ -44,17 +44,12 @@ const UserIssues: React.FC<userIssuesProps> = ({ data, user }) => {
             effectCache.current = true;
             getAndSetUserInfos();
         }
-    }, [data, t, user, getAndSetUserInfos]);
+    }, [data, user, getAndSetUserInfos]);
 
     return (
         <CardWithScrollableTable
             title={t('user.userRecentIssues')}
-            columns={[
-                t('user.number'),
-                t('user.repo'),
-                t('user.issue_title'),
-                t('user.update_time')
-            ]}
+            columns={[t('user.number'), t('user.repo'), t('user.issue_title'), t('user.update_time')]}
             data={issues?.items}
             dataCount={issues?.total_count ?? 0}
             error={error}
@@ -82,8 +77,14 @@ const Issue: React.FC<issueProps> = ({ item, index: key }) => {
                     className="text-gray-700 hover:bg-gray-200 transition-all px-1 rounded-md"
                     target="_blank"
                     rel="noreferrer"
-                    href={`https://github.com/${item.repository_url.match(/\/repos\/([^/]+\/[^/]+)/i)?.slice(1).join('')}`}>
-                    {item.repository_url.match(/\/repos\/([^/]+\/[^/]+)/i)?.slice(1).join('')}
+                    href={`https://github.com/${item.repository_url
+                        .match(/\/repos\/([^/]+\/[^/]+)/i)
+                        ?.slice(1)
+                        .join('')}`}>
+                    {item.repository_url
+                        .match(/\/repos\/([^/]+\/[^/]+)/i)
+                        ?.slice(1)
+                        .join('')}
                 </a>
             </td>
             <td>
