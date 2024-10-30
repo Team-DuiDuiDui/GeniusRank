@@ -9,6 +9,7 @@ import {
     ScrollRestoration,
     useFetcher,
     useLoaderData,
+    useNavigate,
     useRouteLoaderData,
 } from '@remix-run/react';
 import i18nServer, { localeCookie } from './modules/i18n.server';
@@ -57,10 +58,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    const { locale, username, userEmail } = useLoaderData<typeof loader>();
+    const loaderData = useLoaderData<typeof loader>();
+    const { locale, client_id, userAvatar, userLogin, username, userEmail } = loaderData;
+    const navigate = useNavigate();
     const { t, i18n } = useTranslation();
     const fetcher = useFetcher();
     const [opened, { open, close }] = useDisclosure(false);
+    const [logOut, { toggle: toggleLogOut }] = useDisclosure();
     useChangeLanguage(locale);
     return (
         <>
@@ -71,10 +75,10 @@ export default function App() {
             <Drawer opened={opened} onClose={close}>
                 <div className="flex flex-col gap-5 h-full">
                     <div className={`flex flex-row justify-center gap-5`}>
-                        <Avatar size="lg" />
+                        <Avatar size="lg" src={userAvatar ?? undefined} />
                         <div className="flex flex-col justify-center">
-                            <p className="text-lg font-bold">{username ?? t('drawer.anonymous')}</p>
-                            {userEmail && <p className="text-sm text-gray-500">{userEmail}</p>}
+                            <p className="text-lg font-bold">{username ?? userLogin ?? t('drawer.anonymous')}</p>
+                            {userLogin && <p className="text-sm text-gray-500">{userEmail ?? userLogin}</p>}
                         </div>
                     </div>
                     <SegmentedControl
@@ -95,13 +99,31 @@ export default function App() {
                             },
                         ]}
                     />
-                    <Divider label={t('drawer.login')} labelPosition="center" />
-                    <Button variant="default">
-                        <div className="flex gap-2 items-center justify-center text-base">
-                            <GithubFilled />
-                            {t('drawer.login_github')}
-                        </div>
-                    </Button>
+                    <Divider label={userLogin ? t('drawer.logout') : t('drawer.login')} labelPosition="center" />
+                    {userLogin ? (
+                        <Button
+                            variant="filled"
+                            color="red"
+                            type="submit"
+                            loading={logOut}
+                            onClick={async () => {
+                                toggleLogOut();
+                                await fetch('/logout', { method: 'post' });
+                                navigate('.', { replace: true });
+                            }}>
+                            {t('drawer.logout')}
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="default"
+                            component="a"
+                            href={`https://github.com/login/oauth/authorize/?client_id=${client_id}&scope=user:email,read:user`}>
+                            <div className="flex gap-2 items-center justify-center text-base">
+                                <GithubFilled />
+                                {t('drawer.login_github')}
+                            </div>
+                        </Button>
+                    )}
                 </div>
             </Drawer>
             <Outlet />
@@ -109,12 +131,19 @@ export default function App() {
     );
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, context }: LoaderFunctionArgs) {
     const locale = await i18nServer.getLocale(request);
     const cookieHeader = request.headers.get('Cookie');
     const cookie = (await user.parse(cookieHeader)) || {};
     return json(
-        { locale, username: cookie.userName, userEmail: cookie.userEmail },
+        {
+            locale,
+            userAvatar: cookie.userAvatar,
+            username: cookie.username,
+            userLogin: cookie.userLogin,
+            userEmail: cookie.userEmail,
+            client_id: context.cloudflare.env.GITHUB_CLIENT_ID,
+        },
         { headers: { 'Set-Cookie': await localeCookie.serialize(locale) } }
     );
 }

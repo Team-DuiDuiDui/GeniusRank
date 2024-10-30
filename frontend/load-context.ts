@@ -7,6 +7,8 @@ import { type PlatformProxy } from 'wrangler';
 // even if no `wrangler.toml` exists.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Env {
+    GITHUB_CLIENT_ID: string;
+    GITHUB_CLIENT_SECRET: string;
     GITHUB_ACCESS_TOKEN: string;
 }
 
