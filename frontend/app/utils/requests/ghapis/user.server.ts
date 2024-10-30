@@ -22,7 +22,7 @@ export class GithubUserServerOnly extends GithubUser {
     constructor(name: string, token: string) {
         super(name, undefined, undefined, true);
         this.token = token;
-        this.axiosInstanceWithServerToken = createInstanceForGithub(token);
+        this.axiosInstanceWithServerToken = createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank');
     }
 
     /**

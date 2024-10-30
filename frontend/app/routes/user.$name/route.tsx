@@ -14,7 +14,7 @@ import UserCommits from '~/components/userinfo/commits';
 import useAxiosInstanceForBe from '~/hooks/useAxiosInstanceForBe';
 import { useLocale } from 'remix-i18next/react';
 import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
-import { isPromise } from '~/utils/promise';
+import { isPromise } from '~/utils/chore';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];

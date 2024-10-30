@@ -1,7 +1,16 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { LoaderFunctionArgs, json } from '@remix-run/cloudflare';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData } from '@remix-run/react';
+import {
+    Links,
+    Meta,
+    Outlet,
+    Scripts,
+    ScrollRestoration,
+    useFetcher,
+    useLoaderData,
+    useRouteLoaderData,
+} from '@remix-run/react';
 import i18nServer, { localeCookie } from './modules/i18n.server';
 import { useChangeLanguage } from 'remix-i18next/react';
 import { Toaster } from 'react-hot-toast';
@@ -25,16 +34,6 @@ import { useTranslation } from 'react-i18next';
 import { user } from './user-cookie';
 
 export const handle = { i18n: ['translation'] };
-
-export async function loader({ request }: LoaderFunctionArgs) {
-    const locale = await i18nServer.getLocale(request);
-    const cookieHeader = request.headers.get('Cookie');
-    const cookie = (await user.parse(cookieHeader)) || {};
-    return json(
-        { locale, username: cookie.userName, userEmail: cookie.userEmail },
-        { headers: { 'Set-Cookie': await localeCookie.serialize(locale) } }
-    );
-}
 
 export function Layout({ children }: { children: React.ReactNode }) {
     const loaderData = useRouteLoaderData<typeof loader>('root');
@@ -60,6 +59,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
     const { locale, username, userEmail } = useLoaderData<typeof loader>();
     const { t, i18n } = useTranslation();
+    const fetcher = useFetcher();
     const [opened, { open, close }] = useDisclosure(false);
     useChangeLanguage(locale);
     return (
@@ -79,9 +79,9 @@ export default function App() {
                     </div>
                     <SegmentedControl
                         className="mt-auto"
-                        defaultValue={locale}
+                        defaultValue={i18n.language}
                         onChange={(value) => {
-                            fetch(`?lng=${value}`);
+                            fetcher.submit({ lng: value }, { method: 'get' });
                             i18n.changeLanguage(value);
                         }}
                         data={[
@@ -106,5 +106,15 @@ export default function App() {
             </Drawer>
             <Outlet />
         </>
+    );
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+    const locale = await i18nServer.getLocale(request);
+    const cookieHeader = request.headers.get('Cookie');
+    const cookie = (await user.parse(cookieHeader)) || {};
+    return json(
+        { locale, username: cookie.userName, userEmail: cookie.userEmail },
+        { headers: { 'Set-Cookie': await localeCookie.serialize(locale) } }
     );
 }

@@ -28,7 +28,7 @@ export const axiosRetriable = (): AxiosInstance => {
 };
 
 // 防止 baseurl 在不同实例上不同，造成请求失败
-export interface AxiosInstanceForGithub extends AxiosInstance { }
+export interface AxiosInstanceForGithub extends AxiosInstance {}
 
 // TODO: 对接 handleRequest ，做一个再恰当时机的重试
 /**
@@ -39,13 +39,14 @@ export interface AxiosInstanceForGithub extends AxiosInstance { }
  * @param token - 可选的 GitHub 访问令牌
  * @returns 用于 GitHub API 的 Axios 实例
  */
-export const createInstanceForGithub = (token?: string): AxiosInstanceForGithub => {
+export const createInstanceForGithub = (token?: string, ua?: string): AxiosInstanceForGithub => {
     const interceptor = axios.create({
         baseURL: 'https://api.github.com',
         headers: token
             ? {
-                Authorization: `token ${token}`,
-            }
+                  Authorization: `token ${token}`,
+                  UserAgent: ua,
+              }
             : {},
     });
     interceptor.interceptors.response.use(null, async (err) => {
@@ -68,8 +69,8 @@ export const createInstanceForGithubClient = (token?: string): AxiosInstanceForG
         baseURL: 'https://api.github.com',
         headers: token
             ? {
-                Authorization: `token ${token}`,
-            }
+                  Authorization: `token ${token}`,
+              }
             : {},
     });
     interceptor.interceptors.response.use(
