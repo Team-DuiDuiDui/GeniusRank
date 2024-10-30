@@ -78,6 +78,7 @@ module.exports = {
                         varsIgnorePattern: '^_',
                     },
                 ],
+                'import/no-named-as-default-member': 0,
             },
         },
 

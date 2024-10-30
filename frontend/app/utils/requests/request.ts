@@ -65,7 +65,6 @@ export const handleRequest = async <T>(
             }
             return result;
         } catch (error) {
-            console.log(error);
             const shouldRetryCondition = shouldRetry ? shouldRetry(error) : true;
 
             if (shouldRetryCondition) {

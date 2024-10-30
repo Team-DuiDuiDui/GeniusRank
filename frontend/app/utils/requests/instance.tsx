@@ -39,7 +39,7 @@ export interface AxiosInstanceForGithub extends AxiosInstance {}
  * @param token - 可选的 GitHub 访问令牌
  * @returns 用于 GitHub API 的 Axios 实例
  */
-export const createInstanceForGithub = (token?: string, ua?: string): AxiosInstanceForGithub => {
+export const createInstanceForGithub = (token?: string, ua?: string, noRetry?: boolean): AxiosInstanceForGithub => {
     const interceptor = axios.create({
         baseURL: 'https://api.github.com',
         headers: {
@@ -47,14 +47,15 @@ export const createInstanceForGithub = (token?: string, ua?: string): AxiosInsta
             'User-Agent': ua,
         },
     });
-    interceptor.interceptors.response.use(null, async (err) => {
-        const { config } = err;
-        const { retry = 3 } = config;
-        config._retries = config._retries || 0;
-        if (config._retries++ >= retry) return Promise.reject(err);
-        await sleep((Math.pow(3.8, config._retries) / 2 - 1 / 2) * 1000);
-        return interceptor(config);
-    });
+    if (!noRetry)
+        interceptor.interceptors.response.use(null, async (err) => {
+            const { config } = err;
+            const { retry = 3 } = config;
+            config._retries = config._retries || 0;
+            if (config._retries++ >= retry) return Promise.reject(err);
+            await sleep((Math.pow(3.8, config._retries) / 2 - 1 / 2) * 1000);
+            return interceptor(config);
+        });
     return interceptor;
 };
 
@@ -85,8 +86,6 @@ export const createInstanceForGithubClient = (token?: string): AxiosInstanceForG
             const { config } = err;
             const { retry = 3 } = config;
             config._retries = config._retries || 0;
-            console.log(err.response?.data.message);
-            console.log(err.response?.headers['x-ratelimit-remaining']);
             if (config._toastId) {
                 toast.error(i18next.t('user.err.reloadFailed'), {
                     id: config._toastId,

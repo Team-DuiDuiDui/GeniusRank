@@ -10,7 +10,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
         const user = new GithubUserServerOnly(params.name, context.cloudflare.env.GITHUB_ACCESS_TOKEN);
         try {
             const data = (await user.getUser())!;
-            return json({   
+            return json({
                 userData: data,
                 title: `${params?.name ?? ''} | Genius Rank`,
                 description: t('user.description'),
@@ -18,7 +18,6 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
         } catch (e) {
             // eslint-disable-next-line import/no-named-as-default-member
             if (axios.isAxiosError(e)) {
-                console.log(e);
                 if (e.status === 404) throw new Response(t('user.err.not_found'), { status: 404 });
                 if (e.status === 403) {
                     throw new Response(t('user.err.rate_limit'), { status: 403 });
