@@ -52,6 +52,7 @@
       "no_message": "No messages",
       "error": {},
       "success": {
+        "success": "Success",
         "reloadSuccess": "Reload success"
       }
     },

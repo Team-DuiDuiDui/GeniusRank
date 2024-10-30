@@ -51,6 +51,7 @@
       "author": "作者",
       "no_message": "暂无信息",
       "success": {
+        "success": "成功",
         "reloadSuccess": "重试成功"
       }
     },

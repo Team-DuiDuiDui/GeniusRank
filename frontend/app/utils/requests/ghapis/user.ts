@@ -18,9 +18,7 @@ export class githubUser {
         this.name = name;
         this.axiosInstance = axiosInstance
             ? axiosInstance
-            : isServer
-            ? createInstanceForGithub(token)
-            : createInstanceForGithubClient(token);
+            : createInstanceForGithub(token);
         this.userData = userData ?? null;
         if (token) this.isAuthorized = true;
     }
@@ -39,7 +37,7 @@ export class githubUser {
                 this.axiosInstance.get(
                     `/search/issues?q=type:pr+is:merged+author:${this.name}+state:closed&sort=updated&per_page=80`
                 ),
-            async (res) => issueSearchResultSchema.parseAsync(res.data)
+            (res) => issueSearchResultSchema.parseAsync(res.data)
         ))!;
         this.userPrs = data;
         return data;
@@ -48,7 +46,7 @@ export class githubUser {
     async getUserIssues(): Promise<IssueSearchResult> {
         const data = (await handleClientGithubReq<IssueSearchResult>(
             () => this.axiosInstance.get(`/search/issues?q=type:issue+author:${this.name}&sort=updated&per_page=80`),
-            async (res) => issueSearchResultSchema.parseAsync(res.data)
+            (res) => issueSearchResultSchema.parseAsync(res.data)
         ))!;
         this.userIssues = data;
         return data;
@@ -57,7 +55,7 @@ export class githubUser {
     async getUserRepos(): Promise<UserRepos> {
         const data = (await handleClientGithubReq<UserRepos>(
             () => this.axiosInstance.get(`/users/${this.name}/repos?sort=updated&per_page=80`),
-            async (res) => userReposSchema.parseAsync(res.data)
+            (res) => userReposSchema.parseAsync(res.data)
         ))!;
         this.userRepos = data;
         return data;
@@ -66,7 +64,7 @@ export class githubUser {
     async getUserCommits(): Promise<CommitsSearchResult> {
         const data = (await handleClientGithubReq<CommitsSearchResult>(
             () => this.axiosInstance.get(`/search/commits?q=author:${this.name}&sort=author-date&per_page=80`),
-            async (res) => commitsSearchResultSchema.parseAsync(res.data)
+            (res) => commitsSearchResultSchema.parseAsync(res.data)
         ))!;
         return data;
     }

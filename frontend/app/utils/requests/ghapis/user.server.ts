@@ -1,7 +1,7 @@
 import { userSchema } from './schema/user';
 import { User } from './typings/user';
 import { githubUser as GithubUser } from './user';
-import { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { handleServerReq } from '../request';
 import { createInstanceForGithub } from '../instance';
 
@@ -33,7 +33,15 @@ export class GithubUserServerOnly extends GithubUser {
     async getUser(): Promise<User | undefined> {
         return await handleServerReq<User>(
             () => this.axiosInstanceWithServerToken.get(`/users/${this.name}`),
-            (res) => userSchema.parseAsync((res as { data: unknown }).data)
+            (res) => userSchema.parseAsync(res.data),
+            (error)=> {
+                if (axios.isAxiosError(error)) {
+                    if (error.response?.status === 404) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
         );
     }
 }
