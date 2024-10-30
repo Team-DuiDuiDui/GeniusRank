@@ -4,7 +4,7 @@ spring:
   application:
     name: project-gateway
   profiles:
-    active: aggregation
+    active: dev
     # active: dev
   cloud:
     nacos:
