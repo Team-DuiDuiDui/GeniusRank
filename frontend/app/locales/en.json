@@ -22,7 +22,7 @@
                 "reload": "Try to reload",
                 "may_hide": "The user may be set to private",
                 "may_reason": "Possible reasons: ",
-                "reloading_after": "Reached the rate limit, try again after",
+                "reloading_after": "Reached the rate limit, retry after",
                 "reloading_after_2": "seconds",
                 "reloading": "Reloading...",
                 "reloadFailed": "Reload failed"

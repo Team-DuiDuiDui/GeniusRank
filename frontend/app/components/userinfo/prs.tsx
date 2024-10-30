@@ -23,6 +23,7 @@ const UserPRs: React.FC<userPRsProps> = ({ data, user }) => {
     const [error, setErrors] = useState<null | AxiosError | ZodError | unknown>(null);
     const params = useParams();
     const effectCache = useRef<boolean>(false);
+    const effectFlag = useRef<boolean>(false);
 
     useEffect(() => {
         titleRef.current && autoAnimate(titleRef.current);
@@ -30,6 +31,7 @@ const UserPRs: React.FC<userPRsProps> = ({ data, user }) => {
 
     const getAndSetUserInfos = useCallback(async () => {
         setErrors(null);
+        console.log(123);
         try {
             user.current.setUserName(params?.name ?? '');
             const fetchedPRs = await user.current.getUserPrs();
@@ -46,6 +48,14 @@ const UserPRs: React.FC<userPRsProps> = ({ data, user }) => {
             effectCache.current = true;
             getAndSetUserInfos();
         }
+        if (effectFlag.current) {
+            // 重新请求前重置
+            effectCache.current = false;
+            effectFlag.current = false;
+        }
+        return () => {
+            effectFlag.current = true;
+        };
     }, [data, user, getAndSetUserInfos]);
 
     return (
