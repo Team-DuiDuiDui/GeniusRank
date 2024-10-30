@@ -44,4 +44,20 @@ export const InfoIcon: React.FC<infoIconProps> = ({ children, icon, href }) => {
     );
 };
 
+interface commonLinkProps {
+    children: React.ReactNode;
+    href?: string;
+}
+export const CommonLink: React.FC<commonLinkProps> = ({ children, href }) => {
+    return (
+        <a
+            className="text-gray-700 hover:bg-gray-200 transition-all p-1 rounded-md"
+            href={href}
+            target="_blank"
+            rel="noreferrer">
+            {children}
+        </a>
+    );
+};
+
 export default InfoLink;

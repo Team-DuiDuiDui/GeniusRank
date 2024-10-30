@@ -8,6 +8,8 @@ import { useParams } from '@remix-run/react';
 import { IssueSearchResult, IssueSearchResultItem, User } from '~/utils/requests/ghapis/typings/user';
 import dayjs from 'dayjs';
 import CardWithScrollableTable from './cardWithScrollableTable'; // 使用通用的 CardWithScrollableTable 组件
+import { Table } from '@mantine/core';
+import { CommonLink } from '../infoLink';
 
 interface userPRsProps {
     data: User;
@@ -68,13 +70,10 @@ interface prProps {
 
 const Pr: React.FC<prProps> = ({ item, index: key }) => {
     return (
-        <tr className="text-sm text-center">
-            <td>{key}</td>
-            <td>
-                <a
-                    className="text-gray-700 hover:bg-gray-200 transition-all px-1 rounded-md"
-                    target="_blank"
-                    rel="noreferrer"
+        <Table.Tr>
+            <Table.Td>{key}</Table.Td>
+            <Table.Td>
+                <CommonLink
                     href={`https://github.com/${item.repository_url
                         .match(/\/repos\/([^/]+\/[^/]+)/i)
                         ?.slice(1)
@@ -83,19 +82,15 @@ const Pr: React.FC<prProps> = ({ item, index: key }) => {
                         .match(/\/repos\/([^/]+\/[^/]+)/i)
                         ?.slice(1)
                         .join('')}
-                </a>
-            </td>
-            <td>
-                <a
-                    className="text-gray-700 hover:bg-gray-200 transition-all px-1 rounded-md"
-                    href={item.html_url}
-                    target="_blank"
-                    rel="noreferrer">
+                </CommonLink>
+            </Table.Td>
+            <Table.Td>
+                <CommonLink href={item.html_url}>
                     {item.title}
                     <span className="text-xs text-gray-500">#{item.number}</span>
-                </a>
-            </td>
-            <td>{dayjs(item.updated_at).format('YYYY/MM/DD HH:mm:ss UTCZ')}</td>
-        </tr>
+                </CommonLink>
+            </Table.Td>
+            <Table.Td>{dayjs(item.updated_at).format('YYYY/MM/DD HH:mm:ss UTCZ')}</Table.Td>
+        </Table.Tr>
     );
 };

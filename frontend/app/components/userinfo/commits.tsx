@@ -8,6 +8,8 @@ import { useParams } from '@remix-run/react';
 import { CommitSearchResultItem, CommitsSearchResult, User } from '~/utils/requests/ghapis/typings/user';
 import CardWithScrollableTable from './cardWithScrollableTable'; // 使用通用的 CardWithScrollableTable 组件
 import { TFunction } from 'i18next';
+import { Table } from '@mantine/core';
+import { CommonLink } from '../infoLink';
 
 interface userCommitsProps {
     data: User;
@@ -78,36 +80,18 @@ interface commitProps {
 
 const Commit: React.FC<commitProps> = ({ data, item, index: key, t }) => {
     return (
-        <tr className="text-sm text-center">
-            <td>{key}</td>
-            <td>
-                <a
-                    className="text-gray-700 hover:bg-gray-200 transition-all px-1 rounded-md"
-                    target="_blank"
-                    rel="noreferrer"
-                    href={item.repository.html_url}>
-                    {item.repository.full_name}
-                </a>
-            </td>
-            <td>
-                <a
-                    className="text-gray-700 hover:bg-gray-200 transition-all px-1 rounded-md"
-                    href={item.html_url}
-                    target="_blank"
-                    rel="noreferrer">
-                    {item.commit.message}
-                </a>
-            </td>
-            <td>
-                <a
-                    className="text-gray-700 hover:bg-gray-200 transition-all px-1 rounded-md"
-                    href={data.html_url}
-                    target="_blank"
-                    rel="noreferrer">
-                    {item.commit.author?.name ?? data.name}
-                </a>
-            </td>
-            <td>{item.commit.committer?.name ?? t('user.unknown')}</td>
-        </tr>
+        <Table.Tr>
+            <Table.Td>{key}</Table.Td>
+            <Table.Td>
+                <CommonLink href={item.repository.html_url}>{item.repository.full_name}</CommonLink>
+            </Table.Td>
+            <Table.Td>
+                <CommonLink href={item.html_url}>{item.commit.message}</CommonLink>
+            </Table.Td>
+            <Table.Td>
+                <CommonLink href={data.html_url}>{item.commit.author?.name ?? data.name}</CommonLink>
+            </Table.Td>
+            <Table.Td>{item.commit.committer?.name ?? t('user.unknown')}</Table.Td>
+        </Table.Tr>
     );
 };

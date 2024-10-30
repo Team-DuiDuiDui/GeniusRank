@@ -21,7 +21,6 @@ const ErrorNote: React.FC<ErrorProps> = ({ error, reload }) => {
                             <ExclamationCircleOutlined className="text-red-500 hover:scale-110 active:scale-90 transition-all" />
                         </Popover.Target>
                         <Popover.Dropdown className="flex items-center justify-center flex-col gap-2">
-                            <Button onClick={reload}>{t('user.err.reload')}</Button>
                             <p className="text-base font-bold">
                                 {axios.isAxiosError(error)
                                     ? t('user.err.network_error')
@@ -30,7 +29,7 @@ const ErrorNote: React.FC<ErrorProps> = ({ error, reload }) => {
                                     : t('user.err.something_wrong')}
                             </p>
                             <p className="text-xs self-start">
-                                {t('user.err.may_reason')}
+                                <span className="font-bold">{t('user.err.may_reason')}</span>
                                 {axios.isAxiosError(error)
                                     ? error.status === 403
                                         ? t('user.err.rate_limit')
@@ -40,17 +39,18 @@ const ErrorNote: React.FC<ErrorProps> = ({ error, reload }) => {
                                     : t('user.no_message')}
                             </p>
                             <p className="text-xs self-start">
-                                {t('user.err.message')}
+                                <span className="font-bold">{t('user.err.message')}</span>
                                 {(error as { message?: string })?.message ?? t('user.no_message')}
                             </p>
                             <p className="text-xs self-start">
-                                {t('user.err.may_help')}
+                                <span className="font-bold">{t('user.err.may_help')}</span>
                                 {axios.isAxiosError(error)
                                     ? (error.response?.data as { message?: string }).message ?? t('user.no_message')
                                     : error instanceof ZodError
                                     ? JSON.stringify(error.flatten().fieldErrors)
                                     : t('user.no_message')}
                             </p>
+                            <Button onClick={reload}>{t('user.err.reload')}</Button>
                         </Popover.Dropdown>
                     </Popover>
                 </span>

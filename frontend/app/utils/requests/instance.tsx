@@ -39,12 +39,13 @@ export interface AxiosInstanceForGithub extends AxiosInstance {}
  * @param token - 可选的 GitHub 访问令牌
  * @returns 用于 GitHub API 的 Axios 实例
  */
-export const createInstanceForGithub = (token?: string): AxiosInstanceForGithub => {
+export const createInstanceForGithub = (token?: string, ua?: string): AxiosInstanceForGithub => {
     const interceptor = axios.create({
         baseURL: 'https://api.github.com',
         headers: token
             ? {
                   Authorization: `token ${token}`,
+                  UserAgent: ua,
               }
             : {},
     });

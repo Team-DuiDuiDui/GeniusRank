@@ -14,9 +14,13 @@ export class githubUser {
     public userPrs: IssueSearchResult | null = null;
     public userIssues: IssueSearchResult | null = null;
 
-    constructor(name: string, token?: string, userData?: User, isServer?: boolean) {
+    constructor(name: string, token?: string, userData?: User, isServer?: boolean, axiosInstance?: AxiosInstance) {
         this.name = name;
-        this.axiosInstance = isServer ? createInstanceForGithub(token) : createInstanceForGithubClient(token);
+        this.axiosInstance = axiosInstance
+            ? axiosInstance
+            : isServer
+            ? createInstanceForGithub(token)
+            : createInstanceForGithubClient(token);
         this.userData = userData ?? null;
         if (token) this.isAuthorized = true;
     }

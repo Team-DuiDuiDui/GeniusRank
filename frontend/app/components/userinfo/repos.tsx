@@ -6,9 +6,10 @@ import { AxiosError } from 'axios';
 import { githubUser } from '~/utils/requests/ghapis/user';
 import { useParams } from '@remix-run/react';
 import { MinimalRepository, User } from '~/utils/requests/ghapis/typings/user';
-import { Tooltip } from '@mantine/core';
+import { Table, Tooltip } from '@mantine/core';
 import { ForkOutlined } from '@ant-design/icons';
 import CardWithScrollableTable from './cardWithScrollableTable';
+import { CommonLink } from '../infoLink';
 
 interface userRepositoriesProps {
     data: User;
@@ -79,14 +80,10 @@ interface repoProps {
 const Repo: React.FC<repoProps> = ({ item, index: key }) => {
     const { t } = useTranslation();
     return (
-        <tr className="text-sm text-center">
-            <td>{key}</td>
-            <td>
-                <a
-                    className="text-gray-700 hover:bg-gray-200 transition-all px-1 rounded-md"
-                    target="_blank"
-                    rel="noreferrer"
-                    href={item.html_url}>
+        <Table.Tr>
+            <Table.Td>{key}</Table.Td>
+            <Table.Td>
+                <CommonLink href={item.html_url}>
                     {item.full_name}
                     {item.fork && (
                         <Tooltip label={t('user.is_fork')}>
@@ -95,14 +92,14 @@ const Repo: React.FC<repoProps> = ({ item, index: key }) => {
                             </span>
                         </Tooltip>
                     )}
-                </a>
-            </td>
-            <td>{item.language ?? t('user.unknown')}</td>
-            <td>{item.size ?? t('user.unknown')} KB</td>
-            <td>{item.stargazers_count ?? t('user.unknown')}</td>
-            <td>{item.watchers_count ?? t('user.unknown')}</td>
-            <td>{item.forks_count ?? t('user.unknown')}</td>
-            <td>{item.open_issues_count ?? t('user.unknown')}</td>
-        </tr>
+                </CommonLink>
+            </Table.Td>
+            <Table.Td>{item.language ?? t('user.unknown')}</Table.Td>
+            <Table.Td>{item.size ?? t('user.unknown')} KB</Table.Td>
+            <Table.Td>{item.stargazers_count ?? t('user.unknown')}</Table.Td>
+            <Table.Td>{item.watchers_count ?? t('user.unknown')}</Table.Td>
+            <Table.Td>{item.forks_count ?? t('user.unknown')}</Table.Td>
+            <Table.Td>{item.open_issues_count ?? t('user.unknown')}</Table.Td>
+        </Table.Tr>
     );
 };
