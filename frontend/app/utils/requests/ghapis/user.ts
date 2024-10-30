@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios';
 import { CommitsSearchResult, IssueSearchResult, User, UserRepos } from './typings/user';
 import { commitsSearchResultSchema, issueSearchResultSchema, userReposSchema } from './schema/user';
 import { handleClientGithubReq } from '../request';
-import { createInstanceForGithub, createInstanceForGithubClient } from '../instance';
+import { createInstanceForGithub } from '../instance';
 
 export class githubUser {
     public name: string;
