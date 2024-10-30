@@ -42,12 +42,10 @@ export interface AxiosInstanceForGithub extends AxiosInstance {}
 export const createInstanceForGithub = (token?: string, ua?: string): AxiosInstanceForGithub => {
     const interceptor = axios.create({
         baseURL: 'https://api.github.com',
-        headers: token
-            ? {
-                  Authorization: `token ${token}`,
-                  UserAgent: ua,
-              }
-            : {},
+        headers: {
+            Authorization: token ? `token ${token}` : undefined,
+            'User-Agent': ua,
+        },
     });
     interceptor.interceptors.response.use(null, async (err) => {
         const { config } = err;
