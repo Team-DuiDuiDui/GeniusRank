@@ -19,7 +19,6 @@ CREATE TABLE t_user (
     update_time DATETIME NULL COMMENT '修改时间',
     del_flag TINYINT(1) NULL COMMENT '删除标识 0：未删除 1：已删除',
 
-    CONSTRAINT idx_email UNIQUE (email),
     CONSTRAINT idx_username UNIQUE (github_user_id)
 ) COMMENT '用户表';
 
