@@ -28,11 +28,10 @@ public class GithubUserCountryGuessController {
 
 
     /**
-     * 新增用户所在国家/地区猜测接口
+     * 新增/更新用户所在国家/地区猜测接口
      */
     @PostMapping("/api/analyze/country")
-    public Result<Void> addUser(@RequestBody GithubUserCountryReqDTO requestParams) {
-        githubUserCountryGuessService.create(requestParams);
-        return Results.success();
+    public Result<GithubUserCountryRespDTO> addUser(@RequestBody GithubUserCountryReqDTO requestParams) {
+        return Results.success(githubUserCountryGuessService.create(requestParams));
     }
 }
