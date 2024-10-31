@@ -2,12 +2,14 @@ package com.nine.project.user.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.nine.project.framework.database.base.BaseDO;
+import lombok.Builder;
 import lombok.Data;
 
 /**
  * 用户持久层实体
  */
 @Data
+@Builder
 @TableName("t_user")
 public class UserDO extends BaseDO {
     /**
@@ -18,7 +20,7 @@ public class UserDO extends BaseDO {
     /**
      * Github平台用户id
      */
-    private String githubUserId;
+    private String github_user_id;
 
     /**
      * 用户名

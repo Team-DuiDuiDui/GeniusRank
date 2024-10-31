@@ -23,6 +23,7 @@ public enum BaseErrorCode implements IErrorCode {
     USER_NAME_NOT_EXIST_ERROR("A0202", "用户名不存在"),
     USER_NOT_FOUND_ERROR("A0203", "用户不存在"),
     PASSWORD_VERIFY_ERROR("A0204", "密码校验失败"),
+    USER_OAUTH_ERROR("A0205", "用户 OAuth 验证失败"),
 
     // ========== 二级宏观错误码 验证码错误 ==========
     VERIFICATION_CODE_ERROR("A0300", "验证码错误"),
