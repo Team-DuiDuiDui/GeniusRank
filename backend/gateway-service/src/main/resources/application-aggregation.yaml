@@ -1,13 +1,22 @@
 spring:
   cloud:
     gateway:
+      # 网关全局跨域配置
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+        # 解决options请求被拦截的问题
+        add-to-simple-url-handler-mapping: true
       routes:
         - id: project-user-aggregation
           uri: lb://project-aggregation/api/user/**
           predicates:
             - Path=/api/user/**
           filters:
-            - name: CORS
             - name: TokenValidate
               args:
                 whitePathList:
@@ -25,7 +34,6 @@ spring:
           predicates:
             - Path=/api/common/**
           filters:
-            - name: CORS
             - name: TokenValidate
               args:
                 whitePathList:
@@ -37,7 +45,6 @@ spring:
           predicates:
             - Path=/api/analyze/**
           filters:
-            - name: CORS
             - name: TokenValidate
               args:
                 whitePathList:
