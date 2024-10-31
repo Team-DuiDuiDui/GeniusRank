@@ -15,9 +15,14 @@ import lombok.NoArgsConstructor;
 public class UserInfoDO {
 
     /**
-     * 用户 ID
+     * id
      */
     private String id;
+
+    /**
+     * Github平台用户id
+     */
+    private String github_user_id;
 
     /**
      * 用户名
@@ -30,7 +35,7 @@ public class UserInfoDO {
     private String email;
 
     /**
-     * 用户头像
+     * 头像地址
      */
     private String avatar;
 }

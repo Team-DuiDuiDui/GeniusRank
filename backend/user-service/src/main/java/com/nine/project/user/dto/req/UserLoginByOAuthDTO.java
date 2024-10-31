@@ -13,18 +13,9 @@ public class UserLoginByOAuthDTO {
      */
     private String githubUserId;
 
-    /**
-     * 用户名
-     */
-    private String username;
 
     /**
-     * 头像
+     * Github 登录 Token
      */
-    private String avatar;
-
-    /**
-     * 邮箱
-     */
-    private String email;
+    private String accessToken;
 }
