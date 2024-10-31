@@ -1,66 +1,79 @@
 {
-  "common": {
-    "title": "Genius Rank - GitHub user analysis",
-    "languages": "Languages",
-    "search": {
-      "placeholder": "Input the username on GitHub..."
-    },
-    "user": {
-      "description": "GitHub User Analysis",
-      "title": "Search for user  | Genius Rank",
-      "no_description": "This user has no descriptions",
-      "followers": "followers",
-      "following": "following",
-      "err": {
-        "not_found": "User Not Found",
-        "parse_error": "Parse Error",
-        "something_wrong": "Something Went Wrong",
-        "rate_limit": "Request rate is too high or more than 60 requests in an hour (logged-in user is 5000)",
-        "network_error": "Network Error",
-        "message": "Error message: ",
-        "may_help": "The following information may be helpful: ",
-        "reload": "Try to reload",
-        "may_hide": "The user may be set to private",
-        "may_reason": "Possible reasons: ",
-        "reloading_after": "Reached the rate limit, retry after",
-        "reloading_after_2": "seconds",
-        "reloading": "Reloading...",
-        "reloadFailed": "Reload failed"
-      },
-      "userRecentPrs": "Recent 80 Merged Pull Requests",
-      "userRecentIssues": "Recent 80 Issues",
-      "number": "No.",
-      "repo": "Repositories",
-      "pr_title": "Pull Request",
-      "update_time": "Update Time",
-      "issue_title": "Issue Title",
-      "no_prs": "This user has no merged pull requests",
-      "no_issues": "This user has no issues",
-      "userRepos": "Recent 80 Repos",
-      "lang": "Language",
-      "open_issues": "Open Issues",
-      "size": "Size",
-      "no_repos": "This user has no repos",
-      "is_fork": "This is a forked repository",
-      "unknown": "Unknown",
-      "not_a_user": "Note: This may not be a GitHub user, but an organization or another entity.",
-      "commit_message": "Commit Message",
-      "committer": "Committer",
-      "no_commits": "This user has no commits",
-      "userRecentCommits": "Recent 80 Commits",
-      "author": "Author",
-      "no_message": "No messages",
-      "error": {},
-      "success": {
-        "success": "Success",
-        "reloadSuccess": "Reload success"
-      }
-    },
-    "drawer": {
-      "login": "Login",
-      "login_github": "Login with GitHub",
-      "anonymous": "Anonymous",
-      "logout": "Logout"
+    "common": {
+        "title": "Genius Rank - GitHub user analysis",
+        "languages": "Languages",
+        "search": {
+            "placeholder": "Input the username on GitHub..."
+        },
+        "user": {
+            "description": "GitHub User Analysis",
+            "title": "Search for user  | Genius Rank",
+            "no_description": "This user has no descriptions",
+            "followers": "followers",
+            "following": "following",
+            "err": {
+                "not_found": "User Not Found",
+                "parse_error": "Parse Error",
+                "something_wrong": "Something Went Wrong",
+                "rate_limit": "Request rate is too high or more than 60 requests in an hour (logged-in user is 5000)",
+                "network_error": "Network Error",
+                "message": "Error message: ",
+                "may_help": "The following information may be helpful: ",
+                "reload": "Try to reload",
+                "may_hide": "The user may be set to private",
+                "may_reason": "Possible reasons: ",
+                "reloading_after": "Reached the rate limit, retry after",
+                "reloading_after_2": "seconds",
+                "reloading": "Reloading...",
+                "reloadFailed": "Reload failed"
+            },
+            "userRecentPrs": "Recent 80 Merged Pull Requests",
+            "userRecentIssues": "Recent 80 Issues",
+            "number": "No.",
+            "repo": "Repositories",
+            "pr_title": "Pull Request",
+            "update_time": "Update Time",
+            "issue_title": "Issue Title",
+            "no_prs": "This user has no merged pull requests",
+            "no_issues": "This user has no issues",
+            "userRepos": "Recent 80 Repos",
+            "lang": "Language",
+            "open_issues": "Open Issues",
+            "size": "Size",
+            "no_repos": "This user has no repos",
+            "is_fork": "This is a forked repository",
+            "unknown": "Unknown",
+            "not_a_user": "Note: This may not be a GitHub user, but an organization or another entity.",
+            "commit_message": "Commit Message",
+            "committer": "Committer",
+            "no_commits": "This user has no commits",
+            "userRecentCommits": "Recent 80 Commits",
+            "author": "Author",
+            "no_message": "No messages",
+            "error": {},
+            "success": {
+                "success": "Success",
+                "reloadSuccess": "Reload success"
+            }
+        },
+        "drawer": {
+            "login": "Login",
+            "login_github": "Login with GitHub",
+            "anonymous": "Anonymous",
+            "logout": "Logout"
+        },
+        "oauth": {
+            "err": {
+                "bad_verification_code": "Use a duplicate or invalid authorization code",
+                "bad_verification_code_title": "Bad verification code",
+                "network_error": "We are having trouble",
+                "invalid_scope_title": "Invalid scope",
+                "invalid_scope": "Please authorize email and basic user information (read:user,user:email), do not modify the URL of the authorization page",
+                "unknown_error": "Unknown Error",
+                "error": "OAuth Error",
+                "re-login": "Retry Login",
+                "back": "Back to Home"
+            }
+        }
     }
-  }
 }

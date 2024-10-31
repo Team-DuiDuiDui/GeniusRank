@@ -21,7 +21,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export { loader };
 
-export default function Index() {
+export default function User() {
     const data = useLoaderData<typeof loader>();
     const navigation = useNavigation();
     const params = useParams();

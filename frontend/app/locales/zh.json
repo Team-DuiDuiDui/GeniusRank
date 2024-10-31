@@ -60,6 +60,19 @@
       "login_github": "使用 GitHub 登录",
       "anonymous": "匿名用户",
       "logout": "退出登录"
+    },
+    "oauth": {
+      "err": {
+        "bad_verification_code": "使用重复或无效的授权码",
+        "bad_verification_code_title": "无效的授权码",
+        "network_error": "我们这边出了错",
+        "invalid_scope_title": "授权范围无效",
+        "invalid_scope": "请授权邮箱及基本用户信息（read:user,user:email），请勿修改授权页的 URL",
+        "unknown_error": "未知错误",
+        "error": "授权出错",
+        "re-login": "重新登录",
+        "back": "返回首页"
+      }
     }
   }
 }
