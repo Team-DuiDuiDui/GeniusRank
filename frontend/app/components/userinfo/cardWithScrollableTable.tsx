@@ -29,7 +29,6 @@ const CardWithScrollableTable = <T,>({
     const headerRef = useRef<HTMLHeadingElement>(null);
 
     const handleScroll = throttleWithDeepClone((event: React.UIEvent<HTMLDivElement>) => {
-        console.log(event.currentTarget.scrollTop);
         if (event.currentTarget.scrollTop > 0) {
             event.preventDefault();
             headerRef.current?.classList.remove('my-4', 'text-lg');
@@ -38,7 +37,7 @@ const CardWithScrollableTable = <T,>({
             headerRef.current?.classList.remove('text-base', 'my-[2px]');
             headerRef.current?.classList.add('my-4', 'text-lg');
         }
-    }, 200);
+    }, 100);
 
     return (
         <CardWithScroll maxHeight="max-h-96">
