@@ -37,8 +37,21 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
 
     @Override
     public void create(GithubUserCountryReqDTO requestParams) {
-        GithubUserCountryGuessDO githubUserCountryGuessDO = BeanUtil.copyProperties(requestParams, GithubUserCountryGuessDO.class);
+        GithubUserCountryGuessDO githubUserCountryGuessDTO = BeanUtil.copyProperties(requestParams, GithubUserCountryGuessDO.class);
+        LambdaQueryWrapper<GithubUserCountryGuessDO> queryWrapper = Wrappers.lambdaQuery(GithubUserCountryGuessDO.class)
+                .eq(GithubUserCountryGuessDO::getGithubUserId, requestParams.getGithubUserId())
+                .eq(GithubUserCountryGuessDO::getDelFlag, 0);
 
-        this.save(githubUserCountryGuessDO);
+        GithubUserCountryGuessDO githubUserCountryGuessDO = this.getOne(queryWrapper);
+        // 如果存在，则更新。如果不存在，则添加
+        if (githubUserCountryGuessDO != null) {
+            LambdaQueryWrapper<GithubUserCountryGuessDO> updateWrapper = Wrappers.lambdaQuery(GithubUserCountryGuessDO.class)
+                    .eq(GithubUserCountryGuessDO::getGithubUserId, requestParams.getGithubUserId())
+                    .eq(GithubUserCountryGuessDO::getDelFlag, 0);
+
+            this.update(githubUserCountryGuessDTO, updateWrapper);
+        } else {
+            this.save(githubUserCountryGuessDTO);
+        }
     }
 }
