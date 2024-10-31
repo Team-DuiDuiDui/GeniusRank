@@ -1,7 +1,16 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { LoaderFunctionArgs, json } from '@remix-run/cloudflare';
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData } from '@remix-run/react';
+import {
+    Link,
+    Links,
+    Meta,
+    Outlet,
+    Scripts,
+    ScrollRestoration,
+    useLoaderData,
+    useRouteLoaderData,
+} from '@remix-run/react';
 import i18nServer, { localeCookie } from './modules/i18n.server';
 import { useChangeLanguage } from 'remix-i18next/react';
 import { Toaster } from 'react-hot-toast';
@@ -14,6 +23,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { user } from './user-cookie';
 import SettingDrawer from './components/drawer';
 import { MenuOutlined } from '@ant-design/icons';
+import geniusRank from '~/assets/geniusRank.svg';
 
 export const handle = { i18n: ['translation'] };
 
@@ -46,9 +56,14 @@ export default function App() {
     return (
         <>
             <ClientOnly>{() => <Toaster />}</ClientOnly>
-            <ActionIcon variant="default" size="xl" className="z-40 m-10 absolute" onClick={openDrawer}>
-                <MenuOutlined className="text-2xl text-gray-500" />
-            </ActionIcon>
+            <div className="z-40 m-10 absolute flex items-center gap-4">
+                <ActionIcon variant="default" size="xl" onClick={openDrawer}>
+                    <MenuOutlined className="text-2xl text-gray-500" />
+                </ActionIcon>
+                <Link to="/" className="hover:scale-105 active:scale-95 transition-all">
+                    <img src={geniusRank} alt="logo" className="h-10" />
+                </Link>
+            </div>
             <SettingDrawer
                 opened={drawerOpened}
                 close={closeDrawer}
