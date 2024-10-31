@@ -226,7 +226,6 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserDO> implements
         if (response.getStatusCode() != HttpStatus.OK || !userInfo.getLogin().equals(requestParam.getGithubUserId())) {
             throw new ClientException(USER_OAUTH_ERROR);
         }
-        log.info("My Github用户信息: {}", userInfo);
 
         // 查询用户信息
         UserDO user = baseMapper.selectOne(Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getGithub_user_id, requestParam.getGithubUserId()));
