@@ -25,7 +25,8 @@
         "reloading_after": "达到速率限制，在",
         "reloading_after_2": "秒后重新尝试",
         "reloading": "重试中...",
-        "reloadFailed": "重试失败"
+        "reloadFailed": "重试失败",
+        "something_not_fetch": "有些数据没有拿到，你可以自己尝试重新加载"
       },
       "userRecentPrs": "最近 80 条已合并的 Pull Requests",
       "userRecentIssues": "最近 80 条 Issues",

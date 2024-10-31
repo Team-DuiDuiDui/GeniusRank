@@ -50,17 +50,22 @@ export const handleRequest = async <T>(
     maxRetries: number = 0,
     toast_error?: boolean,
     toast_success?: boolean,
-    retrySuccessSideEffect?: (data?: AxiosResponse) => void,
+    sideEffect?: {
+        retrySuccessSideEffect?: (data?: AxiosResponse) => void,
+        failedSideEffect?: () => void,
+        cleanSideEffect?: () => void
+    },
 ): Promise<T | undefined> => {
 
     let attempt = 0;
 
-    while (attempt <= maxRetries) {
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
         try {
             const res = await req();
             const result = await success(res);
-            if (attempt > 0 && retrySuccessSideEffect) {
-                retrySuccessSideEffect(res);
+            if (attempt > 0 && sideEffect?.retrySuccessSideEffect) {
+                sideEffect.retrySuccessSideEffect(res);
             }
             if (toast_success) {
                 toast.success(i18next.t('user.success.success'));
@@ -71,22 +76,18 @@ export const handleRequest = async <T>(
                 toast.error((error as Error).toString());
             }
 
-            if (errorResolve) {
+            if (errorResolve && attempt < maxRetries) {
                 const resultUnchecked = errorResolve(error);
                 const result = resultUnchecked instanceof Promise ? await resultUnchecked : resultUnchecked;
                 if (result) {
                     attempt++;
                     continue;
-                } else {
-                    break;
                 }
-            } else {
-                throw error;
             }
+            sideEffect?.failedSideEffect ? sideEffect?.failedSideEffect() : null;
+            throw error;
         }
     }
-
-    throw new Error(i18next.t('user.err.network_error'));
 }
 
     /**
@@ -108,9 +109,13 @@ export const handleRequest = async <T>(
         errorResolve?: (error: unknown) => void,
         maxRetries: number = 0,
         toast_error: boolean = true,
-        toast_success?: boolean
+        toast_success?: boolean,
+        sideEffect?: {
+            retrySuccessSideEffect?: (data?: AxiosResponse) => void,
+            cleanSideEffect?: () => void
+        }
     ): Promise<T | undefined> => {
-        return handleRequest(req, success, errorResolve, maxRetries, toast_error, toast_success);
+        return handleRequest(req, success, errorResolve, maxRetries, toast_error, toast_success, sideEffect);
     };
 
     /**
@@ -140,6 +145,7 @@ export const handleRequest = async <T>(
                 return res.data
             },
             async (err) => {
+                toast.dismiss('user_reload');
                 if (errorResolve) {
                     errorResolve(err)
                 }
@@ -150,6 +156,7 @@ export const handleRequest = async <T>(
                     loading((resetTime - localTime + 5000)/1000)
                     await sleep(resetTime - localTime + 5000);
                     toast.dismiss('user_reload');
+                    toast.loading(i18next.t('user.err.reloading'), {id: 'user_reload'});
                     return true;
                 } else {
                     return false;
@@ -158,9 +165,21 @@ export const handleRequest = async <T>(
             maxRetries, 
             toast_error, 
             toast_success, 
-            ()=>toast.success(i18next.t('user.success.reloadSuccess'), {
-                id: 'user_reload',
-            }));
+            {
+                retrySuccessSideEffect: () => {
+                    toast.dismiss('user_reload');
+                    toast.success(i18next.t('user.success.reloadSuccess'), {
+                        id: 'user_reload',
+                    });
+                },
+                failedSideEffect: () => {
+                    toast.dismiss('user_reload');
+                    toast.error(i18next.t('user.err.something_not_fetch'), {
+                        id: 'user_reload',
+                    });
+                }
+            }
+        );
     };
 
     /**
