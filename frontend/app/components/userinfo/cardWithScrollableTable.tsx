@@ -1,5 +1,5 @@
 import { Loader, Skeleton, Table } from '@mantine/core';
-import { ReactNode, useCallback, useRef } from 'react';
+import { ReactNode, useRef } from 'react';
 import ErrorNote from './error';
 import CardWithScroll from '../constant/cardWithScroll';
 import { AxiosError } from 'axios';
