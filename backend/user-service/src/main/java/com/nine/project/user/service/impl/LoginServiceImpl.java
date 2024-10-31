@@ -61,7 +61,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserDO> implements
     private final RedissonClient redissonClient;
     private final StringRedisTemplate stringRedisTemplate;
     private final VerificationCodeProducer verificationCodeProducer;
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplateHttps;
 
     @Value("${spring.mail.enable}")
     private Boolean VerificationCodeEnable; // 是否开启邮箱验证码
@@ -221,7 +221,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserDO> implements
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(headers);
 
         // 发送请求并验证用户身份
-        ResponseEntity<String> response = restTemplate.exchange("https://api.github.com/users/" + requestParam.getGithubUserId(), HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> response = restTemplateHttps.exchange("https://api.github.com/users/" + requestParam.getGithubUserId(), HttpMethod.GET, entity, String.class);
         GithubUserDO userInfo = JSONUtil.toBean(response.getBody(), GithubUserDO.class);
         if (response.getStatusCode() != HttpStatus.OK || !userInfo.getLogin().equals(requestParam.getGithubUserId())) {
             throw new ClientException(USER_OAUTH_ERROR);
