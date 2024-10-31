@@ -2,9 +2,13 @@ import { json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
 import axios from 'axios';
 import { ZodError } from 'zod';
 import i18nServer from '~/modules/i18n.server';
+import { user } from '~/user-cookie';
 import { GithubUserServerOnly } from '~/utils/requests/ghapis/user.server';
 
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
+    const cookieHeader = request.headers.get('Cookie');
+    const cookie = (await user.parse(cookieHeader)) || {};
+    if (cookie.access_token) return redirect(`/detail/${params.name}`);
     const t = await i18nServer.getFixedT(request);
     if (params.name) {
         const user = new GithubUserServerOnly(params.name, context.cloudflare.env.GITHUB_ACCESS_TOKEN);

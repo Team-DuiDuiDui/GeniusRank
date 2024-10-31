@@ -73,6 +73,14 @@
         "re-login": "重新登录",
         "back": "返回首页"
       }
+    },
+    "auth": {
+      "err": {
+        "unauthorized": "请登录后查看此页面",
+        "unauthorized_title": "未登录",
+        "login": "登录",
+        "back": "返回首页"
+      }
     }
   }
 }

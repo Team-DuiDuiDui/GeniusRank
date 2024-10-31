@@ -9,12 +9,12 @@ import i18nServer from '~/modules/i18n.server';
 import { user } from '~/user-cookie';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-    const t = await i18nServer.getFixedT(request);
     const cookieHeader = request.headers.get('Cookie');
     const cookie = (await user.parse(cookieHeader)) || {};
+    if (cookie.access_token) return redirect('/');
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code');
-    if (cookie.access_token) return redirect('/');
+    const t = await i18nServer.getFixedT(request);
     if (code) {
         try {
             const res = await axios.post(
@@ -142,7 +142,7 @@ export default function OAuth() {
         <div className="h-screen w-screen flex justify-center items-center flex-col gap-6">
             <ExclamationCircleTwoTone twoToneColor={'#ff4d4f'} className="text-6xl" />
             <div className="flex flex-col justify-center items-center gap-2">
-                <h1 className="text-2xl">{t('oauth.err.error')}</h1>{' '}
+                <h1 className="text-2xl">{t('oauth.err.error')}</h1>
                 <p className="text-sm text-gray-500">
                     {error.title}: {error.message}
                 </p>
