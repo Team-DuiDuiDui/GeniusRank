@@ -38,7 +38,7 @@ export default function Index() {
                 } items-center gap-14`}
                 ref={parentRef}>
                 <div className="flex flex-row items-center gap-16 w-full justify-center">
-                    <div className="w-1/3 pt-8">
+                    <div className="w-3/5 lg:w-1/3 pt-9">
                         <Search logo={githubCat} placeholder={t('search.placeholder')} />
                     </div>
                 </div>

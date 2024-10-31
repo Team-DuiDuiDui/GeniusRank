@@ -60,7 +60,7 @@ export default function App() {
                 <ActionIcon variant="default" size="xl" onClick={openDrawer}>
                     <MenuOutlined className="text-2xl text-gray-500" />
                 </ActionIcon>
-                <Link to="/" className="hover:scale-105 active:scale-95 transition-all">
+                <Link to="/" className="hover:scale-105 active:scale-95 transition-all lg:block hidden">
                     <img src={geniusRank} alt="logo" className="h-10" />
                 </Link>
             </div>
