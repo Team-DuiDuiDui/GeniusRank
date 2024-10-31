@@ -1,7 +1,6 @@
 package com.nine.project.analyze.controller;
 
 
-import com.esotericsoftware.minlog.Log;
 import com.nine.project.analyze.constant.PromptConstant;
 import com.nine.project.analyze.dto.req.ChatReqDTO;
 import com.nine.project.analyze.service.PromptService;

@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * GitHub 用户所在国家/地区猜测响应 DTO
+ */
 @Data
 public class GithubUserCountryRespDTO {
 
