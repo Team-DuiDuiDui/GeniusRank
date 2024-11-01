@@ -22,5 +22,5 @@ public interface GithubUserCountryGuessService extends IService<GithubUserCountr
      * 创建用户所在国家/地区猜测
      * @param requestParams 用户所在国家/地区猜测数据
      */
-    void create(GithubUserCountryReqDTO requestParams);
+    GithubUserCountryRespDTO create(GithubUserCountryReqDTO requestParams);
 }
