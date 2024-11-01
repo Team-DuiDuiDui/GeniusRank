@@ -1,6 +1,7 @@
-type User = {
+export type UserDetail = {
     avatarUrl: string;
     name: string | null;
+    databaseId: number | null;
     login: string;
     bio: string | null;
     followers: {
@@ -80,6 +81,6 @@ type Repository = {
 
 export type UserData = {
     data: {
-        user: User;
+        user: UserDetail;
     };
 };

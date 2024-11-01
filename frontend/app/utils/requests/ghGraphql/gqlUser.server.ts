@@ -1,11 +1,11 @@
 import { AxiosInstance } from 'axios';
-import { User, UserData } from './typings/user';
+import { UserDetail, UserData } from './typings/user';
 import { createInstanceForGithub } from '../instance';
 
 export class gqlUser {
     public name: string;
     private axiosInstance: AxiosInstance;
-    public data: User | null = null;
+    public dataDetail: UserDetail | null = null;
 
     constructor(name: string, token: string) {
         this.name = name;
@@ -13,11 +13,12 @@ export class gqlUser {
     }
 
     async getData(count: number = 5): Promise<UserData> {
-        return await this.axiosInstance.post('/graphql', {
+        const res = await this.axiosInstance.post('/graphql', {
             query: `
 query($username:String!,$count:Int!){
     user(login: $username){
         avatarUrl
+        databaseId
         name
         login
         bio
@@ -146,5 +147,7 @@ query($username:String!,$count:Int!){
 }`,
             variables: { username: this.name, count: count },
         });
+        this.dataDetail = res.data;
+        return res.data;
     }
 }
