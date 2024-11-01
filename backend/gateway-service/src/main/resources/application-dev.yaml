@@ -37,6 +37,7 @@ spring:
             - name: TokenValidate
               args:
                 whitePathList:
+                  - /api/common/time
                   - /api/common/ping
                   - /api/common/files/**
 
