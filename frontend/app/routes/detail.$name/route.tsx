@@ -1,5 +1,5 @@
 import { loader } from './loader';
-import { isRouteErrorResponse, useLoaderData, useRouteError } from '@remix-run/react';
+import { isRouteErrorResponse, useLoaderData, useNavigation, useRouteError } from '@remix-run/react';
 import { MetaFunction } from '@remix-run/cloudflare';
 import UserBasic from '~/components/userinfo/basic';
 import UserInfoDetail from '~/components/userinfo/detail/info';
@@ -7,6 +7,8 @@ import UserIssuesDetail from '~/components/userinfo/detail/issues';
 import UserPullRequestsDetail from '~/components/userinfo/detail/prs';
 import UserReposContributeDetail from '~/components/userinfo/detail/reposContribute';
 import UserReposDetail from '~/components/userinfo/detail/repos';
+import { Loader, LoadingOverlay } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -16,11 +18,27 @@ export { loader };
 
 export default function User() {
     const data = useLoaderData<typeof loader>();
+    const navigation = useNavigation();
+    const { t } = useTranslation();
     const { user } = data.data;
     return (
         <>
             <div className="flex items-center justify-center w-full">
                 <div className="flex flex-row items-center gap-16 w-full h-full justify-center relative">
+                    <LoadingOverlay
+                        visible={navigation.state === 'loading'}
+                        className="items-start"
+                        zIndex={30}
+                        overlayProps={{ radius: 'sm', blur: 2, center: false }}
+                        loaderProps={{
+                            children: (
+                                <div className="flex flex-col justify-center items-center gap-4">
+                                    <Loader variant="dots" />
+                                    <p className="text-base text-gray-500">{t('user.loading')}</p>
+                                </div>
+                            ),
+                        }}
+                    />
                     <UserBasic>
                         <UserInfoDetail data={user} />
                         <UserReposDetail data={user} />

@@ -63,7 +63,8 @@
             "comments_count": "评论数",
             "repo_info": "仓库信息",
             "commits": "提交数",
-            "userContributeRepos": "最近贡献的 50 个仓库"
+            "userContributeRepos": "最近贡献的 50 个仓库",
+            "loading": "正在努力获取大量用户数据..."
         },
         "drawer": {
             "login": "登录",

@@ -64,7 +64,8 @@
             "comments_count": "Comments",
             "repo_info": "Repo Infos",
             "commits": "Commits",
-            "userContributeRepos": "Recent 50 Contributed Repos"
+            "userContributeRepos": "Recent 50 Contributed Repos",
+            "loading": "Loading user data..."
         },
         "drawer": {
             "login": "Login",
