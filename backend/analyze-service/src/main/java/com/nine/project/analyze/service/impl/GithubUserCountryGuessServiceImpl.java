@@ -1,7 +1,6 @@
 package com.nine.project.analyze.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,14 +9,13 @@ import com.nine.project.analyze.dao.mapper.GithubUserCountryGuessMapper;
 import com.nine.project.analyze.dto.req.GithubUserCountryReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserCountryRespDTO;
 import com.nine.project.analyze.service.GithubUserCountryGuessService;
+import com.nine.project.analyze.toolkit.CacheUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -32,14 +30,14 @@ import static com.nine.project.analyze.constant.RedisCacheConstant.*;
 @RequiredArgsConstructor
 public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCountryGuessMapper, GithubUserCountryGuessDO> implements GithubUserCountryGuessService {
 
-    private final StringRedisTemplate stringRedisTemplate;
+    private final CacheUtil<GithubUserCountryRespDTO> cacheUtil;
 
     @Override
     public GithubUserCountryRespDTO getGithubUserCountryGuessByGithubUserId(String githubUserId) {
         String countryKey = USER_COUNTRY_KEY + githubUserId;
 
         // 从缓存中获取
-        Map<Object, Object> cachedData = stringRedisTemplate.opsForHash().entries(countryKey);
+        Map<Object, Object> cachedData = cacheUtil.getMapFromCacheHash(countryKey);
         if (!cachedData.isEmpty()) {
             GithubUserCountryRespDTO respDTO = new GithubUserCountryRespDTO();
             return BeanUtil.fillBeanWithMap(cachedData, respDTO, true);
@@ -53,9 +51,7 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
         GithubUserCountryGuessDO githubUserCountryGuessDO = this.getOne(queryWrapper);
 
         // 存入缓存
-        GithubUserCountryRespDTO githubUserCountryRespDTO = BeanUtil.copyProperties(githubUserCountryGuessDO, GithubUserCountryRespDTO.class);
-
-        return getGithubUserCountryRespDTO(countryKey, githubUserCountryRespDTO);
+        return cacheUtil.send2CacheHash(countryKey, BeanUtil.copyProperties(githubUserCountryGuessDO, GithubUserCountryRespDTO.class), USER_COUNTRY_EXPIRE_TIME, TimeUnit.SECONDS);
     }
 
     @Override
@@ -84,22 +80,6 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
         respDTO.setUpdateTime(LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter));
 
         // 存入缓存
-        return getGithubUserCountryRespDTO(countryKey, respDTO);
-    }
-
-    /**
-     * 存入 Redis 缓存
-     * @param countryKey  Redis 键
-     * @param respDTO  Redis 值
-     * @return 响应数据
-     */
-    private GithubUserCountryRespDTO getGithubUserCountryRespDTO(String countryKey, GithubUserCountryRespDTO respDTO) {
-        Map<String, Object> map = BeanUtil.beanToMap(respDTO , new HashMap<>(), CopyOptions.create()
-                .setIgnoreNullValue(true)
-                .setFieldValueEditor((fieldName, fieldValue) -> fieldValue != null ? fieldValue.toString() : null));
-
-        stringRedisTemplate.opsForHash().putAll(countryKey, map);
-        stringRedisTemplate.expire(countryKey, USER_COUNTRY_EXPIRE_TIME, TimeUnit.SECONDS);
-        return respDTO;
+        return cacheUtil.send2CacheHash(countryKey, respDTO, USER_COUNTRY_EXPIRE_TIME, TimeUnit.SECONDS);
     }
 }
