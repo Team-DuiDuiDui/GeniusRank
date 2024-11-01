@@ -18,4 +18,11 @@ public class RedisCacheConstant {
     public static final long USER_COUNTRY_EXPIRE_TIME = 7 * 24 * 60 * 60;
 
     public static final String USER_COUNTRY_KEY = "general-project:user-country:";
+
+    /**
+     * 用户分数有效时间
+     */
+    public static final long USER_SCORE_EXPIRE_TIME = 7 * 24 * 60 * 60;
+
+    public static final String USER_SCORE_KEY = "general-project:user-score:";
 }
