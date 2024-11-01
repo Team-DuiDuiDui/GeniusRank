@@ -14,8 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -52,7 +51,7 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
 
         // 封装响应数据
         GithubUserCountryRespDTO respDTO = BeanUtil.copyProperties(githubUserCountryGuessDO, GithubUserCountryRespDTO.class);
-        respDTO.setUpdateTime(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+        respDTO.setUpdateTime(Instant.now().getEpochSecond());
 
         // 存入缓存
         return cacheUtil.send2CacheHash(countryKey, respDTO, USER_COUNTRY_EXPIRE_TIME, TimeUnit.SECONDS);
@@ -80,7 +79,7 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
 
         // 封装响应数据
         GithubUserCountryRespDTO respDTO = BeanUtil.copyProperties(githubUserCountryGuessDTO, GithubUserCountryRespDTO.class);
-        respDTO.setUpdateTime(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+        respDTO.setUpdateTime(Instant.now().getEpochSecond());
 
         // 存入缓存
         return cacheUtil.send2CacheHash(countryKey, respDTO, USER_COUNTRY_EXPIRE_TIME, TimeUnit.SECONDS);

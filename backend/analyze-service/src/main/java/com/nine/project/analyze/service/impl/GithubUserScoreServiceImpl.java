@@ -15,8 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -52,7 +51,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
-        respDTO.setUpdateTime(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+        respDTO.setUpdateTime(Instant.now().getEpochSecond());
 
         // 存入缓存
         return cacheUtil.send2CacheHash(cacheKey, respDTO, USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);
@@ -85,7 +84,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
-        respDTO.setUpdateTime(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+        respDTO.setUpdateTime(Instant.now().getEpochSecond());
 
         // 存入缓存
         return cacheUtil.send2CacheHash(cacheKey, respDTO, USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);
