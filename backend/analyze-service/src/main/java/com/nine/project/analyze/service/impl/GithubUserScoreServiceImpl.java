@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -50,8 +50,12 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
         GithubUserScoreDO userScoreDO = this.getOne(queryWrapper);
 
+        // 封装响应数据
+        GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
+        respDTO.setUpdateTime(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+
         // 存入缓存
-        return cacheUtil.send2CacheHash(cacheKey, BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class), USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);
+        return cacheUtil.send2CacheHash(cacheKey, respDTO, USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);
     }
 
     @Override
@@ -81,8 +85,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        respDTO.setUpdateTime(LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter));
+        respDTO.setUpdateTime(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
 
         // 存入缓存
         return cacheUtil.send2CacheHash(cacheKey, respDTO, USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);
