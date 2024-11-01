@@ -2,15 +2,19 @@ import { json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
 import axios from 'axios';
 import { ZodError } from 'zod';
 import i18nServer from '~/modules/i18n.server';
+import { user } from '~/user-cookie';
 import { GithubUserServerOnly } from '~/utils/requests/ghapis/user.server';
 
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
+    const cookieHeader = request.headers.get('Cookie');
+    const cookie = (await user.parse(cookieHeader)) || {};
+    if (cookie.access_token) return redirect(`/detail/${params.name}`);
     const t = await i18nServer.getFixedT(request);
     if (params.name) {
         const user = new GithubUserServerOnly(params.name, context.cloudflare.env.GITHUB_ACCESS_TOKEN);
         try {
             const data = (await user.getUser())!;
-            return json({   
+            return json({
                 userData: data,
                 title: `${params?.name ?? ''} | Genius Rank`,
                 description: t('user.description'),
@@ -18,7 +22,6 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
         } catch (e) {
             // eslint-disable-next-line import/no-named-as-default-member
             if (axios.isAxiosError(e)) {
-                console.log(e);
                 if (e.status === 404) throw new Response(t('user.err.not_found'), { status: 404 });
                 if (e.status === 403) {
                     throw new Response(t('user.err.rate_limit'), { status: 403 });

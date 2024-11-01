@@ -1,26 +1,30 @@
-import { json, LoaderFunctionArgs, redirect, type MetaFunction } from '@remix-run/cloudflare';
-import { useTranslation } from 'react-i18next';
-import Search from '~/components/search';
-import githubCat from '~/assets/github.svg';
-import i18nServer from '~/modules/i18n.server';
+import autoAnimate from '@formkit/auto-animate';
+import { json, LoaderFunctionArgs, redirect, MetaFunction } from '@remix-run/cloudflare';
 import { Outlet, useLocation } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
-import autoAnimate from '@formkit/auto-animate';
+import { useTranslation } from 'react-i18next';
+import Search from '~/components/search';
+import i18nServer from '~/modules/i18n.server';
+import { user } from '~/user-cookie';
+import githubCat from '~/assets/github.svg';
+
+export async function loader({ request }: LoaderFunctionArgs) {
+    const cookieHeader = request.headers.get('Cookie');
+    const cookie = (await user.parse(cookieHeader)) || {};
+    if (!cookie.access_token) return redirect('/unauthorized');
+    const t = await i18nServer.getFixedT(request);
+    return json({ title: t('user.title'), description: t('user.description') });
+}
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
-    const t = await i18nServer.getFixedT(request);
-    return json({ title: t('user.title'), description: t('user.description') });
-}
-
 export async function action({ request }: LoaderFunctionArgs) {
     const formData = await request.formData();
     const name = formData.get('name');
     /** 为了渐进增强 */
-    return redirect(`/user/${name}`);
+    return redirect(`/detail/${name}`);
 }
 
 export default function Index() {

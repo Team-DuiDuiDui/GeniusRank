@@ -124,9 +124,6 @@ export const guessRegionFromFollowings = async (
 };
 
 export const guessRegionFromReadme = async (userData: User, beInstance: AxiosInstanceForBe, githubInstance: AxiosInstanceForGithub, locale: string): Promise<[string, number]> => {
-    interface Readme {
-        content: string;
-    }
     const branchQuery = `
     query($userName: String!) {
         user(login: $userName) {

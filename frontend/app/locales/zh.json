@@ -25,9 +25,11 @@
                 "reloading_after": "达到速率限制，在",
                 "reloading_after_2": "秒后重新尝试",
                 "reloading": "重试中...",
-                "reloadFailed": "重试失败"
+                "reloadFailed": "重试失败",
+                "something_not_fetch": "部分数据加载失败，你仍然可以尝试重新加载"
             },
             "userRecentPrs": "最近 80 条已合并的 Pull Requests",
+            "userRecentPrs_all": "最近 80 条 Pull Requests",
             "userRecentIssues": "最近 80 条 Issues",
             "number": "序号",
             "repo": "仓库",
@@ -51,13 +53,42 @@
             "author": "作者",
             "no_message": "暂无信息",
             "success": {
+                "success": "成功",
                 "reloadSuccess": "重试成功"
-            }
+            },
+            "no_data": "暂无数据",
+            "status": "状态",
+            "comments_count": "评论数",
+            "repo_info": "仓库信息",
+            "commits": "提交数",
+            "userContributeRepos": "最近贡献的 80 个仓库"
         },
         "drawer": {
             "login": "登录",
             "login_github": "使用 GitHub 登录",
-            "anonymous": "匿名用户"
+            "anonymous": "匿名用户",
+            "logout": "退出登录"
+        },
+        "oauth": {
+            "err": {
+                "bad_verification_code": "使用重复或无效的授权码",
+                "bad_verification_code_title": "无效的授权码",
+                "network_error": "我们这边出了错",
+                "invalid_scope_title": "授权范围无效",
+                "invalid_scope": "请授权邮箱及基本用户信息（read:user,user:email），请勿修改授权页的 URL",
+                "unknown_error": "未知错误",
+                "error": "授权出错",
+                "re-login": "重新登录",
+                "back": "返回首页"
+            }
+        },
+        "auth": {
+            "err": {
+                "unauthorized": "请登录后查看此页面",
+                "unauthorized_title": "未登录",
+                "login": "登录",
+                "back": "返回首页"
+            }
         }
     }
 }

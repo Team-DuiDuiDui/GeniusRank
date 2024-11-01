@@ -22,12 +22,14 @@
                 "reload": "Try to reload",
                 "may_hide": "The user may be set to private",
                 "may_reason": "Possible reasons: ",
-                "reloading_after": "Reached the rate limit, try again after",
+                "reloading_after": "Reached the rate limit, retry after",
                 "reloading_after_2": "seconds",
                 "reloading": "Reloading...",
-                "reloadFailed": "Reload failed"
+                "reloadFailed": "Reload failed",
+                "something_not_fetch": "Some data is not fetched, you can try to reload it yourself"
             },
             "userRecentPrs": "Recent 80 Merged Pull Requests",
+            "userRecentPrs_all": "Recent 80 Pull Requests",
             "userRecentIssues": "Recent 80 Issues",
             "number": "No.",
             "repo": "Repositories",
@@ -52,13 +54,42 @@
             "no_message": "No messages",
             "error": {},
             "success": {
+                "success": "Success",
                 "reloadSuccess": "Reload success"
-            }
+            },
+            "no_data": "No data",
+            "status": "Status",
+            "comments_count": "Comments",
+            "repo_info": "Repo Infos",
+            "commits": "Commits",
+            "userContributeRepos": "Recent 80 Contributed Repos"
         },
         "drawer": {
             "login": "Login",
             "login_github": "Login with GitHub",
-            "anonymous": "Anonymous"
+            "anonymous": "Anonymous",
+            "logout": "Logout"
+        },
+        "oauth": {
+            "err": {
+                "bad_verification_code": "Use a duplicate or invalid authorization code",
+                "bad_verification_code_title": "Bad verification code",
+                "network_error": "We are having trouble",
+                "invalid_scope_title": "Invalid scope",
+                "invalid_scope": "Please authorize email and basic user information (read:user,user:email), do not modify the URL of the authorization page",
+                "unknown_error": "Unknown Error",
+                "error": "OAuth Error",
+                "re-login": "Retry Login",
+                "back": "Back to Home"
+            }
+        },
+        "auth": {
+            "err": {
+                "unauthorized": "Please login to view this page",
+                "unauthorized_title": "Unauthorized",
+                "login": "Login",
+                "back": "Back to home"
+            }
         }
     }
 }

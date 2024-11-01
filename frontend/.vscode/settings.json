@@ -11,4 +11,6 @@
         "ratelimit",
         "UTCZ"
     ],
+    "svg.preview.background": "editor",
+    "references.preferredLocation": "view",
 }

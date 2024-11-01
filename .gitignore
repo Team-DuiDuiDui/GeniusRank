@@ -10,6 +10,7 @@ frontend/dev.vars
 frontend/wrangler
 frontend/.env
 frontend/.dev.vars
+frontend/.wrangler/tmp
 
 ### IntelliJ project files
 .idea/
