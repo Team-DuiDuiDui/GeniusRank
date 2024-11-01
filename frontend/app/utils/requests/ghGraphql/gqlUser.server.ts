@@ -12,7 +12,7 @@ export class gqlUser {
         this.axiosInstance = createInstanceForGithub(token, undefined, undefined, 'Bearer');
     }
 
-    async getData(count: number = 5): Promise<UserData> {
+    async getData(count: number = 40): Promise<UserData> {
         const res = await this.axiosInstance.post('/graphql', {
             query: `
 query($username:String!,$count:Int!){
@@ -50,6 +50,9 @@ query($username:String!,$count:Int!){
                     issues{
                         totalCount
                     }
+                    pullRequests{
+                        totalCount
+                    }
                     discussions{
                         totalCount
                     }
@@ -64,7 +67,7 @@ query($username:String!,$count:Int!){
                     totalCount
                 }
                 totalCommentsCount
-                createdAt
+                updatedAt
             }
             totalCount
         }
@@ -84,6 +87,9 @@ query($username:String!,$count:Int!){
                     issues{
                         totalCount
                     }
+                    pullRequests{
+                        totalCount
+                    }
                     discussions{
                         totalCount
                     }
@@ -97,7 +103,7 @@ query($username:String!,$count:Int!){
                 comments{
                     totalCount
                 }
-                createdAt
+                updatedAt
             }
             totalCount
         }
@@ -110,6 +116,9 @@ query($username:String!,$count:Int!){
                 issues{
                     totalCount
                 }
+                pullRequests{
+                        totalCount
+                    }
                 discussions{
                     totalCount
                 }
@@ -131,6 +140,9 @@ query($username:String!,$count:Int!){
                 issues{
                     totalCount
                 }
+                pullRequests{
+                        totalCount
+                    }
                 discussions{
                     totalCount
                 }

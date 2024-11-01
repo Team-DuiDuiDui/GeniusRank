@@ -5,6 +5,7 @@ import CardWithScroll from '../constant/cardWithScroll';
 import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
 import { throttleWithDeepClone } from '~/utils/chore';
+import { useTranslation } from 'react-i18next';
 
 interface DataTableProps<T> {
     title: string;
@@ -27,6 +28,7 @@ const CardWithScrollableTable = <T,>({
 }: DataTableProps<T>) => {
     const titleRef = useRef(null);
     const headerRef = useRef<HTMLHeadingElement>(null);
+    const { t } = useTranslation();
 
     const handleScroll = throttleWithDeepClone((event: React.UIEvent<HTMLDivElement>) => {
         if (event.currentTarget.scrollTop > 0) {
@@ -63,7 +65,7 @@ const CardWithScrollableTable = <T,>({
                                 data.map((item, index) => renderRow(item, index))
                             ) : (
                                 <tr className="text-center text-gray-500">
-                                    <td colSpan={columns.length}>No data available</td>
+                                    <td colSpan={columns.length}>{t('user.no_data')}</td>
                                 </tr>
                             )}
                         </Table.Tbody>

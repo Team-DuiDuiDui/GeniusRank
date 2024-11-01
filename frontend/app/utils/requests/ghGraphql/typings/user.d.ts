@@ -17,55 +17,58 @@ export type UserDetail = {
         totalCount: number;
     };
     pullRequests: {
-        nodes: PullRequest[] | [] | null[];
+        nodes: PullRequestDetail[] | [] | null[];
         totalCount: number;
     };
     issues: {
-        nodes: Issue[] | [] | null[];
+        nodes: IssueDetail[] | [] | null[];
         totalCount: number;
     };
     repositories: {
-        nodes: Repository[] | [] | null[];
+        nodes: RepositoryDetail[] | [] | null[];
         totalCount: number;
     };
     repositoriesContributedTo: {
-        nodes: Repository[] | [] | null[];
+        nodes: RepositoryDetail[] | [] | null[];
         totalCount: number;
     };
 };
 
-type PullRequest = {
+export type PullRequestDetail = {
     title: string;
     url: string;
     state: 'CLOSED' | 'MERGED' | 'OPEN';
     number: number;
-    baseRepository: Repository | null;
+    baseRepository: RepositoryDetail | null;
     commits: {
         totalCount: number;
     };
     totalCommentsCount: number | null;
-    createdAt: string;
+    updatedAt: string;
 };
 
-type Issue = {
+export type IssueDetail = {
     title: string;
     url: string;
     state: 'CLOSED' | 'OPEN';
     number: number;
     //这里确实没有 null
-    repository: Repository;
+    repository: RepositoryDetail;
     comments: {
         totalCount: number;
     };
-    createdAt: string;
+    updatedAt: string;
 };
 
-type Repository = {
+export type RepositoryDetail = {
     url: string;
     isFork: boolean;
     stargazerCount: number;
     forkCount: number;
     issues: {
+        totalCount: number;
+    } | null;
+    pullRequests: {
         totalCount: number;
     } | null;
     discussions: {
