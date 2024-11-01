@@ -55,6 +55,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
             const userData = await axios.get(`https://api.github.com/user`, {
                 headers: {
                     Authorization: `${token_type} ${access_token}`,
+                    'User-Agent': 'Team-Duiduidui: Genius Rank',
                 },
             });
             cookie.userAvatar = userData.data.avatar_url;
@@ -73,6 +74,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                 },
             });
         } catch (e) {
+            console.log(e);
             if (axios.isAxiosError(e)) {
                 if (e.response?.status && e.response.status >= 400 && e.response.status < 500)
                     return json(
