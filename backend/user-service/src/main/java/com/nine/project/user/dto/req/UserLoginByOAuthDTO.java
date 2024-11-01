@@ -11,8 +11,12 @@ public class UserLoginByOAuthDTO {
     /**
      * Github平台用户id
      */
-    private String githubUserId;
+    private Long githubUserId;
 
+    /**
+     * Github 用户名
+     */
+    private String login;
 
     /**
      * Github 登录 Token

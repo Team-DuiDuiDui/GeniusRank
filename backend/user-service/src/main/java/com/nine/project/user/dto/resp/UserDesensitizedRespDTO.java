@@ -16,11 +16,6 @@ public class UserDesensitizedRespDTO {
     private Long id;
 
     /**
-     * Github平台用户id
-     */
-    private String github_user_id;
-
-    /**
      * 用户名
      */
     private String username;
