@@ -16,9 +16,7 @@ export class githubUser {
 
     constructor(name: string, token?: string, userData?: User, isServer?: boolean, axiosInstance?: AxiosInstance) {
         this.name = name;
-        this.axiosInstance = axiosInstance
-            ? axiosInstance
-            : createInstanceForGithub(token);
+        this.axiosInstance = axiosInstance ? axiosInstance : createInstanceForGithub(token);
         this.userData = userData ?? null;
         if (token) this.isAuthorized = true;
     }

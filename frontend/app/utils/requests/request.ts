@@ -29,9 +29,9 @@ interface ErrorExtensions {
 
 /**
  * 【 **通用** 】的请求处理函数。
- * 
+ *
  * 该函数用于处理支持重试机制的请求，并根据请求结果显示相应的提示信息。
- * 
+ *
  * @template T - 请求成功时返回的数据类型
  * @param {() => Promise<AxiosResponse>} req - 发起请求的函数，返回一个解析为 AxiosResponse 的 Promise
  * @param {(data: AxiosResponse) => Promise<T>} success - 处理成功响应的函数，接收 AxiosResponse，返回一个解析为类型 T 的 Promise

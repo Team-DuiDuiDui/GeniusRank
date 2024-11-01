@@ -1,11 +1,6 @@
 /* eslint-disable import/no-named-as-default-member */
 import axios, { AxiosInstance } from 'axios';
 import sleep from '../sleep';
-import toast from 'react-hot-toast';
-import i18next from 'i18next';
-import { ClientOnly } from 'remix-utils/client-only';
-import CountUp from 'react-countup';
-import { CloseButton } from '@mantine/core';
 
 /**
  * 创建一个可重试的 Axios 实例。
@@ -36,13 +31,21 @@ export interface AxiosInstanceForGithub extends AxiosInstance {}
  * 该实例会自动添加 GitHub API 的 baseURL 和可选的授权头。
  *
  * @param token - 可选的 GitHub 访问令牌
+ * @param ua - 可选的用户代理头
+ * @param noRetry - 是否禁用重试，默认为 false
+ * @param token_type - 令牌类型，默认为 'token'
  * @returns 用于 GitHub API 的 Axios 实例
  */
-export const createInstanceForGithub = (token?: string, ua?: string, noRetry?: boolean): AxiosInstanceForGithub => {
+export const createInstanceForGithub = (
+    token?: string,
+    ua?: string,
+    noRetry?: boolean,
+    token_type: 'Bearer' | 'token' = 'token'
+): AxiosInstanceForGithub => {
     const instance = axios.create({
         baseURL: 'https://api.github.com',
         headers: {
-            Authorization: token ? `token ${token}` : undefined,
+            Authorization: token ? `${token_type} ${token}` : undefined,
             'User-Agent': ua,
         },
     });
