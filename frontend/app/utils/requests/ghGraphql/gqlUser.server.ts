@@ -12,7 +12,7 @@ export class gqlUser {
         this.axiosInstance = createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank', undefined, 'Bearer');
     }
 
-    async getData(count: number = 40): Promise<UserData> {
+    async getData(count: number = 50): Promise<UserData> {
         const res = await this.axiosInstance.post('/graphql', {
             query: `
 query($username:String!,$count:Int!){

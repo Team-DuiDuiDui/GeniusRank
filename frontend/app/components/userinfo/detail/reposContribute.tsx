@@ -27,7 +27,7 @@ const UserReposContributeDetail: React.FC<userIssuesProps> = ({ data }) => {
             title={t('user.userContributeRepos')}
             columns={[t('user.number'), t('user.repo'), t('user.lang'), t('user.repo_info')]}
             data={issueNode}
-            dataCount={data?.issues.totalCount ?? 0}
+            dataCount={data?.repositoriesContributedTo.totalCount ?? 0}
             renderRow={(item: RepositoryDetail, index: number) => (
                 <Repo item={item} index={index + 1} key={index} t={t} />
             )}

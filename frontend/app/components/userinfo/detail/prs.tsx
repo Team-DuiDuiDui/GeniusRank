@@ -48,7 +48,7 @@ const UserPullRequestsDetail: React.FC<userIssuesProps> = ({ data }) => {
                 t('user.repo_info'),
             ]}
             data={prNode}
-            dataCount={data?.issues.totalCount ?? 0}
+            dataCount={data?.pullRequests.totalCount ?? 0}
             renderRow={(item: PullRequestDetail, index: number) => (
                 <Prs item={item} index={index + 1} key={index} t={t} />
             )}

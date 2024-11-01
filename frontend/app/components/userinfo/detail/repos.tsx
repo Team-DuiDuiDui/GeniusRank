@@ -34,10 +34,10 @@ const UserReposDetail: React.FC<userIssuesProps> = ({ data }) => {
     }, [titleRef]);
     return (
         <CardWithScrollableTableDetail
-            title={t('user.userRepos')}
+            title={t('user.userRepos_50')}
             columns={[t('user.number'), t('user.repo'), t('user.lang'), t('user.repo_info')]}
             data={issueNode}
-            dataCount={data?.issues.totalCount ?? 0}
+            dataCount={data?.repositories.totalCount ?? 0}
             renderRow={(item: RepositoryDetail, index: number) => (
                 <Repo item={item} index={index + 1} key={index} t={t} />
             )}

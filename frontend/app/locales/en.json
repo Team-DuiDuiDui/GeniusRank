@@ -31,6 +31,7 @@
             "userRecentPrs": "Recent 80 Merged Pull Requests",
             "userRecentPrs_all": "Recent 80 Pull Requests",
             "userRecentIssues": "Recent 80 Issues",
+            "userRecentIssues_50": "Recent 50 Issues",
             "number": "No.",
             "repo": "Repositories",
             "pr_title": "Pull Request",
@@ -39,6 +40,7 @@
             "no_prs": "This user has no merged pull requests",
             "no_issues": "This user has no issues",
             "userRepos": "Recent 80 Repos",
+            "userRepos_50": "Recent 50 Repos",
             "lang": "Language",
             "open_issues": "Open Issues",
             "size": "Size",
@@ -62,7 +64,7 @@
             "comments_count": "Comments",
             "repo_info": "Repo Infos",
             "commits": "Commits",
-            "userContributeRepos": "Recent 80 Contributed Repos"
+            "userContributeRepos": "Recent 50 Contributed Repos"
         },
         "drawer": {
             "login": "Login",
