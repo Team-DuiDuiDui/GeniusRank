@@ -22,8 +22,8 @@ import './tailwind.css';
 import { useDisclosure } from '@mantine/hooks';
 import { user } from './user-cookie';
 import SettingDrawer from './components/drawer';
-import { MenuOutlined } from '@ant-design/icons';
 import geniusRank from '~/assets/geniusRank.svg';
+import MenuIcon from './components/menu';
 
 export const handle = { i18n: ['translation'] };
 
@@ -58,7 +58,7 @@ export default function App() {
             <ClientOnly>{() => <Toaster />}</ClientOnly>
             <div className="z-40 m-10 absolute flex items-center gap-4">
                 <ActionIcon variant="default" size="xl" onClick={openDrawer}>
-                    <MenuOutlined className="text-2xl text-gray-500" />
+                    <MenuIcon />
                 </ActionIcon>
                 <Link to="/" className="hover:scale-105 active:scale-95 transition-all lg:block hidden">
                     <img src={geniusRank} alt="logo" className="h-10" />

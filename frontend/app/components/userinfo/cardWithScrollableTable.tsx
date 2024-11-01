@@ -1,5 +1,5 @@
 import { Loader, Skeleton, Table } from '@mantine/core';
-import { ReactNode, useCallback, useRef } from 'react';
+import { ReactNode, useRef } from 'react';
 import ErrorNote from './error';
 import CardWithScroll from '../constant/cardWithScroll';
 import { AxiosError } from 'axios';
@@ -29,7 +29,6 @@ const CardWithScrollableTable = <T,>({
     const headerRef = useRef<HTMLHeadingElement>(null);
 
     const handleScroll = throttleWithDeepClone((event: React.UIEvent<HTMLDivElement>) => {
-        console.log(event.currentTarget.scrollTop);
         if (event.currentTarget.scrollTop > 0) {
             event.preventDefault();
             headerRef.current?.classList.remove('my-4', 'text-lg');
@@ -38,7 +37,7 @@ const CardWithScrollableTable = <T,>({
             headerRef.current?.classList.remove('text-base', 'my-[2px]');
             headerRef.current?.classList.add('my-4', 'text-lg');
         }
-    }, 200);
+    }, 100);
 
     return (
         <CardWithScroll maxHeight="max-h-96">

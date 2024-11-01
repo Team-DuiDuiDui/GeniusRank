@@ -8,7 +8,7 @@ import { AxiosInstanceForGithub, createInstanceForGithub } from '~/utils/request
 const useAxiosInstanceForGithub = (): AxiosInstanceForGithub | undefined => {
     const currentToken = useRef<string | null>(null);
     const [isClient, setIsClient] = useState<boolean>(false);
-    const [changed, setChanged] = useState<boolean>(false);
+    const [instance, setInstance] = useState<() => AxiosInstanceForGithub | undefined>();
 
     // 仅在客户端设置标志
     useEffect(() => {
@@ -21,7 +21,7 @@ const useAxiosInstanceForGithub = (): AxiosInstanceForGithub | undefined => {
 
         const token = localStorage.getItem('GITHUB_ACCESS_TOKEN');
         if (token && token !== currentToken.current) {
-            setChanged(prev => !prev);
+            setInstance(() => () => createInstanceForGithub(token));
             currentToken.current = token;
         }
 
@@ -29,7 +29,7 @@ const useAxiosInstanceForGithub = (): AxiosInstanceForGithub | undefined => {
             if (event.key === 'GITHUB_ACCESS_TOKEN') {
                 const newToken = event.newValue;
                 if (newToken && newToken !== currentToken.current) {
-                    setChanged(prev => !prev);
+                    setInstance(() => () => createInstanceForGithub(newToken));
                     currentToken.current = newToken;
                 }
             }
@@ -41,7 +41,7 @@ const useAxiosInstanceForGithub = (): AxiosInstanceForGithub | undefined => {
             window.removeEventListener('storage', handleStorageChange);
         };
     }, [isClient]);
-    return changed ? createInstanceForGithub(currentToken.current!) : undefined;
+    return instance?.();
 };
 
 

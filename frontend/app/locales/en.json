@@ -25,7 +25,8 @@
         "reloading_after": "Reached the rate limit, retry after",
         "reloading_after_2": "seconds",
         "reloading": "Reloading...",
-        "reloadFailed": "Reload failed"
+        "reloadFailed": "Reload failed",
+        "something_not_fetch": "Some data is not fetched, you can try to reload it yourself"
       },
       "userRecentPrs": "Recent 80 Merged Pull Requests",
       "userRecentIssues": "Recent 80 Issues",

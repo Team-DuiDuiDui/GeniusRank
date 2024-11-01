@@ -42,6 +42,7 @@ export default function User() {
         console.log(userRegion);
     }, [beInstance, data.userData, githubInstance, locale, userRegion]);
 
+
     useEffect(() => {
         user.current.setUserName(params?.name ?? '');
         user.current.setUserData(data.userData);

@@ -8,7 +8,7 @@ import { AxiosInstanceForBe, createInstanceForBe } from '~/api/instance'
 const useAxiosInstanceForBe = (): AxiosInstanceForBe | undefined => {
     const currentToken = useRef<string | null>(null)
     const [isClient, setIsClient] = useState<boolean>(false)
-    const [changed, setChanged] = useState<boolean>(false)
+    const [instance, setInstance] = useState<()=>AxiosInstanceForBe | undefined>()
 
     // 仅在客户端设置标志
     useEffect(() => {
@@ -21,7 +21,7 @@ const useAxiosInstanceForBe = (): AxiosInstanceForBe | undefined => {
 
         const token = localStorage.getItem('token')
         if (token && token !== currentToken.current) {
-            setChanged(prev => !prev)
+            setInstance(() => () => createInstanceForBe(token))
             currentToken.current = token
         }
 
@@ -29,7 +29,7 @@ const useAxiosInstanceForBe = (): AxiosInstanceForBe | undefined => {
             if (event.key === 'token') {
                 const newToken = event.newValue
                 if (newToken && newToken !== currentToken.current) {
-                    setChanged(prev => !prev)
+                    setInstance(() => () => createInstanceForBe(newToken))
                     currentToken.current = newToken
                 }
             }
@@ -42,7 +42,7 @@ const useAxiosInstanceForBe = (): AxiosInstanceForBe | undefined => {
         }
     }, [isClient])
 
-    return changed ? createInstanceForBe(currentToken.current!) : undefined
+    return instance?.()
 }
 
 export default useAxiosInstanceForBe
