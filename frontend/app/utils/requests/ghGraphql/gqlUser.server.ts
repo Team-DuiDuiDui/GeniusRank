@@ -107,7 +107,7 @@ query($username:String!,$count:Int!){
             }
             totalCount
         }
-        repositories(last:$count,orderBy:{direction:ASC,field:STARGAZERS}){
+        repositories(last:$count,orderBy:{direction:ASC,field:STARGAZERS},ownerAffiliations:[OWNER]){
             nodes{
                 url
                 isFork

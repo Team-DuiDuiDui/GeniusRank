@@ -40,7 +40,7 @@
             "no_prs": "This user has no merged pull requests",
             "no_issues": "This user has no issues",
             "userRepos": "Recent 80 Repos",
-            "userRepos_50": "Recent 50 Repos",
+            "userRepos_50": "50 Popular Repos",
             "lang": "Language",
             "open_issues": "Open Issues",
             "size": "Size",
@@ -64,7 +64,7 @@
             "comments_count": "Comments",
             "repo_info": "Repo Infos",
             "commits": "Commits",
-            "userContributeRepos": "Recent 50 Contributed Repos",
+            "userContributeRepos": "50 Popular Contributed Repos",
             "loading": "Loading user data..."
         },
         "drawer": {

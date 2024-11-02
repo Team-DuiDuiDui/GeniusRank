@@ -9,6 +9,7 @@
         "flowbite",
         "loginbg",
         "ratelimit",
+        "repoinfo",
         "UTCZ"
     ],
     "svg.preview.background": "editor",

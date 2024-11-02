@@ -4,16 +4,10 @@ import autoAnimate from '@formkit/auto-animate';
 import { Table, Tooltip } from '@mantine/core';
 import { CommonLink } from '../../infoLink';
 import { RepositoryDetail, UserDetail } from '~/utils/requests/ghGraphql/typings/user';
-import {
-    CommentOutlined,
-    EyeOutlined,
-    ForkOutlined,
-    IssuesCloseOutlined,
-    PullRequestOutlined,
-    StarOutlined,
-} from '@ant-design/icons';
+import { ForkOutlined } from '@ant-design/icons';
 import { TFunction } from 'i18next';
 import CardWithScrollableTableDetail from './cardWithScrollableTable';
+import RepoInfo from './repoinfo';
 
 interface userIssuesProps {
     data: UserDetail;
@@ -55,7 +49,6 @@ interface repoProps {
 }
 
 export const Repo: React.FC<repoProps> = ({ item, index: key, t }) => {
-    const { stargazerCount, forkCount, issues, pullRequests, discussions, watchers } = item;
     return (
         <Table.Tr>
             <Table.Td>{key}</Table.Td>
@@ -75,50 +68,7 @@ export const Repo: React.FC<repoProps> = ({ item, index: key, t }) => {
                 </CommonLink>
             </Table.Td>
             <Table.Td>{item.primaryLanguage?.name ?? t('user.unknown')}</Table.Td>
-            <Table.Td className="flex flex-wrap gap-2 cursor-default">
-                <Tooltip label="stars">
-                    <span>
-                        <StarOutlined className="mr-1" />
-                        {stargazerCount}
-                    </span>
-                </Tooltip>
-                <Tooltip label="fork">
-                    <span>
-                        <ForkOutlined className="mr-1" />
-                        {forkCount}
-                    </span>
-                </Tooltip>
-                <Tooltip label="watchers">
-                    <span>
-                        <EyeOutlined className="mr-1" />
-                        {watchers.totalCount}
-                    </span>
-                </Tooltip>
-                {issues && (
-                    <Tooltip label="Issues">
-                        <span>
-                            <IssuesCloseOutlined className="mr-1" />
-                            {issues.totalCount}
-                        </span>
-                    </Tooltip>
-                )}
-                {pullRequests && (
-                    <Tooltip label="Pull Requests">
-                        <span>
-                            <PullRequestOutlined className="mr-1" />
-                            {pullRequests.totalCount}
-                        </span>
-                    </Tooltip>
-                )}
-                {discussions && (
-                    <Tooltip label="Discussions">
-                        <span>
-                            <CommentOutlined className="mr-1" />
-                            {discussions.totalCount}
-                        </span>
-                    </Tooltip>
-                )}
-            </Table.Td>
+            <RepoInfo repository={item} />
         </Table.Tr>
     );
 };
