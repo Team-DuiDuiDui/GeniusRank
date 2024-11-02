@@ -47,6 +47,7 @@ const UserIssuesDetail: React.FC<userIssuesProps> = ({ data }) => {
             data={issueNode}
             dataCount={data?.issues.totalCount ?? 0}
             renderRow={(item: IssueDetail, index: number) => <Issue item={item} index={index + 1} key={index} t={t} />}
+            reverse
         />
     );
 };

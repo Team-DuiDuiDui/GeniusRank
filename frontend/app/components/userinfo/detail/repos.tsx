@@ -41,6 +41,7 @@ const UserReposDetail: React.FC<userIssuesProps> = ({ data }) => {
             renderRow={(item: RepositoryDetail, index: number) => (
                 <Repo item={item} index={index + 1} key={index} t={t} />
             )}
+            reverse
         />
     );
 };

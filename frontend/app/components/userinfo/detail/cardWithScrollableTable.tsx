@@ -10,12 +10,21 @@ interface DataTableProps<T> {
     data: T[];
     dataCount: number;
     renderRow: (item: T, index: number) => ReactNode;
+    reverse?: boolean;
 }
 
-const CardWithScrollableTableDetail = <T,>({ title, columns, data, dataCount, renderRow }: DataTableProps<T>) => {
+const CardWithScrollableTableDetail = <T,>({
+    title,
+    columns,
+    data,
+    dataCount,
+    renderRow,
+    reverse = false,
+}: DataTableProps<T>) => {
     const titleRef = useRef(null);
     const headerRef = useRef<HTMLHeadingElement>(null);
     const { t } = useTranslation();
+    const finalData = reverse ? [...data].reverse() : data;
 
     const handleScroll = throttleWithDeepClone((event: React.UIEvent<HTMLDivElement>) => {
         if (event.currentTarget.scrollTop > 0) {
@@ -47,11 +56,11 @@ const CardWithScrollableTableDetail = <T,>({ title, columns, data, dataCount, re
                     </Table.Thead>
                     <Table.Tbody>
                         {data.length > 0 ? (
-                            data.map((item, index) => renderRow(item, index))
+                            finalData.map((item, index) => renderRow(item, index))
                         ) : (
-                            <tr className="text-center text-gray-500">
-                                <td colSpan={columns.length}>{t('user.no_data')}</td>
-                            </tr>
+                            <Table.Tr className="text-center text-gray-500">
+                                <Table.Td colSpan={columns.length}>{t('user.no_data')}</Table.Td>
+                            </Table.Tr>
                         )}
                     </Table.Tbody>
                 </Table>

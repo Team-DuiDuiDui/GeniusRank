@@ -52,6 +52,7 @@ const UserPullRequestsDetail: React.FC<userIssuesProps> = ({ data }) => {
             renderRow={(item: PullRequestDetail, index: number) => (
                 <Prs item={item} index={index + 1} key={index} t={t} />
             )}
+            reverse
         />
     );
 };

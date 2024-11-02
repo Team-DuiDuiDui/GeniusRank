@@ -34,7 +34,7 @@ query($username:String!,$count:Int!){
         lifetimeReceivedSponsorshipValues{
             totalCount
         }
-        pullRequests(last:$count){
+        pullRequests(last:$count,orderBy:{direction:ASC,field:UPDATED_AT}){
             nodes{
                 title
                 url
@@ -71,7 +71,7 @@ query($username:String!,$count:Int!){
             }
             totalCount
         }
-        issues(last:$count){
+        issues(last:$count,orderBy:{direction:ASC,field:UPDATED_AT}){
             nodes{
                 title
                 url
