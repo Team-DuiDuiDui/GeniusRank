@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance } from 'axios';
 
 export interface AxiosInstanceForBe extends AxiosInstance {}
 
@@ -7,11 +7,13 @@ export interface AxiosInstanceForBe extends AxiosInstance {}
  * @param token 用户用来与后端接口通信的 token
  * @returns 返回 axios 实例（默认设置好 baseUrl 和 token【如果有的话】）
  */
-export const createInstanceForBe = (token?: string): AxiosInstanceForBe => {
+export const createInstanceForBe = (baseUrl: string, token?: string): AxiosInstanceForBe => {
     return axios.create({
-        baseURL: 'https://51a2-2001-250-6c01-8000-00-34-2d8a.ngrok-free.app/api',
-        headers: token ? {
-            Authorization: token ,
-        }: {}
+        baseURL: baseUrl,
+        headers: token
+            ? {
+                  Authorization: token,
+              }
+            : {},
     });
-}
+};

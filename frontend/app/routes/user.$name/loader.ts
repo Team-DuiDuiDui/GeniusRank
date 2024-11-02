@@ -15,6 +15,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
         try {
             const data = (await user.getUser())!;
             return json({
+                baseUrl: context.cloudflare.env.BASE_URL,
                 userData: data,
                 title: `${params?.name ?? ''} | Genius Rank`,
                 description: t('user.description'),
