@@ -10,9 +10,9 @@ import lombok.Data;
 public class GithubUserCountryRespDTO {
 
     /**
-     * GitHub 用户 ID
+     * GitHub 用户名
      */
-    private String githubUserId;
+    private String login;
 
     /**
      * 猜测的国家

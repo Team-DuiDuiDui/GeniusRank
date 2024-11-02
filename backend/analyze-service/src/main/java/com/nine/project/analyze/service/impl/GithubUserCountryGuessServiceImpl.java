@@ -46,7 +46,7 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
 
         // 如果缓存中不存在，从数据库中查询
         LambdaQueryWrapper<GithubUserCountryGuessDO> queryWrapper = Wrappers.lambdaQuery(GithubUserCountryGuessDO.class)
-                .eq(GithubUserCountryGuessDO::getGithubUserId, githubUserId)
+                .eq(GithubUserCountryGuessDO::getLogin, githubUserId)
                 .eq(GithubUserCountryGuessDO::getDelFlag, 0);
 
         GithubUserCountryGuessDO githubUserCountryGuessDO = this.getOne(queryWrapper);
@@ -64,13 +64,13 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
 
     @Override
     public GithubUserCountryRespDTO create(GithubUserCountryReqDTO requestParams) {
-        String countryKey = USER_COUNTRY_KEY + requestParams.getGithubUserId();
+        String countryKey = USER_COUNTRY_KEY + requestParams.getLogin();
 
         GithubUserCountryGuessDO githubUserCountryGuessDTO = BeanUtil.copyProperties(requestParams, GithubUserCountryGuessDO.class);
 
         // 使用查询计数来判断记录是否存在
         LambdaQueryWrapper<GithubUserCountryGuessDO> queryWrapper = Wrappers.lambdaQuery(GithubUserCountryGuessDO.class)
-                .eq(GithubUserCountryGuessDO::getGithubUserId, requestParams.getGithubUserId())
+                .eq(GithubUserCountryGuessDO::getLogin, requestParams.getLogin())
                 .eq(GithubUserCountryGuessDO::getDelFlag, 0);
         long count = this.count(queryWrapper);
         boolean existsInDatabase = count > 0;

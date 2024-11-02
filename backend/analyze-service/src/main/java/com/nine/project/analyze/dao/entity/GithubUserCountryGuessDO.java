@@ -17,9 +17,9 @@ public class GithubUserCountryGuessDO extends BaseDO {
     private Long id;
 
     /**
-     * GitHub 用户 ID
+     * GitHub 用户名
      */
-    private String githubUserId;
+    private String login;
 
     /**
      * 猜测的国家
