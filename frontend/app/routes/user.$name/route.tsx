@@ -14,6 +14,7 @@ import UserCommits from '~/components/userinfo/commits';
 import useAxiosInstanceForBe from '~/hooks/useAxiosInstanceForBe';
 import { useLocale } from 'remix-i18next/react';
 import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
+import UserNation from '~/components/userinfo/region';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -65,7 +66,10 @@ export default function User() {
                         loaderProps={{ type: 'dots' }}
                     />
                     <UserBasic>
-                        <UserInfo data={data.userData} />
+                        <div className="flex gap-4 w-full max-h-25">
+                            <UserInfo data={data.userData} />
+                            <UserNation nationISO="CH" />
+                        </div>
                         <UserRepositories data={data.userData} user={user} />
                         <UserPRs user={user} data={data.userData} />
                         <UserIssues user={user} data={data.userData} />
