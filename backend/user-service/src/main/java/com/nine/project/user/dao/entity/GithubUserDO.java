@@ -8,14 +8,9 @@ import lombok.Data;
 @Data
 public class GithubUserDO {
     /**
-     * Github平台用户id
+     * Github平台用户名
      */
     private String login;
-
-    /**
-     * Github 用户名
-     */
-    private String name;
 
     /**
      * 头像

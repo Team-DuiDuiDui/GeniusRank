@@ -1,7 +1,6 @@
 package com.nine.project.analyze.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,15 +9,13 @@ import com.nine.project.analyze.dao.mapper.GithubUserScoreMapper;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 import com.nine.project.analyze.service.GithubUserScoreService;
+import com.nine.project.analyze.toolkit.CacheUtil;
 import com.nine.project.analyze.toolkit.GithubUserScoreCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -33,14 +30,14 @@ import static com.nine.project.analyze.constant.RedisCacheConstant.*;
 @RequiredArgsConstructor
 public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMapper, GithubUserScoreDO> implements GithubUserScoreService {
 
-    private final StringRedisTemplate stringRedisTemplate;
+    private final CacheUtil<GithubUserScoreRespDTO> cacheUtil;
 
     @Override
     public GithubUserScoreRespDTO getGithubUserScore(String githubUserId) {
         String cacheKey = USER_SCORE_KEY + githubUserId;
 
         // 从缓存中获取
-        Map<Object, Object> cachedData = stringRedisTemplate.opsForHash().entries(cacheKey);
+        Map<Object, Object> cachedData = cacheUtil.getMapFromCacheHash(cacheKey);
         if (!cachedData.isEmpty()) {
             return BeanUtil.fillBeanWithMap(cachedData, GithubUserScoreRespDTO.builder().build(), true);
         }
@@ -52,10 +49,12 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
         GithubUserScoreDO userScoreDO = this.getOne(queryWrapper);
 
-        // 存入缓存
-        GithubUserScoreRespDTO githubUserScoreRespDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
+        // 封装响应数据
+        GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
+        respDTO.setUpdateTime(Instant.now().getEpochSecond());
 
-        return send2Cache(cacheKey, githubUserScoreRespDTO);
+        // 存入缓存
+        return cacheUtil.send2CacheHash(cacheKey, respDTO, USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);
     }
 
     @Override
@@ -85,26 +84,9 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        respDTO.setUpdateTime(LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter));
+        respDTO.setUpdateTime(Instant.now().getEpochSecond());
 
         // 存入缓存
-        return send2Cache(cacheKey, respDTO);
-    }
-
-    /**
-     * 存入 Redis 缓存
-     * @param key  Redis 键
-     * @param respDTO  Redis 值
-     * @return 响应数据
-     */
-    private GithubUserScoreRespDTO send2Cache(String key, GithubUserScoreRespDTO respDTO) {
-        Map<String, Object> map = BeanUtil.beanToMap(respDTO , new HashMap<>(), CopyOptions.create()
-                .setIgnoreNullValue(true)
-                .setFieldValueEditor((fieldName, fieldValue) -> fieldValue != null ? fieldValue.toString() : null));
-
-        stringRedisTemplate.opsForHash().putAll(key, map);
-        stringRedisTemplate.expire(key, USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);
-        return respDTO;
+        return cacheUtil.send2CacheHash(cacheKey, respDTO, USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);
     }
 }

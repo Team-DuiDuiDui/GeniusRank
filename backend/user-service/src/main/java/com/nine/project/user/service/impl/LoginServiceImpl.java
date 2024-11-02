@@ -221,14 +221,14 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserDO> implements
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(headers);
 
         // 发送请求并验证用户身份
-        ResponseEntity<String> response = restTemplateHttps.exchange("https://api.github.com/users/" + requestParam.getGithubUserId(), HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> response = restTemplateHttps.exchange("https://api.github.com/users/" + requestParam.getLogin(), HttpMethod.GET, entity, String.class);
         GithubUserDO userInfo = JSONUtil.toBean(response.getBody(), GithubUserDO.class);
-        if (response.getStatusCode() != HttpStatus.OK || !userInfo.getLogin().equals(requestParam.getGithubUserId())) {
+        if (response.getStatusCode() != HttpStatus.OK) {
             throw new ClientException(USER_OAUTH_ERROR);
         }
 
         // 查询用户信息
-        UserDO user = baseMapper.selectOne(Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getGithub_user_id, requestParam.getGithubUserId()));
+        UserDO user = baseMapper.selectOne(Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getId, requestParam.getGithubUserId()));
         if (user != null) {
             return new UserLoginRespDTO(generateToken(user));
         }
@@ -236,10 +236,10 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserDO> implements
         // 执行注册逻辑
         try {
             UserDO userDO = UserDO.builder()
-                    .email(userInfo.getEmail())
-                    .github_user_id(userInfo.getLogin())
+                    .id(requestParam.getGithubUserId())
+                    .username(userInfo.getLogin())
                     .avatar(userInfo.getAvatar_url())
-                    .username(userInfo.getName())
+                    .email(userInfo.getEmail())
                     .build();
 
             // 注册
@@ -247,7 +247,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserDO> implements
             if (inserted < 1) {
                 throw new ServiceException(USER_RECORD_ADD_ERROR);
             }
-            if (userInfo.getName() != null) usernameCachePenetrationBloomFilter.add(userInfo.getName());
+            if (userInfo.getLogin() != null) usernameCachePenetrationBloomFilter.add(userInfo.getLogin());
             if (userInfo.getEmail() != null) userEmailCachePenetrationBloomFilter.add(userInfo.getEmail());
             return new UserLoginRespDTO(generateToken(userDO));
         } catch (DuplicateKeyException ex) {

@@ -22,7 +22,7 @@ public class GithubUserScoreReqDTO {
     public static class User {
         private String github_user_id; // Github 用户 ID
         private int followers; // 跟随者数量
-        private int publicRepos; // 公开仓库数量
+        private int public_repos; // 公开仓库数量
         private int commit_amount; // 提交数量
         private int pr_amount; // 拉取请求数量
         private int issue_amount; // 问题数量
@@ -33,7 +33,7 @@ public class GithubUserScoreReqDTO {
      */
     @Data
     public static class repo {
-        private boolean is_forked; // 是否为 fork 仓库
+        private boolean forked; // 是否为 fork 仓库
         private int stars; // 星标数量
         private int forks; // fork 数量
         private int watchers; // 关注数量

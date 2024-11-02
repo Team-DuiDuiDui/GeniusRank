@@ -2,7 +2,6 @@ package com.nine.project.analyze.dto.resp;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
 
 /**
  * GitHub 用户所在国家/地区猜测响应 DTO
@@ -23,5 +22,5 @@ public class GithubUserCountryRespDTO {
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private long updateTime;
 }

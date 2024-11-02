@@ -67,7 +67,7 @@ public class GithubUserScoreCalculator {
         double followersScore = calculateFunction(8, 1000, user.getFollowers());
 
         // publicRepos 的得分计算
-        double publicReposScore = calculateFunction(2, 10, user.getPublicRepos());
+        double publicReposScore = calculateFunction(2, 10, user.getPublic_repos());
 
         // commit_amount 的得分计算
         double commitAmountScore = calculateFunction(5, 1000, user.getCommit_amount());
@@ -99,7 +99,7 @@ public class GithubUserScoreCalculator {
         double MaxOpenIssuesScore = 5.0 / repos.toArray().length;
         for (GithubUserScoreReqDTO.repo repo : repos) {
             // isForked 的得分计算
-            double isForkedScore = repo.is_forked()? MaxisForkedScore : 0;
+            double isForkedScore = repo.isForked()? MaxisForkedScore : 0;
 
             // stars 的得分计算
             double starsScore = calculateFunction(MaxStarsScore, 5000, repo.getStars());

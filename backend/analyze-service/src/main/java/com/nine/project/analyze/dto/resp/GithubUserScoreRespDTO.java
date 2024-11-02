@@ -3,7 +3,6 @@ package com.nine.project.analyze.dto.resp;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 
 /**
  * Github 用户得分响应
@@ -40,5 +39,5 @@ public class GithubUserScoreRespDTO {
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private long updateTime;
 }

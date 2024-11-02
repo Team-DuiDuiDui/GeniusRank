@@ -8,18 +8,14 @@ USE project_db;
 
 # 1. 创建用户表 (Users)
 CREATE TABLE t_user (
-    id BIGINT AUTO_INCREMENT COMMENT 'ID' PRIMARY KEY,
+    id BIGINT COMMENT 'ID' PRIMARY KEY,
     username VARCHAR(256) NULL COMMENT '用户名',
-    password VARCHAR(512) NULL COMMENT '密码',
-    email VARCHAR(512) NULL COMMENT '邮箱',
     avatar VARCHAR(256) NULL COMMENT '用户头像',
-    github_user_id VARCHAR(256) NULL COMMENT 'GitHub ID',
-
+    email VARCHAR(512) NULL COMMENT '邮箱',
+    password VARCHAR(512) NULL COMMENT '密码',
     create_time DATETIME NULL COMMENT '创建时间',
     update_time DATETIME NULL COMMENT '修改时间',
-    del_flag TINYINT(1) NULL COMMENT '删除标识 0：未删除 1：已删除',
-
-    CONSTRAINT idx_username UNIQUE (github_user_id)
+    del_flag TINYINT(1) NULL COMMENT '删除标识 0：未删除 1：已删除'
 ) COMMENT '用户表';
 
 # 2. 创建 GitHub 用户分数表 (GithubUserScores)
@@ -60,11 +56,8 @@ CREATE TABLE t_github_user_developer_type_guess (
     github_user_id VARCHAR(256) NOT NULL COMMENT 'GitHub 用户 ID',
     developer_type VARCHAR(255) COMMENT '开发者领域',
 
-    create_time    DATETIME NULL COMMENT '创建时间',
-    update_time    DATETIME NULL COMMENT '修改时间',
-    del_flag       TINYINT(1) NULL COMMENT '删除标识 0：未删除 1：已删除',
-
-    CONSTRAINT idx_github_user_id UNIQUE (github_user_id)
+    CONSTRAINT idx_github_user_id UNIQUE (github_user_id),
+    CONSTRAINT idx_developer_type UNIQUE (developer_type)
 ) COMMENT 'GitHub 用户开发者领域猜测表';
 
 
