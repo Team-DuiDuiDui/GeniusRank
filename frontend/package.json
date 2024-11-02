@@ -25,6 +25,7 @@
         "axios": "^1.7.7",
         "cheerio": "^1.0.0",
         "dayjs": "^1.11.13",
+        "flag-icons": "^7.2.3",
         "i18next": "^23.16.2",
         "i18next-browser-languagedetector": "^8.0.0",
         "i18next-fetch-backend": "^6.0.0",

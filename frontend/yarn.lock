@@ -5068,6 +5068,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"flag-icons@npm:^7.2.3":
+  version: 7.2.3
+  resolution: "flag-icons@npm:7.2.3"
+  checksum: 10c0/370fa3a2ccef574e9d2b17cad513157414bf4de1e8ca4b9f3f1465dddbcd80fce7eea021795f77cafc0814d3909ea273d70b85b0bb82ef7f5efadd77e773e8e5
+  languageName: node
+  linkType: hard
+
 "flat-cache@npm:^3.0.4":
   version: 3.2.0
   resolution: "flat-cache@npm:3.2.0"
@@ -9146,6 +9153,7 @@ __metadata:
     eslint-plugin-jsx-a11y: "npm:^6.7.1"
     eslint-plugin-react: "npm:^7.33.2"
     eslint-plugin-react-hooks: "npm:^4.6.0"
+    flag-icons: "npm:^7.2.3"
     i18next: "npm:^23.16.2"
     i18next-browser-languagedetector: "npm:^8.0.0"
     i18next-fetch-backend: "npm:^6.0.0"

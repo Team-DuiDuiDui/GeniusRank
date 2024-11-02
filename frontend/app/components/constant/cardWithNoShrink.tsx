@@ -2,7 +2,7 @@ import React from 'react'
 
 interface cardWithNoShrinkProps {
     containerClass?: string
-
+    style?: React.CSSProperties
     children: React.ReactNode
 }
 

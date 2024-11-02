@@ -68,7 +68,7 @@ export default function User() {
                     <UserBasic>
                         <div className="flex gap-4 w-full max-h-25">
                             <UserInfo data={data.userData} />
-                            <UserNation nationISO="CH" />
+                            <UserNation nationISO="US" nationName="China" />
                         </div>
                         <UserRepositories data={data.userData} user={user} />
                         <UserPRs user={user} data={data.userData} />
