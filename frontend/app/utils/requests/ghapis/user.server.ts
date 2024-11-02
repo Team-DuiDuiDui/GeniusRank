@@ -34,7 +34,7 @@ export class GithubUserServerOnly extends GithubUser {
         return await handleServerReq<User>(
             () => this.axiosInstanceWithServerToken.get(`/users/${this.name}`),
             (res) => userSchema.parseAsync(res.data),
-            (error)=> {
+            (error) => {
                 if (axios.isAxiosError(error)) {
                     if (error.response?.status === 404) {
                         return false;

@@ -1,4 +1,5 @@
 import { json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
+import axios from 'axios';
 import i18nServer from '~/modules/i18n.server';
 import { user } from '~/user-cookie';
 import { gqlUser } from '~/utils/requests/ghGraphql/gqlUser.server';
@@ -9,13 +10,25 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     if (!cookie.access_token) return redirect('/unauthorized');
     const t = await i18nServer.getFixedT(request);
     if (params.name) {
-        const user = new gqlUser(params.name, cookie.access_token);
-        const { data } = await user.getData();
-        return json({
-            data,
-            title: `${params?.name ?? ''} | Genius Rank`,
-            description: t('user.description'),
-        });
+        try {
+            const user = new gqlUser(params.name, cookie.access_token);
+            const { data } = await user.getData();
+            if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
+            return json({
+                data,
+                title: `${params?.name ?? ''} | Genius Rank`,
+                description: t('user.description'),
+            });
+        } catch (e) {
+            // eslint-disable-next-line import/no-named-as-default-member
+            if (axios.isAxiosError(e)) {
+                if (e.status === 404) throw new Response(t('user.err.not_found'), { status: 404 });
+                if (e.status === 403) {
+                    throw new Response(t('user.err.rate_limit'), { status: 403 });
+                } else throw new Response(t('user.err.something_wrong'), { status: 500 });
+            } else if (e instanceof Response) throw e;
+            else throw new Response(t('user.err.something_wrong'), { status: 500 });
+        }
     }
     return redirect('/');
 }

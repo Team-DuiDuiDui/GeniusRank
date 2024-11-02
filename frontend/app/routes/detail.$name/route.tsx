@@ -54,7 +54,6 @@ export default function User() {
 
 export function ErrorBoundary() {
     const error = useRouteError();
-
     if (isRouteErrorResponse(error)) {
         if (error.status === 404)
             return (
@@ -71,7 +70,7 @@ export function ErrorBoundary() {
     } else if (error instanceof Error) {
         return (
             <div>
-                <h1>Error</h1>
+                <h1>错误</h1>
                 <p>{error.message}</p>
                 <p>The stack trace is:</p>
                 <pre>{error.stack}</pre>

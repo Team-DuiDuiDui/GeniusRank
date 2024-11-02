@@ -87,3 +87,24 @@ export type UserData = {
         user: UserDetail;
     };
 };
+
+type Location = {
+    line: number;
+    column: number;
+};
+
+type Error = {
+    type: string;
+    path: string[];
+    locations: Location[];
+    message: string;
+};
+
+type Data = {
+    user: null | User; // 如果 user 可能有具体内容，可以定义 User 类型
+};
+
+export type ERRORResponseDetail = {
+    data: Data;
+    errors: Error[];
+};
