@@ -27,8 +27,8 @@ export default function User() {
     const navigation = useNavigation();
     const params = useParams();
     const locale = useLocale();
-    const beInstance = useAxiosInstanceForBe(data.baseUrl);
-    const githubInstance = useAxiosInstanceForGithub();
+    const beInstance = useAxiosInstanceForBe(data.baseUrl)();
+    const githubInstance = useAxiosInstanceForGithub()();
     const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData));
     const [userRegion, setUserRegion] = useState<null | { nation: string }>(null);
 
@@ -36,8 +36,8 @@ export default function User() {
         const nation = await guessRegion({
             locale,
             userData: data.userData,
-            beInstance: beInstance!,
-            githubInstance: githubInstance!,
+            beInstance: beInstance,
+            githubInstance: githubInstance,
         });
         setUserRegion({ nation });
         console.log(userRegion);
@@ -49,10 +49,8 @@ export default function User() {
     }, [data.userData, params?.name]);
 
     useEffect(() => {
-        if (beInstance && githubInstance) {
-            getAndSetUserRegion();
-        }
-    }, [beInstance, githubInstance, getAndSetUserRegion]);
+        getAndSetUserRegion();
+    }, [getAndSetUserRegion]);
 
     return (
         <>

@@ -7,9 +7,9 @@ export interface AxiosInstanceForBe extends AxiosInstance {}
  * @param token 用户用来与后端接口通信的 token
  * @returns 返回 axios 实例（默认设置好 baseUrl 和 token【如果有的话】）
  */
-export const createInstanceForBe = (baseUrl: string, token?: string): AxiosInstanceForBe => {
+export const createInstanceForBe = (token?: string): AxiosInstanceForBe => {
     return axios.create({
-        baseURL: baseUrl,
+        baseURL: "",
         headers: token
             ? {
                   Authorization: token,

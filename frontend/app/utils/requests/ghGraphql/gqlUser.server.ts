@@ -17,6 +17,7 @@ export class gqlUser {
             query: `
 query($username:String!,$count:Int!){
     user(login: $username){
+        id
         avatarUrl
         databaseId
         name

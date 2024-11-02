@@ -9,6 +9,9 @@ import UserReposContributeDetail from '~/components/userinfo/detail/reposContrib
 import UserReposDetail from '~/components/userinfo/detail/repos';
 import { Loader, LoadingOverlay } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
+import useAxiosInstanceForBe from '~/hooks/useAxiosInstanceForBe';
+import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
+import { useEffect } from 'react';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -19,6 +22,13 @@ export { loader };
 export default function User() {
     const data = useLoaderData<typeof loader>();
     const navigation = useNavigation();
+    console.log("redering")
+    const beInstance = useAxiosInstanceForBe(data.beToken);
+    const githubInstance = useAxiosInstanceForGithub(data.githubToken);
+    useEffect(() => {
+
+        console.log("effecting")
+    },  []);
     const { t } = useTranslation();
     const { user } = data.data;
     return (
