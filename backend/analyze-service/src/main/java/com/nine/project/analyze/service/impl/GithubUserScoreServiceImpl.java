@@ -11,6 +11,7 @@ import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 import com.nine.project.analyze.service.GithubUserScoreService;
 import com.nine.project.analyze.toolkit.CacheUtil;
 import com.nine.project.analyze.toolkit.GithubUserScoreCalculator;
+import com.nine.project.framework.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.nine.project.analyze.constant.RedisCacheConstant.*;
+import static com.nine.project.framework.errorcode.BaseErrorCode.USER_SCORE_NOT_FOUND;
 
 
 /**
@@ -48,6 +50,9 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
                 .eq(GithubUserScoreDO::getDelFlag, 0);
 
         GithubUserScoreDO userScoreDO = this.getOne(queryWrapper);
+        if (userScoreDO == null) {
+            throw new ClientException(USER_SCORE_NOT_FOUND);
+        }
 
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
