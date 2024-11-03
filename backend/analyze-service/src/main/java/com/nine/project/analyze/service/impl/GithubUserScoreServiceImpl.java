@@ -4,7 +4,9 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.nine.project.analyze.dao.entity.GithubUserDeveloperDO;
 import com.nine.project.analyze.dao.entity.GithubUserScoreDO;
+import com.nine.project.analyze.dao.mapper.GithubUserDevelopMapper;
 import com.nine.project.analyze.dao.mapper.GithubUserScoreMapper;
 import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
@@ -13,12 +15,15 @@ import com.nine.project.analyze.service.GithubUserScoreService;
 import com.nine.project.analyze.toolkit.CacheUtil;
 import com.nine.project.analyze.toolkit.GithubDetailedScoreCalculator;
 import com.nine.project.analyze.toolkit.GithubUserScoreCalculator;
+import com.nine.project.analyze.toolkit.LanguageFrequencyCounter;
 import com.nine.project.framework.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -35,6 +40,7 @@ import static com.nine.project.framework.errorcode.BaseErrorCode.USER_SCORE_NOT_
 public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMapper, GithubUserScoreDO> implements GithubUserScoreService {
 
     private final CacheUtil<GithubUserScoreRespDTO> cacheUtil;
+    private final GithubUserDevelopMapper githubUserDevelopMapper;
 
     @Override
     public GithubUserScoreRespDTO getGithubUserScore(String githubUserId) {
@@ -78,7 +84,23 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         // 计算分数
         GithubUserScoreRespDTO scores = GithubUserScoreCalculator.calculate(requestParams);
 
-        // 封装持久化数据
+        // 封装持久化用户开发者领域
+        List<String> topThreeLanguages = LanguageFrequencyCounter.getTopThreeLanguages(requestParams.getRepos());
+        List<GithubUserDeveloperDO> developerDOList = new ArrayList<>();
+
+        for (String language : topThreeLanguages) {
+            GithubUserDeveloperDO developerDO = new GithubUserDeveloperDO();
+            developerDO.setLogin(requestParams.getUser().getLogin());
+            developerDO.setDeveloper_type(language);
+            developerDOList.add(developerDO);
+        }
+
+        // 使用insertBatch方法批量插入数据
+        if (!developerDOList.isEmpty()) {
+            githubUserDevelopMapper.insert(developerDOList);
+        }
+
+        // 封装持久化用户分数
         GithubUserScoreDO userScoreDO = BeanUtil.copyProperties(scores, GithubUserScoreDO.class);
         userScoreDO.setLogin(requestParams.getUser().getLogin());
 
