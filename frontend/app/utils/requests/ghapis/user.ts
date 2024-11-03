@@ -9,7 +9,7 @@ import { GithubScoreReqUnLogin } from '../typings/beReq';
 
 export class githubUser {
     public name: string;
-    private axiosInstance: AxiosInstance;
+    private githubInstance: AxiosInstance;
     private beInstance: AxiosInstance;
     private isAuthorized: boolean = false;
     public userData: User | null = null;
@@ -22,12 +22,12 @@ export class githubUser {
         name: string,
         token?: string,
         userData?: User,
-        axiosInstance?: AxiosInstance,
+        githubInstance?: AxiosInstance,
         beInstance?: AxiosInstance
     ) {
         this.name = name;
-        this.axiosInstance = axiosInstance ? axiosInstance : createInstanceForGithub(token);
-        this.beInstance = beInstance ? beInstance : createInstanceForBe();
+        this.githubInstance = githubInstance ? githubInstance : createInstanceForGithub(token);
+        this.beInstance = beInstance ? beInstance : createInstanceForBe('');
         this.userData = userData ?? null;
         if (token) this.isAuthorized = true;
     }
@@ -43,7 +43,7 @@ export class githubUser {
     async getUserPrs(): Promise<IssueSearchResult> {
         const data = (await handleClientGithubReq<IssueSearchResult>(
             () =>
-                this.axiosInstance.get(
+                this.githubInstance.get(
                     `/search/issues?q=type:pr+is:merged+author:${this.name}+state:closed&sort=updated&per_page=80`
                 ),
             (res) => issueSearchResultSchema.parseAsync(res.data)
@@ -54,7 +54,7 @@ export class githubUser {
 
     async getUserIssues(): Promise<IssueSearchResult> {
         const data = (await handleClientGithubReq<IssueSearchResult>(
-            () => this.axiosInstance.get(`/search/issues?q=type:issue+author:${this.name}&sort=updated&per_page=80`),
+            () => this.githubInstance.get(`/search/issues?q=type:issue+author:${this.name}&sort=updated&per_page=80`),
             (res) => issueSearchResultSchema.parseAsync(res.data)
         ))!;
         this.userIssues = data;
@@ -63,7 +63,7 @@ export class githubUser {
 
     async getUserRepos(): Promise<UserRepos> {
         const data = (await handleClientGithubReq<UserRepos>(
-            () => this.axiosInstance.get(`/users/${this.name}/repos?sort=updated&per_page=80`),
+            () => this.githubInstance.get(`/users/${this.name}/repos?sort=updated&per_page=80`),
             (res) => userReposSchema.parseAsync(res.data)
         ))!;
         this.userRepos = data;
@@ -72,7 +72,7 @@ export class githubUser {
 
     async getUserCommits(): Promise<CommitsSearchResult> {
         const data = (await handleClientGithubReq<CommitsSearchResult>(
-            () => this.axiosInstance.get(`/search/commits?q=author:${this.name}&sort=author-date&per_page=80`),
+            () => this.githubInstance.get(`/search/commits?q=author:${this.name}&sort=author-date&per_page=80`),
             (res) => commitsSearchResultSchema.parseAsync(res.data)
         ))!;
         this.userCommits = data;
@@ -108,7 +108,7 @@ export class githubUser {
         };
         const data = (await handleClientReq<GithubScoreRes>(
             () =>
-                this.beInstance.post(`/analyze/score/detailed`, {
+                this.beInstance.post(`/analyze/score`, {
                     ...req,
                 }),
             (res) => res.data

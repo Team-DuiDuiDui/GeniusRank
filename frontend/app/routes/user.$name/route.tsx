@@ -15,6 +15,7 @@ import useAxiosInstanceForBe from '~/hooks/useAxiosInstanceForBe';
 import { useLocale } from 'remix-i18next/react';
 import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
 import UserNation from '~/components/userinfo/region';
+import UserScore from '~/components/userinfo/score';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -29,7 +30,7 @@ export default function User() {
     const locale = useLocale();
     const beInstance = useAxiosInstanceForBe(data.baseUrl)();
     const githubInstance = useAxiosInstanceForGithub()();
-    const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData));
+    const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData, githubInstance, beInstance));
     const [userRegion, setUserRegion] = useState<null | { nation: string }>(null);
 
     const getAndSetUserRegion = useCallback(async () => {
@@ -48,9 +49,9 @@ export default function User() {
         user.current.setUserData(data.userData);
     }, [data.userData, params?.name]);
 
-    useEffect(() => {
-        getAndSetUserRegion();
-    }, [getAndSetUserRegion]);
+    // useEffect(() => {
+    //     getAndSetUserRegion();
+    // }, [getAndSetUserRegion]);
 
     return (
         <>
@@ -68,6 +69,7 @@ export default function User() {
                             <UserInfo data={data.userData} />
                             <UserNation nationISO="US" nationName="China" />
                         </div>
+                        <UserScore data={data.userData} user={user} />
                         <UserRepositories data={data.userData} user={user} />
                         <UserPRs user={user} data={data.userData} />
                         <UserIssues user={user} data={data.userData} />

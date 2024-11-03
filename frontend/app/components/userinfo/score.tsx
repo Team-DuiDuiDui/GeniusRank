@@ -28,6 +28,7 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
         const intId = setInterval(() => {
             if (user.current.isFulfilled()) {
                 user.current.getUserScores().then(setScores).catch(setErrors);
+                clearInterval(intId);
             }
         }, 1000);
         return () => {
@@ -38,11 +39,12 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
     return (
         <>
             <CardScrollable title={t('user.score')}>
-                <>{scores?.data.issuesScore}</>
+                <>{JSON.stringify(scores)}</>
+                {/* <>{scores?.data.issuesScore}</>
                 <>{scores?.data.prsScore}</>
                 <>{scores?.data.reposScore}</>
                 <>{scores?.data.userScore}</>
-                <>{scores?.data.totalScore}</>
+                <>{scores?.data.totalScore}</> */}
             </CardScrollable>
         </>
     );
