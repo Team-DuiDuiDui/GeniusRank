@@ -41,6 +41,7 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
     };
     useEffect(() => {
         setScores(null);
+        setErrors(null);
         const intId = setInterval(() => {
             if (user.current.isFulfilled()) {
                 loadData();
@@ -56,7 +57,7 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
     return (
         <>
             <CardScrollable title={t('user.score.title')} data={scores} error={error} reload={loadData}>
-                <LoadingOverlay visible={!scores} loaderProps={{ type: 'dots' }} />
+                <LoadingOverlay visible={!scores && !error} loaderProps={{ type: 'dots' }} />
                 {scores && (
                     <div className="flex flex-row items-center justify-between w-full">
                         <div className="flex flex-col gap-8 text-center">
