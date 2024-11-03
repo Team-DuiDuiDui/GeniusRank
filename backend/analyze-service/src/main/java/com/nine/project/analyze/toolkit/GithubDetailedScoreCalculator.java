@@ -5,6 +5,7 @@ import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -93,13 +94,13 @@ public class GithubDetailedScoreCalculator {
         double repositoriesScore = calculateFunction(3, 10, repositories.getTotalCount());
 
         // user repositories 的得分计算
-        double userRepositoriesScore = calculateRepoScore(17, repositories.getNodes());
+        double userRepositoriesScore = calculateRepoScore(17, new ArrayList<>(repositories.getNodes().subList(0, 3)));
 
         // repositoriesContributedTo 的得分计算
         double repositoriesContributedToScore = calculateFunction(5, 10, repositories.getTotalCount());
 
         // User repositoriesContributedTo 的得分计算
-        double userRepositoriesContributedToScore = calculateRepoScore(25, repositoriesContributedTo.getNodes());
+        double userRepositoriesContributedToScore = calculateRepoScore(25, new ArrayList<>(repositoriesContributedTo.getNodes().subList(0, 3)));
 
         return repositoriesScore + userRepositoriesScore + repositoriesContributedToScore + userRepositoriesContributedToScore;
     }
