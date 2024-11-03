@@ -9,6 +9,9 @@ import CardScrollable from './cardScrollable';
 import toast from 'react-hot-toast';
 import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
 import handleErrorCode from '~/utils/handleErrorCode';
+import { LoadingOverlay } from '@mantine/core';
+import { BarChart, PieChart } from '@mantine/charts';
+import { TFunction } from 'i18next';
 
 interface userRepositoriesProps {
     data: User;
@@ -52,16 +55,58 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
 
     return (
         <>
-            <CardScrollable title={t('user.score')} data={scores} error={error} reload={loadData}>
-                <>{JSON.stringify(scores)}</>
-                {/* <>{scores?.data.issuesScore}</>
-                <>{scores?.data.prsScore}</>
-                <>{scores?.data.reposScore}</>
-                <>{scores?.data.userScore}</>
-                <>{scores?.data.totalScore}</> */}
+            <CardScrollable title={t('user.score.title')} data={scores} error={error} reload={loadData}>
+                <LoadingOverlay visible={!scores} loaderProps={{ type: 'dots' }} />
+                {scores && (
+                    <div className="flex flex-row items-center justify-between w-full">
+                        <div className="flex flex-col gap-8 text-center">
+                            <h3 className="text-xl font-bold">{t('user.score.score')}</h3>
+                            <p className="text-4xl font-bold">{scores.data.totalScore}</p>
+                        </div>
+                        <div className="flex flex-col gap-8 text-center">
+                            <h3 className="text-xl font-bold">{t('user.score.score_detail')}</h3>
+                            <BarChart
+                                h={180}
+                                w={500}
+                                series={[{ name: 'value', color: '#1e90ff' }]}
+                                data={parseData(scores, t)}
+                                withBarValueLabel
+                                dataKey="name"
+                            />
+                        </div>
+                        <div className="flex flex-col gap-8 text-center overflow-visible">
+                            <h3 className="text-xl font-bold">{t('user.score.score_proportion')}</h3>
+                            <PieChart
+                                data={parseData(scores, t, true)}
+                                withTooltip
+                                tooltipDataSource="segment"
+                                labelsType="percent"
+                                withLabels
+                                withLabelsLine
+                                labelsPosition="outside"
+                            />
+                        </div>
+                    </div>
+                )}
             </CardScrollable>
         </>
     );
 };
 
 export default UserScore;
+
+const parseData = (res: GithubScoreRes, t: TFunction<'translation', undefined>, ignoreZero: boolean = false) => {
+    const { data } = res;
+    const scores = [
+        { name: t('user.score.commit_score'), value: data.userScore, color: '#1e90ff' },
+        { name: t('user.score.repo_score'), value: data.reposScore, color: '#2ed573' },
+        { name: t('user.score.prs_score'), value: data.prsScore, color: '#ffa502' },
+        { name: t('user.score.issues_score'), value: data.issuesScore, color: '#ff4757' },
+    ];
+
+    if (ignoreZero) {
+        return scores.filter((score) => score.value !== 0);
+    }
+
+    return scores;
+};

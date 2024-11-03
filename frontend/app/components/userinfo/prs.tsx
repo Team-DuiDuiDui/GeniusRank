@@ -31,7 +31,6 @@ const UserPRs: React.FC<userPRsProps> = ({ data, user }) => {
 
     const getAndSetUserInfos = useCallback(async () => {
         setErrors(null);
-        console.log(123);
         try {
             user.current.setUserName(params?.name ?? '');
             const fetchedPRs = await user.current.getUserPrs();

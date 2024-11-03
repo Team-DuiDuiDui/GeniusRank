@@ -37,7 +37,7 @@ const CardScrollable = ({ title, children, data, error, reload }: CardProps) => 
                     <ErrorNote error={error} reload={reload} />
                 </span>
             </h2>
-            <div className="overflow-y-auto max-h-max flex-grow scrollbar" onScroll={handleScroll}>
+            <div className="overflow-y-auto h-full flex-grow scrollbar" onScroll={handleScroll}>
                 {children}
             </div>
         </CardWithScroll>
