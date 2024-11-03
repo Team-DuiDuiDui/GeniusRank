@@ -10,6 +10,7 @@ import com.nine.project.analyze.dto.req.GithubUserCountryReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserCountryRespDTO;
 import com.nine.project.analyze.service.GithubUserCountryGuessService;
 import com.nine.project.analyze.toolkit.CacheUtil;
+import com.nine.project.framework.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.nine.project.analyze.constant.RedisCacheConstant.*;
+import static com.nine.project.framework.errorcode.BaseErrorCode.USER_COUNTRY_NOT_FOUND;
 
 
 /**
@@ -44,10 +46,13 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
 
         // 如果缓存中不存在，从数据库中查询
         LambdaQueryWrapper<GithubUserCountryGuessDO> queryWrapper = Wrappers.lambdaQuery(GithubUserCountryGuessDO.class)
-                .eq(GithubUserCountryGuessDO::getGithubUserId, githubUserId)
+                .eq(GithubUserCountryGuessDO::getLogin, githubUserId)
                 .eq(GithubUserCountryGuessDO::getDelFlag, 0);
 
         GithubUserCountryGuessDO githubUserCountryGuessDO = this.getOne(queryWrapper);
+        if (githubUserCountryGuessDO == null) {
+            throw new ClientException(USER_COUNTRY_NOT_FOUND);
+        }
 
         // 封装响应数据
         GithubUserCountryRespDTO respDTO = BeanUtil.copyProperties(githubUserCountryGuessDO, GithubUserCountryRespDTO.class);
@@ -59,13 +64,13 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
 
     @Override
     public GithubUserCountryRespDTO create(GithubUserCountryReqDTO requestParams) {
-        String countryKey = USER_COUNTRY_KEY + requestParams.getGithubUserId();
+        String countryKey = USER_COUNTRY_KEY + requestParams.getLogin();
 
         GithubUserCountryGuessDO githubUserCountryGuessDTO = BeanUtil.copyProperties(requestParams, GithubUserCountryGuessDO.class);
 
         // 使用查询计数来判断记录是否存在
         LambdaQueryWrapper<GithubUserCountryGuessDO> queryWrapper = Wrappers.lambdaQuery(GithubUserCountryGuessDO.class)
-                .eq(GithubUserCountryGuessDO::getGithubUserId, requestParams.getGithubUserId())
+                .eq(GithubUserCountryGuessDO::getLogin, requestParams.getLogin())
                 .eq(GithubUserCountryGuessDO::getDelFlag, 0);
         long count = this.count(queryWrapper);
         boolean existsInDatabase = count > 0;

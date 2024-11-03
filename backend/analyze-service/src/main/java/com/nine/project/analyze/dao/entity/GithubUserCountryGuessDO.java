@@ -17,12 +17,17 @@ public class GithubUserCountryGuessDO extends BaseDO {
     private Long id;
 
     /**
-     * GitHub 用户 ID
+     * GitHub 用户名
      */
-    private String githubUserId;
+    private String login;
+
+    /**
+     * 猜测的国家 ISO 代码
+     */
+    private String country_iso;
 
     /**
      * 猜测的国家
      */
-    private String country;
+    private String country_name;
 }

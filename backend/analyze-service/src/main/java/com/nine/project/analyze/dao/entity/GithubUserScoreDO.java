@@ -19,9 +19,9 @@ public class GithubUserScoreDO extends BaseDO {
     private Long id;
 
     /**
-     * GitHub 用户 ID
+     * GitHub 用户名
      */
-    private String githubUserId;
+    private String login;
 
     /**
      * Github 用户总分

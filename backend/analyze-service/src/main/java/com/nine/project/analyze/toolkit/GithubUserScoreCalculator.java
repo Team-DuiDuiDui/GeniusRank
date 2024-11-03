@@ -13,7 +13,7 @@ import java.util.List;
 public class GithubUserScoreCalculator {
 
     /**
-     * 计算用户总得分并保留两位小数
+     * 普通计算计算用户总得分并保留两位小数，无需登录
      * @param githubUserScoreReqDTO Github 用户全部数据
      * @return 总得分
      */
