@@ -9,7 +9,7 @@ export interface AxiosInstanceForBe extends AxiosInstance {}
  */
 export const createInstanceForBe = (token?: string): AxiosInstanceForBe => {
     return axios.create({
-        baseURL: "",
+        baseURL: '',
         headers: token
             ? {
                   Authorization: token,

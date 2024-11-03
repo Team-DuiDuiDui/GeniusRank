@@ -1,97 +1,98 @@
 {
-    "common": {
-        "title": "Genius Rank - GitHub 用户分析",
-        "languages": "语言",
-        "search": {
-            "placeholder": "请输入 GitHub 用户名称..."
-        },
-        "user": {
-            "description": "GitHub 用户分析",
-            "title": "用户搜索 | Genius Rank",
-            "no_description": "用户暂无简介",
-            "followers": "位粉丝",
-            "following": "个正在关注",
-            "err": {
-                "not_found": "找不到用户",
-                "parse_error": "解析错误",
-                "something_wrong": "出错了",
-                "rate_limit": "请求频率过快或一小时请求超过60次（登录用户为5000次）",
-                "network_error": "网络错误",
-                "may_help": "以下信息可能有帮助：",
-                "message": "错误信息：",
-                "reload": "尝试重新加载",
-                "may_hide": "用户可能设置为私密状态",
-                "may_reason": "可能原因：",
-                "reloading_after": "达到速率限制，在",
-                "reloading_after_2": "秒后重新尝试",
-                "reloading": "重试中...",
-                "reloadFailed": "重试失败",
-                "something_not_fetch": "部分数据加载失败，你仍然可以尝试重新加载"
-            },
-            "userRecentPrs": "最近 80 条已合并的 Pull Requests",
-            "userRecentPrs_all": "最近 50 条 Pull Requests",
-            "userRecentIssues": "最近 80 条 Issues",
-            "userRecentIssues_50": "最近 50 条 Issues",
-            "number": "序号",
-            "repo": "仓库",
-            "pr_title": "PR 标题",
-            "update_time": "更新时间",
-            "issue_title": "Issue 标题",
-            "no_prs": "该用户暂无已合并的 PR",
-            "no_issues": "该用户暂无 Issue",
-            "userRepos": "最近 80 个仓库",
-            "userRepos_50": "50 个高人气仓库",
-            "lang": "语言",
-            "open_issues": "打开的 Issue",
-            "size": "大小",
-            "no_repos": "该用户暂无仓库",
-            "is_fork": "这是一个 Fork 仓库",
-            "unknown": "未知",
-            "not_a_user": "注意：这可能不是一个 GitHub 用户，而是组织或其他实体",
-            "commit_message": "提交信息",
-            "committer": "提交人",
-            "no_commits": "该用户暂无提交",
-            "userRecentCommits": "最近 80 条提交",
-            "author": "作者",
-            "no_message": "暂无信息",
-            "success": {
-                "success": "成功",
-                "reloadSuccess": "重试成功"
-            },
-            "no_data": "暂无数据",
-            "status": "状态",
-            "comments_count": "评论数",
-            "repo_info": "仓库信息",
-            "commits": "提交数",
-            "userContributeRepos": "贡献的 50 个高人气仓库",
-            "loading": "正在努力获取大量用户数据..."
-        },
-        "drawer": {
-            "login": "登录",
-            "login_github": "使用 GitHub 登录",
-            "anonymous": "匿名用户",
-            "logout": "退出登录"
-        },
-        "oauth": {
-            "err": {
-                "bad_verification_code": "使用重复或无效的授权码",
-                "bad_verification_code_title": "无效的授权码",
-                "network_error": "我们这边出了错",
-                "invalid_scope_title": "授权范围无效",
-                "invalid_scope": "请授权邮箱及基本用户信息（read:user,user:email），请勿修改授权页的 URL",
-                "unknown_error": "未知错误",
-                "error": "授权出错",
-                "re-login": "重新登录",
-                "back": "返回首页"
-            }
-        },
-        "auth": {
-            "err": {
-                "unauthorized": "请登录后查看此页面",
-                "unauthorized_title": "未登录",
-                "login": "登录",
-                "back": "返回首页"
-            }
-        }
+  "common": {
+    "title": "Genius Rank - GitHub 用户分析",
+    "languages": "语言",
+    "search": {
+      "placeholder": "请输入 GitHub 用户名称..."
+    },
+    "user": {
+      "description": "GitHub 用户分析",
+      "title": "用户搜索 | Genius Rank",
+      "no_description": "用户暂无简介",
+      "followers": "位粉丝",
+      "following": "个正在关注",
+      "err": {
+        "not_found": "找不到用户",
+        "parse_error": "解析错误",
+        "something_wrong": "出错了",
+        "rate_limit": "请求频率过快或一小时请求超过60次（登录用户为5000次）",
+        "network_error": "网络错误",
+        "may_help": "以下信息可能有帮助：",
+        "message": "错误信息：",
+        "reload": "尝试重新加载",
+        "may_hide": "用户可能设置为私密状态",
+        "may_reason": "可能原因：",
+        "reloading_after": "达到速率限制，在",
+        "reloading_after_2": "秒后重新尝试",
+        "reloading": "重试中...",
+        "reloadFailed": "重试失败",
+        "something_not_fetch": "部分数据加载失败，你仍然可以尝试重新加载"
+      },
+      "userRecentPrs": "最近 80 条已合并的 Pull Requests",
+      "userRecentPrs_all": "最近 50 条 Pull Requests",
+      "userRecentIssues": "最近 80 条 Issues",
+      "userRecentIssues_50": "最近 50 条 Issues",
+      "number": "序号",
+      "repo": "仓库",
+      "pr_title": "PR 标题",
+      "update_time": "更新时间",
+      "issue_title": "Issue 标题",
+      "no_prs": "该用户暂无已合并的 PR",
+      "no_issues": "该用户暂无 Issue",
+      "userRepos": "最近 80 个仓库",
+      "userRepos_50": "50 个高人气仓库",
+      "lang": "语言",
+      "open_issues": "打开的 Issue",
+      "size": "大小",
+      "no_repos": "该用户暂无仓库",
+      "is_fork": "这是一个 Fork 仓库",
+      "unknown": "未知",
+      "not_a_user": "注意：这可能不是一个 GitHub 用户，而是组织或其他实体",
+      "commit_message": "提交信息",
+      "committer": "提交人",
+      "no_commits": "该用户暂无提交",
+      "userRecentCommits": "最近 80 条提交",
+      "author": "作者",
+      "no_message": "暂无信息",
+      "success": {
+        "success": "成功",
+        "reloadSuccess": "重试成功"
+      },
+      "no_data": "暂无数据",
+      "status": "状态",
+      "comments_count": "评论数",
+      "repo_info": "仓库信息",
+      "commits": "提交数",
+      "userContributeRepos": "贡献的 50 个高人气仓库",
+      "loading": "正在努力获取大量用户数据...",
+      "score": "得分"
+    },
+    "drawer": {
+      "login": "登录",
+      "login_github": "使用 GitHub 登录",
+      "anonymous": "匿名用户",
+      "logout": "退出登录"
+    },
+    "oauth": {
+      "err": {
+        "bad_verification_code": "使用重复或无效的授权码",
+        "bad_verification_code_title": "无效的授权码",
+        "network_error": "我们这边出了错",
+        "invalid_scope_title": "授权范围无效",
+        "invalid_scope": "请授权邮箱及基本用户信息（read:user,user:email），请勿修改授权页的 URL",
+        "unknown_error": "未知错误",
+        "error": "授权出错",
+        "re-login": "重新登录",
+        "back": "返回首页"
+      }
+    },
+    "auth": {
+      "err": {
+        "unauthorized": "请登录后查看此页面",
+        "unauthorized_title": "未登录",
+        "login": "登录",
+        "back": "返回首页"
+      }
     }
+  }
 }
