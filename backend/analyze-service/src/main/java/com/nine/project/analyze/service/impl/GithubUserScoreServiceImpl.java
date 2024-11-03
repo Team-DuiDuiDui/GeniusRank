@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import static com.nine.project.analyze.constant.RedisCacheConstant.*;
 import static com.nine.project.framework.errorcode.BaseErrorCode.USER_SCORE_NOT_FOUND;
@@ -85,6 +86,8 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         GithubUserScoreRespDTO scores = GithubUserScoreCalculator.calculate(requestParams);
 
         // 封装持久化用户开发者领域
+        githubUserDevelopMapper.delete(Wrappers.lambdaQuery(GithubUserDeveloperDO.class).eq(GithubUserDeveloperDO::getLogin, requestParams.getUser().getLogin()));
+
         List<String> topThreeLanguages = LanguageFrequencyCounter.getTopThreeLanguages(requestParams.getRepos());
         List<GithubUserDeveloperDO> developerDOList = new ArrayList<>();
 
@@ -95,7 +98,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
             developerDOList.add(developerDO);
         }
 
-        // 使用insertBatch方法批量插入数据
+        // 使用 insertBatch 方法批量插入数据
         if (!developerDOList.isEmpty()) {
             githubUserDevelopMapper.insert(developerDOList);
         }
@@ -118,6 +121,29 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
                 .eq(GithubUserScoreDO::getDelFlag, 0);
         long count = this.count(queryWrapper);
         boolean existsInDatabase = count > 0;
+
+        // 封装持久化用户开发者领域
+        githubUserDevelopMapper.delete(Wrappers.lambdaQuery(GithubUserDeveloperDO.class).eq(GithubUserDeveloperDO::getLogin, requestParams.getLogin()));
+
+        List<GithubDetailedScoreReqDTO.Repository> repositoryList = Stream.concat(
+                requestParams.getRepositories().getNodes().stream(),
+                requestParams.getRepositoriesContributedTo().getNodes().stream()
+        ).toList();
+
+        List<String> topThreeLanguages = LanguageFrequencyCounter.getDetailedTopThreeLanguages(repositoryList);
+        List<GithubUserDeveloperDO> developerDOList = new ArrayList<>();
+
+        for (String language : topThreeLanguages) {
+            GithubUserDeveloperDO developerDO = new GithubUserDeveloperDO();
+            developerDO.setLogin(requestParams.getLogin());
+            developerDO.setDeveloper_type(language);
+            developerDOList.add(developerDO);
+        }
+
+        // 使用 insertBatch 方法批量插入数据
+        if (!developerDOList.isEmpty()) {
+            githubUserDevelopMapper.insert(developerDOList);
+        }
 
         // 计算分数
         GithubUserScoreRespDTO scores = GithubDetailedScoreCalculator.calculate(requestParams);
