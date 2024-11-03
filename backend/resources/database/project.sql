@@ -51,15 +51,12 @@ CREATE TABLE t_github_user_country_guess (
 ) COMMENT 'GitHub 用户所在国家/地区猜测表';
 
 
-# 4. 创建 Github 用户开发者领域猜测表 (GithubUserDeveloperTypeGuess)
-CREATE TABLE t_github_user_developer_type_guess (
+# 4. 创建 Github 用户开发者领域表 (GithubUserDeveloperType)
+CREATE TABLE t_github_user_developer_type (
     id             BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,
     login VARCHAR(256) NOT NULL COMMENT 'GitHub 用户名',
-    developer_type VARCHAR(255) COMMENT '开发者领域',
-
-    CONSTRAINT idx_login UNIQUE (login),
-    CONSTRAINT idx_developer_type UNIQUE (developer_type)
-) COMMENT 'GitHub 用户开发者领域猜测表';
+    developer_type VARCHAR(255) COMMENT '开发者领域'
+) COMMENT 'GitHub 用户开发者领域表';
 
 
 # 5. 创建 Github 用户技术能力评估信息整理表(GithubUserTechCapAssessment)

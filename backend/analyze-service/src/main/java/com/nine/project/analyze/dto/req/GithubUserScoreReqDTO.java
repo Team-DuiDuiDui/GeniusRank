@@ -38,6 +38,7 @@ public class GithubUserScoreReqDTO {
         private int forks; // fork 数量
         private int watchers; // 关注数量
         private int open_issues; // 未关闭的问题数量
+        private String language; // 仓库主要编程语言
     }
 
     /**

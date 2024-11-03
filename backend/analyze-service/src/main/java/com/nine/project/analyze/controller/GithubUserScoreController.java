@@ -1,5 +1,6 @@
 package com.nine.project.analyze.controller;
 
+import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 import com.nine.project.analyze.service.GithubUserScoreService;
@@ -21,17 +22,25 @@ public class GithubUserScoreController {
     /**
      * 查询对于 githubUserId 的用户分数接口
      */
-    @GetMapping("/api/analyze/score/{githubUserId}")
-    public Result<GithubUserScoreRespDTO> getUser(@PathVariable String githubUserId) {
-        return Results.success(githubUserScoreService.getGithubUserScore(githubUserId));
+    @GetMapping("/api/analyze/score/{login}")
+    public Result<GithubUserScoreRespDTO> getUserScore(@PathVariable String login) {
+        return Results.success(githubUserScoreService.getGithubUserScore(login));
     }
 
 
     /**
-     * 添加/更新用户分数猜测接口
+     * 添加/更新简单用户分数猜测接口（无需登录）
      */
     @PostMapping("/api/analyze/score")
-    public Result<GithubUserScoreRespDTO> addUser(@RequestBody GithubUserScoreReqDTO requestParams) {
+    public Result<GithubUserScoreRespDTO> addUserScore(@RequestBody GithubUserScoreReqDTO requestParams) {
         return Results.success(githubUserScoreService.generateScore(requestParams));
+    }
+
+    /**
+     * 添加/更新详细用户分数猜测接口（需要登录）
+     */
+    @PostMapping("/api/analyze/score/detailed")
+    public Result<GithubUserScoreRespDTO> addUserDetailedScore(@RequestBody GithubDetailedScoreReqDTO requestParams) {
+        return Results.success(githubUserScoreService.generateScoreDetail(requestParams));
     }
 }
