@@ -11,7 +11,10 @@ import { Loader, LoadingOverlay } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import useAxiosInstanceForBe from '~/hooks/useAxiosInstanceForBe';
 import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import UserNation from '~/components/userinfo/region';
+import { guessRegion } from '~/utils/region/main';
+import { useLocale } from 'remix-i18next/react';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -20,15 +23,18 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export { loader };
 
 export default function User() {
+    const [nationData, setNationData] = useState<null | { nationISO: string, nationName: string }>(null);
     const data = useLoaderData<typeof loader>();
+    const locale = useLocale();
     const navigation = useNavigation();
-    console.log("redering")
-    const beInstance = useAxiosInstanceForBe(data.beToken);
-    const githubInstance = useAxiosInstanceForGithub(data.githubToken);
-    useEffect(() => {
-
-        console.log("effecting")
-    },  []);
+    const beInstance = useAxiosInstanceForBe(data.beToken)();
+    const githubInstance = useAxiosInstanceForGithub(data.githubToken)(); 
+    const getUserRegion = async () => {
+        setNationData(await guessRegion({locale, userData: data.data.user, beInstance, githubInstance}))
+    }
+    useEffect(()=>{
+        getUserRegion()
+    }, [beInstance, githubInstance])
     const { t } = useTranslation();
     const { user } = data.data;
     return (
@@ -50,7 +56,10 @@ export default function User() {
                         }}
                     />
                     <UserBasic>
-                        <UserInfoDetail data={user} />
+                        <div className="flex gap-4 w-full max-h-25">
+                            <UserInfoDetail data={user} />
+                            {/* <UserNation nationISO={nationData!.nationISO} nationName={nationData!.nationName} /> */}
+                        </div>
                         <UserReposDetail data={user} />
                         <UserReposContributeDetail data={user} />
                         <UserPullRequestsDetail data={user} />

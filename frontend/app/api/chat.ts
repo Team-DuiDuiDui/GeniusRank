@@ -1,13 +1,19 @@
 import { handleClientReq } from "~/utils/requests/request";
 import { AxiosInstanceForBe } from "./instance";
 
+export interface NationData {
+    nationName: string;
+    nationISO: string;
+    nationLocale: string;
+}
+
 /**
  * 调用后端 chat 接口（非流式传输形式），直接返回国家结果
  * @param data 传入 userList 用来判断国家
  * @param language 返回国家的语言
  * @returns 返回国家
  */
-export const syncChatForNationFromUserList = (data: string, language: string, beInstance: AxiosInstanceForBe): Promise<string> => {
+export const syncChatForNationFromUserList = async (data: string, language: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
     const message = `${data}
     这里面的数据中既有国家，也有这个国家所属的地区。
     请你帮我从这里面搜索一下出现频率最高的国家是哪里。
@@ -15,10 +21,12 @@ export const syncChatForNationFromUserList = (data: string, language: string, be
     {
         "nationName": [国家的英文全称],
         "nationISO": [国家对应的 ISO 简写]
-        "nation": [${language} 对应语言下的国家名称]
+        "nationLocale": [${language} 对应语言下的国家名称]
     }
     `
-    return syncChat(message, beInstance)
+    const result = await syncChat(message, beInstance)
+    console.log(result)
+    return JSON.parse(result)
 }
 
 /**
@@ -27,7 +35,7 @@ export const syncChatForNationFromUserList = (data: string, language: string, be
  * @param language 返回国家的语言
  * @returns 返回国家
  */
-export const syncChatForNationFromReadme = (data: string, language: string, beInstance: AxiosInstanceForBe): Promise<string> => {
+export const syncChatForNationFromReadme = async (data: string, language: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
     const message = `${data}
     这是一个 README 文件中的内容，里面可能包含了作者的国家信息。
     请你从这里面找寻作者明确声明了自己属于某个地区的信息，并且告诉我这个地区属于哪个国家。
@@ -36,10 +44,10 @@ export const syncChatForNationFromReadme = (data: string, language: string, beIn
     {
         "nationName": [国家的英文全称],
         "nationISO": [国家对应的 ISO 简写]
-        "nation": [${language} 对应语言下的国家名称]
+        "nationLocale": [${language} 对应语言下的国家名称]
     }
     `
-    return syncChat(message, beInstance)
+    return JSON.parse(await syncChat(message, beInstance))
 }
 
 /**
@@ -50,8 +58,8 @@ export const syncChatForNationFromReadme = (data: string, language: string, beIn
  */
 export const syncChat = async (message: string, beInstance: AxiosInstanceForBe): Promise<string> => {
     return await handleClientReq(
-        ()=>beInstance.post('/analyze/chat/sync', {message}), 
-        async res => res.data.data, 
+        () => beInstance.post('/analyze/chat/sync', { message }),
+        async res => res.data.data,
         undefined, 0, true, false
     )
 }

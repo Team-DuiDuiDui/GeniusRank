@@ -2,16 +2,17 @@ import { User } from '~/utils/requests/ghapis/typings/user';
 import { handleClientGithubGraphQLReq } from '../requests/request';
 import { AxiosInstanceForGithub } from '../requests/instance';
 import { AxiosInstanceForBe } from '~/api/instance';
-import { syncChatForNationFromUserList } from '~/api/chat';
+import { NationData, syncChatForNationFromUserList } from '~/api/chat';
 import { guessRegionFromFollowers, guessRegionFromFollowings } from './nation';
 import { getUserNation } from '~/api/region';
 import { UserNationData } from '~/api/interface';
+import { UserDetail } from '../requests/ghGraphql/typings/user';
 
 export interface GuessNationProps {
     locale: string;
     beInstance: AxiosInstanceForBe;
     githubInstance: AxiosInstanceForGithub;
-    userData: User;
+    userData: UserDetail;
 }
 
 // TODO: 创建一个任务队列，用于存储非必要任务，但是可以执行的。
@@ -24,10 +25,10 @@ export interface GuessNationProps {
  * @param githubInstance 前端与 github 通信的 axios 实例
  * @returns 返回还没做完
  */
-export const guessRegion = async ({ locale, userData, beInstance, githubInstance }: GuessNationProps): Promise<string> => {
+export const guessRegion = async ({ locale, userData, beInstance, githubInstance }: GuessNationProps): Promise<NationData> => {
     const nationDataFromBe = await getUserNation(userData.login, beInstance);
-    if (nationDataFromBe) return nationDataFromBe.country; 
-    const [nationFromFollowers, confidenceFromFollowers] = await guessRegionFromFollowers(userData, beInstance, githubInstance, locale);
-    const [nationFromFollowings, confidenceFromFollowings] = await guessRegionFromFollowings(userData, beInstance, githubInstance, locale);
-    return nationFromFollowers;
+    if (nationDataFromBe) return nationDataFromBe;
+    // const { nationName, nationISO, nationLocale} = await guessRegionFromFollowers(userData, beInstance, githubInstance, locale);
+    // const [nationFromFollowings, confidenceFromFollowings] = await guessRegionFromFollowings(userData, beInstance, githubInstance, locale);
+    // return {nationISO: nationFromFollowers, nationName: nationFromFollowers, confidence: confidenceFromFollowers};
 }

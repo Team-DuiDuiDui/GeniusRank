@@ -1,5 +1,8 @@
 import { json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
 import axios from 'axios';
+import { useLocale } from 'remix-i18next/react';
+import { createInstanceForBe } from '~/api/instance';
+import { getBeToken } from '~/api/user';
 import i18nServer from '~/modules/i18n.server';
 import { user } from '~/user-cookie';
 import { gqlUser } from '~/utils/requests/ghGraphql/gqlUser.server';
@@ -19,7 +22,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
                 title: `${params?.name ?? ''} | Genius Rank`,
                 description: t('user.description'),
                 githubToken: cookie.access_token as string,
-                // beToken: await getBeToken({id: data.user.id, login: data.user.login}, cookie.access_token, createInstanceForBe()),
+                beToken: await getBeToken(
+                    { id: data.user.databaseId!.toString(), login: data.user.login },
+                    cookie.access_token,
+                    createInstanceForBe()
+                ),
             });
         } catch (e) {
             // eslint-disable-next-line import/no-named-as-default-member
