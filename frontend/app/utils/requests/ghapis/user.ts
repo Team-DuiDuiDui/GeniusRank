@@ -41,6 +41,7 @@ export class githubUser {
     }
 
     async getUserPrs(): Promise<IssueSearchResult> {
+        this.userPrs = null;
         const data = (await handleClientGithubReq<IssueSearchResult>(
             () =>
                 this.githubInstance.get(
@@ -53,6 +54,7 @@ export class githubUser {
     }
 
     async getUserIssues(): Promise<IssueSearchResult> {
+        this.userIssues = null;
         const data = (await handleClientGithubReq<IssueSearchResult>(
             () => this.githubInstance.get(`/search/issues?q=type:issue+author:${this.name}&sort=updated&per_page=80`),
             (res) => issueSearchResultSchema.parseAsync(res.data)
@@ -62,6 +64,7 @@ export class githubUser {
     }
 
     async getUserRepos(): Promise<UserRepos> {
+        this.userRepos = null;
         const data = (await handleClientGithubReq<UserRepos>(
             () => this.githubInstance.get(`/users/${this.name}/repos?sort=updated&per_page=80`),
             (res) => userReposSchema.parseAsync(res.data)
@@ -71,6 +74,7 @@ export class githubUser {
     }
 
     async getUserCommits(): Promise<CommitsSearchResult> {
+        this.userCommits = null;
         const data = (await handleClientGithubReq<CommitsSearchResult>(
             () => this.githubInstance.get(`/search/commits?q=author:${this.name}&sort=author-date&per_page=80`),
             (res) => commitsSearchResultSchema.parseAsync(res.data)
