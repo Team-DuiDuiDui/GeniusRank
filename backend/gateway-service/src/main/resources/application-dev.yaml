@@ -52,6 +52,11 @@ spring:
                   - /api/analyze/ping
                   - /api/analyze/score
                   - /api/analyze/score/.*
+                  - /api/analyze/chat/sync
+                  - /api/analyze/chat/stream/question
+                  - /api/analyze/chat/stream/tech
+                  - /api/analyze/country/.*
+                  - /api/analyze/country
 
 project:
   nacos:
