@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import { AxiosInstanceForBe, createInstanceForBe } from '~/api/instance';
 
 /**
@@ -10,3 +11,13 @@ const useAxiosInstanceForBe = (baseUrl: string, token?: string): (() => AxiosIns
 };
 
 export default useAxiosInstanceForBe;
+
+export class BackEndError extends Error {
+    response: AxiosResponse;
+    error: string;
+    constructor(response: AxiosResponse, error: string) {
+        super(response.data.message);
+        this.response = response;
+        this.error = error;
+    }
+}

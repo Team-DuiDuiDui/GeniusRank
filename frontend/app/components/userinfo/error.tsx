@@ -4,6 +4,7 @@ import { Button, Popover } from '@mantine/core';
 import axios, { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 import { ZodError } from 'zod';
+import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
 
 interface ErrorProps {
     error: AxiosError | ZodError | unknown | null;
@@ -36,6 +37,8 @@ const ErrorNote: React.FC<ErrorProps> = ({ error, reload }) => {
                                         : error.status === 422
                                         ? t('user.err.may_hide')
                                         : t('user.no_message')
+                                    : error instanceof BackEndError
+                                    ? error.error
                                     : t('user.no_message')}
                             </p>
                             <p className="text-xs self-start">

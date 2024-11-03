@@ -1,13 +1,20 @@
 import { ReactNode, useRef } from 'react';
 import CardWithScroll from '../constant/cardWithScroll';
 import { throttleWithDeepClone } from '~/utils/chore';
+import { AxiosError } from 'axios';
+import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
+import ErrorNote from './error';
+import { Loader } from '@mantine/core';
 
 interface CardProps {
     title: string;
     children: ReactNode;
+    data: unknown;
+    error: null | AxiosError | BackEndError | unknown;
+    reload: () => void;
 }
 
-const CardScrollable = ({ title, children }: CardProps) => {
+const CardScrollable = ({ title, children, data, error, reload }: CardProps) => {
     const headerRef = useRef<HTMLHeadingElement>(null);
 
     const handleScroll = throttleWithDeepClone((event: React.UIEvent<HTMLDivElement>) => {
@@ -25,6 +32,10 @@ const CardScrollable = ({ title, children }: CardProps) => {
         <CardWithScroll maxHeight="max-h-96">
             <h2 className="text-lg font-bold top-0 my-4 bg-white py-1 transition-all flex-shrink" ref={headerRef}>
                 {title}
+                <span className="font-normal ml-4 text-base">
+                    {!data && !error && <Loader size={16} />}
+                    <ErrorNote error={error} reload={reload} />
+                </span>
             </h2>
             <div className="overflow-y-auto max-h-max flex-grow scrollbar" onScroll={handleScroll}>
                 {children}

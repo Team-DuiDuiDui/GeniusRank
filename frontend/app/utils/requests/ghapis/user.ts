@@ -2,10 +2,10 @@
 import { AxiosInstance } from 'axios';
 import { CommitsSearchResult, IssueSearchResult, User, UserRepos } from './typings/user';
 import { commitsSearchResultSchema, issueSearchResultSchema, userReposSchema } from './schema/user';
-import { handleClientGithubReq, handleClientReq } from '../request';
+import { handleBackendReq, handleClientGithubReq } from '../request';
 import { createInstanceForGithub } from '../instance';
 import { createInstanceForBe } from '~/api/instance';
-import { GithubScoreReqUnLogin } from '../typings/beReq';
+import { GithubScoreReqUnLogin } from '../../../api/typings/beReq';
 
 export class githubUser {
     public name: string;
@@ -106,9 +106,9 @@ export class githubUser {
                 public_repos: this.userData?.public_repos ?? 0,
             },
         };
-        const data = (await handleClientReq<GithubScoreRes>(
+        const data = (await handleBackendReq<GithubScoreRes>(
             () =>
-                this.beInstance.post(`/analyze/score`, {
+                this.beInstance.post(`/analyze/score `, {
                     ...req,
                 }),
             (res) => res.data

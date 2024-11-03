@@ -28,7 +28,6 @@ const CardWithScrollableTable = <T,>({
     reload,
     reverse = false,
 }: DataTableProps<T>) => {
-    const titleRef = useRef(null);
     const headerRef = useRef<HTMLHeadingElement>(null);
     const { t } = useTranslation();
     const finalData = data && (reverse ? [...data].reverse() : data);
@@ -48,7 +47,7 @@ const CardWithScrollableTable = <T,>({
         <CardWithScroll maxHeight="max-h-96">
             <h2 className="text-lg font-bold top-0 my-4 bg-white py-1 transition-all flex-shrink" ref={headerRef}>
                 {title}
-                <span className="font-normal ml-4 text-base" ref={titleRef}>
+                <span className="font-normal ml-4 text-base">
                     {!data && !error ? <Loader size={16} /> : `${data?.length ?? '_'} / ${dataCount ?? '_'}`}
                     <ErrorNote error={error} reload={reload} />
                 </span>
