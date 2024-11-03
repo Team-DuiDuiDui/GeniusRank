@@ -13,7 +13,12 @@ public class GithubUserCountryReqDTO {
     private String login;
 
     /**
+     * GitHub ISO 简写 ISO 简写
+     */
+    private String country_iso;
+
+    /**
      * 猜测的国家
      */
-    private String country;
+    private String country_name;
 }

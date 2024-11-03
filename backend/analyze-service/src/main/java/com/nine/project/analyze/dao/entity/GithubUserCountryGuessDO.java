@@ -22,7 +22,12 @@ public class GithubUserCountryGuessDO extends BaseDO {
     private String login;
 
     /**
+     * 猜测的国家 ISO 代码
+     */
+    private String country_iso;
+
+    /**
      * 猜测的国家
      */
-    private String country;
+    private String country_name;
 }

@@ -21,9 +21,9 @@ public class GithubUserCountryGuessController {
     /**
      * 查询对于 githubUserId 的用户所在国家/地区猜测接口
      */
-    @GetMapping("/api/analyze/country/{githubUserId}")
-    public Result<GithubUserCountryRespDTO> getUser(@PathVariable String githubUserId) {
-        return Results.success(githubUserCountryGuessService.getGithubUserCountryGuessByGithubUserId(githubUserId));
+    @GetMapping("/api/analyze/country/{login}")
+    public Result<GithubUserCountryRespDTO> getUser(@PathVariable String login) {
+        return Results.success(githubUserCountryGuessService.getGithubUserCountryGuessByGithubUserId(login));
     }
 
 

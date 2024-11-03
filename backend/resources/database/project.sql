@@ -38,9 +38,10 @@ CREATE TABLE t_github_user_score (
 
 # 3. 创建 Github 用户所在国家/地区猜测表 (GithubUserCountryGuess)
 CREATE TABLE t_github_user_country_guess (
-  id             BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,
-  login VARCHAR(256) NOT NULL COMMENT 'GitHub 用户名',
-  country        VARCHAR(50) COMMENT '国家/地区',
+  id                    BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,
+  login                 VARCHAR(256) NOT NULL COMMENT 'GitHub 用户名',
+  country_iso           VARCHAR(50) COMMENT '国家/地区 ISO 缩写',
+  country_name          VARCHAR(50) COMMENT '国家/地区',
 
   create_time    DATETIME NULL COMMENT '创建时间',
   update_time    DATETIME NULL COMMENT '修改时间',
