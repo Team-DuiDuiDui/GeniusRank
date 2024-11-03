@@ -1,4 +1,3 @@
-import { User } from "~/utils/requests/ghapis/typings/user";
 import { handleRequest } from "~/utils/requests/request";
 import { AxiosInstanceForBe } from "./instance";
 

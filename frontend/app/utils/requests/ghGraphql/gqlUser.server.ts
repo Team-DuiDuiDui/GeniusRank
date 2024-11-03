@@ -9,7 +9,7 @@ export class gqlUser {
 
     constructor(name: string, token: string) {
         this.name = name;
-        this.axiosInstance = createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank', undefined, 'Bearer');
+        this.axiosInstance = createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank', 'Bearer');
     }
 
     async getData(count: number = 50): Promise<UserData> {
@@ -17,7 +17,6 @@ export class gqlUser {
             query: `
 query($username:String!,$count:Int!){
     user(login: $username){
-        id
         avatarUrl
         databaseId
         name

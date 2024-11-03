@@ -1,5 +1,4 @@
 export type UserDetail = {
-    id: string;
     avatarUrl: string;
     name: string | null;
     databaseId: number | null;

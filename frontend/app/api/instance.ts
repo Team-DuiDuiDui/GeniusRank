@@ -9,9 +9,9 @@ export interface AxiosInstanceForBe extends AxiosInstance {}
  */
 export const createInstanceForBe = (token?: string): AxiosInstanceForBe => {
     return axios.create({
-        baseURL: "",
+        baseURL: "https://51a2-2001-250-6c01-8000-00-34-2d8a.ngrok-free.app/api",
         headers: token
-            ? {
+            ? { 
                   Authorization: token,
               }
             : {},
