@@ -55,9 +55,7 @@ CREATE TABLE t_github_user_country_guess (
 CREATE TABLE t_github_user_developer_type (
     id             BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,
     login VARCHAR(256) NOT NULL COMMENT 'GitHub 用户名',
-    developer_type VARCHAR(255) COMMENT '开发者领域',
-
-    CONSTRAINT idx_developer_type UNIQUE (developer_type)
+    developer_type VARCHAR(255) COMMENT '开发者领域'
 ) COMMENT 'GitHub 用户开发者领域表';
 
 
