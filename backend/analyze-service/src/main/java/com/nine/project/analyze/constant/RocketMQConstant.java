@@ -8,7 +8,7 @@ public final class RocketMQConstant {
     /**
      * 服务消费者组 Key
      */
-    public static final String CONSUMER_GROUP = "common-message_cg";
+    public static final String CONSUMER_DETAIL_TYPE_GROUP = "common-message_detail_develop_type_cg";
 
     /**
      * 服务 Topic Key
