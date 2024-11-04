@@ -10,6 +10,7 @@ import com.nine.project.analyze.dao.mapper.GithubUserDevelopMapper;
 import com.nine.project.analyze.dao.mapper.GithubUserScoreMapper;
 import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
+import com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 import com.nine.project.analyze.mq.event.SaveDetailedScoreAndTypeEvent;
 import com.nine.project.analyze.mq.produce.SaveDetailedScoreAndTypeProducer;
@@ -123,6 +124,13 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
         return scores;
     }
+
+    @Override
+    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, String type, String nation) {
+
+        return baseMapper.findTopScoresByCountryName(size, nation);
+    }
+
     /**
      * 根据是否存在数据库记录，决定是更新还是保存
      * @param existsInDatabase 是否存在数据库记录
