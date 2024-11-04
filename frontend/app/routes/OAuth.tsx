@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { z, ZodError } from 'zod';
 import i18nServer from '~/modules/i18n.server';
 import { user } from '~/cookie';
+import { parseURLParamsToObject } from '~/utils/chore';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
@@ -23,6 +24,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                     client_id: context.cloudflare.env.GITHUB_CLIENT_ID,
                     client_secret: context.cloudflare.env.GITHUB_CLIENT_SECRET,
                     code: code,
+                    // redirect_uri: "htpp://localhost:5173"
                 },
                 {
                     headers: {

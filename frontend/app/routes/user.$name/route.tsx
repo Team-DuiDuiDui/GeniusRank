@@ -4,11 +4,10 @@ import { isRouteErrorResponse, useLoaderData, useNavigation, useParams, useRoute
 import UserBasic from '~/components/userinfo/basic';
 import UserInfo from '~/components/userinfo/info';
 import { githubUser } from '~/utils/requests/ghapis/user';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import UserPRs from '~/components/userinfo/prs';
 import UserIssues from '~/components/userinfo/issues';
 import UserRepositories from '~/components/userinfo/repos';
-import { guessRegion } from '~/utils/region/main';
 import { LoadingOverlay } from '@mantine/core';
 import UserCommits from '~/components/userinfo/commits';
 import useAxiosInstanceForBe from '~/hooks/useAxiosInstanceForBe';
@@ -16,6 +15,7 @@ import { useLocale } from 'remix-i18next/react';
 import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
 import UserNation from '~/components/userinfo/region';
 import UserScore from '~/components/userinfo/score';
+import { t } from 'i18next';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -28,21 +28,26 @@ export default function User() {
     const navigation = useNavigation();
     const params = useParams();
     const locale = useLocale();
+    // const [nationLoading, setNationLoading] = useState<boolean>(true)
     const beInstance = useAxiosInstanceForBe(data.baseUrl)();
     const githubInstance = useAxiosInstanceForGithub()();
     const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData, githubInstance, beInstance));
-    const [userRegion, setUserRegion] = useState<null | { nation: string }>(null);
+    // const [userRegion, setUserRegion] = useState<NationData | null>(null);
 
-    const getAndSetUserRegion = useCallback(async () => {
-        const nation = await guessRegion({
-            locale,
-            userData: data.userData,
-            beInstance: beInstance,
-            githubInstance: githubInstance,
-        });
-        setUserRegion({ nation });
-        console.log(userRegion);
-    }, [beInstance, data.userData, githubInstance, locale, userRegion]);
+    // const getAndSetUserRegion = useCallback(async () => {
+    //     const nation = await guessRegion({
+    //         locale,
+    //         userData: { 
+    //             followers: data.userData.followers, 
+    //             followings: data.userData.following, 
+    //             login: data.userData.login 
+    //         }, 
+    //         beInstance: beInstance,
+    //         githubInstance: githubInstance,
+    //     });
+    //     setUserRegion(nation);
+    //     setNationLoading(false)
+    // }, [beInstance, data.userData, githubInstance, locale, userRegion]);
 
     useEffect(() => {
         user.current.setUserName(params?.name ?? '');
@@ -67,7 +72,7 @@ export default function User() {
                     <UserBasic>
                         <div className="flex gap-4 w-full max-h-25">
                             <UserInfo data={data.userData} />
-                            <UserNation nationISO="US" nationName="China" />
+                            <UserNation nationISO="US" nationLocale={t(`country.US.${locale}`)} disable={true}/>
                         </div>
                         <UserScore data={data.userData} user={user} />
                         <UserRepositories data={data.userData} user={user} />

@@ -32,7 +32,6 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                         githubInstance 
                     }
                 );
-            console.log()
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
             return json({
                 data,
