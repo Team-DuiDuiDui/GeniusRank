@@ -11,6 +11,8 @@ import com.nine.project.analyze.dao.mapper.GithubUserScoreMapper;
 import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
+import com.nine.project.analyze.mq.event.SaveDetailedScoreAndTypeEvent;
+import com.nine.project.analyze.mq.produce.SaveDetailedScoreAndTypeProducer;
 import com.nine.project.analyze.service.GithubUserScoreService;
 import com.nine.project.analyze.toolkit.CacheUtil;
 import com.nine.project.analyze.toolkit.GithubDetailedScoreCalculator;
@@ -26,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 import static com.nine.project.analyze.constant.RedisCacheConstant.*;
 import static com.nine.project.framework.errorcode.BaseErrorCode.USER_SCORE_NOT_FOUND;
@@ -42,6 +43,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
     private final CacheUtil<GithubUserScoreRespDTO> cacheUtil;
     private final GithubUserDevelopMapper githubUserDevelopMapper;
+    private final SaveDetailedScoreAndTypeProducer saveDetailedScoreAndTypeProducer;
 
     @Override
     public GithubUserScoreRespDTO getGithubUserScore(String githubUserId) {
@@ -113,49 +115,14 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
     @Override
     public GithubUserScoreRespDTO generateScoreDetail(GithubDetailedScoreReqDTO requestParams) {
-        String cacheKey = USER_SCORE_KEY + requestParams.getLogin();
-
-        // 使用查询计数来判断记录是否存在
-        LambdaQueryWrapper<GithubUserScoreDO> queryWrapper = Wrappers.lambdaQuery(GithubUserScoreDO.class)
-                .eq(GithubUserScoreDO::getLogin, requestParams.getLogin())
-                .eq(GithubUserScoreDO::getDelFlag, 0);
-        long count = this.count(queryWrapper);
-        boolean existsInDatabase = count > 0;
-
-        // 封装持久化用户开发者领域
-        githubUserDevelopMapper.delete(Wrappers.lambdaQuery(GithubUserDeveloperDO.class).eq(GithubUserDeveloperDO::getLogin, requestParams.getLogin()));
-
-        List<GithubDetailedScoreReqDTO.Repository> repositoryList = Stream.concat(
-                requestParams.getRepositories().getNodes().stream(),
-                requestParams.getRepositoriesContributedTo().getNodes().stream()
-        ).toList();
-
-        List<String> topThreeLanguages = LanguageFrequencyCounter.getDetailedTopThreeLanguages(repositoryList);
-        List<GithubUserDeveloperDO> developerDOList = new ArrayList<>();
-
-        for (String language : topThreeLanguages) {
-            GithubUserDeveloperDO developerDO = new GithubUserDeveloperDO();
-            developerDO.setLogin(requestParams.getLogin());
-            developerDO.setDeveloper_type(language);
-            developerDOList.add(developerDO);
-        }
-
-        // 使用 insertBatch 方法批量插入数据
-        if (!developerDOList.isEmpty()) {
-            githubUserDevelopMapper.insert(developerDOList);
-        }
-
         // 计算分数
         GithubUserScoreRespDTO scores = GithubDetailedScoreCalculator.calculate(requestParams);
 
-        // 封装持久化数据
-        GithubUserScoreDO userScoreDO = BeanUtil.copyProperties(scores, GithubUserScoreDO.class);
-        userScoreDO.setLogin(requestParams.getLogin());
+        // 使用 RocketMQ 异步持久化用户分数和开发者领域
+        saveDetailedScoreAndTypeProducer.sendMessage(new SaveDetailedScoreAndTypeEvent(requestParams, scores));
 
-        // 如果存在，则更新。如果不存在，则添加。并传入响应参数到缓存
-        return saveOrUpdate(existsInDatabase, userScoreDO, queryWrapper, cacheKey);
+        return scores;
     }
-
     /**
      * 根据是否存在数据库记录，决定是更新还是保存
      * @param existsInDatabase 是否存在数据库记录

@@ -5,6 +5,7 @@ import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,8 +24,11 @@ public class GithubUserScoreCalculator {
         BigDecimal userScoreDecimal = BigDecimal.valueOf(userScore).setScale(2, RoundingMode.HALF_UP);
 
         // 计算仓库得分并保留两位小数
-        double repoScore = calculateRepoScore(githubUserScoreReqDTO.getRepos());
-        BigDecimal repoScoreDecimal = BigDecimal.valueOf(repoScore).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal repoScoreDecimal = BigDecimal.valueOf(0);
+        if(githubUserScoreReqDTO.getRepos().size() > 3) {
+            double repoScore = calculateRepoScore(new ArrayList<>(githubUserScoreReqDTO.getRepos().subList(0, 3)));
+            repoScoreDecimal = BigDecimal.valueOf(repoScore).setScale(2, RoundingMode.HALF_UP);
+        }
 
         // 计算拉取请求得分并保留两位小数
         double prScore = calculatePrScore(githubUserScoreReqDTO.getPrs());
