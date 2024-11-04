@@ -54,10 +54,10 @@ export const syncChatForNationFromReadme = async (data: string, beInstance: Axio
  * @param beInstance 后端 axios 实例
  * @returns 返回的结果
  */
-export const syncChat = async (message: string, beInstance: AxiosInstanceForBe): Promise<string> => {
+export const syncChat = async (message: string, beInstance: AxiosInstanceForBe, retry=0): Promise<string> => {
     return await handleClientReq(
         () => beInstance.post('/analyze/chat/sync', { message }),
         async res => res.data.data,
-        undefined, 0, true, false
+        retry !== 0 ? (error) => true : undefined, 0, true, false
     )
 }

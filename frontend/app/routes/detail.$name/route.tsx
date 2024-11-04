@@ -25,20 +25,21 @@ export { loader };
 
 export default function User() {
     const data = useLoaderData<typeof loader>();
-    const [nationData, setNationData] = useState<{nationISO: string, nationName: string, message: string}>(data.nationData);
+    const [nationData, setNationData] = useState<{nationISO: string, nationName: string, message: string, confidence: number}>(data.nationData);
     const locale = useLocale();
     const navigation = useNavigation();
     const beInstance = useAxiosInstanceForBe(data.beToken)();
     const githubInstance = useAxiosInstanceForGithub(data.githubToken)();
+    const { t } = useTranslation();
+    const { user } = data.data;
+
     const getUserRegion = async () => {
-        setNationData(await guessRegion({ locale, userData: {
+        setNationData(await guessRegion({t, locale, userData: {
             followers: data.data.user.followers.totalCount, 
             followings: data.data.user.following.totalCount,
             login: data.data.user.login
         }, beInstance, githubInstance }))
     }
-    const { t } = useTranslation();
-    const { user } = data.data;
     return (
         <>
             <div className="flex items-center justify-center w-full">
@@ -60,7 +61,7 @@ export default function User() {
                     <UserBasic>
                         <div className="flex gap-4 w-full max-h-25">
                             <UserInfoDetail data={user} />
-                            <UserNation nationISO={nationData.nationISO} nationLocale={t(`country.${nationData.nationISO}`)} message={nationData.message} />
+                            <UserNation nationISO={nationData.nationISO} nationLocale={t(`country.${nationData.nationISO}`)} message={`${nationData.message}\n${t("user.confidence")}: ${nationData.confidence}`} />
                         </div>
                         <UserReposDetail data={user} />
                         <UserReposContributeDetail data={user} />

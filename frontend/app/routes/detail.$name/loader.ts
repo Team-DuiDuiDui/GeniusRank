@@ -25,11 +25,15 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
 
             const { data } = await user.getData();
-            const nationData = await guessRegion(
+
+            let nationData = {}
+
+            try {
+                nationData = await guessRegion(
                     { 
+                        t,
                         locale, 
                         userData: { 
-                            t,
                             followers: data.user.followers.totalCount, 
                             followings: data.user.following.totalCount, 
                             login: data.user.login 
@@ -38,6 +42,10 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                         githubInstance 
                     }
                 );
+            } catch (e) {
+                nationData = {nationISO: "", nationName: "", message: t('user.err.someting_wrong'), confidence: 0};
+            }
+
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
             return json({
                 data,

@@ -72,7 +72,7 @@ export default function User() {
                     <UserBasic>
                         <div className="flex gap-4 w-full max-h-25">
                             <UserInfo data={data.userData} />
-                            <UserNation nationISO="US" nationLocale={t(`country.US.${locale}`)} disable={true}/>
+                            <UserNation nationISO="US" nationLocale={t(`country.US.${locale}`)} disable={true} message=""/>
                         </div>
                         <UserScore data={data.userData} user={user} />
                         <UserRepositories data={data.userData} user={user} />
