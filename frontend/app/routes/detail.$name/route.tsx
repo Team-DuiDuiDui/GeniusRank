@@ -16,7 +16,6 @@ import UserNation from '~/components/userinfo/region';
 import { guessRegion } from '~/utils/region/main';
 import { useLocale } from 'remix-i18next/react';
 import { NationData } from '~/api/chat';
-// import { translateISOToLocale } from '~/api/typings/country';
 import UserScoreDetail from '~/components/userinfo/detail/score';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -27,7 +26,10 @@ export { loader };
 
 export default function User() {
     const data = useLoaderData<typeof loader>();
-    const [nationData, setNationData] = useState<NationData>(data.nationData);
+    const [nationData, setNationData] = useState<{ nationISO: string; nationName: string; message: string }>(
+        data.nationData
+    );
+    const { t } = useTranslation();
     const locale = useLocale();
     const navigation = useNavigation();
     const beInstance = useAxiosInstanceForBe(data.beToken)();
@@ -35,8 +37,10 @@ export default function User() {
     const getUserRegion = async () => {
         setNationData(
             await guessRegion({
+                t: t,
                 locale,
                 userData: {
+                    t: t,
                     followers: data.data.user.followers.totalCount,
                     followings: data.data.user.following.totalCount,
                     login: data.data.user.login,
@@ -47,7 +51,6 @@ export default function User() {
         );
     };
     console.log(data.scores);
-    const { t } = useTranslation();
     const { user } = data.data;
     return (
         <>
@@ -71,9 +74,9 @@ export default function User() {
                         <div className="flex gap-4 w-full max-h-25">
                             <UserInfoDetail data={user} />
                             <UserNation
-                                disable={false}
                                 nationISO={nationData.nationISO}
                                 nationLocale={t(`country.${nationData.nationISO}`)}
+                                message={nationData.message}
                             />
                         </div>
                         <UserScoreDetail scores={data.scores} />

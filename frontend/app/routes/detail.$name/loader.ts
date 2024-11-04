@@ -27,8 +27,10 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             const { data } = await user.getData();
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
             const nationData = await guessRegion({
+                t,
                 locale,
                 userData: {
+                    t,
                     followers: data.user.followers.totalCount,
                     followings: data.user.following.totalCount,
                     login: data.user.login,
