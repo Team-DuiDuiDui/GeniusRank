@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { ZodError } from 'zod';
 import axios, { AxiosError } from 'axios';
@@ -60,55 +60,7 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
             <Card title={t('user.score.title')} data={scores} error={error} reload={loadData} isBackendRequest>
                 <LoadingOverlay visible={!scores && !error} loaderProps={{ type: 'dots' }} />
                 <div className="flex justify-center">
-                    {scores && !error && (
-                        <div className="flex flex-row items-stretch justify-around w-full">
-                            <div className="flex flex-col gap-8 text-center">
-                                <h3 className="text-xl font-bold">{t('user.score.score')}</h3>
-                                <p className="text-4xl font-bold m-auto">
-                                    {scores.data.totalScore}
-                                    <span className="text-xl font-normal ml-3">/100</span>
-                                </p>
-                            </div>
-                            <div className="flex flex-col gap-8 text-center">
-                                <h3 className="text-xl font-bold">{t('user.score.score_detail')}</h3>
-                                <BarChart
-                                    className="m-auto"
-                                    h={180}
-                                    w={400}
-                                    series={[{ name: 'value', color: '#1e90ff' }]}
-                                    data={parseData(scores, t)}
-                                    withBarValueLabel
-                                    dataKey="name"
-                                />
-                            </div>
-                            <div className="flex flex-col gap-8 text-center overflow-visible">
-                                <h3 className="text-xl font-bold">{t('user.score.score_proportion')}</h3>
-                                <PieChart
-                                    w={260}
-                                    className="m-auto"
-                                    data={parseData(scores, t, true)}
-                                    withTooltip
-                                    tooltipDataSource="segment"
-                                    labelsType="percent"
-                                    withLabels
-                                    withLabelsLine
-                                    labelsPosition="outside"
-                                />
-                            </div>
-                            <div className="flex flex-col gap-8 text-center overflow-visible">
-                                <h3 className="text-xl font-bold">{t('user.score.score_radar')}</h3>
-                                <RadarChart
-                                    h={250}
-                                    w={350}
-                                    data={parseData(scores, t)}
-                                    dataKey="name"
-                                    series={[{ name: 'value', color: 'blue.4', opacity: 0.2 }]}
-                                    withPolarRadiusAxis
-                                    withPolarAngleAxis
-                                />
-                            </div>
-                        </div>
-                    )}
+                    {scores && !error && <UserScoreCharts scores={scores} t={t} />}
                 </div>
             </Card>
         </>
@@ -116,6 +68,64 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
 };
 
 export default UserScore;
+
+export const UserScoreCharts: React.FC<{ scores: GithubScoreRes; t: TFunction<'translation', undefined> }> = ({
+    scores,
+    t,
+}) => {
+    const data = useMemo(() => {
+        return parseData(scores, t);
+    }, [scores, t]);
+    return (
+        <div className="flex flex-row items-stretch justify-around w-full">
+            <div className="flex flex-col gap-8 text-center">
+                <h3 className="text-xl font-bold">{t('user.score.score')}</h3>
+                <p className="text-4xl font-bold m-auto">
+                    {scores.data.totalScore}
+                    <span className="text-xl font-normal ml-3">/100</span>
+                </p>
+            </div>
+            <div className="flex flex-col gap-8 text-center">
+                <h3 className="text-xl font-bold">{t('user.score.score_detail')}</h3>
+                <BarChart
+                    className="m-auto"
+                    h={180}
+                    w={400}
+                    series={[{ name: 'value', color: '#1e90ff' }]}
+                    data={data}
+                    withBarValueLabel
+                    dataKey="name"
+                />
+            </div>
+            <div className="flex flex-col gap-8 text-center overflow-visible">
+                <h3 className="text-xl font-bold">{t('user.score.score_proportion')}</h3>
+                <PieChart
+                    w={260}
+                    className="m-auto"
+                    data={parseData(scores, t, true)}
+                    withTooltip
+                    tooltipDataSource="segment"
+                    labelsType="percent"
+                    withLabels
+                    withLabelsLine
+                    labelsPosition="outside"
+                />
+            </div>
+            <div className="flex flex-col gap-8 text-center overflow-visible">
+                <h3 className="text-xl font-bold">{t('user.score.score_radar')}</h3>
+                <RadarChart
+                    h={250}
+                    w={350}
+                    data={data}
+                    dataKey="name"
+                    series={[{ name: 'value', color: 'blue.4', opacity: 0.2 }]}
+                    withPolarRadiusAxis
+                    withPolarAngleAxis
+                />
+            </div>
+        </div>
+    );
+};
 
 const parseData = (res: GithubScoreRes, t: TFunction<'translation', undefined>, ignoreZero: boolean = false) => {
     const { data } = res;
