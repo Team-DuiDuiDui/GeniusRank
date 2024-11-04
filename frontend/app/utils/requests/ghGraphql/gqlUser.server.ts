@@ -1,19 +1,23 @@
 import { AxiosInstance } from 'axios';
 import { UserDetail, UserData } from './typings/user';
 import { createInstanceForGithub } from '../instance';
+import { handleBackendReq } from '../request';
+import { createInstanceForBe } from '~/api/instance';
 
 export class gqlUser {
     public name: string;
-    private axiosInstance: AxiosInstance;
+    private githubInstance: AxiosInstance;
+    private beInstance: AxiosInstance;
     public dataDetail: UserDetail | null = null;
 
-    constructor(name: string, token: string) {
+    constructor(name: string, token: string, baseUrl: string, beToken: string) {
         this.name = name;
-        this.axiosInstance = createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank', 'Bearer');
+        this.githubInstance = createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank', 'Bearer');
+        this.beInstance = createInstanceForBe(baseUrl, beToken);
     }
 
     async getData(count: number = 50): Promise<UserData> {
-        const res = await this.axiosInstance.post('/graphql', {
+        const res = await this.githubInstance.post('/graphql', {
             query: `
 query($username:String!,$count:Int!){
     user(login: $username){
@@ -161,5 +165,13 @@ query($username:String!,$count:Int!){
         });
         this.dataDetail = res.data;
         return res.data;
+    }
+
+    async getUserScores(): Promise<GithubScoreRes> {
+        const data = (await handleBackendReq<GithubScoreRes>(
+            () => this.beInstance.post(`/analyze/score/detailed `, this.dataDetail),
+            (res) => res.data
+        ))!;
+        return data;
     }
 }

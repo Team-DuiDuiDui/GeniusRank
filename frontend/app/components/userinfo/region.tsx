@@ -15,7 +15,7 @@ interface NationCardProps {
 const UserNation = ({ nationISO, nationLocale, warning, loading, disable, message }: NationCardProps) => {
 
     return (
-        <CardWithNoShrink containerClass={`flex-shrink-0 flex-grow-0 overflow-hidden `} containerClassDelete={["p-8"]}>
+        <CardWithNoShrink containerClass={`flex-shrink-0 flex-grow-0 overflow-hidden `} containerClassDelete={['p-8']}>
             {loading && <LoadingOverlay visible={loading} loaderProps={{ type: 'dots' }} />}
             <span className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${disable ? "blur-xl" : ""} p-0 h-full w-full ${nationISO !== "CN" ? "blur scale-95" : ""}`}></span>
             <div className={`h-full w-full flex items-center justify-center p-4 `} style={{ aspectRatio: "4/3" }}>
@@ -46,7 +46,7 @@ const UserNation = ({ nationISO, nationLocale, warning, loading, disable, messag
                 }
             </div>
         </CardWithNoShrink>
-    )
-}
+    );
+};
 
 export default UserNation;

@@ -37,7 +37,7 @@
         "react-dom": "^18.2.0",
         "react-hot-toast": "^2.4.1",
         "react-i18next": "^15.1.0",
-        "recharts": "2",
+        "recharts": "^2.13.3",
         "remix-i18next": "^6.4.1",
         "remix-utils": "^7.7.0",
         "vite-env-only": "^3.0.3",

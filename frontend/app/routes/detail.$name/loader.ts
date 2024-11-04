@@ -10,12 +10,17 @@ import { createInstanceForGithub } from '~/utils/requests/instance';
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
     const cookie = (await user.parse(cookieHeader)) || {};
-    const locale = await lng.parse(cookieHeader) as string;
+    const locale = (await lng.parse(cookieHeader)) as string;
     if (!cookie.access_token) return redirect('/unauthorized');
     const t = await i18nServer.getFixedT(request);
     if (params.name) {
         try {
-            const user = new gqlUser(params.name, cookie.access_token);
+            const user = new gqlUser(
+                params.name,
+                cookie.access_token,
+                context.cloudflare.env.BASE_URL,
+                cookie.be_token
+            );
             const githubInstance = createInstanceForGithub(cookie.access_token);
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
 
@@ -52,7 +57,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             } else if (e instanceof Response) throw e;
             else {
                 console.log(e);
-                throw new Response(t('user.err.something_wrong'), { status: 500 })
+                throw new Response(t('user.err.something_wrong'), { status: 500 });
             }
         }
     }

@@ -77,12 +77,13 @@
             "loading": "Loading user data...",
             "score": {
                 "title": "Final Score (Roughly calculated)",
-                "commit_score": "Commit Score",
-                "repo_score": "Repositories Score",
-                "prs_score": "Pull Request Score",
-                "issues_score": "Issue Score",
-                "score_proportion": "Score Proportion",
-                "score_detail": "Score Details",
+                "commit_score": "Commit",
+                "repo_score": "Repositories",
+                "prs_score": "Pull Request",
+                "issues_score": "Issue",
+                "score_proportion": "Proportion",
+                "score_detail": "Details",
+                "score_radar": "Radar",
                 "score": "Score"
             }
         },
