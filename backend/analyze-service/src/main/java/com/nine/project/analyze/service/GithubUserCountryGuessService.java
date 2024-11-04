@@ -5,6 +5,8 @@ import com.nine.project.analyze.dao.entity.GithubUserCountryGuessDO;
 import com.nine.project.analyze.dto.req.GithubUserCountryReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserCountryRespDTO;
 
+import java.util.List;
+
 /**
  * GitHub 用户所在国家/地区猜测接口层
  */
@@ -23,4 +25,10 @@ public interface GithubUserCountryGuessService extends IService<GithubUserCountr
      * @param requestParams 用户所在国家/地区猜测数据
      */
     GithubUserCountryRespDTO create(GithubUserCountryReqDTO requestParams);
+
+    /**
+     * 获取所有已存在的国家
+     * @return 所有已存在的国家
+     */
+    List<String> getExistNation();
 }

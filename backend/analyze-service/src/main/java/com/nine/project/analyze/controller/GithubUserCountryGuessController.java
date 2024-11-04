@@ -8,6 +8,8 @@ import com.nine.project.framework.web.Results;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 用户所在国家/地区猜测接口控制层
  */
@@ -17,6 +19,15 @@ public class GithubUserCountryGuessController {
 
 
     private final GithubUserCountryGuessService githubUserCountryGuessService;
+
+    /**
+     * 查询所有已存在国家
+     */
+    @GetMapping("/api/analyze/country/exist")
+    public Result<List<String>> getUser() {
+        return Results.success(githubUserCountryGuessService.getExistNation());
+    }
+
 
     /**
      * 查询对于 githubUserId 的用户所在国家/地区猜测接口

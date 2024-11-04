@@ -3,13 +3,16 @@ package com.nine.project.analyze.toolkit;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static com.nine.project.analyze.constant.RedisCacheConstant.*;
 
 
 /**
@@ -20,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheUtil<T> {
 
     private final StringRedisTemplate stringRedisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     /**
      * 存入 Redis 缓存.
@@ -48,5 +52,24 @@ public class CacheUtil<T> {
      */
     public Map<Object, Object> getMapFromCacheHash(String cacheKey) {
         return stringRedisTemplate.opsForHash().entries(cacheKey);
+    }
+
+    /**
+     * 注册国家
+     */
+    public void registerNation(String nation) {
+        Long counter = redisTemplate.opsForValue().increment(NATION_COUNTER_KEY);
+        if (counter == null) {
+            counter = 0L;
+        }
+        redisTemplate.opsForZSet().add(NATION_KEY, nation, counter);
+    }
+
+    /**
+     * 获取所有国家
+     * @return 排序后的所有国家
+     */
+    public Set<String> getCountries() {
+        return redisTemplate.opsForZSet().range(NATION_KEY, 0, -1);
     }
 }
