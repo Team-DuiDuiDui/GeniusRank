@@ -69,7 +69,7 @@ export const Card = ({ title, children, data, error, isBackendRequest, reload }:
                     <ErrorNote error={error} reload={reload} isBackendRequest={isBackendRequest} />
                 </span>
             </h2>
-            <div className="overflow-y-auto h-full flex-grow scrollbar" onScroll={handleScroll}>
+            <div className="overflow-y-auto h-full flex-grow" onScroll={handleScroll}>
                 {children}
             </div>
         </CardWithNoShrink>

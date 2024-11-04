@@ -61,47 +61,38 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
                 <LoadingOverlay visible={!scores && !error} loaderProps={{ type: 'dots' }} />
                 <div className="flex justify-center">
                     {scores && !error && (
-                        <table className="w-5/6">
-                            <thead>
-                                <tr>
-                                    <th className="text-center text-xl font-bold">{t('user.score.score')}</th>
-                                    <th className="text-center text-xl font-bold">{t('user.score.score_detail')}</th>
-                                    <th className="text-center text-xl font-bold">
-                                        {t('user.score.score_proportion')}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td className="text-4xl font-bold text-center place-self-center">
-                                        {scores.data.totalScore}
-                                    </td>
-                                    <td>
-                                        <BarChart
-                                            className="place-self-center"
-                                            h={180}
-                                            w={400}
-                                            series={[{ name: 'value', color: '#1e90ff' }]}
-                                            data={parseData(scores, t)}
-                                            withBarValueLabel
-                                            dataKey="name"
-                                        />
-                                    </td>
-                                    <td>
-                                        <PieChart
-                                            className="place-self-center"
-                                            data={parseData(scores, t, true)}
-                                            withTooltip
-                                            tooltipDataSource="segment"
-                                            labelsType="percent"
-                                            withLabels
-                                            withLabelsLine
-                                            labelsPosition="outside"
-                                        />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div className="flex flex-row items-stretch justify-around w-full">
+                            <div className="flex flex-col gap-8 text-center">
+                                <h3 className="text-xl font-bold">{t('user.score.score')}</h3>
+                                <p className="text-4xl font-bold m-auto">{scores.data.totalScore}</p>
+                            </div>
+                            <div className="flex flex-col gap-8 text-center">
+                                <h3 className="text-xl font-bold">{t('user.score.score_detail')}</h3>
+                                <BarChart
+                                    className="m-auto"
+                                    h={180}
+                                    w={500}
+                                    series={[{ name: 'value', color: '#1e90ff' }]}
+                                    data={parseData(scores, t)}
+                                    withBarValueLabel
+                                    dataKey="name"
+                                />
+                            </div>
+                            <div className="flex flex-col gap-8 text-center overflow-visible">
+                                <h3 className="text-xl font-bold">{t('user.score.score_proportion')}</h3>
+                                <PieChart
+                                    w={260}
+                                    className="m-auto"
+                                    data={parseData(scores, t, true)}
+                                    withTooltip
+                                    tooltipDataSource="segment"
+                                    labelsType="percent"
+                                    withLabels
+                                    withLabelsLine
+                                    labelsPosition="outside"
+                                />
+                            </div>
+                        </div>
                     )}
                 </div>
             </Card>
