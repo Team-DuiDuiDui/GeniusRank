@@ -5,7 +5,7 @@ import { ZodError } from 'zod';
 import axios, { AxiosError } from 'axios';
 import { githubUser } from '~/utils/requests/ghapis/user';
 import { User } from '~/utils/requests/ghapis/typings/user';
-import CardScrollable from './cardScrollable';
+import { Card } from './cardScrollable';
 import toast from 'react-hot-toast';
 import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
 import handleErrorCode from '~/utils/handleErrorCode';
@@ -33,8 +33,10 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
             .getUserScores()
             .then(setScores)
             .catch((err) => {
-                if (axios.isAxiosError(err)) toast.error(t('user.err.network_error'));
-                else if (err instanceof BackEndError) toast.error(handleErrorCode(err.response.data.code, t));
+                if (axios.isAxiosError(err)) {
+                    if (!err.response?.data) toast.error(t('user.err.ngrok_error'));
+                    else toast.error(t('user.err.network_error'));
+                } else if (err instanceof BackEndError) toast.error(handleErrorCode(err.response.data.code, t));
                 else toast.error(t('errorCode.unknown'));
                 setErrors(err);
             });
@@ -53,12 +55,11 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, user]);
-
     return (
         <>
-            <CardScrollable title={t('user.score.title')} data={scores} error={error} reload={loadData}>
+            <Card title={t('user.score.title')} data={scores} error={error} reload={loadData} isBackendRequest>
                 <LoadingOverlay visible={!scores && !error} loaderProps={{ type: 'dots' }} />
-                {scores && (
+                {scores && !error && (
                     <div className="flex flex-row items-center justify-between w-full">
                         <div className="flex flex-col gap-8 text-center">
                             <h3 className="text-xl font-bold">{t('user.score.score')}</h3>
@@ -89,7 +90,7 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
                         </div>
                     </div>
                 )}
-            </CardScrollable>
+            </Card>
         </>
     );
 };

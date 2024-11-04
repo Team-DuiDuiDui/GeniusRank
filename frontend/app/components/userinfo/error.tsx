@@ -9,9 +9,10 @@ import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
 interface ErrorProps {
     error: AxiosError | ZodError | unknown | null;
     reload?: () => void;
+    isBackendRequest?: boolean;
 }
 
-const ErrorNote: React.FC<ErrorProps> = ({ error, reload }) => {
+const ErrorNote: React.FC<ErrorProps> = ({ error, isBackendRequest = false, reload }) => {
     const { t } = useTranslation();
     return (
         <>
@@ -48,7 +49,8 @@ const ErrorNote: React.FC<ErrorProps> = ({ error, reload }) => {
                             <p className="text-xs self-start">
                                 <span className="font-bold">{t('user.err.may_help')}</span>
                                 {axios.isAxiosError(error)
-                                    ? (error.response?.data as { message?: string }).message ?? t('user.no_message')
+                                    ? (error.response?.data as { message?: string })?.message ??
+                                      ((isBackendRequest && t('user.err.ngrok_error')) || t('user.no_message'))
                                     : error instanceof ZodError
                                     ? JSON.stringify(error.flatten().fieldErrors)
                                     : t('user.no_message')}
