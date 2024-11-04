@@ -42,6 +42,8 @@ CREATE TABLE t_github_user_country_guess (
   login                 VARCHAR(256) NOT NULL COMMENT 'GitHub 用户名',
   country_iso           VARCHAR(50) COMMENT '国家/地区 ISO 缩写',
   country_name          VARCHAR(50) COMMENT '国家/地区',
+  message           VARCHAR(512) COMMENT '猜测信息',
+  confidence            DECIMAL(10,2) COMMENT '猜测置信度',
 
   create_time    DATETIME NULL COMMENT '创建时间',
   update_time    DATETIME NULL COMMENT '修改时间',

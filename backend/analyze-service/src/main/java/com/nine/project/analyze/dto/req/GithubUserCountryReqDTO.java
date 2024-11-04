@@ -21,4 +21,14 @@ public class GithubUserCountryReqDTO {
      * 猜测的国家
      */
     private String country_name;
+
+    /**
+     * 猜测信息
+     */
+    private String message;
+
+    /**
+     * 可信度
+     */
+    private Double confidence;
 }
