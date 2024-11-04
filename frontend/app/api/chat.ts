@@ -1,10 +1,10 @@
 import { handleClientReq } from "~/utils/requests/request";
 import { AxiosInstanceForBe } from "./instance";
+import { parseStringToJSONfy } from "~/utils/chore";
 
 export interface NationData {
     nationName: string;
     nationISO: string;
-    nationLocale: string;
 }
 
 /**
@@ -13,20 +13,21 @@ export interface NationData {
  * @param language 返回国家的语言
  * @returns 返回国家
  */
-export const syncChatForNationFromUserList = async (data: string, language: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
-    const message = `${data}
-    这里面的数据中既有国家，也有这个国家所属的地区。
-    请你帮我从这里面搜索一下出现频率最高的国家是哪里。
+export const syncChatForNationFromUserList = async (data: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
+    const message = `[${data}]
+    上面的 array 里面既有国家，也有这个国家所属的地区。
+    首先请你将这里面非国家的地区从你的知识库中找出这个地区属于哪个国家。
+    然后从结果里面这里面搜索一下出现频率最高的国家是哪里。
     你的输出内容需要是如下 json 格式的文本，格式如下（[]中是需要你判断的内容）。**注意：你的回答需要且只需要包含下面格式的 json 内容即可，不要有任何多余内容**
     {
         "nationName": [国家的英文全称],
         "nationISO": [国家对应的 ISO 简写]
-        "nationLocale": [${language} 对应语言下的国家名称]
     }
     `
+    console.log(message)
     const result = await syncChat(message, beInstance)
     console.log(result)
-    return JSON.parse(result)
+    return JSON.parse(parseStringToJSONfy(result))
 }
 
 /**
@@ -35,7 +36,7 @@ export const syncChatForNationFromUserList = async (data: string, language: stri
  * @param language 返回国家的语言
  * @returns 返回国家
  */
-export const syncChatForNationFromReadme = async (data: string, language: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
+export const syncChatForNationFromReadme = async (data: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
     const message = `${data}
     这是一个 README 文件中的内容，里面可能包含了作者的国家信息。
     请你从这里面找寻作者明确声明了自己属于某个地区的信息，并且告诉我这个地区属于哪个国家。
@@ -44,10 +45,9 @@ export const syncChatForNationFromReadme = async (data: string, language: string
     {
         "nationName": [国家的英文全称],
         "nationISO": [国家对应的 ISO 简写]
-        "nationLocale": [${language} 对应语言下的国家名称]
     }
     `
-    return JSON.parse(await syncChat(message, beInstance))
+    return JSON.parse(parseStringToJSONfy(await syncChat(message, beInstance)))
 }
 
 /**

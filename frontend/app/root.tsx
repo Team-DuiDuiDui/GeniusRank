@@ -20,7 +20,7 @@ import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
 import './tailwind.css';
 import { useDisclosure } from '@mantine/hooks';
-import { user } from './user-cookie';
+import { user } from './cookie';
 import SettingDrawer from './components/drawer';
 import geniusRank from '~/assets/geniusRank.svg';
 import MenuIcon from './components/menu';

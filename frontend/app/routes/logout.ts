@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, json } from '@remix-run/cloudflare';
-import { user } from '~/user-cookie';
+import { user } from '~/cookie';
 
 export async function action({ request }: ActionFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');

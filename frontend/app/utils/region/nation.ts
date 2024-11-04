@@ -1,9 +1,8 @@
 import { NationData, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/chat";
 import { AxiosInstanceForBe } from "~/api/instance";
-import { User } from "../requests/ghapis/typings/user";
 import { AxiosInstanceForGithub } from "../requests/instance";
 import { handleClientGithubGraphQLReq } from "../requests/request";
-import { UserDetail } from "../requests/ghGraphql/typings/user";
+import { UserDataProps } from "./main";
 
 
 /**
@@ -11,7 +10,11 @@ import { UserDetail } from "../requests/ghGraphql/typings/user";
  * @params 同 guessRegion
  * @returns 返回一个数组，第一个元素是国家，第二个元素是置信度
  */
-export const guessRegionFromFollowers = async (userData: UserDetail, beInstance: AxiosInstanceForBe, githubInstance: AxiosInstanceForGithub, locale: string): Promise<NationData> => {
+export const guessRegionFromFollowers = async (
+    userData: UserDataProps, 
+    beInstance: AxiosInstanceForBe, 
+    githubInstance: AxiosInstanceForGithub
+): Promise<NationData> => {
     interface Followers {
         login: string;
         name: string;
@@ -24,7 +27,7 @@ export const guessRegionFromFollowers = async (userData: UserDetail, beInstance:
     const query = `
                 query($userName: String!) {
                     user(login: $userName) {
-                        followers(last: ${userData.followers.totalCount <= 80 ? userData.followers : 80}) {
+                        followers(last: ${userData.followers <= 80 ? userData.followers : 80}) {
                         nodes {
                             login
                             name
@@ -52,10 +55,10 @@ export const guessRegionFromFollowers = async (userData: UserDetail, beInstance:
     let loopCount = 0
     while (loopCount < 3) {
         loopCount++;
-        const resultJSON = await syncChatForNationFromUserList(data.toString(), locale, beInstance);
-        if (resultJSON.nationLocale) return resultJSON;
+        const resultJSON = await syncChatForNationFromUserList(data.toString(), beInstance);
+        if (resultJSON.nationISO) return resultJSON;
     }
-    return { nationName: "", nationISO: "", nationLocale: "" }
+    return { nationName: "", nationISO: "" }
 };
 
 /**
@@ -64,10 +67,9 @@ export const guessRegionFromFollowers = async (userData: UserDetail, beInstance:
  * @returns 返回一个数组，第一个元素是国家，第二个元素是置信度
  */
 export const guessRegionFromFollowings = async (
-    userData: UserDetail,
+    userData: UserDataProps,
     beInstance: AxiosInstanceForBe,
     githubInstance: AxiosInstanceForGithub,
-    locale: string
 ): Promise<NationData> => {
     interface Following {
         login: string;
@@ -82,7 +84,7 @@ export const guessRegionFromFollowings = async (
     const query = `
         query($userName: String!) {
             user(login: $userName) {
-                following(last: ${userData.following.totalCount <= 80 ? userData.following : 80}) {
+                following(last: ${userData.followings <= 80 ? userData.followings : 80}) {
                     nodes {
                         login
                         name
@@ -118,17 +120,16 @@ export const guessRegionFromFollowings = async (
     let loopCount = 0
     while (loopCount < 3) {
         loopCount++;
-        const resultJSON = await syncChatForNationFromUserList(data.toString(), locale, beInstance);
+        const resultJSON = await syncChatForNationFromUserList(data.toString(), beInstance);
         if (resultJSON.nationISO) return resultJSON;
     }
-    return { nationName: "", nationISO: "", nationLocale: "" };
+    return { nationName: "", nationISO: "" };
 };
 
 export const guessRegionFromReadme = async (
-    userData: User, 
+    userData: UserDataProps, 
     beInstance: AxiosInstanceForBe, 
     githubInstance: AxiosInstanceForGithub, 
-    locale: string
 ): Promise<NationData> => {
     const branchQuery = `
     query($userName: String!) {
@@ -149,7 +150,7 @@ export const guessRegionFromReadme = async (
         async res => res.data.user?.repository?.refs?.edges[0]?.node?.name
     );
 
-    if (!branchName) return { nationName: "", nationISO: "", nationLocale: "" };
+    if (!branchName) return { nationName: "", nationISO: "" };
 
     const readmeQuery = `
         query($userName: String!, $branchName: String!) {
@@ -168,13 +169,13 @@ export const guessRegionFromReadme = async (
         { axiosInstance: githubInstance, query: readmeQuery, variables },
         async res => res.data.user?.repository?.object?.text
     );
-    if (!readme) return { nationName: "", nationISO: "", nationLocale: "" };
+    if (!readme) return { nationName: "", nationISO: "" };
 
     let loopCount = 0
     while (loopCount < 3) {
         loopCount++;
-        const resultJSON = await syncChatForNationFromReadme(readme.toString(), locale, beInstance);
+        const resultJSON = await syncChatForNationFromReadme(readme.toString(), beInstance);
         if (resultJSON.nationName) return resultJSON;
     }
-    return { nationName: "", nationISO: "", nationLocale: "" };
+    return { nationName: "", nationISO: "" };
 }

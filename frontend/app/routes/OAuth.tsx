@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { z, ZodError } from 'zod';
 import i18nServer from '~/modules/i18n.server';
-import { user } from '~/user-cookie';
+import { user } from '~/cookie';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');

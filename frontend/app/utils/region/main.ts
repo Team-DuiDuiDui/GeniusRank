@@ -7,12 +7,19 @@ import { guessRegionFromFollowers, guessRegionFromFollowings } from './nation';
 import { getUserNation } from '~/api/region';
 import { UserNationData } from '~/api/interface';
 import { UserDetail } from '../requests/ghGraphql/typings/user';
+import { translateISOToLocale } from '~/api/typings/country';
 
 export interface GuessNationProps {
     locale: string;
     beInstance: AxiosInstanceForBe;
     githubInstance: AxiosInstanceForGithub;
-    userData: UserDetail;
+    userData: UserDataProps;
+}
+
+export interface UserDataProps {
+    followers: number
+    followings: number
+    login: string
 }
 
 // TODO: 创建一个任务队列，用于存储非必要任务，但是可以执行的。
@@ -27,8 +34,12 @@ export interface GuessNationProps {
  */
 export const guessRegion = async ({ locale, userData, beInstance, githubInstance }: GuessNationProps): Promise<NationData> => {
     const nationDataFromBe = await getUserNation(userData.login, beInstance);
-    if (nationDataFromBe) return nationDataFromBe;
-    // const { nationName, nationISO, nationLocale} = await guessRegionFromFollowers(userData, beInstance, githubInstance, locale);
-    // const [nationFromFollowings, confidenceFromFollowings] = await guessRegionFromFollowings(userData, beInstance, githubInstance, locale);
+    if (nationDataFromBe !== null ) return nationDataFromBe;
+    const dataFromFollowers = await guessRegionFromFollowers(userData, beInstance, githubInstance);
+    const dataFromFollowings = await guessRegionFromFollowings(userData, beInstance, githubInstance);
+    if (dataFromFollowers.nationName !== dataFromFollowings.nationName) {
+        return dataFromFollowers
+    }
+    return dataFromFollowers
     // return {nationISO: nationFromFollowers, nationName: nationFromFollowers, confidence: confidenceFromFollowers};
 }

@@ -3,15 +3,15 @@ import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 interface NationCardProps {
     nationISO: string
-    nationName: string
+    nationLocale: string
     warning?: string
 }
 
-const UserNation = ({ nationISO, nationName, warning }: NationCardProps) => {
+const UserNation = ({ nationISO, nationLocale: nationName, warning }: NationCardProps) => {
 
     return (
-        <CardWithNoShrink containerClass="flex-shrink-0 flex-grow-0 overflow-hidden p-0">
-            <span className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} h-full w-full ${nationISO !== "CN" ? "blur scale-95" : ""}`}></span>
+        <CardWithNoShrink containerClass="flex-shrink-0 flex-grow-0 overflow-hidden" containerClassDelete={["p-8"]}>
+            <span className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} p-0 h-full w-full ${nationISO !== "CN" ? "blur scale-95" : ""}`}></span>
             <div className={`h-full w-full flex items-center justify-center p-4 `} style={{ aspectRatio: "4/3" }}>
                 <div className="absolute w-6 h-6 top-3 right-3 bg-white/90 backdrop-blur-md rounded-full shadow-md">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
