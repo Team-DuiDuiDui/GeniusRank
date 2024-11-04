@@ -16,6 +16,7 @@ import UserNation from '~/components/userinfo/region';
 import { guessRegion } from '~/utils/region/main';
 import { useLocale } from 'remix-i18next/react';
 import { NationData } from '~/api/chat';
+import UserScoreDetail from '~/components/userinfo/detail/score';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -63,6 +64,7 @@ export default function User() {
                             <UserInfoDetail data={user} />
                             <UserNation nationISO={nationData.nationISO} nationLocale={t(`country.${nationData.nationISO}`)} message={`${nationData.message}\n${t("user.confidence")}: ${nationData.confidence}`} />
                         </div>
+                        <UserScoreDetail scores={data.scores} />
                         <UserReposDetail data={user} />
                         <UserReposContributeDetail data={user} />
                         <UserPullRequestsDetail data={user} />

@@ -6,6 +6,7 @@ import { getUserNation } from '~/api/region';
 
 export interface GuessNationProps {
     t: (key: string) => string;
+    t: (key: string) => string;
     locale: string;
     beInstance: AxiosInstanceForBe;
     githubInstance: AxiosInstanceForGithub;
@@ -28,7 +29,12 @@ export interface UserDataProps {
  * @param githubInstance 前端与 github 通信的 axios 实例
  * @returns 返回还没做完
  */
-export const guessRegion = async ({ t, userData, beInstance, githubInstance }: GuessNationProps): Promise<{
+export const guessRegion = async ({
+    t,
+    userData,
+    beInstance,
+    githubInstance,
+}: GuessNationProps): Promise<{
     nationISO: string;
     nationName: string;
     message: string;
@@ -37,13 +43,23 @@ export const guessRegion = async ({ t, userData, beInstance, githubInstance }: G
     // const nationDataFromBe = await getUserNation(userData.login, beInstance);
     // if (nationDataFromBe !== null ) return nationDataFromBe;
     const dataFromReadme = await guessRegionFromReadme(userData, beInstance, githubInstance);
-    if (dataFromReadme.nationISO) return {...dataFromReadme, message: t("user.info.from_readme"), confidence: 0.99};
+    if (dataFromReadme.nationISO) return { ...dataFromReadme, message: t('user.info.from_readme'), confidence: 0.99 };
     const dataFromFollowers = await guessRegionFromFollowers(userData, beInstance, githubInstance);
     const dataFromFollowings = await guessRegionFromFollowings(userData, beInstance, githubInstance);
     if (dataFromFollowings.nationISO === dataFromFollowers.nationISO) return {...dataFromFollowings, message: t("user.info.from_followers_and_followings"), confidence: (dataFromFollowers.confidence + dataFromFollowings.confidence) * 0.8};  
     else {
-        if (dataFromFollowers.confidence > dataFromFollowings.confidence) return {...dataFromFollowers, message: t("user.info.from_followers"), confidence: dataFromFollowers.confidence};
-        else return {...dataFromFollowings, message: t("user.info.from_followings"), confidence: dataFromFollowings.confidence};
-    };
+        if (dataFromFollowers.confidence > dataFromFollowings.confidence)
+            return {
+                ...dataFromFollowers,
+                message: t('user.info.from_followers'),
+                confidence: dataFromFollowers.confidence,
+            };
+        else
+            return {
+                ...dataFromFollowings,
+                message: t('user.info.from_followings'),
+                confidence: dataFromFollowings.confidence,
+            };
+    }
     // return {nationISO: nationFromFollowers, nationName: nationFromFollowers, confidence: confidenceFromFollowers};
-}
+};

@@ -7,7 +7,11 @@ import { useTranslation } from 'react-i18next';
 import { z, ZodError } from 'zod';
 import i18nServer from '~/modules/i18n.server';
 import { user } from '~/cookie';
-import { parseURLParamsToObject } from '~/utils/chore';
+// import { parseURLParamsToObject } from '~/utils/chore';
+import { handleBackendReq } from '~/utils/requests/request';
+import { OAuthLogin } from '~/api/typings/beRes';
+import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
+import handleErrorCode from '~/utils/handleErrorCode';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
@@ -61,25 +65,29 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                 },
             });
             //TODO 错误处理
-            const beLogin = await axios.post(
-                `${context.cloudflare.env.BASE_URL}/user/loginByOAuth`,
-                {
-                    githubUserId: userData.data.id,
-                    login: userData.data.login,
-                    accessToken: access_token,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
+            const beLogin = await handleBackendReq<OAuthLogin>(
+                () =>
+                    axios.post(
+                        `${context.cloudflare.env.BASE_URL}/user/loginByOAuth`,
+                        {
+                            githubUserId: userData.data.id,
+                            login: userData.data.login,
+                            accessToken: access_token,
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        }
+                    ),
+                (res) => res.data
             );
             cookie.userAvatar = userData.data.avatar_url;
             cookie.username = userData.data.name;
             cookie.userLogin = userData.data.login;
             cookie.userEmail = userData.data.email;
             cookie.access_token = access_token;
-            cookie.be_token = beLogin.data.data.token;
+            cookie.be_token = beLogin?.data.token;
             return redirect('/', {
                 headers: {
                     'Set-Cookie': await user.serialize(cookie, {
@@ -109,7 +117,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                 return json(
                     {
                         error: {
-                            message: t('oauth.err.network_error'),
+                            message: t('oauth.err.network_error_detail'),
                             title: t('oauth.err.network_error'),
                         },
                         title: `${t('oauth.err.error')} | Genius Rank`,
@@ -132,6 +140,17 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                     },
                     { status: 400 }
                 );
+            }
+            if (e instanceof BackEndError) {
+                return json({
+                    error: {
+                        message: t('oauth.err.backend_error'),
+                        title: handleErrorCode(e.response.data?.code ?? 'unknown', t),
+                    },
+                    title: `${t('oauth.err.error')} | Genius Rank`,
+                    description: t('user.description'),
+                    client_id: context.cloudflare.env.GITHUB_CLIENT_ID,
+                });
             }
             return json(
                 {
