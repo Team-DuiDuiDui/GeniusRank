@@ -68,6 +68,8 @@
             "userContributeRepos": "50 Popular Contributed Repos",
             "loading": "Loading user data...",
             "score": {
+                "ngrok_error": "Backend internal network tunneling status abnormal, please contact with the backend administrator",
+                "backend_error": "Backend internal error, please contact with the backend administrator",
                 "title": "Final Score (Roughly calculated)",
                 "commit_score": "Commit",
                 "repo_score": "Repositories",
@@ -89,13 +91,15 @@
             "err": {
                 "bad_verification_code": "Use a duplicate or invalid authorization code",
                 "bad_verification_code_title": "Bad verification code",
+                "backend_error": "Backend internal error, please contact with the backend administrator",
                 "network_error": "We are having trouble",
                 "invalid_scope_title": "Invalid scope",
                 "invalid_scope": "Please authorize email and basic user information (read:user,user:email), do not modify the URL of the authorization page",
                 "unknown_error": "Unknown Error",
                 "error": "OAuth Error",
                 "re-login": "Retry Login",
-                "back": "Back to Home"
+                "back": "Back to Home",
+                "network_error_detail": "Possible reasons: Backend internal network tunneling status abnormal, GitHub service abnormal, Remix server failed to connect to GitHub, please contact with the backend administrator"
             }
         },
         "auth": {

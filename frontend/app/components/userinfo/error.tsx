@@ -55,7 +55,7 @@ const ErrorNote: React.FC<ErrorProps> = ({ error, isBackendRequest = false, relo
                                     ? JSON.stringify(error.flatten().fieldErrors)
                                     : t('user.no_message')}
                             </p>
-                            <Button onClick={reload}>{t('user.err.reload')}</Button>
+                            {reload && <Button onClick={reload}>{t('user.err.reload')}</Button>}
                         </Popover.Dropdown>
                     </Popover>
                 </span>

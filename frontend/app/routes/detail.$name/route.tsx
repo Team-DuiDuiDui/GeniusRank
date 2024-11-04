@@ -16,7 +16,8 @@ import UserNation from '~/components/userinfo/region';
 import { guessRegion } from '~/utils/region/main';
 import { useLocale } from 'remix-i18next/react';
 import { NationData } from '~/api/chat';
-import { translateISOToLocale } from '~/api/typings/country';
+// import { translateISOToLocale } from '~/api/typings/country';
+import UserScoreDetail from '~/components/userinfo/detail/score';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -32,12 +33,19 @@ export default function User() {
     const beInstance = useAxiosInstanceForBe(data.beToken)();
     const githubInstance = useAxiosInstanceForGithub(data.githubToken)();
     const getUserRegion = async () => {
-        setNationData(await guessRegion({ locale, userData: {
-            followers: data.data.user.followers.totalCount, 
-            followings: data.data.user.following.totalCount,
-            login: data.data.user.login
-        }, beInstance, githubInstance }))
-    }
+        setNationData(
+            await guessRegion({
+                locale,
+                userData: {
+                    followers: data.data.user.followers.totalCount,
+                    followings: data.data.user.following.totalCount,
+                    login: data.data.user.login,
+                },
+                beInstance,
+                githubInstance,
+            })
+        );
+    };
     const { t } = useTranslation();
     const { user } = data.data;
     return (
@@ -61,8 +69,13 @@ export default function User() {
                     <UserBasic>
                         <div className="flex gap-4 w-full max-h-25">
                             <UserInfoDetail data={user} />
-                            <UserNation nationISO={nationData.nationISO} nationLocale={t(`country.${nationData.nationISO}`)} />
+                            <UserNation
+                                disable={false}
+                                nationISO={nationData.nationISO}
+                                nationLocale={t(`country.${nationData.nationISO}`)}
+                            />
                         </div>
+                        <UserScoreDetail scores={data.scores} />
                         <UserReposDetail data={user} />
                         <UserReposContributeDetail data={user} />
                         <UserPullRequestsDetail data={user} />

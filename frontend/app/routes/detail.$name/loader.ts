@@ -25,6 +25,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
 
             const { data } = await user.getData();
+            if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
             const nationData = await guessRegion({
                 locale,
                 userData: {
@@ -35,7 +36,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                 beInstance,
                 githubInstance,
             });
-            if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
+            const scores = await user.getUserScores();
             return json({
                 data,
                 title: `${params?.name ?? ''} | Genius Rank`,
@@ -43,6 +44,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                 beToken: cookie.be_token,
                 githubToken: cookie.access_token,
                 nationData,
+                scores,
             });
         } catch (e) {
             // eslint-disable-next-line import/no-named-as-default-member

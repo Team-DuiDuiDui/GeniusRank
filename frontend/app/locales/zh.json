@@ -86,6 +86,8 @@
         },
         "oauth": {
             "err": {
+                "ngrok_error": "后端内网穿透状态异常，请联系后端管理员",
+                "backend_error": "后端错误，请联系后端管理员",
                 "bad_verification_code": "使用重复或无效的授权码",
                 "bad_verification_code_title": "无效的授权码",
                 "network_error": "我们这边出了错",
@@ -94,7 +96,8 @@
                 "unknown_error": "未知错误",
                 "error": "授权出错",
                 "re-login": "重新登录",
-                "back": "返回首页"
+                "back": "返回首页",
+                "network_error_detail": "可能原因：后端 Ngrok 内网映射状态异常、GitHub 服务异常、服务端无法连接至 GitHub，请联系后端管理员"
             }
         },
         "auth": {

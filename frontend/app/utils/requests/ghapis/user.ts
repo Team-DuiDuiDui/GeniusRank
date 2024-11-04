@@ -6,6 +6,7 @@ import { handleBackendReq, handleClientGithubReq } from '../request';
 import { createInstanceForGithub } from '../instance';
 import { createInstanceForBe } from '~/api/instance';
 import { GithubScoreReqUnLogin } from '../../../api/typings/beReq';
+import { GithubScoreRes } from '~/api/typings/beRes';
 
 export class githubUser {
     public name: string;
