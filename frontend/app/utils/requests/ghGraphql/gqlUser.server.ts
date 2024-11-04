@@ -3,6 +3,7 @@ import { UserDetail, UserData } from './typings/user';
 import { createInstanceForGithub } from '../instance';
 import { handleBackendReq } from '../request';
 import { createInstanceForBe } from '~/api/instance';
+import { GithubScoreRes } from '~/api/typings/beRes';
 
 export class gqlUser {
     public name: string;
@@ -163,13 +164,14 @@ query($username:String!,$count:Int!){
 }`,
             variables: { username: this.name, count: count },
         });
-        this.dataDetail = res.data;
+        this.dataDetail = res.data.data.user;
         return res.data;
     }
 
     async getUserScores(): Promise<GithubScoreRes> {
+        console.log(this.dataDetail);
         const data = (await handleBackendReq<GithubScoreRes>(
-            () => this.beInstance.post(`/analyze/score/detailed `, this.dataDetail),
+            () => this.beInstance.post(`/analyze/score/detailed`, this.dataDetail),
             (res) => res.data
         ))!;
         return data;

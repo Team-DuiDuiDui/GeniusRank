@@ -46,6 +46,7 @@ export default function User() {
             })
         );
     };
+    console.log(data.scores);
     const { t } = useTranslation();
     const { user } = data.data;
     return (
