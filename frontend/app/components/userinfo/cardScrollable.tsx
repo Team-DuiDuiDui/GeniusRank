@@ -16,7 +16,7 @@ interface CardProps {
     reload: () => void;
 }
 
-const CardScrollable = ({ title, children, data, error, reload }: CardProps) => {
+const CardScrollable = ({ title, children, data, error, reload, isBackendRequest }: CardProps) => {
     const headerRef = useRef<HTMLHeadingElement>(null);
 
     const handleScroll = throttleWithDeepClone((event: React.UIEvent<HTMLDivElement>) => {
@@ -36,7 +36,7 @@ const CardScrollable = ({ title, children, data, error, reload }: CardProps) => 
                 {title}
                 <span className="font-normal ml-4 text-base">
                     {!data && !error && <Loader size={16} />}
-                    <ErrorNote error={error} reload={reload} />
+                    <ErrorNote error={error} reload={reload} isBackendRequest={isBackendRequest} />
                 </span>
             </h2>
             <div className="overflow-y-auto h-full flex-grow scrollbar" onScroll={handleScroll}>

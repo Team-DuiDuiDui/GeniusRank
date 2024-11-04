@@ -59,37 +59,51 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
         <>
             <Card title={t('user.score.title')} data={scores} error={error} reload={loadData} isBackendRequest>
                 <LoadingOverlay visible={!scores && !error} loaderProps={{ type: 'dots' }} />
-                {scores && !error && (
-                    <div className="flex flex-row items-center justify-between w-full">
-                        <div className="flex flex-col gap-8 text-center">
-                            <h3 className="text-xl font-bold">{t('user.score.score')}</h3>
-                            <p className="text-4xl font-bold">{scores.data.totalScore}</p>
-                        </div>
-                        <div className="flex flex-col gap-8 text-center">
-                            <h3 className="text-xl font-bold">{t('user.score.score_detail')}</h3>
-                            <BarChart
-                                h={180}
-                                w={500}
-                                series={[{ name: 'value', color: '#1e90ff' }]}
-                                data={parseData(scores, t)}
-                                withBarValueLabel
-                                dataKey="name"
-                            />
-                        </div>
-                        <div className="flex flex-col gap-8 text-center overflow-visible">
-                            <h3 className="text-xl font-bold">{t('user.score.score_proportion')}</h3>
-                            <PieChart
-                                data={parseData(scores, t, true)}
-                                withTooltip
-                                tooltipDataSource="segment"
-                                labelsType="percent"
-                                withLabels
-                                withLabelsLine
-                                labelsPosition="outside"
-                            />
-                        </div>
-                    </div>
-                )}
+                <div className="flex justify-center">
+                    {scores && !error && (
+                        <table className="w-5/6">
+                            <thead>
+                                <tr>
+                                    <th className="text-center text-xl font-bold">{t('user.score.score')}</th>
+                                    <th className="text-center text-xl font-bold">{t('user.score.score_detail')}</th>
+                                    <th className="text-center text-xl font-bold">
+                                        {t('user.score.score_proportion')}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="text-4xl font-bold text-center place-self-center">
+                                        {scores.data.totalScore}
+                                    </td>
+                                    <td>
+                                        <BarChart
+                                            className="place-self-center"
+                                            h={180}
+                                            w={400}
+                                            series={[{ name: 'value', color: '#1e90ff' }]}
+                                            data={parseData(scores, t)}
+                                            withBarValueLabel
+                                            dataKey="name"
+                                        />
+                                    </td>
+                                    <td>
+                                        <PieChart
+                                            className="place-self-center"
+                                            data={parseData(scores, t, true)}
+                                            withTooltip
+                                            tooltipDataSource="segment"
+                                            labelsType="percent"
+                                            withLabels
+                                            withLabelsLine
+                                            labelsPosition="outside"
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    )}
+                </div>
             </Card>
         </>
     );
