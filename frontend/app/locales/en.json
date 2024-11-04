@@ -29,6 +29,14 @@
                 "reloadFailed": "Reload failed",
                 "something_not_fetch": "Some data is not fetched, you can try to reload it yourself"
             },
+            "info": {
+                "from_readme": "From README",
+                "from_followers": "From early followers",
+                "from_followings": "From early followings",
+                "from_followers_and_followings": "From early followers and followings",
+                "different_from_location": "May be different from the current location in GitHub",
+                "confidence_low": "Confidence is low"
+            },
             "userRecentPrs": "Recent 80 Merged Pull Requests",
             "userRecentPrs_all": "Recent 80 Pull Requests",
             "userRecentIssues": "Recent 80 Issues",

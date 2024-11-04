@@ -11,10 +11,14 @@ import { UserDataProps } from "./main";
  * @returns 返回一个数组，第一个元素是国家，第二个元素是置信度
  */
 export const guessRegionFromFollowers = async (
-    userData: UserDataProps, 
-    beInstance: AxiosInstanceForBe, 
+    userData: UserDataProps,
+    beInstance: AxiosInstanceForBe,
     githubInstance: AxiosInstanceForGithub
-): Promise<NationData> => {
+): Promise<{
+    nationISO: string;
+    nationName: string;
+    confidence: number;
+}> => {
     interface Followers {
         login: string;
         name: string;
@@ -23,6 +27,11 @@ export const guessRegionFromFollowers = async (
         followers: {
             totalCount: number;
         };
+    }
+    const resultValue = {
+        nationISO: "",
+        nationName: "",
+        confidence: 0
     }
     const query = `
                 query($userName: String!) {
@@ -56,9 +65,9 @@ export const guessRegionFromFollowers = async (
     while (loopCount < 3) {
         loopCount++;
         const resultJSON = await syncChatForNationFromUserList(data.toString(), beInstance);
-        if (resultJSON.nationISO) return resultJSON;
+        if (resultJSON.nationISO) return {...resultJSON, confidence: data.length / (userData.followers > 80 ? 80 : userData.followers)};
     }
-    return { nationName: "", nationISO: "" }
+    return { nationName: "", nationISO: "", confidence: 0 }
 };
 
 /**
@@ -70,7 +79,11 @@ export const guessRegionFromFollowings = async (
     userData: UserDataProps,
     beInstance: AxiosInstanceForBe,
     githubInstance: AxiosInstanceForGithub,
-): Promise<NationData> => {
+): Promise<{
+    nationISO: string;
+    nationName: string;
+    confidence: number;
+}> => {
     interface Following {
         login: string;
         name: string;
@@ -121,39 +134,38 @@ export const guessRegionFromFollowings = async (
     while (loopCount < 3) {
         loopCount++;
         const resultJSON = await syncChatForNationFromUserList(data.toString(), beInstance);
-        if (resultJSON.nationISO) return resultJSON;
+        if (resultJSON.nationISO) return {...resultJSON, confidence: data.length / (userData.followings > 80 ? 80 : userData.followings)};
     }
-    return { nationName: "", nationISO: "" };
+    return { nationName: "", nationISO: "", confidence: 0 }
 };
 
 export const guessRegionFromReadme = async (
-    userData: UserDataProps, 
-    beInstance: AxiosInstanceForBe, 
-    githubInstance: AxiosInstanceForGithub, 
+    userData: UserDataProps,
+    beInstance: AxiosInstanceForBe,
+    githubInstance: AxiosInstanceForGithub,
 ): Promise<NationData> => {
     const branchQuery = `
     query($userName: String!) {
         user(login: $userName) {
             repository(name: $userName) {
-                object(expression: "master:README.md") {
-                    ... on Blob {
-                        text
+                    defaultBranchRef {
+                        name
                     }
                 }
             }
         }
-    }
     `;
     const variables = { userName: userData.login };
     const branchName = await handleClientGithubGraphQLReq<string | undefined>(
         { axiosInstance: githubInstance, query: branchQuery, variables },
-        async res => res.data.user?.repository?.refs?.edges[0]?.node?.name
+        async res => {
+            return res.data.data.user?.repository?.defaultBranchRef?.name}
     );
 
     if (!branchName) return { nationName: "", nationISO: "" };
 
     const readmeQuery = `
-        query($userName: String!, $branchName: String!) {
+        query($userName: String!) {
         user(login: $userName) {
             repository(name: $userName) {
                 object(expression: "${branchName}:README.md") {
@@ -163,11 +175,12 @@ export const guessRegionFromReadme = async (
                 }
             }
         }
-    }`
+    }
+        `
 
     const readme = await handleClientGithubGraphQLReq<string | undefined>(
         { axiosInstance: githubInstance, query: readmeQuery, variables },
-        async res => res.data.user?.repository?.object?.text
+        async res => res.data.data.user?.repository?.object?.text
     );
     if (!readme) return { nationName: "", nationISO: "" };
 

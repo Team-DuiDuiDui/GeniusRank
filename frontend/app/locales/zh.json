@@ -29,6 +29,12 @@
                 "reloadFailed": "重试失败",
                 "something_not_fetch": "部分数据加载失败，你仍然可以尝试重新加载"
             },
+            "info": {
+                "from_readme": "来自 README",
+                "from_followers_and_followings": "来自早期粉丝和关注判断而来",
+                "different_from_location": "可能与当前 GitHub 中的 location 不同",
+                "confidence_low": "置信度较低"
+            },
             "userRecentPrs": "最近 80 条已合并的 Pull Requests",
             "userRecentPrs_all": "最近 50 条 Pull Requests",
             "userRecentIssues": "最近 80 条 Issues",

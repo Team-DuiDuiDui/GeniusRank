@@ -24,6 +24,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                     { 
                         locale, 
                         userData: { 
+                            t,
                             followers: data.user.followers.totalCount, 
                             followings: data.user.following.totalCount, 
                             login: data.user.login 

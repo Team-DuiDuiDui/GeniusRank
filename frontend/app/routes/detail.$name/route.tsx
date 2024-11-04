@@ -16,7 +16,6 @@ import UserNation from '~/components/userinfo/region';
 import { guessRegion } from '~/utils/region/main';
 import { useLocale } from 'remix-i18next/react';
 import { NationData } from '~/api/chat';
-import { translateISOToLocale } from '~/api/typings/country';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -26,7 +25,7 @@ export { loader };
 
 export default function User() {
     const data = useLoaderData<typeof loader>();
-    const [nationData, setNationData] = useState<NationData>(data.nationData);
+    const [nationData, setNationData] = useState<{nationISO: string, nationName: string, message: string}>(data.nationData);
     const locale = useLocale();
     const navigation = useNavigation();
     const beInstance = useAxiosInstanceForBe(data.beToken)();
@@ -61,7 +60,7 @@ export default function User() {
                     <UserBasic>
                         <div className="flex gap-4 w-full max-h-25">
                             <UserInfoDetail data={user} />
-                            <UserNation nationISO={nationData.nationISO} nationLocale={t(`country.${nationData.nationISO}`)} />
+                            <UserNation nationISO={nationData.nationISO} nationLocale={t(`country.${nationData.nationISO}`)} message={nationData.message} />
                         </div>
                         <UserReposDetail data={user} />
                         <UserReposContributeDetail data={user} />
