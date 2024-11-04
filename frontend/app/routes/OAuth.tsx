@@ -58,11 +58,26 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                     'User-Agent': 'Team-Duiduidui: Genius Rank',
                 },
             });
+            //TODO 错误处理
+            const beLogin = await axios.post(
+                `${context.cloudflare.env.BASE_URL}/user/loginByOAuth`,
+                {
+                    githubUserId: userData.data.id,
+                    login: userData.data.login,
+                    accessToken: access_token,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
             cookie.userAvatar = userData.data.avatar_url;
             cookie.username = userData.data.name;
             cookie.userLogin = userData.data.login;
             cookie.userEmail = userData.data.email;
             cookie.access_token = access_token;
+            cookie.be_token = beLogin.data.data.token;
             return redirect('/', {
                 headers: {
                     'Set-Cookie': await user.serialize(cookie, {

@@ -1,13 +1,12 @@
 import { json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
 import axios from 'axios';
-import { useLocale } from 'remix-i18next/react';
 import { createInstanceForBe } from '~/api/instance';
 import { getBeToken } from '~/api/user';
 import i18nServer from '~/modules/i18n.server';
 import { user } from '~/user-cookie';
 import { gqlUser } from '~/utils/requests/ghGraphql/gqlUser.server';
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
     const cookie = (await user.parse(cookieHeader)) || {};
     if (!cookie.access_token) return redirect('/unauthorized');
@@ -25,7 +24,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
                 beToken: await getBeToken(
                     { id: data.user.databaseId!.toString(), login: data.user.login },
                     cookie.access_token,
-                    createInstanceForBe()
+                    createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token)
                 ),
             });
         } catch (e) {
