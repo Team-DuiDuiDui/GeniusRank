@@ -9,13 +9,8 @@ import UserReposContributeDetail from '~/components/userinfo/detail/reposContrib
 import UserReposDetail from '~/components/userinfo/detail/repos';
 import { Loader, LoadingOverlay } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import useAxiosInstanceForBe from '~/hooks/useAxiosInstanceForBe';
-import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
-import { useState } from 'react';
 import UserNation from '~/components/userinfo/region';
-import { guessRegion } from '~/utils/region/main';
-import { useLocale } from 'remix-i18next/react';
-import { NationData } from '~/api/chat';
+
 import UserScoreDetail from '~/components/userinfo/detail/score';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -26,21 +21,9 @@ export { loader };
 
 export default function User() {
     const data = useLoaderData<typeof loader>();
-    const [nationData, setNationData] = useState<{nationISO: string, nationName: string, message: string, confidence: number}>(data.nationData);
-    const locale = useLocale();
     const navigation = useNavigation();
-    const beInstance = useAxiosInstanceForBe(data.beToken)();
-    const githubInstance = useAxiosInstanceForGithub(data.githubToken)();
     const { t } = useTranslation();
     const { user } = data.data;
-
-    const getUserRegion = async () => {
-        setNationData(await guessRegion({t, locale, userData: {
-            followers: data.data.user.followers.totalCount, 
-            followings: data.data.user.following.totalCount,
-            login: data.data.user.login
-        }, beInstance, githubInstance }))
-    }
     return (
         <>
             <div className="flex items-center justify-center w-full">
@@ -62,7 +45,13 @@ export default function User() {
                     <UserBasic>
                         <div className="flex gap-4 w-full max-h-25">
                             <UserInfoDetail data={user} />
-                            <UserNation nationISO={nationData.nationISO} nationLocale={t(`country.${nationData.nationISO}`)} message={`${nationData.message}\n${t("user.confidence")}: ${nationData.confidence}`} />
+                            <UserNation
+                                nationISO={data.nationData.nationISO}
+                                nationLocale={t(`country.${data.nationData.nationISO}`)}
+                                message={`${data.nationData.message}\n${t('user.confidence')}: ${
+                                    data.nationData.confidence
+                                }`}
+                            />
                         </div>
                         <UserScoreDetail scores={data.scores} />
                         <UserReposDetail data={user} />

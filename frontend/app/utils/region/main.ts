@@ -1,11 +1,8 @@
 import { AxiosInstanceForGithub } from '../requests/instance';
 import { AxiosInstanceForBe } from '~/api/instance';
-import { NationData } from '~/api/chat';
 import { guessRegionFromFollowers, guessRegionFromFollowings, guessRegionFromReadme } from './nation';
-import { getUserNation } from '~/api/region';
 
 export interface GuessNationProps {
-    t: (key: string) => string;
     t: (key: string) => string;
     locale: string;
     beInstance: AxiosInstanceForBe;
@@ -14,9 +11,10 @@ export interface GuessNationProps {
 }
 
 export interface UserDataProps {
-    followers: number
-    followings: number
-    login: string
+    t: (key: string) => string;
+    followers: number;
+    followings: number;
+    login: string;
 }
 
 // TODO: 创建一个任务队列，用于存储非必要任务，但是可以执行的。
@@ -46,7 +44,12 @@ export const guessRegion = async ({
     if (dataFromReadme.nationISO) return { ...dataFromReadme, message: t('user.info.from_readme'), confidence: 0.99 };
     const dataFromFollowers = await guessRegionFromFollowers(userData, beInstance, githubInstance);
     const dataFromFollowings = await guessRegionFromFollowings(userData, beInstance, githubInstance);
-    if (dataFromFollowings.nationISO === dataFromFollowers.nationISO) return {...dataFromFollowings, message: t("user.info.from_followers_and_followings"), confidence: (dataFromFollowers.confidence + dataFromFollowings.confidence) * 0.8};  
+    if (dataFromFollowings.nationISO === dataFromFollowers.nationISO)
+        return {
+            ...dataFromFollowings,
+            message: t('user.info.from_followers_and_followings'),
+            confidence: (dataFromFollowers.confidence + dataFromFollowings.confidence) * 0.8,
+        };
     else {
         if (dataFromFollowers.confidence > dataFromFollowings.confidence)
             return {
