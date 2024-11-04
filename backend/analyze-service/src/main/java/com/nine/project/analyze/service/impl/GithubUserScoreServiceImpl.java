@@ -4,9 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.nine.project.analyze.dao.entity.GithubUserDeveloperDO;
 import com.nine.project.analyze.dao.entity.GithubUserScoreDO;
-import com.nine.project.analyze.dao.mapper.GithubUserDevelopMapper;
 import com.nine.project.analyze.dao.mapper.GithubUserScoreMapper;
 import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
@@ -20,14 +18,12 @@ import com.nine.project.analyze.service.GithubUserScoreService;
 import com.nine.project.analyze.toolkit.CacheUtil;
 import com.nine.project.analyze.toolkit.GithubDetailedScoreCalculator;
 import com.nine.project.analyze.toolkit.GithubUserScoreCalculator;
-import com.nine.project.analyze.toolkit.LanguageFrequencyCounter;
 import com.nine.project.framework.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -84,6 +80,8 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         // 使用 RocketMQ 异步持久化用户分数和开发者领域
         saveScoreAndTypeProducer.sendMessage(new SaveScoreAndTypeEvent(requestParams, scores));
 
+        // 封装并返回分数
+        scores.setUpdateTime(Instant.now().getEpochSecond());
         return scores;
     }
 
@@ -95,6 +93,8 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         // 使用 RocketMQ 异步持久化用户分数和开发者领域
         saveDetailedScoreAndTypeProducer.sendMessage(new SaveDetailedScoreAndTypeEvent(requestParams, scores));
 
+        // 封装并返回分数
+        scores.setUpdateTime(Instant.now().getEpochSecond());
         return scores;
     }
 

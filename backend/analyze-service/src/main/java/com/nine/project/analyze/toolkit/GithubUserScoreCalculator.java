@@ -31,6 +31,9 @@ public class GithubUserScoreCalculator {
         if(githubUserScoreReqDTO.getRepos().size() > 3) {
             double repoScore = calculateRepoScore(new ArrayList<>(githubUserScoreReqDTO.getRepos().subList(0, 3)));
             repoScoreDecimal = BigDecimal.valueOf(repoScore).setScale(2, RoundingMode.HALF_UP);
+        } else{
+            double repoScore = calculateRepoScore(githubUserScoreReqDTO.getRepos());
+            repoScoreDecimal = BigDecimal.valueOf(repoScore).setScale(2, RoundingMode.HALF_UP);
         }
 
         // 计算拉取请求得分并保留两位小数

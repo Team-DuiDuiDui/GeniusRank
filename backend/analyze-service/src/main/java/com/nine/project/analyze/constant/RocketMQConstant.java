@@ -23,10 +23,10 @@ public final class RocketMQConstant {
     /**
      * 开发者领域服务 Tag Key
      */
-    public static final String DETAILED_TYPE_TAG = "common-message_develop_type_tag";
+    public static final String TYPE_TAG = "common-message_develop_type_tag";
 
     /**
      * 开发者领域服务 Tag Key2
      */
-    public static final String DETAILED_DEVELOP_TYPE_TAG = "common-message_detail_develop_type_tag";
+    public static final String DETAIL_TYPE_TAG = "common-message_detail_develop_type_tag";
 }

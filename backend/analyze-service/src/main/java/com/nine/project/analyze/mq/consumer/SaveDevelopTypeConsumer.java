@@ -40,7 +40,7 @@ import static com.nine.project.framework.errorcode.BaseErrorCode.MESSAGE_QUEUE_E
 @RequiredArgsConstructor
 @RocketMQMessageListener(
         topic = RocketMQConstant.TOPIC_KEY,
-        selectorExpression = RocketMQConstant.DETAILED_TYPE_TAG,
+        selectorExpression = RocketMQConstant.TYPE_TAG,
         consumerGroup = RocketMQConstant.CONSUMER_TYPE_GROUP
 )
 public class SaveDevelopTypeConsumer implements RocketMQListener<GeneralMessageEvent> {

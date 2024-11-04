@@ -26,7 +26,7 @@ public class SaveDetailedScoreAndTypeProducer {
     private final RocketMQTemplate rocketMQTemplate;
 
     /**
-     * 发送邮箱验证码信息
+     * 持久化分数和开发者领域生产者
      *
      * @param messageSendEvent 普通消息发送事件，自定义对象，最终都会序列化为字符串
      */
@@ -35,7 +35,7 @@ public class SaveDetailedScoreAndTypeProducer {
         try {
             String keys = UUID.randomUUID().toString();
             StringBuilder destinationBuilder = StrUtil.builder().append(RocketMQConstant.TOPIC_KEY);
-            destinationBuilder.append(":").append(RocketMQConstant.DETAILED_DEVELOP_TYPE_TAG);
+            destinationBuilder.append(":").append(RocketMQConstant.DETAIL_TYPE_TAG);
 
             // 封装一下发送的信息
             String jsonString = JSON.toJSONString(messageSendEvent);
@@ -44,7 +44,7 @@ public class SaveDetailedScoreAndTypeProducer {
             Message<?> message = MessageBuilder
                     .withPayload(generalMessageEvent)
                     .setHeader(MessageConst.PROPERTY_KEYS, keys)
-                    .setHeader(MessageConst.PROPERTY_TAGS, RocketMQConstant.DETAILED_DEVELOP_TYPE_TAG)
+                    .setHeader(MessageConst.PROPERTY_TAGS, RocketMQConstant.DETAIL_TYPE_TAG)
                     .build();
             sendResult = rocketMQTemplate.syncSend(
                     destinationBuilder.toString(),
