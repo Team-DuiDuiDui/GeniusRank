@@ -36,9 +36,9 @@ const UserNation: React.FC<NationCardProps> = ({
 
         if (noData)
             return (
-                <Tooltip label={t('user.reload_nation')}>
-                    <fetcher.Form method="post">
-                        <input type="hidden" name="userData" value={JSON.stringify(userData)} />
+                <fetcher.Form method="post">
+                    <input type="hidden" name="userData" value={JSON.stringify(userData)} />
+                    <Tooltip label={t('user.reload_nation')}>
                         <button
                             className="absolute w-6 h-6 top-3 right-3 bg-white/90 backdrop-blur-md rounded-full shadow-md flex justify-center items-center"
                             name="reload-nation"
@@ -46,8 +46,8 @@ const UserNation: React.FC<NationCardProps> = ({
                             type="submit">
                             <ReloadOutlined className="text-red-500" />
                         </button>
-                    </fetcher.Form>
-                </Tooltip>
+                    </Tooltip>
+                </fetcher.Form>
             );
 
         return (
