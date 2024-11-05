@@ -10,10 +10,10 @@ import com.nine.project.analyze.dao.entity.GithubUserDeveloperDO;
 import com.nine.project.analyze.dao.entity.GithubUserScoreDO;
 import com.nine.project.analyze.dao.mapper.GithubUserDevelopMapper;
 import com.nine.project.analyze.dao.mapper.GithubUserScoreMapper;
-import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
+import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 import com.nine.project.analyze.mq.event.GeneralMessageEvent;
-import com.nine.project.analyze.mq.event.SaveDetailedScoreAndTypeEvent;
+import com.nine.project.analyze.mq.event.SaveScoreAndTypeEvent;
 import com.nine.project.analyze.toolkit.CacheUtil;
 import com.nine.project.analyze.toolkit.LanguageFrequencyCounter;
 import com.nine.project.framework.exception.RemoteException;
@@ -27,7 +27,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 import static com.nine.project.analyze.constant.RedisCacheConstant.USER_SCORE_EXPIRE_TIME;
 import static com.nine.project.analyze.constant.RedisCacheConstant.USER_SCORE_KEY;
@@ -41,10 +40,10 @@ import static com.nine.project.framework.errorcode.BaseErrorCode.MESSAGE_QUEUE_E
 @RequiredArgsConstructor
 @RocketMQMessageListener(
         topic = RocketMQConstant.TOPIC_KEY,
-        selectorExpression = RocketMQConstant.DETAIL_TYPE_TAG,
-        consumerGroup = RocketMQConstant.CONSUMER_DETAIL_TYPE_GROUP
+        selectorExpression = RocketMQConstant.TYPE_TAG,
+        consumerGroup = RocketMQConstant.CONSUMER_TYPE_GROUP
 )
-public class SaveDetailedDevelopTypeConsumer implements RocketMQListener<GeneralMessageEvent> {
+public class SaveDevelopTypeConsumer implements RocketMQListener<GeneralMessageEvent> {
 
     private final GithubUserScoreMapper githubUserScoreMapper;
     private final GithubUserDevelopMapper githubUserDevelopMapper;
@@ -53,20 +52,20 @@ public class SaveDetailedDevelopTypeConsumer implements RocketMQListener<General
     @Override
     public void onMessage(GeneralMessageEvent message) {
         String jsonBody = message.getBody();
-        SaveDetailedScoreAndTypeEvent saveDetailedScoreAndTypeEvent;
+        SaveScoreAndTypeEvent saveScoreAndTypeEvent;
 
         // 尝试解析 JSON
         try {
-            saveDetailedScoreAndTypeEvent = JSON.to(SaveDetailedScoreAndTypeEvent.class, jsonBody);
+            saveScoreAndTypeEvent = JSON.to(SaveScoreAndTypeEvent.class, jsonBody);
         } catch (JSONException e) {
             log.error("出现恶意请求，消息队列解析失败，消息内容：{}", jsonBody);
             return;
         }
 
         // 解析出开发者领域对象
-        GithubDetailedScoreReqDTO requestParams = saveDetailedScoreAndTypeEvent.getRequestParams();
-        GithubUserScoreRespDTO scores = saveDetailedScoreAndTypeEvent.getScores();
-        String login = requestParams.getLogin();
+        GithubUserScoreReqDTO requestParams = saveScoreAndTypeEvent.getRequestParams();
+        GithubUserScoreRespDTO scores = saveScoreAndTypeEvent.getScores();
+        String login = requestParams.getUser().getLogin();
 
         // 持久化分数和开发者领域逻辑
         try {
@@ -83,19 +82,14 @@ public class SaveDetailedDevelopTypeConsumer implements RocketMQListener<General
             saveOrUpdate(existsInDatabase, userScoreDO, queryWrapper, USER_SCORE_KEY + login);
 
             // 封装持久化数据开发者领域逻辑
-            githubUserDevelopMapper.delete(Wrappers.lambdaQuery(GithubUserDeveloperDO.class).eq(GithubUserDeveloperDO::getLogin, requestParams.getLogin()));
+            githubUserDevelopMapper.delete(Wrappers.lambdaQuery(GithubUserDeveloperDO.class).eq(GithubUserDeveloperDO::getLogin, login));
 
-            List<GithubDetailedScoreReqDTO.Repository> repositoryList = Stream.concat(
-                    requestParams.getRepositories().getNodes().stream(),
-                    requestParams.getRepositoriesContributedTo().getNodes().stream()
-            ).toList();
-
-            List<String> topThreeLanguages = LanguageFrequencyCounter.getDetailedTopThreeLanguages(repositoryList);
+            List<String> topThreeLanguages = LanguageFrequencyCounter.getTopThreeLanguages(requestParams.getRepos());
             List<GithubUserDeveloperDO> developerDOList = new ArrayList<>();
 
             for (String language : topThreeLanguages) {
                 GithubUserDeveloperDO developerDO = new GithubUserDeveloperDO();
-                developerDO.setLogin(requestParams.getLogin());
+                developerDO.setLogin(login);
                 developerDO.setDeveloper_type(language);
                 developerDOList.add(developerDO);
             }

@@ -97,6 +97,8 @@ public class GithubDetailedScoreCalculator {
         double userRepositoriesScore = 0;
         if (repositories.getNodes().size() > 3) {
             userRepositoriesScore = calculateRepoScore(17, new ArrayList<>(repositories.getNodes().subList(0, 3)));
+        } else {
+            userRepositoriesScore = calculateRepoScore(17, repositories.getNodes());
         }
 
         // repositoriesContributedTo 的得分计算
@@ -106,6 +108,8 @@ public class GithubDetailedScoreCalculator {
         double userRepositoriesContributedToScore = 0;
         if (repositoriesContributedTo.getNodes().size() > 3) {
             userRepositoriesContributedToScore = calculateRepoScore(25, new ArrayList<>(repositoriesContributedTo.getNodes().subList(0, 3)));
+        } else {
+            userRepositoriesContributedToScore = calculateRepoScore(25, repositoriesContributedTo.getNodes());
         }
 
         return repositoriesScore + userRepositoriesScore + repositoriesContributedToScore + userRepositoriesContributedToScore;

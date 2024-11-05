@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -68,6 +70,9 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
 
         GithubUserCountryGuessDO githubUserCountryGuessDTO = BeanUtil.copyProperties(requestParams, GithubUserCountryGuessDO.class);
 
+        // 存入国家到 redis
+        cacheUtil.registerNation(requestParams.getCountry_name());
+
         // 使用查询计数来判断记录是否存在
         LambdaQueryWrapper<GithubUserCountryGuessDO> queryWrapper = Wrappers.lambdaQuery(GithubUserCountryGuessDO.class)
                 .eq(GithubUserCountryGuessDO::getLogin, requestParams.getLogin())
@@ -88,5 +93,10 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
 
         // 存入缓存
         return cacheUtil.send2CacheHash(countryKey, respDTO, USER_COUNTRY_EXPIRE_TIME, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public List<String> getExistNation() {
+        return new ArrayList<>(cacheUtil.getCountries());
     }
 }

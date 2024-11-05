@@ -68,9 +68,9 @@ public class LanguageFrequencyCounter {
 
         // 遍历repos列表，统计每种语言的出现次数
         for (GithubDetailedScoreReqDTO.Repository repo : repos) {
-            String language = repo.getPrimaryLanguage().getName();
-            if (language != null) {
-                languageFrequency.put(language, languageFrequency.getOrDefault(language, 0) + 1);
+            if (repo.getPrimaryLanguage() != null){
+                String language = repo.getPrimaryLanguage().getName();
+                if (language != null)  languageFrequency.put(language, languageFrequency.getOrDefault(language, 0) + 1);
             }
         }
 

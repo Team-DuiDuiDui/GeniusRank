@@ -25,8 +25,14 @@ public class GithubUserScoreCalculator {
 
         // 计算仓库得分并保留两位小数
         BigDecimal repoScoreDecimal = BigDecimal.valueOf(0);
+
+        // 先根据 stars 进行排序一层
+        githubUserScoreReqDTO.getRepos().sort((r1, r2) -> r2.getStars() - r1.getStars());
         if(githubUserScoreReqDTO.getRepos().size() > 3) {
             double repoScore = calculateRepoScore(new ArrayList<>(githubUserScoreReqDTO.getRepos().subList(0, 3)));
+            repoScoreDecimal = BigDecimal.valueOf(repoScore).setScale(2, RoundingMode.HALF_UP);
+        } else{
+            double repoScore = calculateRepoScore(githubUserScoreReqDTO.getRepos());
             repoScoreDecimal = BigDecimal.valueOf(repoScore).setScale(2, RoundingMode.HALF_UP);
         }
 

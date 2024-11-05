@@ -25,6 +25,16 @@ public class GithubUserCountryRespDTO {
     private String country_name;
 
     /**
+     * 猜测信息
+     */
+    private String message;
+
+    /**
+     * 可信度
+     */
+    private Double confidence;
+
+    /**
      * 更新时间
      */
     private long updateTime;

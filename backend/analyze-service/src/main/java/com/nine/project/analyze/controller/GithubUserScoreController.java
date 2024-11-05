@@ -2,12 +2,15 @@ package com.nine.project.analyze.controller;
 
 import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
+import com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 import com.nine.project.analyze.service.GithubUserScoreService;
 import com.nine.project.framework.result.Result;
 import com.nine.project.framework.web.Results;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 用户分数接口控制层
@@ -42,5 +45,15 @@ public class GithubUserScoreController {
     @PostMapping("/api/analyze/score/detailed")
     public Result<GithubUserScoreRespDTO> addUserDetailedScore(@RequestBody GithubDetailedScoreReqDTO requestParams) {
         return Results.success(githubUserScoreService.generateScoreDetail(requestParams));
+    }
+
+    /**
+     * 获取用户分数接口排行榜（无需登录）
+     */
+    @GetMapping("/api/analyze/score/rank")
+    public Result<List<GithubUserScoreRankRespDTO>> getUserScoreRank(@RequestParam(defaultValue = "10") Integer size,
+                                                                     @RequestParam(required = false) String type,
+                                                                     @RequestParam(required = false) String nation) {
+        return Results.success(githubUserScoreService.getGithubUserScoreRank(size, type, nation));
     }
 }
