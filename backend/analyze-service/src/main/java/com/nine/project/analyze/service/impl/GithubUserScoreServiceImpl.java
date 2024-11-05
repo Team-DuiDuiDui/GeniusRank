@@ -33,7 +33,7 @@ import static com.nine.project.framework.errorcode.BaseErrorCode.USER_SCORE_NOT_
 
 
 /**
- * 用户所在国家/地区猜测服务接口实现层
+ * Github 用户分数计算服务接口实现层
  */
 @Slf4j
 @Service
@@ -99,8 +99,21 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     }
 
     @Override
-    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, String type, String nation) {
-
-        return baseMapper.findTopScoresByCountryName(size, nation);
+    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, String nation, String type) {
+        List<GithubUserScoreRankRespDTO> scoreRankList;
+        if (type!= null) {
+            scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, type);
+            if (scoreRankList == null) {
+                scoreRankList = baseMapper.findTopScoresByCountryNameAndType(size, nation, type);
+                cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, type);
+            }
+        } else {
+            scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, null);
+            if (scoreRankList == null) {
+                scoreRankList = baseMapper.findTopScoresByCountryName(size, nation);
+                cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, null);
+            }
+        }
+        return scoreRankList;
     }
 }

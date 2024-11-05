@@ -52,8 +52,8 @@ public class GithubUserScoreController {
      */
     @GetMapping("/api/analyze/score/rank")
     public Result<List<GithubUserScoreRankRespDTO>> getUserScoreRank(@RequestParam(defaultValue = "10") Integer size,
-                                                                     @RequestParam(required = false) String type,
-                                                                     @RequestParam(required = false) String nation) {
-        return Results.success(githubUserScoreService.getGithubUserScoreRank(size, type, nation));
+                                                                     @RequestParam(required = false) String nation,
+                                                                     @RequestParam(required = false) String type) {
+        return Results.success(githubUserScoreService.getGithubUserScoreRank(size, nation, type));
     }
 }

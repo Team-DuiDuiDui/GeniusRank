@@ -38,4 +38,42 @@
         ORDER BY totalScore DESC
         LIMIT #{size}
     </select>
+
+    <select id="findTopScoresByCountryNameAndType" resultType="com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO">
+        SELECT temp.login,
+        temp.country_iso,
+        temp.country_name,
+        temp.totalScore,
+        temp.userScore,
+        temp.reposScore,
+        temp.prsScore,
+        temp.issuesScore
+        FROM (
+        SELECT gus.login,
+        gusc.country_iso,
+        gusc.country_name,
+        gus.total_score AS totalScore,
+        gus.user_score AS userScore,
+        gus.repos_score AS reposScore,
+        gus.prs_score AS prsScore,
+        gus.issues_score AS issuesScore
+        FROM t_github_user_score gus
+        LEFT JOIN t_github_user_country_guess gusc ON gus.login = gusc.login
+        <where>
+            <!-- 如果 nation 不为 null，则添加国家名称的条件 -->
+            <if test="nation!= null">
+                AND gusc.country_name = #{nation}
+            </if>
+        </where>
+        ) temp
+        LEFT JOIN t_github_user_developer_type gudt ON temp.login = gudt.login
+        <where>
+            <!-- 如果 developerType 不为 null，则添加开发者领域的条件 -->
+            <if test="type!= null">
+                AND gudt.developer_type = #{type}
+            </if>
+        </where>
+        ORDER BY temp.totalScore DESC
+        LIMIT #{size}
+    </select>
 </mapper>
