@@ -110,7 +110,7 @@ export const interpolateColors = (colors: RGB[], percentage: number): RGB => {
 
 export const interpolateColorsOfScore = (score: number): RGB => {
     const colors = hexColors.map(hexToRgb)
-    return interpolateColors(colors, score)
+    return interpolateColors(colors, score/100)
 }
 
 export const hexToRgb = (hex: string): RGB => {
