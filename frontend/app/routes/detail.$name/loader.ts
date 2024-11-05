@@ -6,7 +6,6 @@ import { lng, user } from '~/cookie';
 import { guessRegion } from '~/utils/region/main';
 import { gqlUser } from '~/utils/requests/ghGraphql/gqlUser.server';
 import { createInstanceForGithub } from '~/utils/requests/instance';
-import { interpolateColorsOfScore } from '~/utils/chore';
 
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
@@ -31,7 +30,12 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             const { data } = await user.getData();
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
-            let nationData = {}
+            let nationData = {
+                nationISO: '',
+                nationName: '',
+                message: t('user.info.from_followers_and_followings'),
+                confidence: 0.5,
+            };
             try {
                 nationData = await guessRegion({
                     t,
@@ -51,7 +55,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                     nationName: '',
                     message: t('user.info.from_followers_and_followings'),
                     confidence: 0.5,
-                }
+                };
             }
 
             const scores = await user.getUserScores();
