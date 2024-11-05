@@ -6,17 +6,9 @@ import { Table, Tooltip } from '@mantine/core';
 import { CommonLink } from '../../infoLink';
 import { IssueDetail, UserDetail } from '~/utils/requests/ghGraphql/typings/user';
 import CardWithScrollableTableDetail from './cardWithScrollableTable';
-import {
-    CheckCircleOutlined,
-    ClockCircleOutlined,
-    CommentOutlined,
-    EyeOutlined,
-    ForkOutlined,
-    IssuesCloseOutlined,
-    PullRequestOutlined,
-    StarOutlined,
-} from '@ant-design/icons';
+import { CheckCircleOutlined, ClockCircleOutlined, ForkOutlined } from '@ant-design/icons';
 import { TFunction } from 'i18next';
+import RepoInfo from './repoinfo';
 
 interface userIssuesProps {
     data: UserDetail;
@@ -33,7 +25,7 @@ const UserIssuesDetail: React.FC<userIssuesProps> = ({ data }) => {
     }, [titleRef]);
     return (
         <CardWithScrollableTableDetail
-            title={t('user.userRecentIssues')}
+            title={t('user.userRecentIssues_50')}
             columns={[
                 t('user.number'),
                 t('user.issue_title'),
@@ -47,6 +39,7 @@ const UserIssuesDetail: React.FC<userIssuesProps> = ({ data }) => {
             data={issueNode}
             dataCount={data?.issues.totalCount ?? 0}
             renderRow={(item: IssueDetail, index: number) => <Issue item={item} index={index + 1} key={index} t={t} />}
+            reverse
         />
     );
 };
@@ -60,17 +53,16 @@ interface issueProps {
 }
 
 const Issue: React.FC<issueProps> = ({ item, index: key, t }) => {
-    const { stargazerCount, forkCount, issues, pullRequests, discussions, watchers } = item.repository;
     return (
         <Table.Tr>
-            <Table.Td>{key}</Table.Td>
-            <Table.Td>
+            <Table.Td className="w-[2%]">{key}</Table.Td>
+            <Table.Td className="w-[20%]">
                 <CommonLink href={item.url}>
                     {item.title}
                     <span className="text-xs text-gray-500">#{item.number}</span>
                 </CommonLink>
             </Table.Td>
-            <Table.Td>
+            <Table.Td className="w-[5%]">
                 <Tooltip label={item.state}>
                     <span
                         className={[item.state === 'OPEN' ? 'text-green-500' : 'text-purple-500', 'text-xl'].join(' ')}>
@@ -78,9 +70,9 @@ const Issue: React.FC<issueProps> = ({ item, index: key, t }) => {
                     </span>
                 </Tooltip>
             </Table.Td>
-            <Table.Td>{item.comments.totalCount}</Table.Td>
-            <Table.Td>{dayjs(item.updatedAt).format('YYYY/MM/DD HH:mm:ss UTCZ')}</Table.Td>
-            <Table.Td>
+            <Table.Td className="w-[2%]">{item.comments.totalCount}</Table.Td>
+            <Table.Td className="w-[20%]">{dayjs(item.updatedAt).format('YYYY/MM/DD HH:mm')}</Table.Td>
+            <Table.Td className="w-[20%]">
                 <CommonLink href={item.repository.url}>
                     {item.repository.url
                         .match(/\/github.com\/([^/]+\/[^/]+)/i)
@@ -95,51 +87,8 @@ const Issue: React.FC<issueProps> = ({ item, index: key, t }) => {
                     )}
                 </CommonLink>
             </Table.Td>
-            <Table.Td>{item.repository.primaryLanguage?.name ?? t('user.unknown')}</Table.Td>
-            <Table.Td className="flex flex-wrap gap-2 w-52 cursor-default">
-                <Tooltip label="stars">
-                    <span>
-                        <StarOutlined className="mr-1" />
-                        {stargazerCount}
-                    </span>
-                </Tooltip>
-                <Tooltip label="fork">
-                    <span>
-                        <ForkOutlined className="mr-1" />
-                        {forkCount}
-                    </span>
-                </Tooltip>
-                <Tooltip label="watchers">
-                    <span>
-                        <EyeOutlined className="mr-1" />
-                        {watchers.totalCount}
-                    </span>
-                </Tooltip>
-                {issues && (
-                    <Tooltip label="Issues">
-                        <span>
-                            <IssuesCloseOutlined className="mr-1" />
-                            {issues.totalCount}
-                        </span>
-                    </Tooltip>
-                )}
-                {pullRequests && (
-                    <Tooltip label="Pull Requests">
-                        <span>
-                            <PullRequestOutlined className="mr-1" />
-                            {pullRequests.totalCount}
-                        </span>
-                    </Tooltip>
-                )}
-                {discussions && (
-                    <Tooltip label="Discussions">
-                        <span>
-                            <CommentOutlined className="mr-1" />
-                            {discussions.totalCount}
-                        </span>
-                    </Tooltip>
-                )}
-            </Table.Td>
+            <Table.Td className="w-[10%]">{item.repository.primaryLanguage?.name ?? t('user.unknown')}</Table.Td>
+            <RepoInfo repository={item.repository} />
         </Table.Tr>
     );
 };

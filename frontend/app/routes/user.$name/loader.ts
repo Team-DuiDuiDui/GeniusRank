@@ -2,7 +2,7 @@ import { json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
 import axios from 'axios';
 import { ZodError } from 'zod';
 import i18nServer from '~/modules/i18n.server';
-import { user } from '~/user-cookie';
+import { user } from '~/cookie';
 import { GithubUserServerOnly } from '~/utils/requests/ghapis/user.server';
 
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
@@ -15,6 +15,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
         try {
             const data = (await user.getUser())!;
             return json({
+                baseUrl: context.cloudflare.env.BASE_URL,
                 userData: data,
                 title: `${params?.name ?? ''} | Genius Rank`,
                 description: t('user.description'),

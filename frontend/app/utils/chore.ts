@@ -63,3 +63,17 @@ export const throttleWithDeepClone = (func: Function, delay: number) => {
     };
 };
 
+export const parseStringToJSONfy = (str: string): string => {
+    const [start, end] = [str.indexOf('{'), str.lastIndexOf('}')];
+    return str.slice(start, end + 1);
+}
+
+export const parseURLParamsToObject = (url: string): Record<string, string> => {
+    const params = url.split('?')[1];
+    if (!params) return {};
+    return params.split('&').reduce((acc, cur) => {
+        const [key, value] = cur.split('=');
+        acc[key] = value;
+        return acc;
+    }, {} as Record<string, string>);
+}

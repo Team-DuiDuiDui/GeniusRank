@@ -101,7 +101,7 @@ const Issue: React.FC<issueProps> = ({ item, index: key }) => {
                     <span className="text-xs text-gray-500">#{item.number}</span>
                 </CommonLink>
             </Table.Td>
-            <Table.Td>{dayjs(item.updated_at).format('YYYY/MM/DD HH:mm:ss UTCZ')}</Table.Td>
+            <Table.Td>{dayjs(item.updated_at).format('YYYY/MM/DD HH:mm')}</Table.Td>
         </Table.Tr>
     );
 };

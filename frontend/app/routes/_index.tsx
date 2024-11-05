@@ -1,5 +1,6 @@
+import { Button } from '@mantine/core';
 import { json, LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
-import SearchCurtain from '~/components/searchCurtain';
+import { useTranslation } from 'react-i18next';
 import i18nServer from '~/modules/i18n.server';
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
@@ -11,13 +12,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
+    const { t } = useTranslation();
     return (
         <>
-            <SearchCurtain />
-            <div className="flex h-screen items-center justify-center overflow-auto">
-                <div className="flex flex-row items-center gap-16 w-full justify-center">
-                    <div className="w-1/2"></div>
-                </div>
+            <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2">
+                <h1 className="text-6xl font-bold">Genius Rank</h1>
+                <h2 className="text-2xl">{t('description')}</h2>
+                <Button variant="default" size="md" className="mt-4">
+                    {t('lookup_docs')}
+                </Button>
             </div>
         </>
     );

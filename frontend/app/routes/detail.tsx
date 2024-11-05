@@ -2,11 +2,8 @@ import autoAnimate from '@formkit/auto-animate';
 import { json, LoaderFunctionArgs, redirect, MetaFunction } from '@remix-run/cloudflare';
 import { Outlet, useLocation } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import Search from '~/components/search';
 import i18nServer from '~/modules/i18n.server';
-import { user } from '~/user-cookie';
-import githubCat from '~/assets/github.svg';
+import { user } from '~/cookie';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
@@ -28,7 +25,6 @@ export async function action({ request }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-    const { t } = useTranslation();
     const { pathname } = useLocation();
     const parentRef = useRef(null);
     useEffect(() => {
@@ -36,16 +32,7 @@ export default function Index() {
     }, [parentRef, pathname]);
     return (
         <>
-            <div
-                className={`flex h-screen flex-col ${
-                    pathname === '/user' || pathname === '/user/' ? 'justify-center' : ''
-                } items-center gap-14`}
-                ref={parentRef}>
-                <div className="flex flex-row items-center gap-16 w-full justify-center">
-                    <div className="w-3/5 lg:w-1/3 pt-9">
-                        <Search logo={githubCat} placeholder={t('search.placeholder')} />
-                    </div>
-                </div>
+            <div className="flex h-screen flex-col items-center gap-14" ref={parentRef}>
                 <Outlet />
             </div>
         </>

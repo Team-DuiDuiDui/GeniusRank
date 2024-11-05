@@ -4,13 +4,15 @@ import { Button, Popover } from '@mantine/core';
 import axios, { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 import { ZodError } from 'zod';
+import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
 
 interface ErrorProps {
     error: AxiosError | ZodError | unknown | null;
     reload?: () => void;
+    isBackendRequest?: boolean;
 }
 
-const ErrorNote: React.FC<ErrorProps> = ({ error, reload }) => {
+const ErrorNote: React.FC<ErrorProps> = ({ error, isBackendRequest = false, reload }) => {
     const { t } = useTranslation();
     return (
         <>
@@ -36,6 +38,8 @@ const ErrorNote: React.FC<ErrorProps> = ({ error, reload }) => {
                                         : error.status === 422
                                         ? t('user.err.may_hide')
                                         : t('user.no_message')
+                                    : error instanceof BackEndError
+                                    ? error.error
                                     : t('user.no_message')}
                             </p>
                             <p className="text-xs self-start">
@@ -45,12 +49,13 @@ const ErrorNote: React.FC<ErrorProps> = ({ error, reload }) => {
                             <p className="text-xs self-start">
                                 <span className="font-bold">{t('user.err.may_help')}</span>
                                 {axios.isAxiosError(error)
-                                    ? (error.response?.data as { message?: string }).message ?? t('user.no_message')
+                                    ? (error.response?.data as { message?: string })?.message ??
+                                      ((isBackendRequest && t('user.err.ngrok_error')) || t('user.no_message'))
                                     : error instanceof ZodError
                                     ? JSON.stringify(error.flatten().fieldErrors)
                                     : t('user.no_message')}
                             </p>
-                            <Button onClick={reload}>{t('user.err.reload')}</Button>
+                            {reload && <Button onClick={reload}>{t('user.err.reload')}</Button>}
                         </Popover.Dropdown>
                     </Popover>
                 </span>

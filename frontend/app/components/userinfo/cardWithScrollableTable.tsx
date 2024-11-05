@@ -15,6 +15,7 @@ interface DataTableProps<T> {
     renderRow: (item: T, index: number) => ReactNode;
     error: null | AxiosError | ZodError | unknown;
     reload: () => void;
+    reverse?: boolean;
 }
 
 const CardWithScrollableTable = <T,>({
@@ -25,10 +26,11 @@ const CardWithScrollableTable = <T,>({
     renderRow,
     error,
     reload,
+    reverse = false,
 }: DataTableProps<T>) => {
-    const titleRef = useRef(null);
     const headerRef = useRef<HTMLHeadingElement>(null);
     const { t } = useTranslation();
+    const finalData = data && (reverse ? [...data].reverse() : data);
 
     const handleScroll = throttleWithDeepClone((event: React.UIEvent<HTMLDivElement>) => {
         if (event.currentTarget.scrollTop > 0) {
@@ -45,7 +47,7 @@ const CardWithScrollableTable = <T,>({
         <CardWithScroll maxHeight="max-h-96">
             <h2 className="text-lg font-bold top-0 my-4 bg-white py-1 transition-all flex-shrink" ref={headerRef}>
                 {title}
-                <span className="font-normal ml-4 text-base" ref={titleRef}>
+                <span className="font-normal ml-4 text-base">
                     {!data && !error ? <Loader size={16} /> : `${data?.length ?? '_'} / ${dataCount ?? '_'}`}
                     <ErrorNote error={error} reload={reload} />
                 </span>
@@ -62,11 +64,11 @@ const CardWithScrollableTable = <T,>({
                         </Table.Thead>
                         <Table.Tbody>
                             {data.length > 0 ? (
-                                data.map((item, index) => renderRow(item, index))
+                                finalData!.map((item, index) => renderRow(item, index))
                             ) : (
-                                <tr className="text-center text-gray-500">
-                                    <td colSpan={columns.length}>{t('user.no_data')}</td>
-                                </tr>
+                                <Table.Tr className="text-center text-gray-500">
+                                    <Table.Td colSpan={columns.length}>{t('user.no_data')}</Table.Td>
+                                </Table.Tr>
                             )}
                         </Table.Tbody>
                     </Table>

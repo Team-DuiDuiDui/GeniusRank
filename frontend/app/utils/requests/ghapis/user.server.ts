@@ -20,7 +20,7 @@ export class GithubUserServerOnly extends GithubUser {
      * @param token GITHUB_ACCESS_TOKEN
      */
     constructor(name: string, token: string) {
-        super(name, undefined, undefined, true);
+        super(name, undefined, undefined);
         this.token = token;
         this.axiosInstanceWithServerToken = createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank');
     }
@@ -34,7 +34,7 @@ export class GithubUserServerOnly extends GithubUser {
         return await handleServerReq<User>(
             () => this.axiosInstanceWithServerToken.get(`/users/${this.name}`),
             (res) => userSchema.parseAsync(res.data),
-            (error)=> {
+            (error) => {
                 if (axios.isAxiosError(error)) {
                     if (error.response?.status === 404) {
                         return false;

@@ -12,7 +12,7 @@ interface userInfo {
 const UserInfoDetail: React.FC<userInfo> = ({ data }) => {
     const { t } = useTranslation();
     return (
-        <CardWithNoShrink>
+        <CardWithNoShrink containerClass="flex-grow flex-shrink max-h-25 min-h-fit">
             <div className="flex flex-row items-center justify-left gap-8 w-full h-full">
                 <Avatar src={data.avatarUrl} style={{ width: '6rem', height: '6rem' }} />
                 <div className="flex flex-col h-full justify-between">

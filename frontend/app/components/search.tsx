@@ -37,7 +37,11 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用�
                     {...props}
                     // type="text"
                     name="name"
-                    defaultValue={pathname.includes('user/') ? decodeURIComponent(pathname.split('/')[2]) : ''}
+                    defaultValue={
+                        pathname.includes('user/') || pathname.includes('detail/')
+                            ? decodeURIComponent(pathname.split('/')[2])
+                            : ''
+                    }
                     placeholder={placeholder}
                     className={`py-3 ${logo ? 'pl-1' : 'pl-5'} focus-visible:outline-none w-full pr-0`}
                 />

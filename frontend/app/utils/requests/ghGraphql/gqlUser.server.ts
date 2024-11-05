@@ -1,19 +1,24 @@
 import { AxiosInstance } from 'axios';
 import { UserDetail, UserData } from './typings/user';
 import { createInstanceForGithub } from '../instance';
+import { handleBackendReq } from '../request';
+import { createInstanceForBe } from '~/api/instance';
+import { GithubScoreRes } from '~/api/typings/beRes';
 
 export class gqlUser {
     public name: string;
-    private axiosInstance: AxiosInstance;
+    private githubInstance: AxiosInstance;
+    private beInstance: AxiosInstance;
     public dataDetail: UserDetail | null = null;
 
-    constructor(name: string, token: string) {
+    constructor(name: string, token: string, baseUrl: string, beToken: string) {
         this.name = name;
-        this.axiosInstance = createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank', undefined, 'Bearer');
+        this.githubInstance = createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank', 'Bearer');
+        this.beInstance = createInstanceForBe(baseUrl, beToken);
     }
 
-    async getData(count: number = 40): Promise<UserData> {
-        const res = await this.axiosInstance.post('/graphql', {
+    async getData(count: number = 50): Promise<UserData> {
+        const res = await this.githubInstance.post('/graphql', {
             query: `
 query($username:String!,$count:Int!){
     user(login: $username){
@@ -34,7 +39,7 @@ query($username:String!,$count:Int!){
         lifetimeReceivedSponsorshipValues{
             totalCount
         }
-        pullRequests(last:$count){
+        pullRequests(last:$count,orderBy:{direction:ASC,field:UPDATED_AT}){
             nodes{
                 title
                 url
@@ -71,7 +76,7 @@ query($username:String!,$count:Int!){
             }
             totalCount
         }
-        issues(last:$count){
+        issues(last:$count,orderBy:{direction:ASC,field:UPDATED_AT}){
             nodes{
                 title
                 url
@@ -107,7 +112,7 @@ query($username:String!,$count:Int!){
             }
             totalCount
         }
-        repositories(last:$count,orderBy:{direction:ASC,field:STARGAZERS}){
+        repositories(last:$count,orderBy:{direction:ASC,field:STARGAZERS},ownerAffiliations:[OWNER]){
             nodes{
                 url
                 isFork
@@ -159,7 +164,16 @@ query($username:String!,$count:Int!){
 }`,
             variables: { username: this.name, count: count },
         });
-        this.dataDetail = res.data;
+        this.dataDetail = res.data.data.user;
         return res.data;
+    }
+
+    async getUserScores(): Promise<GithubScoreRes> {
+        console.log(this.dataDetail);
+        const data = (await handleBackendReq<GithubScoreRes>(
+            () => this.beInstance.post(`/analyze/score/detailed`, this.dataDetail),
+            (res) => res.data
+        ))!;
+        return data;
     }
 }

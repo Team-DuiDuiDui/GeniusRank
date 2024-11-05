@@ -5068,6 +5068,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"flag-icons@npm:^7.2.3":
+  version: 7.2.3
+  resolution: "flag-icons@npm:7.2.3"
+  checksum: 10c0/370fa3a2ccef574e9d2b17cad513157414bf4de1e8ca4b9f3f1465dddbcd80fce7eea021795f77cafc0814d3909ea273d70b85b0bb82ef7f5efadd77e773e8e5
+  languageName: node
+  linkType: hard
+
 "flat-cache@npm:^3.0.4":
   version: 3.2.0
   resolution: "flat-cache@npm:3.2.0"
@@ -8739,9 +8746,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"recharts@npm:2":
-  version: 2.13.0
-  resolution: "recharts@npm:2.13.0"
+"recharts@npm:^2.13.3":
+  version: 2.13.3
+  resolution: "recharts@npm:2.13.3"
   dependencies:
     clsx: "npm:^2.0.0"
     eventemitter3: "npm:^4.0.1"
@@ -8754,7 +8761,7 @@ __metadata:
   peerDependencies:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/40fd9dbacdbb8f0828029f0daaca8a846eada7e017bfdae2790910b38a8ee0f3a9e235f84927d0554da0f0ed46f1f167e84b59f6dc5831113dac0a7763f7d057
+  checksum: 10c0/67c516cd142da0e5968cf9b723c1bc08c2324ff4c41952d623dfce06e8c13751e1ef885b2e39aaeb5e32595566c8d91633328850adee70ad53bc8685adff456d
   languageName: node
   linkType: hard
 
@@ -9146,6 +9153,7 @@ __metadata:
     eslint-plugin-jsx-a11y: "npm:^6.7.1"
     eslint-plugin-react: "npm:^7.33.2"
     eslint-plugin-react-hooks: "npm:^4.6.0"
+    flag-icons: "npm:^7.2.3"
     i18next: "npm:^23.16.2"
     i18next-browser-languagedetector: "npm:^8.0.0"
     i18next-fetch-backend: "npm:^6.0.0"
@@ -9160,7 +9168,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-hot-toast: "npm:^2.4.1"
     react-i18next: "npm:^15.1.0"
-    recharts: "npm:2"
+    recharts: "npm:^2.13.3"
     remix-i18next: "npm:^6.4.1"
     remix-utils: "npm:^7.7.0"
     tailwindcss: "npm:^3.4.4"
