@@ -21,6 +21,8 @@ public class GithubUserScoreReqDTO {
     @Data
     public static class User {
         private String login; // Github 用户名
+        private String name; // Github 昵称
+        private String avatar_url; // Github 头像
         private int followers; // 跟随者数量
         private int public_repos; // 公开仓库数量
         private int commit_amount; // 提交数量

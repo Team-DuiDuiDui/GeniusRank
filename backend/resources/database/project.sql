@@ -22,6 +22,9 @@ CREATE TABLE t_user (
 CREATE TABLE t_github_user_score (
    id             BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,
    login VARCHAR(256) NOT NULL COMMENT 'GitHub 用户名',
+   name VARCHAR(256) NULL COMMENT 'GitHub 用户昵称',
+   avatar_url VARCHAR(256) NULL COMMENT 'GitHub 用户头像',
+
    total_score    DOUBLE NOT NULL COMMENT '算法所得分数',
    user_score     DOUBLE NULL COMMENT 'Github 用户基础数据得分',
    repos_score    DOUBLE NULL COMMENT 'Github 用户仓库数据得分',

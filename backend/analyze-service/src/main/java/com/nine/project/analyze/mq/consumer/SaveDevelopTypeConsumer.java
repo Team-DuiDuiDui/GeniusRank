@@ -79,6 +79,8 @@ public class SaveDevelopTypeConsumer implements RocketMQListener<GeneralMessageE
             // 封装持久化数据分数逻辑
             GithubUserScoreDO userScoreDO = BeanUtil.copyProperties(scores, GithubUserScoreDO.class);
             userScoreDO.setLogin(login);
+            userScoreDO.setName(requestParams.getUser().getName());
+            userScoreDO.setAvatarUrl(requestParams.getUser().getAvatar_url());
             saveOrUpdate(existsInDatabase, userScoreDO, queryWrapper, USER_SCORE_KEY + login);
 
             // 封装持久化数据开发者领域逻辑
@@ -123,6 +125,8 @@ public class SaveDevelopTypeConsumer implements RocketMQListener<GeneralMessageE
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
         respDTO.setUpdateTime(Instant.now().getEpochSecond());
+        respDTO.setName(userScoreDO.getName());
+        respDTO.setAvatarUrl(userScoreDO.getAvatarUrl());
 
         // 存入缓存
         cacheUtil.send2CacheHash(cacheKey, respDTO, USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);

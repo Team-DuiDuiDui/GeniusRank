@@ -16,6 +16,16 @@ public class GithubUserScoreRankRespDTO {
     private String login;
 
     /**
+     * 昵称
+     */
+    private String name;
+
+    /**
+     * 头像
+     */
+    private String avatar_url;
+
+    /**
      * 用户所在国家/地区 iso 代码
      */
     private String country_iso;

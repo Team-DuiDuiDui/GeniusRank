@@ -14,6 +14,14 @@ public class GithubDetailedScoreReqDTO {
      */
     private String login;
     /**
+     * 昵称
+     */
+    private String name;
+    /**
+     * 头像
+     */
+    private String avatarUrl;
+    /**
      * 关注者信息对象
      */
     private Followers followers;

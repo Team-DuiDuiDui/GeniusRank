@@ -81,6 +81,8 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         saveScoreAndTypeProducer.sendMessage(new SaveScoreAndTypeEvent(requestParams, scores));
 
         // 封装并返回分数
+        scores.setName(requestParams.getUser().getName());
+        scores.setAvatarUrl(requestParams.getUser().getAvatar_url());
         scores.setUpdateTime(Instant.now().getEpochSecond());
         return scores;
     }
@@ -94,6 +96,8 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         saveDetailedScoreAndTypeProducer.sendMessage(new SaveDetailedScoreAndTypeEvent(requestParams, scores));
 
         // 封装并返回分数
+        scores.setName(requestParams.getName());
+        scores.setAvatarUrl(requestParams.getAvatarUrl());
         scores.setUpdateTime(Instant.now().getEpochSecond());
         return scores;
     }

@@ -20,6 +20,8 @@
 <mapper namespace="com.nine.project.analyze.dao.mapper.GithubUserScoreMapper">
     <select id="findTopScoresByCountryName" resultType="com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO">
         SELECT gus.login,
+        gus.name,
+        gus.avatar_url As avatarUrl,
         gusc.country_iso,
         gusc.country_name,
         gus.total_score AS totalScore,
@@ -41,6 +43,8 @@
 
     <select id="findTopScoresByCountryNameAndType" resultType="com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO">
         SELECT temp.login,
+               temp.name,
+               temp.avatarUrl,
         temp.country_iso,
         temp.country_name,
         temp.totalScore,
@@ -52,6 +56,8 @@
         SELECT gus.login,
         gusc.country_iso,
         gusc.country_name,
+        gus.name,
+        gus.avatar_url As avatarUrl,
         gus.total_score AS totalScore,
         gus.user_score AS userScore,
         gus.repos_score AS reposScore,
