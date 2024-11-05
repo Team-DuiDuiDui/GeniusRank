@@ -41,7 +41,6 @@ export const createInstanceForGithub = (
     ua?: string,
     token_type: 'Bearer' | 'token' = 'token'
 ): AxiosInstanceForGithub => {
-    console.log(ua);
     const instance = axios.create({
         baseURL: 'https://api.github.com',
         headers: {

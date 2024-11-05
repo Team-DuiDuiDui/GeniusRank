@@ -171,7 +171,6 @@ query($username:String!,$count:Int!){
     }
 
     async getUserScores(): Promise<GithubScoreRes> {
-        console.log(this.dataDetail);
         const data = (await handleBackendReq<GithubScoreRes>(
             () => this.beInstance.post(`/analyze/score/detailed`, this.dataDetail),
             (res) => res.data

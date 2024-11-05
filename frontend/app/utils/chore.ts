@@ -91,23 +91,26 @@ interface RGB {
 }
 
 export const interpolateColors = (colors: RGB[], percentage: number): RGB => {
-    const n = colors.length
-    const index = Math.floor(percentage * (n - 1))
-    const t = (percentage * (n - 1)) - index
+    percentage = Math.max(0, Math.min(1, percentage));
 
-    const color1 = colors[index]
-    const color2 = colors[Math.min(index + 1, n - 1)]
+    const n = colors.length;
+    const scaledPercentage = percentage * (n - 1);
+    const index = Math.floor(scaledPercentage);
+    const t = scaledPercentage - index;
 
-    const r = Math.round(color1.r + (color2.r - color1.r) * t)
-    const g = Math.round(color1.g + (color2.g - color1.g) * t)
-    const b = Math.round(color1.b + (color2.b - color1.b) * t)
+    const color1 = colors[index];
+    const color2 = colors[Math.min(index + 1, n - 1)];
 
-    return { r, g, b }
+    const r = Math.round(color1.r + (color2.r - color1.r) * t);
+    const g = Math.round(color1.g + (color2.g - color1.g) * t);
+    const b = Math.round(color1.b + (color2.b - color1.b) * t);
+
+    return { r, g, b };
 }
 
 export const interpolateColorsOfScore = (score: number): RGB => {
     const colors = hexColors.map(hexToRgb)
-    return interpolateColors(colors, score)
+    return interpolateColors(colors, score/100)
 }
 
 export const hexToRgb = (hex: string): RGB => {
