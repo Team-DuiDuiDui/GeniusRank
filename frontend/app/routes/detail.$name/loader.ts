@@ -15,17 +15,21 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const t = await i18nServer.getFixedT(request);
     if (params.name) {
         try {
+            const githubInstance = createInstanceForGithub(
+                cookie.access_token,
+                'Team-Duiduidui: Genius Rank',
+                'Bearer'
+            );
             const user = new gqlUser(
                 params.name,
                 cookie.access_token,
                 context.cloudflare.env.BASE_URL,
-                cookie.be_token
+                cookie.be_token,
+                githubInstance
             );
-            const githubInstance = createInstanceForGithub(cookie.access_token);
-            const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
-
             const { data } = await user.getData();
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
+            const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
             const nationData = await guessRegion({
                 t,
                 locale,
@@ -51,6 +55,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             });
         } catch (e) {
             // eslint-disable-next-line import/no-named-as-default-member
+            console.log(e);
             if (axios.isAxiosError(e)) {
                 if (e.status === 404) throw new Response(t('user.err.not_found'), { status: 404 });
                 if (e.status === 403) {
