@@ -6,6 +6,7 @@ import { lng, user } from '~/cookie';
 import { guessRegion } from '~/utils/region/main';
 import { gqlUser } from '~/utils/requests/ghGraphql/gqlUser.server';
 import { createInstanceForGithub } from '~/utils/requests/instance';
+import { interpolateColorsOfScore } from '~/utils/chore';
 
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
@@ -42,7 +43,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                 beInstance,
                 githubInstance,
             });
-            console.log(nationData);
+            console.log(interpolateColorsOfScore(50));
             const scores = await user.getUserScores();
             return json({
                 data,
