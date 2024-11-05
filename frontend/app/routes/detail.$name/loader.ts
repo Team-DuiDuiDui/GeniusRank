@@ -32,13 +32,11 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
             let nationData = {
                 nationISO: '',
-                nationName: '',
                 message: t('user.info.from_followers_and_followings'),
                 confidence: 0.5,
             };
             try {
                 nationData = await guessRegion({
-                    t,
                     locale,
                     userData: {
                         t,
@@ -49,17 +47,16 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                     beInstance,
                     githubInstance,
                 });
+                nationData = { ...nationData, confidence: parseFloat(nationData.confidence.toFixed(2)), message: t(nationData.message) };
             } catch (e) {
                 nationData = {
                     nationISO: '',
-                    nationName: '',
                     message: t('user.info.from_followers_and_followings'),
-                    confidence: 0.5,
+                    confidence: 0,
                 };
             }
 
             const scores = await user.getUserScores();
-            console.log('sdfu');
             return json({
                 data,
                 title: `${params?.name ?? ''} | Genius Rank`,
