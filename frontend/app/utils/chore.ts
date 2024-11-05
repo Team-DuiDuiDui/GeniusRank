@@ -109,7 +109,15 @@ export const interpolateColors = (colors: RGB[], percentage: number): RGB => {
 export const interpolateColorsOfScore = (score: number): RGB => {
     const colors = hexColors.map(hexToRgb)
     return interpolateColors(colors, score/100)
-    return interpolateColors(colors, score/100)
+}
+
+export const interpolateColorsOfIcon = (confidence: number): string => {
+    const colors = ["#ef4444", "#222"].map(hexToRgb)
+    return RGBToHex(interpolateColors(colors, confidence)) 
+}
+
+export const RGBToHex = ({r, g, b}: RGB): string => {
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
 }
 
 export const hexToRgb = (hex: string): RGB => {

@@ -6,13 +6,20 @@ import {
     guessRegionFromGLM,
     guessRegionFromReadme,
 } from './nation';
+import { getUserNation, updateUserNation } from '~/api/region';
 
 export interface GuessNationProps {
-    t: (key: string) => string;
     locale: string;
     beInstance: AxiosInstanceForBe;
     githubInstance: AxiosInstanceForGithub;
     userData: UserDataProps;
+}
+
+interface NationData {
+    nationISO: string;
+    confidence: number;
+    login: string;
+    message: string;
 }
 
 export interface UserDataProps {
@@ -20,6 +27,28 @@ export interface UserDataProps {
     followers: number;
     followings: number;
     login: string;
+}
+
+const checkAndUpdateBeData = (newData: NationData, beData: NationData | null, beInstance: AxiosInstanceForBe): NationData => {
+    if (!beData) {
+        updateUserNation(newData, beInstance);
+        console.log("后端没有数据")
+        return newData
+    };
+    if (beData.nationISO !== newData.nationISO) {
+        if (beData.confidence > 0.5) {
+        updateUserNation({...beData, confidence: beData.confidence * 0.7}, beInstance);
+        console.log("后端数据不够烂")
+        return newData;
+        }
+        updateUserNation(newData, beInstance);
+        console.log("新数据更好")
+        return newData;
+    }
+    console.log("后端数据更好")
+    const result = { ...beData, confidence: Math.max(beData.confidence * 1.3, 0.99) }
+    updateUserNation(result, beInstance);
+    return result;
 }
 
 // TODO: 创建一个任务队列，用于存储非必要任务，但是可以执行的。
@@ -33,54 +62,34 @@ export interface UserDataProps {
  * @returns 返回还没做完
  */
 export const guessRegion = async ({
-    t,
     userData,
     beInstance,
     githubInstance,
-}: GuessNationProps): Promise<{
-    nationISO: string;
-    nationName: string;
-    message: string;
-    confidence: number;
-    login: string;
-}> => {
+}: GuessNationProps): Promise<NationData> => {
     // throw new Error('Not implemented');
-    // const nationDataFromBe = await getUserNation(userData.login, beInstance);
-    // if (nationDataFromBe !== null ) return nationDataFromBe;
-    let dataFromGLM = null;
-    console.log(userData);
+    const dataFromBe = await getUserNation(userData.login, beInstance);
+    if (dataFromBe?.confidence === 1) {
+        console.log("共识")
+        return dataFromBe
+    };
     if (userData.followers > 50000) {
-        dataFromGLM = await guessRegionFromGLM(userData.login, beInstance);
-        if (dataFromGLM?.nationISO)
-            return { ...dataFromGLM, message: t('user.info.from_glm'), confidence: 0.7, login: userData.login };
+        const dataFromGLM = await guessRegionFromGLM(userData.login, beInstance);
+        if (dataFromGLM?.nationISO) return checkAndUpdateBeData(dataFromGLM, dataFromBe, beInstance);
     }
     const dataFromReadme = await guessRegionFromReadme(userData, beInstance, githubInstance);
-    if (dataFromReadme.nationISO)
-        return { ...dataFromReadme, message: t('user.info.from_readme'), confidence: 0.99, login: userData.login };
+    if (dataFromReadme.nationISO) return checkAndUpdateBeData(dataFromReadme, dataFromBe, beInstance);
+
     const dataFromFollowers = await guessRegionFromFollowers(userData, beInstance, githubInstance);
+    if (dataFromFollowers.nationISO) return checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
+
     const dataFromFollowings = await guessRegionFromFollowings(userData, beInstance, githubInstance);
-    if (dataFromFollowings.nationISO === dataFromFollowers.nationISO)
-        return {
-            ...dataFromFollowings,
-            message: t('user.info.from_followers_and_followings'),
-            confidence: (dataFromFollowers.confidence + dataFromFollowings.confidence) * 0.8,
-            login: userData.login,
-        };
-    else {
-        if (dataFromFollowers.confidence > dataFromFollowings.confidence)
-            return {
-                ...dataFromFollowers,
-                message: t('user.info.from_followers'),
-                confidence: dataFromFollowers.confidence,
-                login: userData.login,
-            };
-        else
-            return {
-                ...dataFromFollowings,
-                message: t('user.info.from_followings'),
-                confidence: dataFromFollowings.confidence,
-                login: userData.login,
-            };
+    if (dataFromFollowings.nationISO) return checkAndUpdateBeData(dataFromFollowings, dataFromBe, beInstance);
+
+    return {
+        nationISO: '',
+        confidence: 0,
+        login: userData.login,
+        message: 'user.info.from_followers_and_followings',
     }
-    // return {nationISO: nationFromFollowers, nationName: nationFromFollowers, confidence: confidenceFromFollowers};
 };
+

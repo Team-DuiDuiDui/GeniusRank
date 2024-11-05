@@ -17,7 +17,7 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = ({ userInfo, score }) => {
-    const { r, g, b } = interpolateColorsOfScore(score.userScore);
+    const { r, g, b } = interpolateColorsOfScore(score.totalScore);
     const { t } = useTranslation();
 
     return (

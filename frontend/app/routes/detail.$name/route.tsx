@@ -48,11 +48,15 @@ export default function User() {
                                 userData={{ followers: user.followers, following: user.following, login: user.login }}
                                 nationISO={(isStillHim && fetcher.data?.nationISO) || data.nationData.nationISO}
                                 nationLocale={t(
-                                    `country.${(isStillHim && fetcher.data?.nationISO) ?? data.nationData.nationISO}`
+                                    `country.${(isStillHim && fetcher.data?.nationISO) || data.nationData.nationISO}`
                                 )}
-                                message={`${(isStillHim && fetcher.data?.message) ?? data.nationData.message}\n${t(
-                                    'user.confidence'
-                                )}: ${(isStillHim && fetcher.data?.confidence) ?? data.nationData.confidence}`}
+                                confidence={(isStillHim && fetcher.data?.confidence) || data.nationData.confidence}
+                                message={
+                                <div className="flex flex-col items-center justify-center">
+                                    <span>{(isStillHim && fetcher.data?.message) || data.nationData.message}</span>
+                                    <span>{t("user.confidence")}: {(isStillHim && fetcher.data?.confidence) || data.nationData.confidence}</span>
+                                </div>
+                                }
                             />
                         </div>
                         <UserScoreDetail scores={data.scores} />
@@ -109,7 +113,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
         const userData = JSON.parse(stringUserData) as Pick<UserDetail, 'followers' | 'following' | 'login'>;
         try {
             const nationData = await guessRegion({
-                t,
                 locale,
                 userData: {
                     t,
@@ -120,7 +123,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
                 beInstance,
                 githubInstance,
             });
-            return json({ ...nationData, donotLoad: true });
+            return json({ ...nationData, message: t(nationData.message), donotLoad: true });
         } catch (e) {
             const nationData = {
                 nationISO: '',
