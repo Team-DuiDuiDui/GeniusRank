@@ -75,7 +75,7 @@ export const UserScoreCharts: React.FC<{ scores: GithubScoreRes; t: TFunction<'t
     t,
 }) => {
     const data = useMemo(() => {
-        return parseData(scores, t);
+        return parseScoreData(scores, t);
     }, [scores, t]);
     return (
         <div className="flex flex-row items-stretch justify-around w-full">
@@ -103,7 +103,7 @@ export const UserScoreCharts: React.FC<{ scores: GithubScoreRes; t: TFunction<'t
                 <PieChart
                     w={260}
                     className="m-auto"
-                    data={parseData(scores, t, true)}
+                    data={parseScoreData(scores, t, true)}
                     withTooltip
                     tooltipDataSource="segment"
                     labelsType="percent"
@@ -128,7 +128,11 @@ export const UserScoreCharts: React.FC<{ scores: GithubScoreRes; t: TFunction<'t
     );
 };
 
-const parseData = (res: GithubScoreRes, t: TFunction<'translation', undefined>, ignoreZero: boolean = false) => {
+export const parseScoreData = (
+    res: GithubScoreRes,
+    t: TFunction<'translation', undefined>,
+    ignoreZero: boolean = false
+) => {
     const { data } = res;
     const scores = [
         { name: t('user.score.commit_score'), value: data.userScore, color: '#1e90ff' },

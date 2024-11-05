@@ -60,7 +60,7 @@ export default function User() {
 
     return (
         <>
-            <div className="flex items-center justify-center w-full">
+            <div className="flex items-center justify-center w-full mt-16">
                 <div className="flex flex-row items-center gap-16 w-full h-full justify-center relative">
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}
@@ -76,6 +76,7 @@ export default function User() {
                                 nationISO="US"
                                 nationLocale={t(`country.US.${locale}`)}
                                 disable={true}
+                                confidence={0}
                                 message=""
                             />
                         </div>

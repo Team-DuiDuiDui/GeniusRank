@@ -9,6 +9,12 @@
         "search": {
             "placeholder": "请输入 GitHub 用户名称..."
         },
+        "ranking": {
+            "title": "排名",
+            "description": "排名与用户筛选",
+            "type": "请选择语言",
+            "nation": "请选择国籍"
+        },
         "user": {
             "description": "GitHub 用户分析",
             "title": "用户搜索 | Genius Rank",
@@ -16,15 +22,17 @@
             "followers": "位粉丝",
             "following": "个正在关注",
             "err": {
-                "not_found": "找不到用户",
+                "not_found": "找不到用户或后端内网穿透状态异常",
                 "parse_error": "解析错误",
                 "ngrok_error": "后端内网穿透状态异常，请联系后端管理员",
                 "something_wrong": "出错了",
+                "something_wrong_shorter": "出错了",
                 "rate_limit": "请求频率过快或一小时请求超过60次（登录用户为5000次）",
                 "network_error": "网络错误",
                 "may_help": "以下信息可能有帮助：",
                 "message": "错误信息：",
                 "reload": "尝试重新加载",
+                "click_to_reload": "点击右上角重新加载",
                 "may_hide": "用户可能设置为私密状态",
                 "may_reason": "可能原因：",
                 "reloading_after": "达到速率限制，在",
@@ -35,11 +43,14 @@
             },
             "info": {
                 "from_readme": "来自 README",
+                "from_glm": "来自最近的互联网数据",
                 "from_followers_and_followings": "来自早期粉丝和关注判断而来",
                 "different_from_location": "可能与当前 GitHub 中的 location 不同",
                 "confidence_low": "置信度较低",
                 "from_followers": "来自早期粉丝",
-                "from_followings": "来自早期关注者"
+                "from_followings": "来自早期关注者",
+                "login_to_see_l1": "登录后查看猜测",
+                "login_to_see_l2": "的国籍相关信息"
             },
             "userRecentPrs": "最近 80 条已合并的 Pull Requests",
             "userRecentPrs_all": "最近 50 条 Pull Requests",
@@ -83,14 +94,15 @@
                 "title_detail": "最终得分",
                 "commit_score": "用户得分",
                 "repo_score": "仓库得分",
-                "prs_score": "Pull Request 得分",
+                "prs_score": "PR 得分",
                 "issues_score": "Issue 得分",
                 "score_proportion": "分数占比",
                 "score_detail": "分数详情",
                 "score_radar": "分数雷达图",
                 "score": "分数"
             },
-            "confidence": "置信度"
+            "confidence": "置信度",
+            "reload_nation": "点击刷新国籍"
         },
         "drawer": {
             "login": "登录",
@@ -121,6 +133,12 @@
                 "login": "登录",
                 "back": "返回首页"
             }
+        },
+        "loading": {
+            "common": "正在加载...",
+            "detail": "正在加载大量用户数据并判断国籍，这可能需要一段时间...",
+            "user": "正在加载基本信息...",
+            "still": "仍在加载..."
         },
         "errorCode": {
             "0": "成功",

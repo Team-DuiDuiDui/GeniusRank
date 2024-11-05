@@ -9,6 +9,12 @@
         "search": {
             "placeholder": "Input the username on GitHub..."
         },
+        "ranking": {
+            "title": "Ranking",
+            "description": "Ranking of the users",
+            "type": "Please pick a language",
+            "nation": "Please pick a nation"
+        },
         "user": {
             "description": "GitHub User Analysis",
             "title": "Search for user  | Genius Rank",
@@ -16,7 +22,7 @@
             "followers": "followers",
             "following": "following",
             "err": {
-                "not_found": "User Not Found",
+                "not_found": "User Not Found or backend internal network tunneling status abnormal",
                 "parse_error": "Parse Error",
                 "ngrok_error": "Backend internal network tunneling status abnormal, please contact with the backend administrator",
                 "something_wrong": "Something Went Wrong",
@@ -25,6 +31,8 @@
                 "message": "Error message: ",
                 "may_help": "The following information may be helpful: ",
                 "reload": "Try to reload",
+                "something_wrong_shorter": "Something wrong",
+                "click_to_reload": "Click to reload",
                 "may_hide": "The user may be set to private",
                 "may_reason": "Possible reasons: ",
                 "reloading_after": "Reached the rate limit, retry after",
@@ -35,11 +43,14 @@
             },
             "info": {
                 "from_readme": "From README",
+                "from_glm": "From recent data in network",
                 "from_followers": "From early followers",
                 "from_followings": "From early followings",
                 "from_followers_and_followings": "From early followers and followings",
                 "different_from_location": "May be different from the current location in GitHub",
-                "confidence_low": "Confidence is low"
+                "confidence_low": "Confidence is low",
+                "login_to_see_l1": "Login to see the",
+                "login_to_see_l2": "info of nation"
             },
             "userRecentPrs": "Recent 80 Merged Pull Requests",
             "userRecentPrs_all": "Recent 80 Pull Requests",
@@ -85,7 +96,7 @@
                 "title": "Final Score (Roughly calculated)",
                 "title_detail": "Final Score",
                 "commit_score": "User",
-                "repo_score": "Repositories",
+                "repo_score": "Repos",
                 "prs_score": "Pull Request",
                 "issues_score": "Issue",
                 "score_proportion": "Proportion",
@@ -93,7 +104,8 @@
                 "score_radar": "Radar",
                 "score": "Score"
             },
-            "confidence": "Confidence"
+            "confidence": "Confidence",
+            "reload_nation": "Click to reload"
         },
         "drawer": {
             "login": "Login",
@@ -123,6 +135,12 @@
                 "login": "Login",
                 "back": "Back to home"
             }
+        },
+        "loading": {
+            "common": "Loading...",
+            "detail": "Loading a large amount of user data and determining nationality, this may take some time...",
+            "user": "Loading basic information...",
+            "still": "Still loading..."
         },
         "errorCode": {
             "0": "Success",

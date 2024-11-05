@@ -11,9 +11,11 @@ export class gqlUser {
     private beInstance: AxiosInstance;
     public dataDetail: UserDetail | null = null;
 
-    constructor(name: string, token: string, baseUrl: string, beToken: string) {
+    constructor(name: string, token: string, baseUrl: string, beToken: string, githubInstance?: AxiosInstance) {
         this.name = name;
-        this.githubInstance = createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank', 'Bearer');
+        this.githubInstance = githubInstance
+            ? githubInstance
+            : createInstanceForGithub(token, 'Team-Duiduidui: Genius Rank', 'Bearer');
         this.beInstance = createInstanceForBe(baseUrl, beToken);
     }
 
@@ -169,7 +171,6 @@ query($username:String!,$count:Int!){
     }
 
     async getUserScores(): Promise<GithubScoreRes> {
-        console.log(this.dataDetail);
         const data = (await handleBackendReq<GithubScoreRes>(
             () => this.beInstance.post(`/analyze/score/detailed`, this.dataDetail),
             (res) => res.data

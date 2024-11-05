@@ -27,7 +27,7 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用�
                 <span className="relative flex items-center justify-center ml-1">
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}
-                        zIndex={30}
+                        zIndex={10}
                         overlayProps={{ radius: 'sm', blur: 1, center: false }}
                         loaderProps={{ size: 'sm' }}
                     />
@@ -43,7 +43,9 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用�
                             : ''
                     }
                     placeholder={placeholder}
-                    className={`py-3 ${logo ? 'pl-1' : 'pl-5'} focus-visible:outline-none w-full pr-0`}
+                    className={`py-3 ${
+                        logo ? 'pl-1' : 'pl-5'
+                    } focus-visible:outline-none w-full pr-0 text-black dark:text-white`}
                 />
                 <button
                     type="submit"
