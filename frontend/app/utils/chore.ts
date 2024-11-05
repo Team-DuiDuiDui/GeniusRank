@@ -91,8 +91,6 @@ interface RGB {
 }
 
 export const interpolateColors = (colors: RGB[], percentage: number): RGB => {
-    percentage = Math.max(0, Math.min(1, percentage));
-
     const n = colors.length;
     const scaledPercentage = percentage * (n - 1);
     const index = Math.floor(scaledPercentage);
