@@ -38,7 +38,7 @@ export const guessRegion = async ({
     message: string;
     confidence: number;
 }> => {
-    throw new Error('Not implemented');
+    // throw new Error('Not implemented');
     // const nationDataFromBe = await getUserNation(userData.login, beInstance);
     // if (nationDataFromBe !== null ) return nationDataFromBe;
     const dataFromReadme = await guessRegionFromReadme(userData, beInstance, githubInstance);

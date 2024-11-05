@@ -24,6 +24,7 @@ export default function User() {
     const navigation = useNavigation();
     const { t } = useTranslation();
     const { user } = data.data;
+    console.log(data.nationData)
     return (
         <>
             <div className="flex items-center justify-center w-full">
