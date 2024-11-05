@@ -1,20 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { LoaderFunctionArgs, json } from '@remix-run/cloudflare';
-import {
-    Link,
-    Links,
-    Meta,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
-    useLoaderData,
-    useRouteLoaderData,
-} from '@remix-run/react';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData } from '@remix-run/react';
 import i18nServer, { localeCookie } from './modules/i18n.server';
 import { useChangeLanguage } from 'remix-i18next/react';
 import { Toaster } from 'react-hot-toast';
-import { ActionIcon, ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { ClientOnly } from 'remix-utils/client-only';
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
@@ -22,8 +13,7 @@ import './tailwind.css';
 import { useDisclosure } from '@mantine/hooks';
 import { user } from './cookie';
 import SettingDrawer from './components/drawer';
-import geniusRank from '~/assets/geniusRank.svg';
-import MenuIcon from './components/menu';
+import Header from './components/header';
 
 export const handle = { i18n: ['translation'] };
 
@@ -56,14 +46,7 @@ export default function App() {
     return (
         <>
             <ClientOnly>{() => <Toaster />}</ClientOnly>
-            <div className="z-40 m-10 absolute flex items-center gap-4">
-                <ActionIcon variant="default" size="xl" onClick={openDrawer}>
-                    <MenuIcon />
-                </ActionIcon>
-                <Link to="/" className="hover:scale-105 active:scale-95 transition-all lg:block hidden">
-                    <img src={geniusRank} alt="logo" className="h-10" />
-                </Link>
-            </div>
+            <Header openDrawer={openDrawer} userAvatar={userAvatar} />
             <SettingDrawer
                 opened={drawerOpened}
                 close={closeDrawer}

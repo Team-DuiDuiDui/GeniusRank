@@ -58,7 +58,7 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
     }, [data, user]);
     return (
         <>
-            <Card title={t('user.score.title')} data={scores} error={error} reload={loadData} isBackendRequest>
+            <Card title={t('user.score.title_detail')} data={scores} error={error} reload={loadData} isBackendRequest>
                 <LoadingOverlay visible={!scores && !error} loaderProps={{ type: 'dots' }} />
                 <div className="flex justify-center">
                     {scores && !error && <UserScoreCharts scores={scores} t={t} />}
