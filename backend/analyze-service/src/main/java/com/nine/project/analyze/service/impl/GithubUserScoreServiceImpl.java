@@ -99,8 +99,11 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     }
 
     @Override
-    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, String type, String nation) {
-
-        return baseMapper.findTopScoresByCountryName(size, nation);
+    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, String nation, String type) {
+        if(type != null) {
+            return baseMapper.findTopScoresByCountryNameAndType(size, nation ,type);
+        } else {
+            return baseMapper.findTopScoresByCountryName(size, nation);
+        }
     }
 }
