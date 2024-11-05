@@ -70,6 +70,6 @@ public class CacheUtil<T> {
      * @return 排序后的所有国家
      */
     public Set<String> getCountries() {
-        return redisTemplate.opsForZSet().range(NATION_KEY, 0, -1);
+        return redisTemplate.opsForZSet().reverseRange(NATION_KEY, 0, -1);
     }
 }
