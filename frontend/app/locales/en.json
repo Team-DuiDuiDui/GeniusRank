@@ -41,6 +41,7 @@
             },
             "info": {
                 "from_readme": "From README",
+                "from_glm": "From recent data in network",
                 "from_followers": "From early followers",
                 "from_followings": "From early followings",
                 "from_followers_and_followings": "From early followers and followings",

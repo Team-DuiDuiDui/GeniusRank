@@ -1,6 +1,6 @@
 import { AxiosInstanceForGithub } from '../requests/instance';
 import { AxiosInstanceForBe } from '~/api/instance';
-import { guessRegionFromFollowers, guessRegionFromFollowings, guessRegionFromReadme } from './nation';
+import { guessRegionFromFollowers, guessRegionFromFollowings, guessRegionFromGLM, guessRegionFromReadme } from './nation';
 
 export interface GuessNationProps {
     t: (key: string) => string;
@@ -41,6 +41,12 @@ export const guessRegion = async ({
     // throw new Error('Not implemented');
     // const nationDataFromBe = await getUserNation(userData.login, beInstance);
     // if (nationDataFromBe !== null ) return nationDataFromBe;
+    let dataFromGLM = null;
+    console.log(userData)
+    if (userData.followers > 50000) {
+        dataFromGLM = await guessRegionFromGLM(userData.login, beInstance)
+        if (dataFromGLM?.nationISO) return { ...dataFromGLM, message: t('user.info.from_glm'), confidence: 0.7 };
+    }
     const dataFromReadme = await guessRegionFromReadme(userData, beInstance, githubInstance);
     if (dataFromReadme.nationISO) return { ...dataFromReadme, message: t('user.info.from_readme'), confidence: 0.99 };
     const dataFromFollowers = await guessRegionFromFollowers(userData, beInstance, githubInstance);

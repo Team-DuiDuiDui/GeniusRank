@@ -1,4 +1,4 @@
-import { NationData, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/chat";
+import { NationData, syncChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/chat";
 import { AxiosInstanceForBe } from "~/api/instance";
 import { AxiosInstanceForGithub } from "../requests/instance";
 import { handleClientGithubGraphQLReq } from "../requests/request";
@@ -212,4 +212,8 @@ export const guessRegionFromReadme = async (
         if (resultJSON.nationName) return resultJSON;
     }
     return { nationName: "", nationISO: "" };
+}
+
+export const guessRegionFromGLM = async ( userName: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
+    return syncChatForNationFromGLM(userName, beInstance)
 }
