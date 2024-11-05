@@ -56,6 +56,8 @@ export type UserScoreRanking = {
  * ScoreRankResp
  */
 export type ScoreRankResp = {
+    name: string | null;
+    avatar_url: string;
     /**
      * 国家 iso 编码
      */

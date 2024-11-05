@@ -1,14 +1,21 @@
-import { json, LoaderFunctionArgs } from '@remix-run/cloudflare';
+import { json, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
+import { useLoaderData } from '@remix-run/react';
 import { createInstanceForBe } from '~/api/instance';
+import { UserAccordion, UserCard } from '~/components/ranking/card';
+import i18nServer from '~/modules/i18n.server';
 import { getRankings } from '~/utils/requests/ranking';
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const nation = url.searchParams.get('nation');
     const type = url.searchParams.get('type');
     const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL);
+    const t = await i18nServer.getFixedT(request);
     try {
         const res = await getRankings(beInstance, nation, type);
-        return json(res.data, { status: 200 });
+        return json(
+            { ranking: res.data, title: `${t('ranking.title')} | Genius Rank`, description: t('ranking.description') },
+            { status: 200 }
+        );
     } catch (e) {
         throw new Response(
             JSON.stringify({
@@ -25,4 +32,30 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
             }
         );
     }
+}
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+    return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
+};
+
+export default function Ranking() {
+    const loaderData = useLoaderData<typeof loader>();
+    return (
+        <div>
+            <div className="flex flex-row justify-around">
+                <UserAccordion>
+                    {loaderData.ranking.data
+                        .slice(0, Math.ceil(loaderData.ranking.data.length / 2))
+                        .map((item, index) => (
+                            <UserCard key={index} userInfo={item} score={item} />
+                        ))}
+                </UserAccordion>
+                <UserAccordion>
+                    {loaderData.ranking.data.slice(Math.ceil(loaderData.ranking.data.length / 2)).map((item, index) => (
+                        <UserCard key={index} userInfo={item} score={item} />
+                    ))}
+                </UserAccordion>
+            </div>
+        </div>
+    );
 }
