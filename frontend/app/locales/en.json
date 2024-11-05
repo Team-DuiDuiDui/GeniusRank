@@ -25,6 +25,8 @@
                 "message": "Error message: ",
                 "may_help": "The following information may be helpful: ",
                 "reload": "Try to reload",
+                "something_wrong_shorter": "Something wrong",
+                "click_to_reload": "Click to reload",
                 "may_hide": "The user may be set to private",
                 "may_reason": "Possible reasons: ",
                 "reloading_after": "Reached the rate limit, retry after",
@@ -39,7 +41,9 @@
                 "from_followings": "From early followings",
                 "from_followers_and_followings": "From early followers and followings",
                 "different_from_location": "May be different from the current location in GitHub",
-                "confidence_low": "Confidence is low"
+                "confidence_low": "Confidence is low",
+                "login_to_see_l1": "Login to see the",
+                "login_to_see_l2": "info of nation"
             },
             "userRecentPrs": "Recent 80 Merged Pull Requests",
             "userRecentPrs_all": "Recent 80 Pull Requests",

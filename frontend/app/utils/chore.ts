@@ -104,7 +104,6 @@ export const interpolateColors = (colors: RGB[], percentage: number): RGB => {
     const b = Math.round(color1.b + (color2.b - color1.b) * t);
 
     return { r, g, b };
-    return { r, g, b };
 }
 
 export const interpolateColorsOfScore = (score: number): RGB => {

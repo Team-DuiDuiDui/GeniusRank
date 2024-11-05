@@ -31,19 +31,29 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             const { data } = await user.getData();
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
-            const nationData = await guessRegion({
-                t,
-                locale,
-                userData: {
+            let nationData = {}
+            try {
+                nationData = await guessRegion({
                     t,
-                    followers: data.user.followers.totalCount,
-                    followings: data.user.following.totalCount,
-                    login: data.user.login,
-                },
-                beInstance,
-                githubInstance,
-            });
-            console.log(interpolateColorsOfScore(50));
+                    locale,
+                    userData: {
+                        t,
+                        followers: data.user.followers.totalCount,
+                        followings: data.user.following.totalCount,
+                        login: data.user.login,
+                    },
+                    beInstance,
+                    githubInstance,
+                });
+            } catch (e) {
+                nationData = {
+                    nationISO: '',
+                    nationName: '',
+                    message: t('user.info.from_followers_and_followings'),
+                    confidence: 0.5,
+                }
+            }
+
             const scores = await user.getUserScores();
             return json({
                 data,
