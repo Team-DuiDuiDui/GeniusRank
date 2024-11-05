@@ -1,6 +1,6 @@
 import { LoadingOverlay, Tooltip } from '@mantine/core';
 import CardWithNoShrink from '../constant/cardWithNoShrink';
-import '/node_modules/flag-icons/css/flag-icons.min.css';
+import '../../../node_modules/flag-icons/css/flag-icons.min.css';
 import { InfoIcon } from '../constant/info';
 
 interface NationCardProps {
