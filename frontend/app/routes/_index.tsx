@@ -1,6 +1,7 @@
 import { Button } from '@mantine/core';
 import { json, LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
 import { useTranslation } from 'react-i18next';
+import UserCard from '~/components/ranking/card';
 import i18nServer from '~/modules/i18n.server';
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
@@ -22,6 +23,7 @@ export default function Index() {
                     {t('lookup_docs')}
                 </Button>
             </div>
+            <div className="flex flex-row flex-wrap"></div>
         </>
     );
 }
