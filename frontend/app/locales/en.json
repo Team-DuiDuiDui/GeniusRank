@@ -3,7 +3,9 @@
         "opposite_lng": "zh",
         "opposite_lng_name": "中文",
         "title": "Genius Rank - GitHub user analysis",
+        "description": "GitHub user data, analysis, evaluation, and nationality prediction",
         "languages": "Languages",
+        "lookup_docs": "Read the docs",
         "search": {
             "placeholder": "Input the username on GitHub..."
         },
