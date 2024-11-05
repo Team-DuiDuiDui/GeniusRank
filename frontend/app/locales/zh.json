@@ -41,6 +41,7 @@
             },
             "info": {
                 "from_readme": "来自 README",
+                "from_glm": "来自最近的互联网数据",
                 "from_followers_and_followings": "来自早期粉丝和关注判断而来",
                 "different_from_location": "可能与当前 GitHub 中的 location 不同",
                 "confidence_low": "置信度较低",
