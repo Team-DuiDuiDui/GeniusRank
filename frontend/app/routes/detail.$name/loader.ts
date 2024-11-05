@@ -30,7 +30,12 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             const { data } = await user.getData();
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
-            let nationData = {};
+            let nationData = {
+                nationISO: '',
+                nationName: '',
+                message: t('user.info.from_followers_and_followings'),
+                confidence: 0.5,
+            };
             try {
                 nationData = await guessRegion({
                     t,
