@@ -4,6 +4,7 @@ import { Outlet, useLocation } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
 import i18nServer from '~/modules/i18n.server';
 import { user } from '~/cookie';
+import LoadingLayout from '~/components/loading';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
@@ -33,6 +34,7 @@ export default function Index() {
     return (
         <>
             <div className="flex h-screen flex-col items-center gap-14" ref={parentRef}>
+                <LoadingLayout />
                 <Outlet />
             </div>
         </>

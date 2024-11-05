@@ -136,6 +136,10 @@
         "back": "Back to home"
       }
     },
+    "loading": {
+      "common": "Loading...",
+      "still": "Still loading..."
+    },
     "errorCode": {
       "0": "Success",
       "A0001": "Client-side error",

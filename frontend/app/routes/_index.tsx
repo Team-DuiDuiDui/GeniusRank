@@ -1,7 +1,7 @@
 import { Button } from '@mantine/core';
 import { json, LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
 import { useTranslation } from 'react-i18next';
-import UserCard from '~/components/ranking/card';
+import LoadingLayout from '~/components/loading';
 import i18nServer from '~/modules/i18n.server';
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
@@ -16,7 +16,8 @@ export default function Index() {
     const { t } = useTranslation();
     return (
         <>
-            <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2">
+            <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2 relative">
+                <LoadingLayout />
                 <h1 className="text-6xl font-bold">Genius Rank</h1>
                 <h2 className="text-2xl">{t('description')}</h2>
                 <Button variant="default" size="md" className="mt-4">

@@ -3,6 +3,7 @@ import i18nServer from '~/modules/i18n.server';
 import { Outlet, useLocation } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
+import LoadingLayout from '~/components/loading';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
@@ -28,7 +29,8 @@ export default function Index() {
     }, [parentRef, pathname]);
     return (
         <>
-            <div className="flex h-screen flex-col items-center gap-14" ref={parentRef}>
+            <div className="flex h-screen flex-col items-center gap-14 relative" ref={parentRef}>
+                <LoadingLayout />
                 <Outlet />
             </div>
         </>

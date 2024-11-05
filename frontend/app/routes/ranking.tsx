@@ -4,6 +4,7 @@ import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { createInstanceForBe } from '~/api/instance';
 import { ScoreRankResp } from '~/api/typings/beRes';
+import LoadingLayout from '~/components/loading';
 import { UserAccordion, UserCard } from '~/components/ranking/card';
 import i18nServer from '~/modules/i18n.server';
 import { getRankings } from '~/utils/requests/ranking';
@@ -54,7 +55,8 @@ export default function Ranking() {
     const rankingData: ScoreRankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.data));
     const splicedData = rankingData.splice(0, Math.ceil(loaderData.ranking.data.length / 2));
     return (
-        <div className="my-12 mx-32">
+        <div className="my-12 mx-32 relative">
+            <LoadingLayout />
             <div className="flex flex-row justify-start gap-8">
                 <Select
                     onChange={(value) => {

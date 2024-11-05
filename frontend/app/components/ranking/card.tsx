@@ -31,7 +31,7 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score }) => {
                         </div>
                     </div>
                     <div className="ml-auto flex flex-row items-center justify-around mx-5 gap-4">
-                        <span style={{ color: `rgb(${r}, ${g}, ${b})` }} className="text-3xl">
+                        <span style={{ color: `rgb(${r}, ${g}, ${b})` }} className="text-3xl w-14">
                             {rankIt(score.totalScore)}
                             <sup className="text-base align-top">{score.totalScore}</sup>
                         </span>

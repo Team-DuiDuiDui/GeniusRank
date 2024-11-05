@@ -4,7 +4,6 @@ import {
     ShouldRevalidateFunction,
     useFetcher,
     useLoaderData,
-    useNavigation,
     useRouteError,
 } from '@remix-run/react';
 import { ActionFunctionArgs, json, MetaFunction } from '@remix-run/cloudflare';
@@ -14,7 +13,6 @@ import UserIssuesDetail from '~/components/userinfo/detail/issues';
 import UserPullRequestsDetail from '~/components/userinfo/detail/prs';
 import UserReposContributeDetail from '~/components/userinfo/detail/reposContribute';
 import UserReposDetail from '~/components/userinfo/detail/repos';
-import { Loader, LoadingOverlay } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import UserNation from '~/components/userinfo/region';
 
@@ -34,7 +32,6 @@ export { loader };
 
 export default function User() {
     const data = useLoaderData<typeof loader>();
-    const navigation = useNavigation();
     const { t } = useTranslation();
     const { user } = data.data;
     const fetcher = useFetcher<typeof action>();
@@ -43,20 +40,6 @@ export default function User() {
         <>
             <div className="flex items-center justify-center w-full">
                 <div className="flex flex-row items-center gap-16 w-full h-full justify-center relative">
-                    <LoadingOverlay
-                        visible={navigation.state === 'loading'}
-                        className="items-start"
-                        zIndex={30}
-                        overlayProps={{ radius: 'sm', blur: 2, center: false }}
-                        loaderProps={{
-                            children: (
-                                <div className="flex flex-col justify-center items-center gap-4">
-                                    <Loader variant="dots" />
-                                    <p className="text-base text-gray-500">{t('user.loading')}</p>
-                                </div>
-                            ),
-                        }}
-                    />
                     <UserBasic>
                         <div className="flex gap-4 w-full max-h-25">
                             <UserInfoDetail data={user} />
