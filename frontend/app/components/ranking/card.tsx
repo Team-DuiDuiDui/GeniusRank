@@ -22,8 +22,8 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score }) => {
 
     return (
         <Accordion.Item value={userInfo.login} className="bg-white">
-            <Accordion.Control icon={<Avatar src={userInfo.avatar_url} />} className="px-6">
-                <div className="flex flex-row items-center justify-around">
+            <Accordion.Control icon={<Avatar src={userInfo.avatar_url} />}>
+                <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-row items-center">
                         <div className="flex flex-col">
                             <div className="text-xl font-bold">{userInfo.name ?? userInfo.login}</div>

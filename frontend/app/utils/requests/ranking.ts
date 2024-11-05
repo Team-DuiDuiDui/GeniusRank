@@ -9,9 +9,9 @@ export const getRankings = (
 ): Promise<AxiosResponse<UserScoreRanking>> => {
     return backEndInstance.get('/analyze/score/rank', {
         params: {
-            nation: nation,
-            type: type,
-            size,
+            ...(nation && { nation }),
+            ...(type && { type }),
+            ...(size && { size }),
         },
     });
 };
