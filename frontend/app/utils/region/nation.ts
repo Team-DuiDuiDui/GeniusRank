@@ -60,11 +60,21 @@ export const guessRegionFromFollowers = async (
             return result
         }
     ))!;
+    const processedData: string[] = [];
+
+    for (let i = 0; i < data.length; i++) {
+        const group = Math.floor(i / 5);
+        const repeatCount = group + 1;
+
+        for (let j = 0; j <= repeatCount; j++) {
+            processedData.push(data[i]);
+        }
+    }
 
     let loopCount = 0
     while (loopCount < 3) {
         loopCount++;
-        const resultJSON = await syncChatForNationFromUserList(data.toString(), beInstance);
+        const resultJSON = await syncChatForNationFromUserList(processedData.toString(), beInstance);
         if (resultJSON.nationISO) return {...resultJSON, confidence: data.length / (userData.followers > 80 ? 80 : userData.followers)};
     }
     return { nationName: "", nationISO: "", confidence: 0 }
@@ -130,10 +140,21 @@ export const guessRegionFromFollowings = async (
         }
     ))!;
 
+    const processedData: string[] = [];
+
+    for (let i = 0; i < data.length; i++) {
+        const group = Math.floor(i / 5);
+        const repeatCount = group + 1;
+
+        for (let j = 0; j <= repeatCount; j++) {
+            processedData.push(data[i]);
+        }
+    }
+
     let loopCount = 0
     while (loopCount < 3) {
         loopCount++;
-        const resultJSON = await syncChatForNationFromUserList(data.toString(), beInstance);
+        const resultJSON = await syncChatForNationFromUserList(processedData.toString(), beInstance);
         if (resultJSON.nationISO) return {...resultJSON, confidence: data.length / (userData.followings > 80 ? 80 : userData.followings)};
     }
     return { nationName: "", nationISO: "", confidence: 0 }

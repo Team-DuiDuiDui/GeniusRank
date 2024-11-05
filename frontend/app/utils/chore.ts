@@ -1,6 +1,12 @@
 import cloneDeep from 'lodash/cloneDeep';
 
 
+const hexColors: string[] = [
+    "#ef4444", "#f97316", "#f59e0b", "#eab308", "#84cc16",
+    "#22c55e", "#10b981", "#14b8a6", "#06b6d4", "#0ea5e9",
+    "#3b82f6", "#6366f1", "#8b5cf6", "#a855f7"
+]
+
 /**
  * 判断参数变量是否是一个Promise对象
  * @param obj 变量本身
@@ -77,3 +83,38 @@ export const parseURLParamsToObject = (url: string): Record<string, string> => {
         return acc;
     }, {} as Record<string, string>);
 }
+
+interface RGB {
+    r: number
+    g: number
+    b: number
+}
+
+export const interpolateColors = (colors: RGB[], percentage: number): RGB => {
+    const n = colors.length
+    const index = Math.floor(percentage * (n - 1))
+    const t = (percentage * (n - 1)) - index
+
+    const color1 = colors[index]
+    const color2 = colors[Math.min(index + 1, n - 1)]
+
+    const r = Math.round(color1.r + (color2.r - color1.r) * t)
+    const g = Math.round(color1.g + (color2.g - color1.g) * t)
+    const b = Math.round(color1.b + (color2.b - color1.b) * t)
+
+    return { r, g, b }
+}
+
+export const interpolateColorsOfScore = (score: number): RGB => {
+    const colors = hexColors.map(hexToRgb)
+    return interpolateColors(colors, score)
+}
+
+export const hexToRgb = (hex: string): RGB => {
+    const bigint = parseInt(hex.slice(1), 16)
+    const r = (bigint >> 16) & 255
+    const g = (bigint >> 8) & 255
+    const b = bigint & 255
+    return { r, g, b }
+}
+

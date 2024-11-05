@@ -24,7 +24,9 @@ export const syncChatForNationFromUserList = async (data: string, beInstance: Ax
         "nationISO": [国家对应的 ISO 简写]
     }
     `
+    console.log(message)
     const result = await syncChat(message, beInstance)
+    console.log(result)
     return JSON.parse(parseStringToJSONfy(result))
 }
 

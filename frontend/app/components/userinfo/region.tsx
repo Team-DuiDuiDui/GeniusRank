@@ -6,7 +6,7 @@ import { InfoIcon } from '../constant/info';
 interface NationCardProps {
     nationISO: string;
     nationLocale: string;
-    message: string;
+    message: string | React.ReactNode;
     loading?: boolean;
     disable?: boolean;
     warning?: string;
