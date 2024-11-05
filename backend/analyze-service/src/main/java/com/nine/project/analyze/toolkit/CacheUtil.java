@@ -58,10 +58,13 @@ public class CacheUtil<T> {
      * 注册国家
      */
     public void registerNation(String nation) {
-        Long counter = redisTemplate.opsForValue().increment(NATION_COUNTER_KEY);
+        // 获取国家的计数器键
+        String counterKey = NATION_COUNTER_KEY + nation;
+        Long counter = redisTemplate.opsForValue().increment(counterKey);
         if (counter == null) {
             counter = 0L;
         }
+        // 计算分数
         redisTemplate.opsForZSet().add(NATION_KEY, nation, counter);
     }
 

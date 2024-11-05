@@ -29,6 +29,6 @@ public class RedisCacheConstant {
     /**
      * 国家统计
      */
-    public static final String NATION_COUNTER_KEY = "general-project:counter-countries";
+    public static final String NATION_COUNTER_KEY = "general-project:counter-countries:";
     public static final String NATION_KEY = "general-project:user-countries";
 }
