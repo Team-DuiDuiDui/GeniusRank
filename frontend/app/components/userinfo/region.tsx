@@ -9,12 +9,12 @@ import { UserDetail } from '~/utils/requests/ghGraphql/typings/user';
 import { interpolateColorsOfIcon } from '~/utils/chore';
 
 interface NationCardProps {
-    fetcher: FetcherWithComponents<unknown>;
-    userData: Pick<UserDetail, 'followers' | 'following' | 'login'>;
+    fetcher?: FetcherWithComponents<unknown>;
+    userData?: Pick<UserDetail, 'followers' | 'following' | 'login'>;
     nationISO: string;
     nationLocale: string;
     message: string | React.ReactNode;
-    confidence: number;
+    confidence?: number;
     loading?: boolean;
     disable?: boolean;
     warning?: string;
@@ -37,7 +37,7 @@ const UserNation: React.FC<NationCardProps> = ({
     const renderIcon = () => {
         if (disable) return;
 
-        if (noData)
+        if (noData && fetcher)
             return (
                 <fetcher.Form method="post">
                     <input type="hidden" name="userData" value={JSON.stringify(userData)} />
@@ -115,8 +115,9 @@ const UserNation: React.FC<NationCardProps> = ({
 
     const renderFlag = () => (
         <span
-            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${disable ? 'blur-xl' : ''
-                } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
+            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${
+                disable ? 'blur-xl' : ''
+            } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
     );
 
     const renderComponent = () => (

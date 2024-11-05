@@ -38,7 +38,7 @@ export default function User() {
     const isStillHim = fetcher.data?.login === user.login;
     return (
         <>
-            <div className="flex items-center justify-center w-full">
+            <div className="flex items-center justify-center w-full mt-16">
                 <div className="flex flex-row items-center gap-16 w-full h-full justify-center relative">
                     <UserBasic>
                         <div className="flex gap-4 w-full max-h-25">
@@ -52,10 +52,13 @@ export default function User() {
                                 )}
                                 confidence={(isStillHim && fetcher.data?.confidence) || data.nationData.confidence}
                                 message={
-                                <div className="flex flex-col items-center justify-center">
-                                    <span>{(isStillHim && fetcher.data?.message) || data.nationData.message}</span>
-                                    <span>{t("user.confidence")}: {(isStillHim && fetcher.data?.confidence) || data.nationData.confidence}</span>
-                                </div>
+                                    <div className="flex flex-col items-center justify-center">
+                                        <span>{(isStillHim && fetcher.data?.message) || data.nationData.message}</span>
+                                        <span>
+                                            {t('user.confidence')}:{' '}
+                                            {(isStillHim && fetcher.data?.confidence) || data.nationData.confidence}
+                                        </span>
+                                    </div>
                                 }
                             />
                         </div>

@@ -177,7 +177,7 @@ export default function OAuth() {
     const { error, client_id } = useLoaderData<typeof loader>();
     const { t } = useTranslation();
     return (
-        <div className="h-screen w-screen flex justify-center items-center flex-col gap-6">
+        <div className="h-screen flex justify-center items-center flex-col gap-6">
             <ExclamationCircleTwoTone twoToneColor={'#ff4d4f'} className="text-6xl" />
             <div className="flex flex-col justify-center items-center gap-2">
                 <h1 className="text-2xl">{t('oauth.err.error')}</h1>
