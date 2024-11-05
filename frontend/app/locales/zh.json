@@ -20,7 +20,7 @@
             "followers": "位粉丝",
             "following": "个正在关注",
             "err": {
-                "not_found": "找不到用户",
+                "not_found": "找不到用户或后端内网穿透状态异常",
                 "parse_error": "解析错误",
                 "ngrok_error": "后端内网穿透状态异常，请联系后端管理员",
                 "something_wrong": "出错了",
@@ -98,7 +98,8 @@
                 "score_radar": "分数雷达图",
                 "score": "分数"
             },
-            "confidence": "置信度"
+            "confidence": "置信度",
+            "reload_nation": "点击刷新国籍"
         },
         "drawer": {
             "login": "登录",

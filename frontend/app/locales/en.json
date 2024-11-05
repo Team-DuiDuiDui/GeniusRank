@@ -20,7 +20,7 @@
             "followers": "followers",
             "following": "following",
             "err": {
-                "not_found": "User Not Found",
+                "not_found": "User Not Found or backend internal network tunneling status abnormal",
                 "parse_error": "Parse Error",
                 "ngrok_error": "Backend internal network tunneling status abnormal, please contact with the backend administrator",
                 "something_wrong": "Something Went Wrong",
@@ -101,7 +101,8 @@
                 "score_radar": "Radar",
                 "score": "Score"
             },
-            "confidence": "Confidence"
+            "confidence": "Confidence",
+            "reload_nation": "Click to reload"
         },
         "drawer": {
             "login": "Login",

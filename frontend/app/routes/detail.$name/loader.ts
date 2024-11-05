@@ -59,6 +59,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
             }
 
             const scores = await user.getUserScores();
+            console.log('sdfu');
             return json({
                 data,
                 title: `${params?.name ?? ''} | Genius Rank`,
@@ -69,7 +70,6 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                 scores,
             });
         } catch (e) {
-            // eslint-disable-next-line import/no-named-as-default-member
             console.log(e);
             if (axios.isAxiosError(e)) {
                 if (e.status === 404) throw new Response(t('user.err.not_found'), { status: 404 });

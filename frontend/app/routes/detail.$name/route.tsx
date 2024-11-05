@@ -1,6 +1,14 @@
 import { loader } from './loader';
-import { isRouteErrorResponse, useLoaderData, useNavigation, useRouteError } from '@remix-run/react';
-import { MetaFunction } from '@remix-run/cloudflare';
+import {
+    isRouteErrorResponse,
+    ShouldRevalidateFunction,
+    useFetcher,
+    useLoaderData,
+    useNavigation,
+    useParams,
+    useRouteError,
+} from '@remix-run/react';
+import { ActionFunctionArgs, json, MetaFunction } from '@remix-run/cloudflare';
 import UserBasic from '~/components/userinfo/basic';
 import UserInfoDetail from '~/components/userinfo/detail/info';
 import UserIssuesDetail from '~/components/userinfo/detail/issues';
@@ -12,6 +20,13 @@ import { useTranslation } from 'react-i18next';
 import UserNation from '~/components/userinfo/region';
 
 import UserScoreDetail from '~/components/userinfo/detail/score';
+import { createInstanceForBe } from '~/api/instance';
+import { createInstanceForGithub } from '~/utils/requests/instance';
+import { lng, user } from '~/cookie';
+import i18nServer from '~/modules/i18n.server';
+import { guessRegion } from '~/utils/region/main';
+import { UserDetail } from '~/utils/requests/ghGraphql/typings/user';
+import { useEffect } from 'react';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -22,9 +37,11 @@ export { loader };
 export default function User() {
     const data = useLoaderData<typeof loader>();
     const navigation = useNavigation();
+    const params = useParams();
     const { t } = useTranslation();
     const { user } = data.data;
-    console.log(data.nationData)
+    const fetcher = useFetcher<typeof action>();
+
     return (
         <>
             <div className="flex items-center justify-center w-full">
@@ -47,11 +64,13 @@ export default function User() {
                         <div className="flex gap-4 w-full max-h-25">
                             <UserInfoDetail data={user} />
                             <UserNation
-                                nationISO={data.nationData.nationISO}
-                                nationLocale={t(`country.${data.nationData.nationISO}`)}
-                                message={`${data.nationData.message}\n${t('user.confidence')}: ${
-                                    data.nationData.confidence
-                                }`}
+                                fetcher={fetcher}
+                                userData={{ followers: user.followers, following: user.following, login: user.login }}
+                                nationISO={fetcher.data?.nationISO ?? data.nationData.nationISO}
+                                nationLocale={t(`country.${fetcher.data?.nationISO ?? data.nationData.nationISO}`)}
+                                message={`${fetcher.data?.message ?? data.nationData.message}\n${t(
+                                    'user.confidence'
+                                )}: ${fetcher.data?.confidence ?? data.nationData.confidence}`}
                             />
                         </div>
                         <UserScoreDetail scores={data.scores} />
@@ -94,3 +113,55 @@ export function ErrorBoundary() {
         return <h1>Unknown Error</h1>;
     }
 }
+
+export async function action({ request, context }: ActionFunctionArgs) {
+    const cookieHeader = request.headers.get('Cookie');
+    const cookie = (await user.parse(cookieHeader)) || {};
+    const githubInstance = createInstanceForGithub(cookie.access_token, 'Team-Duiduidui: Genius Rank', 'Bearer');
+    const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
+    const t = await i18nServer.getFixedT(request);
+    const body = await request.formData();
+    const stringUserData = body.get('userData')?.toString();
+    const locale = (await lng.parse(cookieHeader)) as string;
+    if (body.get('reload-nation') === 'reload' && stringUserData) {
+        const userData = JSON.parse(stringUserData) as Pick<UserDetail, 'followers' | 'following' | 'login'>;
+        try {
+            const nationData = await guessRegion({
+                t,
+                locale,
+                userData: {
+                    t,
+                    followers: userData.followers.totalCount,
+                    followings: userData.following.totalCount,
+                    login: userData.login,
+                },
+                beInstance,
+                githubInstance,
+            });
+            return json({ ...nationData, donotLoad: true });
+        } catch (e) {
+            const nationData = {
+                nationISO: 'CN',
+                nationName: 'China',
+                message: t('user.info.from_followers_and_followings'),
+                confidence: 0.5,
+            };
+            return json({ ...nationData, donotLoad: true });
+        }
+    }
+    const nationData = {
+        nationISO: 'CN',
+        nationName: 'China',
+        message: t('user.info.from_followers_and_followings'),
+        confidence: 0.5,
+    };
+    return json({ ...nationData, donotLoad: true });
+}
+
+/** 阻止 Action 触发 Loader */
+export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
+    if (actionResult?.donotLoad) {
+        return false;
+    }
+    return defaultShouldRevalidate;
+};

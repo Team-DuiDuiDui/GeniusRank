@@ -11,7 +11,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL);
     const t = await i18nServer.getFixedT(request);
     try {
-        const res = await getRankings(beInstance, nation, type);
+        const res = await getRankings(beInstance, nation, type, 20);
         return json(
             { ranking: res.data, title: `${t('ranking.title')} | Genius Rank`, description: t('ranking.description') },
             { status: 200 }
@@ -42,7 +42,7 @@ export default function Ranking() {
     const loaderData = useLoaderData<typeof loader>();
     return (
         <div>
-            <div className="flex flex-row justify-around">
+            <div className="flex flex-row justify-around my-12">
                 <UserAccordion>
                     {loaderData.ranking.data
                         .slice(0, Math.ceil(loaderData.ranking.data.length / 2))
