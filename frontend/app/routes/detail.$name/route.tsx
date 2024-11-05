@@ -5,7 +5,6 @@ import {
     useFetcher,
     useLoaderData,
     useNavigation,
-    useParams,
     useRouteError,
 } from '@remix-run/react';
 import { ActionFunctionArgs, json, MetaFunction } from '@remix-run/cloudflare';
@@ -26,7 +25,6 @@ import { lng, user } from '~/cookie';
 import i18nServer from '~/modules/i18n.server';
 import { guessRegion } from '~/utils/region/main';
 import { UserDetail } from '~/utils/requests/ghGraphql/typings/user';
-import { useEffect } from 'react';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -37,11 +35,10 @@ export { loader };
 export default function User() {
     const data = useLoaderData<typeof loader>();
     const navigation = useNavigation();
-    const params = useParams();
     const { t } = useTranslation();
     const { user } = data.data;
     const fetcher = useFetcher<typeof action>();
-
+    const isStillHim = fetcher.data?.login === user.login;
     return (
         <>
             <div className="flex items-center justify-center w-full">
@@ -66,11 +63,13 @@ export default function User() {
                             <UserNation
                                 fetcher={fetcher}
                                 userData={{ followers: user.followers, following: user.following, login: user.login }}
-                                nationISO={fetcher.data?.nationISO ?? data.nationData.nationISO}
-                                nationLocale={t(`country.${fetcher.data?.nationISO ?? data.nationData.nationISO}`)}
-                                message={`${fetcher.data?.message ?? data.nationData.message}\n${t(
+                                nationISO={(isStillHim && fetcher.data?.nationISO) || data.nationData.nationISO}
+                                nationLocale={t(
+                                    `country.${(isStillHim && fetcher.data?.nationISO) ?? data.nationData.nationISO}`
+                                )}
+                                message={`${(isStillHim && fetcher.data?.message) ?? data.nationData.message}\n${t(
                                     'user.confidence'
-                                )}: ${fetcher.data?.confidence ?? data.nationData.confidence}`}
+                                )}: ${(isStillHim && fetcher.data?.confidence) ?? data.nationData.confidence}`}
                             />
                         </div>
                         <UserScoreDetail scores={data.scores} />
@@ -141,19 +140,21 @@ export async function action({ request, context }: ActionFunctionArgs) {
             return json({ ...nationData, donotLoad: true });
         } catch (e) {
             const nationData = {
-                nationISO: 'CN',
-                nationName: 'China',
+                nationISO: '',
+                nationName: '',
                 message: t('user.info.from_followers_and_followings'),
                 confidence: 0.5,
+                login: userData.login,
             };
             return json({ ...nationData, donotLoad: true });
         }
     }
     const nationData = {
-        nationISO: 'CN',
-        nationName: 'China',
+        nationISO: '',
+        nationName: '',
         message: t('user.info.from_followers_and_followings'),
         confidence: 0.5,
+        login: 'unknown',
     };
     return json({ ...nationData, donotLoad: true });
 }

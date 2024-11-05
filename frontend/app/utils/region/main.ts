@@ -1,6 +1,11 @@
 import { AxiosInstanceForGithub } from '../requests/instance';
 import { AxiosInstanceForBe } from '~/api/instance';
-import { guessRegionFromFollowers, guessRegionFromFollowings, guessRegionFromGLM, guessRegionFromReadme } from './nation';
+import {
+    guessRegionFromFollowers,
+    guessRegionFromFollowings,
+    guessRegionFromGLM,
+    guessRegionFromReadme,
+} from './nation';
 
 export interface GuessNationProps {
     t: (key: string) => string;
@@ -37,18 +42,21 @@ export const guessRegion = async ({
     nationName: string;
     message: string;
     confidence: number;
+    login: string;
 }> => {
     // throw new Error('Not implemented');
     // const nationDataFromBe = await getUserNation(userData.login, beInstance);
     // if (nationDataFromBe !== null ) return nationDataFromBe;
     let dataFromGLM = null;
-    console.log(userData)
+    console.log(userData);
     if (userData.followers > 50000) {
-        dataFromGLM = await guessRegionFromGLM(userData.login, beInstance)
-        if (dataFromGLM?.nationISO) return { ...dataFromGLM, message: t('user.info.from_glm'), confidence: 0.7 };
+        dataFromGLM = await guessRegionFromGLM(userData.login, beInstance);
+        if (dataFromGLM?.nationISO)
+            return { ...dataFromGLM, message: t('user.info.from_glm'), confidence: 0.7, login: userData.login };
     }
     const dataFromReadme = await guessRegionFromReadme(userData, beInstance, githubInstance);
-    if (dataFromReadme.nationISO) return { ...dataFromReadme, message: t('user.info.from_readme'), confidence: 0.99 };
+    if (dataFromReadme.nationISO)
+        return { ...dataFromReadme, message: t('user.info.from_readme'), confidence: 0.99, login: userData.login };
     const dataFromFollowers = await guessRegionFromFollowers(userData, beInstance, githubInstance);
     const dataFromFollowings = await guessRegionFromFollowings(userData, beInstance, githubInstance);
     if (dataFromFollowings.nationISO === dataFromFollowers.nationISO)
@@ -56,6 +64,7 @@ export const guessRegion = async ({
             ...dataFromFollowings,
             message: t('user.info.from_followers_and_followings'),
             confidence: (dataFromFollowers.confidence + dataFromFollowings.confidence) * 0.8,
+            login: userData.login,
         };
     else {
         if (dataFromFollowers.confidence > dataFromFollowings.confidence)
@@ -63,12 +72,14 @@ export const guessRegion = async ({
                 ...dataFromFollowers,
                 message: t('user.info.from_followers'),
                 confidence: dataFromFollowers.confidence,
+                login: userData.login,
             };
         else
             return {
                 ...dataFromFollowings,
                 message: t('user.info.from_followings'),
                 confidence: dataFromFollowings.confidence,
+                login: userData.login,
             };
     }
     // return {nationISO: nationFromFollowers, nationName: nationFromFollowers, confidence: confidenceFromFollowers};
