@@ -2,8 +2,8 @@ import { LinkOutlined } from '@ant-design/icons';
 import { BarChart } from '@mantine/charts';
 import { Accordion, Avatar } from '@mantine/core';
 import { Link } from '@remix-run/react';
-import { GithubScoreRes } from '~/api/typings/beRes';
-import { interpolateColorsOfScore } from '~/utils/chore';
+import { GithubScoreRes } from '~/api/backend/typings/beRes';
+import { interpolateColorsOfScore } from '~/utils/color';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
@@ -24,7 +24,7 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score }) => {
         <Accordion.Item value={userInfo.login} className="bg-white">
             <Accordion.Control icon={<Avatar src={userInfo.avatar_url} />}>
                 <div className="flex flex-row items-center justify-between">
-                    <div className="flex flex-row items-center">
+                    <div className="flex flex-row items-center h-12">
                         <div className="flex flex-col">
                             <div className="text-xl font-bold">{userInfo.name ?? userInfo.login}</div>
                             {userInfo.name && <div className="text-sm text-gray-500">{userInfo.login}</div>}
@@ -107,7 +107,7 @@ const parseScoreData = (
     return scores;
 };
 
-const rankIt = (score: number): string => {
+export const rankIt = (score: number): string => {
     if (score >= 75) return 'A';
     else if (score >= 50) return 'B';
     else if (score >= 25) return 'C';

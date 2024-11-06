@@ -1,6 +1,6 @@
 import { ReactNode, useRef } from 'react';
 import CardWithScroll from '../constant/cardWithScroll';
-import { throttleWithDeepClone } from '~/utils/chore';
+import { throttleWithDeepClone } from '~/utils/perform';
 import { AxiosError } from 'axios';
 import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
 import ErrorNote from './error';

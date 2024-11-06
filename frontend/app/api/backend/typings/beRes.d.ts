@@ -35,13 +35,12 @@ export type OAuthLogin = {
      */
     success: boolean;
 };
-
 export type UserScoreRanking = {
     /**
      * 错误码
      */
     code: string;
-    data: ScoreRankResp[];
+    data: ScoreRankResp;
     /**
      * 错误码信息
      */
@@ -56,38 +55,67 @@ export type UserScoreRanking = {
  * ScoreRankResp
  */
 export type ScoreRankResp = {
+    nations: string[];
+    resp: RankResp[];
+    types: string[];
+};
+
+export type RankResp = {
+    avatar_url: string;
+    country_iso?: string;
+    issuesScore: number;
+    login: string;
+    name: string;
+    prsScore: number;
+    reposScore: number;
+    totalScore: number;
+    userScore: number;
+};
+
+export type SingleUserScoreRes = {
+    /**
+     * 错误码
+     */
+    code: string;
+    data: GithubScoreResp;
+    /**
+     * 错误码信息
+     */
+    message: null;
+    /**
+     * 请求是否成功
+     */
+    success: boolean;
+};
+
+/**
+ * GithubScoreResp
+ */
+export type GithubScoreResp = {
     name: string | null;
     avatar_url: string;
     /**
-     * 国家 iso 编码
+     * 用户 issues 数据得分
      */
-    country_iso: null | string;
+    issuesScore: number;
     /**
-     * 国家名字
+     * 用户 prs 数据得分
      */
-    country_name: null | string;
+    prsScore: number;
     /**
-     * issue 分数
+     * 用户仓库数据得分
      */
-    issuesScore: number | number;
+    reposScore: number;
     /**
-     * Github 用户名
-     */
-    login: string;
-    /**
-     * pr 分数
-     */
-    prsScore: number | number;
-    /**
-     * 仓库分数
-     */
-    reposScore: number | number;
-    /**
-     * 总分数
+     * 用户总得分
      */
     totalScore: number;
     /**
-     * 用户基础分数
+     * 更新时间时间戳
+     */
+    updateTime: number;
+    /**
+     * 用户基础数据得分
      */
     userScore: number;
 };

@@ -29,7 +29,7 @@ const SettingDrawer: React.FC<DrawerProps> = ({
     const fetcher = useFetcher();
     return (
         <Drawer opened={opened} onClose={close}>
-            <div className="flex flex-col gap-5 h-full">
+            <div className="flex flex-col gap-5 h-full z-50">
                 <div className={`flex flex-row justify-center gap-5`}>
                     <Avatar size="lg" src={userAvatar ?? undefined} />
                     <div className="flex flex-col justify-center">

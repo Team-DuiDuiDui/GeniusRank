@@ -3,9 +3,9 @@ import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'reac
 import autoAnimate from '@formkit/auto-animate';
 import { ZodError } from 'zod';
 import { AxiosError } from 'axios';
-import { githubUser } from '~/utils/requests/ghapis/user';
+import { githubUser } from '~/api/github/rest/user';
 import { useParams } from '@remix-run/react';
-import { MinimalRepository, User } from '~/utils/requests/ghapis/typings/user';
+import { MinimalRepository, User } from '~/api/github/rest/typings/user';
 import { Table, Tooltip } from '@mantine/core';
 import { ForkOutlined } from '@ant-design/icons';
 import CardWithScrollableTable from './cardWithScrollableTable';

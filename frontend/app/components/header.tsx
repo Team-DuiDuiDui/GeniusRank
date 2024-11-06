@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
         parentRef.current && autoAnimate(parentRef.current, scaleAnimate);
     }, [parentRef, params.pathname]);
     return (
-        <div className="flex items-center justify-between py-3 px-8 shadow-lg sticky">
+        <div className="flex items-center justify-between py-3 px-8 shadow-lg sticky top-0 bg-white z-40 h-[68px]">
             <div className="flex items-center gap-4 w-1/3">
                 <ActionIcon variant="default" size="xl" onClick={openDrawer}>
                     <MenuIcon />
@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
                 <Link to="/" className="hover:scale-105 active:scale-95 transition-all lg:block hidden">
                     <img src={geniusRank} alt="logo" className="h-10" />
                 </Link>
-                <div className="flex items-center gap-6 ml-8 h-full">
+                <div className="flex items-center gap-6 justify-evenly h-full">
                     <Link
                         to="/user"
                         className={`text-nowrap transition-all py-1 px-2 rounded-lg ${
@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
                                 ? 'text-gray-500'
                                 : 'hover:text-gray-700 hover:bg-gray-200'
                         }`}>
-                        <span className="text-lg">用户</span>
+                        <span className="text-lg">{t('searching')}</span>
                     </Link>
                     <Link
                         to="/ranking"
@@ -52,12 +52,12 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
                                 ? 'text-gray-500'
                                 : 'hover:text-gray-700 hover:bg-gray-200'
                         }`}>
-                        <span className="text-lg">排名</span>
+                        <span className="text-lg">{t('ranking.title')}</span>
                     </Link>
                 </div>
             </div>
             <div className="w-2/4 lg:w-1/3" ref={parentRef}>
-                {params.pathname !== '/detail' && params.pathname !== '/user' && (
+                {!params.pathname.startsWith('/detail') && !params.pathname.startsWith('/user') && (
                     <Search logo={octoCat} placeholder={t('search.placeholder')} />
                 )}
             </div>

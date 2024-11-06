@@ -77,6 +77,7 @@ export type GithubScoreReqUnLogin = {
          * 用户名
          */
         login: string;
+        name?: string;
     };
 };
 

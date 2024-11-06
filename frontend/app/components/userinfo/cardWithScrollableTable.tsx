@@ -4,7 +4,7 @@ import ErrorNote from './error';
 import CardWithScroll from '../constant/cardWithScroll';
 import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
-import { throttleWithDeepClone } from '~/utils/chore';
+import { throttleWithDeepClone } from '~/utils/perform';
 import { useTranslation } from 'react-i18next';
 
 interface DataTableProps<T> {

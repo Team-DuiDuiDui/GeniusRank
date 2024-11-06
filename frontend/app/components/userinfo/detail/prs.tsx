@@ -4,7 +4,7 @@ import autoAnimate from '@formkit/auto-animate';
 import dayjs from 'dayjs';
 import { Table, Tooltip } from '@mantine/core';
 import { CommonLink } from '../../infoLink';
-import { PullRequestDetail, UserDetail } from '~/utils/requests/ghGraphql/typings/user';
+import { PullRequestDetail, UserDetail } from '~/api/github/graphql/typings/user';
 import { ForkOutlined, MergeOutlined, PullRequestOutlined } from '@ant-design/icons';
 import { TFunction } from 'i18next';
 import CardWithScrollableTableDetail from './cardWithScrollableTable';
@@ -76,8 +76,8 @@ const Prs: React.FC<issueProps> = ({ item, index: key, t }) => {
                             item.state === 'OPEN'
                                 ? 'text-green-500'
                                 : item.state === 'MERGED'
-                                ? 'text-purple-500'
-                                : 'text-red-500',
+                                    ? 'text-purple-500'
+                                    : 'text-red-500',
                             'text-xl',
                         ].join(' ')}>
                         {item.state === 'OPEN' ? (

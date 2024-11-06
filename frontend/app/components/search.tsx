@@ -1,7 +1,7 @@
 import { InputHTMLAttributes } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 import { useFetcher, useLocation, useNavigate, useNavigation } from '@remix-run/react';
-import { getForm } from '~/utils/form/form';
+import { getForm } from '~/utils/form';
 import { LoadingOverlay } from '@mantine/core';
 
 interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -43,9 +43,8 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用�
                             : ''
                     }
                     placeholder={placeholder}
-                    className={`py-3 ${
-                        logo ? 'pl-1' : 'pl-5'
-                    } focus-visible:outline-none w-full pr-0 text-black dark:text-white`}
+                    className={`py-3 ${logo ? 'pl-1' : 'pl-5'
+                        } focus-visible:outline-none w-full pr-0 text-black dark:text-white`}
                 />
                 <button
                     type="submit"

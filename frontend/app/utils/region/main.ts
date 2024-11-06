@@ -1,12 +1,12 @@
-import { AxiosInstanceForGithub } from '../requests/instance';
-import { AxiosInstanceForBe } from '~/api/instance';
+import { AxiosInstanceForGithub } from '../../api/github/instance';
+import { AxiosInstanceForBe } from '~/api/backend/instance';
 import {
     guessRegionFromFollowers,
     guessRegionFromFollowings,
     guessRegionFromGLM,
     guessRegionFromReadme,
 } from './nation';
-import { getUserNation, updateUserNation } from '~/api/region';
+import { getUserNation, updateUserNation } from '~/api/backend/region';
 
 export interface GuessNationProps {
     locale: string;
@@ -34,12 +34,12 @@ const checkAndUpdateBeData = (newData: NationData, beData: NationData | null, be
         updateUserNation(newData, beInstance);
         console.log("后端没有数据")
         return newData
-    };
+    }
     if (beData.nationISO !== newData.nationISO) {
         if (beData.confidence > 0.5) {
-        updateUserNation({...beData, confidence: beData.confidence * 0.7}, beInstance);
-        console.log("后端数据不够烂")
-        return newData;
+            updateUserNation({ ...beData, confidence: beData.confidence * 0.7 }, beInstance);
+            console.log("后端数据不够烂")
+            return newData;
         }
         updateUserNation(newData, beInstance);
         console.log("新数据更好")
@@ -71,7 +71,7 @@ export const guessRegion = async ({
     if (dataFromBe?.confidence === 1) {
         console.log("共识")
         return dataFromBe
-    };
+    }
     if (userData.followers > 50000) {
         const dataFromGLM = await guessRegionFromGLM(userData.login, beInstance);
         if (dataFromGLM?.nationISO) return checkAndUpdateBeData(dataFromGLM, dataFromBe, beInstance);

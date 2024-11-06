@@ -1,9 +1,8 @@
-import { type MetaFunction } from '@remix-run/cloudflare';
-import { loader } from './loader';
+import { json, LoaderFunctionArgs, redirect, type MetaFunction } from '@remix-run/cloudflare';
 import { isRouteErrorResponse, useLoaderData, useNavigation, useParams, useRouteError } from '@remix-run/react';
 import UserBasic from '~/components/userinfo/basic';
 import UserInfo from '~/components/userinfo/info';
-import { githubUser } from '~/utils/requests/ghapis/user';
+import { githubUser } from '~/api/github/rest/user';
 import { useEffect, useRef } from 'react';
 import UserPRs from '~/components/userinfo/prs';
 import UserIssues from '~/components/userinfo/issues';
@@ -16,12 +15,44 @@ import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
 import UserNation from '~/components/userinfo/region';
 import UserScore from '~/components/userinfo/score';
 import { t } from 'i18next';
+import axios from 'axios';
+import { ZodError } from 'zod';
+import { GithubUserServerOnly } from '~/api/github/rest/user.server';
+import { user } from '~/cookie';
+import i18nServer from '~/modules/i18n.server';
+
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
+    const cookieHeader = request.headers.get('Cookie');
+    const cookie = (await user.parse(cookieHeader)) || {};
+    if (cookie.access_token) return redirect(`/detail/${params.name}`);
+    const t = await i18nServer.getFixedT(request);
+    if (params.name) {
+        const user = new GithubUserServerOnly(params.name, context.cloudflare.env.GITHUB_ACCESS_TOKEN);
+        try {
+            const data = (await user.getUser())!;
+            return json({
+                baseUrl: context.cloudflare.env.BASE_URL,
+                userData: data,
+                title: `${params?.name ?? ''} | Genius Rank`,
+                description: t('user.description'),
+            });
+        } catch (e) {
+            // eslint-disable-next-line import/no-named-as-default-member
+            if (axios.isAxiosError(e)) {
+                if (e.status === 404) throw new Response(t('user.err.not_found'), { status: 404 });
+                if (e.status === 403) {
+                    throw new Response(t('user.err.rate_limit'), { status: 403 });
+                } else throw new Response(t('user.err.something_wrong'), { status: 500 });
+            } else if (e instanceof ZodError) throw new Response(t('user.err.parse_error'), { status: 500 });
+            else throw new Response(t('user.err.something_wrong'), { status: 500 });
+        }
+    }
+    return redirect('/');
+}
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
 };
-
-export { loader };
 
 export default function User() {
     const data = useLoaderData<typeof loader>();
@@ -60,7 +91,7 @@ export default function User() {
 
     return (
         <>
-            <div className="flex items-center justify-center w-full mt-16">
+            <div className="flex items-center justify-center w-full mt-5 z-0">
                 <div className="flex flex-row items-center gap-16 w-full h-full justify-center relative">
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}
@@ -70,7 +101,7 @@ export default function User() {
                         loaderProps={{ type: 'dots' }}
                     />
                     <UserBasic>
-                        <div className="flex gap-4 w-full max-h-25">
+                        <div className="flex gap-4 w-full h-40 items-start">
                             <UserInfo data={data.userData} />
                             <UserNation
                                 nationISO="US"

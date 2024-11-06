@@ -8,8 +8,8 @@ import { z, ZodError } from 'zod';
 import i18nServer from '~/modules/i18n.server';
 import { user } from '~/cookie';
 // import { parseURLParamsToObject } from '~/utils/chore';
-import { handleBackendReq } from '~/utils/requests/request';
-import { OAuthLogin } from '~/api/typings/beRes';
+import { handleBackendReq } from '~/utils/request';
+import { OAuthLogin } from '~/api/backend/typings/beRes';
 import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
 import handleErrorCode from '~/utils/handleErrorCode';
 

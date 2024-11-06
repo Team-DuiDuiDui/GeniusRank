@@ -2,11 +2,11 @@
 import { AxiosInstance } from 'axios';
 import { CommitsSearchResult, IssueSearchResult, User, UserRepos } from './typings/user';
 import { commitsSearchResultSchema, issueSearchResultSchema, userReposSchema } from './schema/user';
-import { handleBackendReq, handleClientGithubReq } from '../request';
+import { handleBackendReq, handleClientGithubReq } from '../../../utils/request';
 import { createInstanceForGithub } from '../instance';
-import { createInstanceForBe } from '~/api/instance';
-import { GithubScoreReqUnLogin } from '../../../api/typings/beReq';
-import { GithubScoreRes } from '~/api/typings/beRes';
+import { createInstanceForBe } from '~/api/backend/instance';
+import { GithubScoreReqUnLogin } from '../../backend/typings/beReq';
+import { GithubScoreRes } from '~/api/backend/typings/beRes';
 
 export class githubUser {
     public name: string;
@@ -103,7 +103,8 @@ export class githubUser {
                 return { pr_and_issue_amount: pr.number };
             }),
             user: {
-                login: this.name,
+                login: this.userData?.login ?? this.name,
+                name: this.userData?.name ?? this.name,
                 commit_amount: this.userCommits?.total_count ?? 0,
                 followers: this.userData?.followers ?? 0,
                 issue_amount: this.userIssues?.total_count ?? 0,

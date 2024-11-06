@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
-import { RepositoryDetail, UserDetail } from '~/utils/requests/ghGraphql/typings/user';
+import { RepositoryDetail, UserDetail } from '~/api/github/graphql/typings/user';
 import CardWithScrollableTableDetail from './cardWithScrollableTable';
 import { Repo } from './repos';
 

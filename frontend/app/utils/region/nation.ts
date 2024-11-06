@@ -1,9 +1,9 @@
-import { syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/chat";
-import { AxiosInstanceForBe } from "~/api/instance";
-import { AxiosInstanceForGithub } from "../requests/instance";
-import { handleClientGithubGraphQLReq } from "../requests/request";
+import { syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/backend/chat";
+import { AxiosInstanceForBe } from "~/api/backend/instance";
+import { AxiosInstanceForGithub } from "../../api/github/instance";
+import { handleClientGithubGraphQLReq } from "../request";
 import { UserDataProps } from "./main";
-import { NationData } from "~/api/region";
+import { NationData } from "~/api/backend/region";
 
 const defaultValue: NationData = {
     nationISO: "",
