@@ -33,9 +33,7 @@ export default function Index() {
     }, [parentRef, pathname]);
     return (
         <>
-            <div
-                className="flex flex-col items-center gap-14 relative "
-                ref={parentRef}>
+            <div className="flex flex-col items-center gap-1 relative" ref={parentRef}>
                 <LoadingLayout />
                 <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2 w-full h-full">
                     <h1 className="text-6xl font-bold">Genius Rank</h1>
