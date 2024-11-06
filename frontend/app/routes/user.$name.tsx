@@ -101,7 +101,7 @@ export default function User() {
                         loaderProps={{ type: 'dots' }}
                     />
                     <UserBasic>
-                        <div className="flex gap-4 w-full max-h-25">
+                        <div className="flex gap-4 w-full h-40 items-start">
                             <UserInfo data={data.userData} />
                             <UserNation
                                 nationISO="US"
