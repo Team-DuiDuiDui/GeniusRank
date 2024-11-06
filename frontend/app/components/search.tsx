@@ -23,7 +23,7 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用�
                 const { value: name } = getForm<HTMLInputElement>(e, 'name');
                 name.trim() ? navigate(`/user/${name}`) : pathname.includes('user/') && navigate('/user');
             }}>
-            <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all">
+            <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all sticky top-0">
                 <span className="relative flex items-center justify-center ml-1">
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}

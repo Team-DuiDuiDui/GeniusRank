@@ -38,20 +38,18 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
                 <div className="md:flex items-center gap-6 justify-evenly h-full hidden">
                     <Link
                         to="/user"
-                        className={`text-nowrap transition-all py-1 px-2 rounded-lg ${
-                            params.pathname.startsWith('/user') || params.pathname.startsWith('/detail')
+                        className={`text-nowrap transition-all py-1 px-2 rounded-lg ${params.pathname.startsWith('/user') || params.pathname.startsWith('/detail')
                                 ? 'text-gray-500'
                                 : 'hover:text-gray-700 hover:bg-gray-200'
-                        }`}>
+                            }`}>
                         <span className="text-lg">{t('searching')}</span>
                     </Link>
                     <Link
                         to="/ranking"
-                        className={`text-nowrap transition-all py-1 px-2 rounded-lg ${
-                            params.pathname.startsWith('/ranking')
+                        className={`text-nowrap transition-all py-1 px-2 rounded-lg ${params.pathname.startsWith('/ranking')
                                 ? 'text-gray-500'
                                 : 'hover:text-gray-700 hover:bg-gray-200'
-                        }`}>
+                            }`}>
                         <span className="text-lg">{t('ranking.title')}</span>
                     </Link>
                 </div>
