@@ -22,7 +22,7 @@ export const getSvgCard = (score: SingleUserScoreRes['data'], login: string): st
     const issue_h = issuesScore * maxD,
         issue_y = 314 - issue_h;
     return `
-    <svg width="1004" height="373" xmlns="http://www.w3.org/2000/svg" fill="none">
+    <svg width="502" height="187" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1004 373">
     <defs>
         <clipPath id="clip0_187_281">
             <rect width="497" height="73" fill="white" y="35.5" x="50" id="svg_1" />
@@ -51,47 +51,47 @@ export const getSvgCard = (score: SingleUserScoreRes['data'], login: string): st
             letter-spacing="0em" id="bg_score">
             <tspan x="127" y="253.5" id="svg_17">${totalScore} <tspan id="svg_15" font-size="24" letter-spacing="0em" font-weight="400">/100</tspan></tspan>
         </text>
-        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="8" letter-spacing="0em"
+        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="22" letter-spacing="0em"
             id="base_title">
-            <tspan x="570" y="323.909" id="svg_23">BASE</tspan>
+            <tspan x="555" y="338" id="svg_23">BASE</tspan>
         </text>
-        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="8" letter-spacing="0em"
+        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="22" letter-spacing="0em"
             id="repo_title">
-            <tspan x="653" y="323.909" id="svg_25">REPO</tspan>
+            <tspan x="638" y="338" id="svg_25">REPO</tspan>
         </text>
-        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="8" letter-spacing="0em" id="pr_title">
-            <tspan x="741" y="323.909" id="svg_27">PR</tspan>
+        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="22" letter-spacing="0em" id="pr_title">
+            <tspan x="726" y="338" id="svg_27">PR</tspan>
         </text>
-        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="8" letter-spacing="0em"
+        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="22" letter-spacing="0em"
             id="issue_title">
-            <tspan x="818" y="325.909" id="svg_29">ISSUE</tspan>
+            <tspan x="803" y="338" id="svg_29">ISSUE</tspan>
         </text>
         <line x1="531" y1="313.75" x2="875" y2="313.75" stroke="#8C8C8C" stroke-width="0.5" stroke-dasharray="1 1"
             id="svg_39" />
         <g id="base">
             <rect x="547" y="${base_y}" width="67" height="${base_h}" fill="#1E90FF" id="svg_19" />
-            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"
+            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="20" letter-spacing="0em"
                 id="svg_20">
                 <tspan x="547" y="${base_y - 9}" id="svg_21">${userScore}</tspan>
             </text>
         </g>
         <g id="repo">
             <rect x="630" y="${repo_y}" width="67" height="${repo_h}" fill="#2ED573" stroke="null" />
-            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"
+            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="20" letter-spacing="0em"
                 id="svg_31" stroke="null">
                 <tspan x="630" y="${repo_y - 9}" id="svg_32" stroke="null">${reposScore}</tspan>
             </text>
         </g>
         <g id="pr">
             <rect x="713" y="${pr_y}" width="67" height="${pr_h}" fill="#FFA502" id="svg_33" />
-            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"
+            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="20" letter-spacing="0em"
                 id="svg_34">
                 <tspan x="713" y="${pr_y - 9}" id="svg_35">${prsScore}</tspan>
             </text>
         </g>
         <g id="issue">
             <rect x="796" y="${issue_y}" width="67" height="${issue_h}" fill="#FF4757" id="svg_36" />
-            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"
+            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="20" letter-spacing="0em"
                 id="svg_37">
                 <tspan x="796" y="${issue_y - 9}" id="svg_38">${issuesScore}</tspan>
             </text>

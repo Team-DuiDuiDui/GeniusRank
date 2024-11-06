@@ -104,6 +104,7 @@ export class githubUser {
             }),
             user: {
                 login: this.userData?.login ?? this.name,
+                name: this.userData?.name ?? this.name,
                 commit_amount: this.userCommits?.total_count ?? 0,
                 followers: this.userData?.followers ?? 0,
                 issue_amount: this.userIssues?.total_count ?? 0,

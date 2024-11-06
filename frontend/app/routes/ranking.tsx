@@ -66,7 +66,7 @@ export default function Ranking() {
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.resp));
-    const splicedData = (rankingData && rankingData.splice(0, Math.ceil(loaderData.ranking.nations.length / 2))) || '';
+    const splicedData = (rankingData && rankingData.splice(0, Math.ceil(loaderData.ranking.resp.length / 2))) || '';
     return (
         <div className="my-12 mx-32 relative">
             <LoadingLayout />

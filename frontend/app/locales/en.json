@@ -102,7 +102,11 @@
         "score_proportion": "Proportion",
         "score_detail": "Details",
         "score_radar": "Radar",
-        "score": "Score"
+        "score": "Score",
+        "copy_card": "Copy GitHub User Card",
+        "copy": "Copy",
+        "copied": "√ Copied",
+        "open": "Preview"
       },
       "confidence": "Confidence",
       "reload_nation": "Click to reload"

@@ -140,7 +140,7 @@ export default function User() {
                                 }
                             />
                         </div>
-                        <UserScoreDetail scores={data.scores} />
+                        <UserScoreDetail scores={data.scores} data={user} />
                         <UserReposDetail data={user} />
                         <UserReposContributeDetail data={user} />
                         <UserPullRequestsDetail data={user} />

@@ -99,7 +99,11 @@
         "score_proportion": "分数占比",
         "score_detail": "分数详情",
         "score_radar": "分数雷达图",
-        "score": "分数"
+        "score": "分数",
+        "copy_card": "复制 GitHub 卡片",
+        "copy": "复制",
+        "copied": "√ 已复制",
+        "open": "预览"
       },
       "confidence": "置信度",
       "reload_nation": "点击刷新国籍"
