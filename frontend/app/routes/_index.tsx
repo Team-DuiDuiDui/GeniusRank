@@ -9,6 +9,7 @@ import { user } from '~/cookie';
 import i18nServer from '~/modules/i18n.server';
 import { RankResp } from '~/api/backend/typings/beRes';
 import { useEffect } from 'react';
+import { UserCardFull } from '~/components/ranking/card';
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };

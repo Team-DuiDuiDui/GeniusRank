@@ -99,9 +99,6 @@ export default function Ranking() {
                         <span className="font-bold text-lg" style={{ color: `rgb(${color.r}, ${color.g}, ${color.b})` }}>
                             {userData.rank}
                         </span>
-                        {/* <span className="font-extralight text-sm translate-y-2">
-                            /{loaderData.ranking.totalCount}
-                        </span> */}
                     </div>
                     <span style={{ color: `rgb(${color.r}, ${color.g}, ${color.b})` }} className="text-3xl w-14">
                         {rankIt(userData.score)}
@@ -164,7 +161,7 @@ export default function Ranking() {
                         {renderUserInfo()}
                     </div>}
             </div>
-            <div className="flex w-screen flex-col lg:flex-row justify-around items-center lg:items-start mt-8">
+            <div className="flex w-full flex-col lg:flex-row justify-around items-center lg:items-start mt-8">
                 <UserAccordion>
                     {splicedData &&
                         splicedData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
