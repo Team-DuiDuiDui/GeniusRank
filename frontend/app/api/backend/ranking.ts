@@ -1,6 +1,6 @@
 import { handleBackendReq } from '~/utils/request';
 import { AxiosInstanceForBe } from './instance';
-import { ScoreRankResp, SingleUserScoreRes } from './typings/beRes';
+import { GithubScoreRes, ScoreRankResp, SingleUserScoreRes } from './typings/beRes';
 import { AxiosResponse } from 'axios';
 
 export const getRankings = (
@@ -21,6 +21,26 @@ export const getRankings = (
         (res) => res.data.data
     );
 };
+
+export const getUserRanking = (
+    backEndInstance: AxiosInstanceForBe,
+    login: string
+): Promise<{ rank: number, score: number }> => {
+    return handleBackendReq(
+        () => backEndInstance.get(`/analyze/score/rank/${login}`),
+        (res) => res.data.data
+    );
+}
+
+export const getRankingsByUserWithHandle = (
+    backEndInstance: AxiosInstanceForBe,
+    login: string
+): Promise<GithubScoreRes["data"]> => {
+    return handleBackendReq(
+        () => backEndInstance.get(`/analyze/score/${login}`),
+        (res) => res.data.data
+    );
+}
 
 /** 这里有特殊的错误处理 Handle */
 export const getRankingsByUser = (

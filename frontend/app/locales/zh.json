@@ -50,7 +50,10 @@
         "from_followers": "来自早期粉丝",
         "from_followings": "来自早期关注者",
         "login_to_see_l1": "登录后查看猜测",
-        "login_to_see_l2": "的国籍相关信息"
+        "login_to_see_l2": "的国籍相关信息",
+        "no_ranking_data_l1": "暂无排名数据，可以点",
+        "no_ranking_data_l2": "这里",
+        "no_ranking_data_l3": "生成自己的报告"
       },
       "userRecentPrs": "最近 80 条已合并的 Pull Requests",
       "userRecentPrs_all": "最近 50 条 Pull Requests",

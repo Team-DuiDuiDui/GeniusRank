@@ -58,6 +58,7 @@ export type ScoreRankResp = {
     nations: string[];
     resp: RankResp[];
     types: string[];
+    totalCount: number
 };
 
 export type RankResp = {

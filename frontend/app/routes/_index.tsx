@@ -6,9 +6,8 @@ import { createInstanceForBe } from '~/api/backend/instance';
 import { getRankings } from '~/api/backend/ranking';
 import LoadingLayout from '~/components/loading';
 import { user } from '~/cookie';
-import cloneDeep from 'lodash/cloneDeep';
 import i18nServer from '~/modules/i18n.server';
-import { RankResp, ScoreRankResp } from '~/api/backend/typings/beRes';
+import { RankResp } from '~/api/backend/typings/beRes';
 import { UserAccordion, UserCard } from '~/components/ranking/card';
 import { useEffect } from 'react';
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -30,7 +29,6 @@ export default function Index() {
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(data.rankingData.resp));
     const rankingDataList: RankResp[][] = [];
     const length = rankingData.length;
-    console.log(length)
     for (let i = 0; i < length; i += length / 3) {
         const data = rankingData.slice(i, i + length / 3)
         rankingDataList.push([...data, ...data]);

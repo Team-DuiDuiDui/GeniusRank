@@ -1,38 +1,44 @@
-import { Select } from '@mantine/core';
+import { Avatar, Select } from '@mantine/core';
 import { json, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { isRouteErrorResponse, useLoaderData, useRouteError, useSearchParams } from '@remix-run/react';
+import { isRouteErrorResponse, Link, useLoaderData, useRouteError, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { createInstanceForBe } from '~/api/backend/instance';
 import { RankResp } from '~/api/backend/typings/beRes';
 import LoadingLayout from '~/components/loading';
-import { UserAccordion, UserCard } from '~/components/ranking/card';
+import { rankIt, UserAccordion, UserCard } from '~/components/ranking/card';
 import i18nServer from '~/modules/i18n.server';
-import { getRankings } from '~/api/backend/ranking';
+import { getRankings, getUserRanking } from '~/api/backend/ranking';
 import { user } from '~/cookie';
 import axios from 'axios';
 import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
+import { LinkOutlined } from '@ant-design/icons';
+import { interpolateColorsOfScore } from '~/utils/color';
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const nation = url.searchParams.get('nation');
     const cookieHeader = request.headers.get('Cookie');
     const userCookie = (await user.parse(cookieHeader)) || {};
-    const userData = {
+    const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL);
+    const userInfo = {
         login: userCookie.userLogin,
         name: userCookie.username,
         avatar_url: userCookie.userAvatar,
+        rankingInfo: await getUserRanking(beInstance, userCookie.userLogin).catch(() => undefined),
+        // rankingInfo: { rank: 9, score: 17 },
     } as {
         login: string;
         avatar_url: string;
         name?: string | null;
+        rankingInfo: { rank: number, score: number } | undefined;
     };
+    console.log(userInfo.rankingInfo);
     const type = url.searchParams.get('type');
-    const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL);
     const t = await i18nServer.getFixedT(request);
     try {
         const res = await getRankings(beInstance, nation, type, 20);
         return json(
             {
-                userData: userData,
+                userInfo,
                 ranking: res,
                 title: `${t('ranking.title')} | Genius Rank`,
                 description: t('ranking.description'),
@@ -56,12 +62,72 @@ export default function Ranking() {
     const loaderData = useLoaderData<typeof loader>();
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
+    const userInfo = loaderData.userInfo;
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.resp));
     const splicedData = (rankingData && rankingData.splice(0, Math.ceil(loaderData.ranking.resp.length / 2))) || '';
+
+    const renderUserInfo = () => {
+        let noData = true;
+        let userData = { score: 39, rank: 39 };
+        let color = interpolateColorsOfScore(39);
+        console.log(userInfo.rankingInfo?.score !== 0);
+        if (userInfo.rankingInfo?.score) {
+            userData = userInfo.rankingInfo;
+            color = interpolateColorsOfScore(userData.score);
+            noData = false;
+        }
+        return (
+            <>
+                {
+                    noData &&
+                    <div className=" absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 bg-white/30">
+                        <div className="text-base whitespace-nowrap">{t("user.info.no_ranking_data_l1")}</div>
+                        <a href={`/detail/${userInfo.login}`} className=" mx-2 text-blue-400 text-xl font-semibold">{t("user.info.no_ranking_data_l2")}</a>
+                        <div className="text-base whitespace-nowrap">{t("user.info.no_ranking_data_l3")}</div>
+                    </div>
+                }
+                <div className={`${noData ? "blur-sm" : ""} flex flex-row items-center justify-between`}>
+                    <div className="flex gap-2 items-center">
+                        <Avatar src={userInfo.avatar_url} />
+                        <div className="flex flex-row items-center h-12">
+                            <div className="flex flex-col">
+                                <div className="text-xl font-bold">{userInfo.name ?? userInfo.login}</div>
+                                {userInfo.name && <div className="text-sm text-gray-500">{userInfo.login}</div>}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span className="font-bold text-lg" style={{ color: `rgb(${color.r}, ${color.g}, ${color.b})` }}>
+                            {userData.rank}
+                        </span>
+                        <span className="font-extralight text-sm translate-y-2">
+                            /{loaderData.ranking.totalCount}
+                        </span>
+                    </div>
+                    <span style={{ color: `rgb(${color.r}, ${color.g}, ${color.b})` }} className="text-3xl w-14">
+                        {rankIt(userData.score)}
+                        <sup className="text-base align-top">{userData.score}</sup>
+                    </span>
+                    <Link
+                        onClick={(e) => {
+                            e.stopPropagation();
+                        }}
+                        to={`/user/${userInfo.login}`}
+                        className="hover:bg-gray-300 p-2 rounded-md transition-all">
+                        <LinkOutlined className="text-2xl text-gray-900" />
+                    </Link>
+                </div>
+            </>
+
+        )
+    }
+
     return (
         <div className="my-12 mx-0 sm:mx-8 relative">
             <LoadingLayout />
-            <div className="flex justify-center">
+            <div className="flex justify-between items-center relative">
+                <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4  p-3">
+                </div>
                 <div className="flex flex-row justify-start gap-8">
                     <Select
                         onChange={(value) => {
@@ -94,6 +160,9 @@ export default function Ranking() {
                         searchable
                         clearable
                     />
+                </div>
+                <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 border relative rounded-2xl border-slate-300 p-3">
+                    {renderUserInfo()}
                 </div>
             </div>
             <div className="flex flex-col lg:flex-row justify-around items-center lg:items-start mt-8 w-screen sm:w-auto">

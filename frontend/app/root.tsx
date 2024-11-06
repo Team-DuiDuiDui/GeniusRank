@@ -14,8 +14,6 @@ import { useDisclosure } from '@mantine/hooks';
 import { user } from './cookie';
 import SettingDrawer from './components/drawer';
 import Header from './components/header';
-import { getRankings } from './api/backend/ranking';
-import { createInstanceForBe } from './api/backend/instance';
 
 export const handle = { i18n: ['translation'] };
 

@@ -50,7 +50,10 @@
         "different_from_location": "May be different from the current location in GitHub",
         "confidence_low": "Confidence is low",
         "login_to_see_l1": "Login to see the",
-        "login_to_see_l2": "info of nation"
+        "login_to_see_l2": "info of nation",
+        "no_ranking_data_l1": "No ranking data yet, click",
+        "no_ranking_data_l2": "HERE",
+        "no_ranking_data_l3": "to see your report"
       },
       "userRecentPrs": "Recent 80 Merged Pull Requests",
       "userRecentPrs_all": "Recent 80 Pull Requests",
