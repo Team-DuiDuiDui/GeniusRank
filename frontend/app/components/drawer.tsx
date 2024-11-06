@@ -1,7 +1,7 @@
 import { GithubFilled } from '@ant-design/icons';
 import { Avatar, Button, Divider, Drawer, SegmentedControl } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useFetcher, useNavigate } from '@remix-run/react';
+import { Link, useFetcher, useLocation, useNavigate } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 interface DrawerProps {
@@ -24,18 +24,46 @@ const SettingDrawer: React.FC<DrawerProps> = ({
     client_id,
 }) => {
     const { t, i18n } = useTranslation();
+    const params = useLocation();
     const navigate = useNavigate();
     const [logOut, { toggle: toggleLogOut }] = useDisclosure();
     const fetcher = useFetcher();
     return (
         <Drawer opened={opened} onClose={close}>
-            <div className="flex flex-col gap-5 h-full z-50">
-                <div className={`flex flex-row justify-center gap-5`}>
-                    <Avatar size="lg" src={userAvatar ?? undefined} />
-                    <div className="flex flex-col justify-center">
-                        <p className="text-lg font-bold">{username ?? userLogin ?? t('drawer.anonymous')}</p>
-                        {userLogin && <p className="text-sm text-gray-500">{userEmail ?? userLogin}</p>}
-                    </div>
+            <div className={`flex flex-row justify-center gap-5`}>
+                <Avatar size="lg" src={userAvatar ?? undefined} />
+                <div className="flex flex-col justify-center">
+                    <p className="text-lg font-bold">{username ?? userLogin ?? t('drawer.anonymous')}</p>
+                    {userLogin && <p className="text-sm text-gray-500">{userEmail ?? userLogin}</p>}
+                </div>
+            </div>
+            <div className="flex flex-col gap-5 h-full mt-8 z-50">
+                <div className="flex flex-col items-center gap-1 justify-evenly w-full md:hidden">
+                    <Link
+                        to="/"
+                        className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center ${
+                            params.pathname === '/' ? 'bg-gray-200' : 'hover:text-gray-700 hover:bg-gray-200'
+                        }`}>
+                        <span className="text-lg">{t('index')}</span>
+                    </Link>
+                    <Link
+                        to="/user"
+                        className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center ${
+                            params.pathname.startsWith('/user') || params.pathname.startsWith('/detail')
+                                ? 'bg-gray-200'
+                                : 'hover:text-gray-700 hover:bg-gray-200'
+                        }`}>
+                        <span className="text-lg">{t('searching')}</span>
+                    </Link>
+                    <Link
+                        to="/ranking"
+                        className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center ${
+                            params.pathname.startsWith('/ranking')
+                                ? 'bg-gray-200'
+                                : 'hover:text-gray-700 hover:bg-gray-200'
+                        }`}>
+                        <span className="text-lg">{t('ranking.title')}</span>
+                    </Link>
                 </div>
                 <SegmentedControl
                     className="mt-auto"

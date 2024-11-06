@@ -59,9 +59,9 @@ export default function Ranking() {
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.resp));
     const splicedData = (rankingData && rankingData.splice(0, Math.ceil(loaderData.ranking.resp.length / 2))) || '';
     return (
-        <div className="my-12 mx-32 relative">
+        <div className="my-12 mx-0 sm:mx-8 relative">
             <LoadingLayout />
-            <div className="flex justify-between">
+            <div className="flex justify-center">
                 <div className="flex flex-row justify-start gap-8">
                     <Select
                         onChange={(value) => {
@@ -95,16 +95,8 @@ export default function Ranking() {
                         clearable
                     />
                 </div>
-                {/* <UserCard userInfo={loaderData.userData} score={
-                {
-                    rank: 0,
-                    login: loaderData.userData.login,
-                    avatar_url: loaderData.userData.avatar_url,
-                    name: loaderData.userData.name,
-                }
-            } /> */}
             </div>
-            <div className="flex flex-row justify-between mt-8">
+            <div className="flex flex-col lg:flex-row justify-around items-center mt-8 w-screen sm:w-auto">
                 <UserAccordion>
                     {splicedData &&
                         splicedData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
