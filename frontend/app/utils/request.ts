@@ -253,7 +253,7 @@ export const handleClientGithubGraphQLReq = async <T>(
 };
 
 export const handleBackendReq = async <T>(
-    req: () => Promise<AxiosResponse>,
+    req: () => Promise<AxiosResponse<T>>,
     success: (data: AxiosResponse) => Promise<T>,
     errorResolve?: (error: unknown) => void
 ): Promise<T> => {
