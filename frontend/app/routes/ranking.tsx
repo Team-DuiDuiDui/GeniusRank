@@ -8,9 +8,21 @@ import LoadingLayout from '~/components/loading';
 import { UserAccordion, UserCard } from '~/components/ranking/card';
 import i18nServer from '~/modules/i18n.server';
 import { getRankings } from '~/api/ranking';
+import { user } from '~/cookie';
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const nation = url.searchParams.get('nation');
+    const cookieHeader = request.headers.get('Cookie');
+    const userCookie = (await user.parse(cookieHeader)) || {};
+    const userData = {
+        login: userCookie.userLogin,
+        name: userCookie.username,
+        avatar_url: userCookie.userAvatar,
+    } as {
+        login: string;
+        avatar_url: string;
+        name?: string | null;
+    }
     const type = url.searchParams.get('type');
     const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL);
     const t = await i18nServer.getFixedT(request);
@@ -18,6 +30,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         const res = await getRankings(beInstance, nation, type, 20);
         return json(
             {
+                userData: userData,
                 ranking: res,
                 title: `${t('ranking.title')} | Genius Rank`,
                 description: t('ranking.description'),
@@ -57,6 +70,7 @@ export default function Ranking() {
     return (
         <div className="my-12 mx-32 relative">
             <LoadingLayout />
+            <div className="flex justify-between">
             <div className="flex flex-row justify-start gap-8">
                 <Select
                     onChange={(value) => {
@@ -84,6 +98,15 @@ export default function Ranking() {
                     searchable
                     clearable
                 />
+            </div>
+            {/* <UserCard userInfo={loaderData.userData} score={
+                {
+                    rank: 0,
+                    login: loaderData.userData.login,
+                    avatar_url: loaderData.userData.avatar_url,
+                    name: loaderData.userData.name,
+                }
+            } /> */}
             </div>
             <div className="flex flex-row justify-between mt-8">
                 <UserAccordion>
