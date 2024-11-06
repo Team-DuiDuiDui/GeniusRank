@@ -22,6 +22,7 @@ export const getRankings = (
     );
 };
 
+/** 这里有特殊的错误处理 Handle */
 export const getRankingsByUser = (
     backEndInstance: AxiosInstanceForBe,
     login: string
