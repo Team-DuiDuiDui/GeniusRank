@@ -93,7 +93,7 @@ export type SingleUserScoreRes = {
  */
 export type GithubScoreResp = {
     name: string | null;
-    avatar_url: string;
+    avatarUrl: string;
     /**
      * 用户 issues 数据得分
      */
