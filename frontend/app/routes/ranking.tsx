@@ -7,7 +7,7 @@ import { ScoreRankResp } from '~/api/typings/beRes';
 import LoadingLayout from '~/components/loading';
 import { UserAccordion, UserCard } from '~/components/ranking/card';
 import i18nServer from '~/modules/i18n.server';
-import { getRankings } from '~/utils/requests/ranking';
+import { getRankings } from '~/api/ranking';
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const nation = url.searchParams.get('nation');
@@ -18,7 +18,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         const res = await getRankings(beInstance, nation, type, 20);
         return json(
             {
-                ranking: res.data,
+                ranking: res,
                 title: `${t('ranking.title')} | Genius Rank`,
                 description: t('ranking.description'),
                 type,
@@ -52,8 +52,8 @@ export default function Ranking() {
     const loaderData = useLoaderData<typeof loader>();
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
-    const rankingData: ScoreRankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.data));
-    const splicedData = rankingData.splice(0, Math.ceil(loaderData.ranking.data.length / 2));
+    const rankingData: ScoreRankResp[] = JSON.parse(JSON.stringify(loaderData.ranking));
+    const splicedData = rankingData.splice(0, Math.ceil(loaderData.ranking.length / 2));
     return (
         <div className="my-12 mx-32 relative">
             <LoadingLayout />
