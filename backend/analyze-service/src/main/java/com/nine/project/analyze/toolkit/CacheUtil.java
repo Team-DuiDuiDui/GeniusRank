@@ -117,4 +117,26 @@ public class CacheUtil<T> {
     public Set<String> getCountries() {
         return redisTemplate.opsForZSet().reverseRange(NATION_KEY, 0, -1);
     }
+
+    /**
+     * 注册开发者领域
+     */
+    public void registerType(String type) {
+        // 获取国家的计数器键
+        String counterKey = TYPE_COUNTER_KEY + type;
+        Long counter = redisTemplate.opsForValue().increment(counterKey);
+        if (counter == null) {
+            counter = 0L;
+        }
+        // 计算分数
+        redisTemplate.opsForZSet().add(TYPE_KEY, type, counter);
+    }
+
+    /**
+     * 获取所有开发者领域
+     * @return 排序后的所有开发者领域
+     */
+    public Set<String> getTypes() {
+        return redisTemplate.opsForZSet().reverseRange(TYPE_KEY, 0, -1);
+    }
 }

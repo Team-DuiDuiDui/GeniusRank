@@ -10,6 +10,7 @@ import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
+import com.nine.project.analyze.dto.resp.RankRespDTO;
 import com.nine.project.analyze.mq.event.SaveDetailedScoreAndTypeEvent;
 import com.nine.project.analyze.mq.event.SaveScoreAndTypeEvent;
 import com.nine.project.analyze.mq.produce.SaveDetailedScoreAndTypeProducer;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -103,7 +105,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     }
 
     @Override
-    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, List<String> nation, List<String> type) {
+    public RankRespDTO getGithubUserScoreRank(Integer size, List<String> nation, List<String> type) {
         List<GithubUserScoreRankRespDTO> scoreRankList;
         if (type!= null) {
             scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, type);
@@ -118,6 +120,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
                 cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, null);
             }
         }
-        return scoreRankList;
+        // 返回结果
+        return new RankRespDTO(scoreRankList, new ArrayList<>(cacheUtil.getCountries()), new ArrayList<>(cacheUtil.getTypes()));
     }
 }

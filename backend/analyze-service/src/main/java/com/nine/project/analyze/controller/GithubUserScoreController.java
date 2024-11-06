@@ -4,6 +4,7 @@ import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
+import com.nine.project.analyze.dto.resp.RankRespDTO;
 import com.nine.project.analyze.service.GithubUserScoreService;
 import com.nine.project.framework.result.Result;
 import com.nine.project.framework.web.Results;
@@ -51,9 +52,9 @@ public class GithubUserScoreController {
      * 获取用户分数接口排行榜（无需登录）
      */
     @GetMapping("/api/analyze/score/rank")
-    public Result<List<GithubUserScoreRankRespDTO>> getUserScoreRank(@RequestParam(defaultValue = "10") Integer size,
-                                                                     @RequestParam(required = false) String[] nation,
-                                                                     @RequestParam(required = false) String[] type) {
+    public Result<RankRespDTO> getUserScoreRank(@RequestParam(defaultValue = "10") Integer size,
+                                                @RequestParam(required = false) String[] nation,
+                                                @RequestParam(required = false) String[] type) {
         List<String> nationList = nation == null ? null : List.of(nation);
         List<String> typeList = type == null ? null : List.of(type);
         return Results.success(githubUserScoreService.getGithubUserScoreRank(size, nationList, typeList));

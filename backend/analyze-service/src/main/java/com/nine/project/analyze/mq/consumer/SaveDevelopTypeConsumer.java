@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.nine.project.analyze.constant.RedisCacheConstant.USER_SCORE_EXPIRE_TIME;
@@ -89,7 +90,12 @@ public class SaveDevelopTypeConsumer implements RocketMQListener<GeneralMessageE
             List<String> topThreeLanguages = LanguageFrequencyCounter.getTopThreeLanguages(requestParams.getRepos());
             List<GithubUserDeveloperDO> developerDOList = new ArrayList<>();
 
-            for (String language : topThreeLanguages) {
+            // 存入 Redis 中
+            if (topThreeLanguages != null && !topThreeLanguages.isEmpty()) {
+                topThreeLanguages.forEach(cacheUtil::registerType);
+            }
+
+            for (String language : Objects.requireNonNull(topThreeLanguages)) {
                 GithubUserDeveloperDO developerDO = new GithubUserDeveloperDO();
                 developerDO.setLogin(login);
                 developerDO.setDeveloper_type(language);

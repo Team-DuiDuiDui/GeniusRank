@@ -3,6 +3,8 @@ package com.nine.project.analyze.dto.resp;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 
 /**
  * Github 用户得分响应
