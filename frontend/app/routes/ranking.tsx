@@ -96,7 +96,7 @@ export default function Ranking() {
                     />
                 </div>
             </div>
-            <div className="flex flex-col lg:flex-row justify-around items-center mt-8 w-screen sm:w-auto">
+            <div className="flex flex-col lg:flex-row justify-around items-center lg:items-start mt-8 w-screen sm:w-auto">
                 <UserAccordion>
                     {splicedData &&
                         splicedData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
