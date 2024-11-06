@@ -2,6 +2,7 @@ package com.nine.project.analyze.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nine.project.analyze.dao.entity.GithubUserScoreDO;
@@ -129,5 +130,19 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     @Override
     public List<String> getTypes() {
         return new ArrayList<>(cacheUtil.getTypes());
+    }
+
+    @Override
+    public Integer getGithubUserRank(String login) {
+        QueryWrapper<GithubUserScoreDO> queryWrapper = Wrappers.<GithubUserScoreDO>query()
+                .eq("login", login);
+        GithubUserScoreDO userScoreDO = this.getOne(queryWrapper);
+        if (userScoreDO == null) {
+            log.error("用户分数不存在");
+            throw new ClientException(USER_SCORE_NOT_FOUND);
+        }
+        double totalScore = userScoreDO.getTotalScore();
+
+        return baseMapper.getGithubUserRank(totalScore);
     }
 }

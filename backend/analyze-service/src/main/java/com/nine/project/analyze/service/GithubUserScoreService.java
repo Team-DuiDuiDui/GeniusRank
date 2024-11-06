@@ -50,4 +50,9 @@ public interface GithubUserScoreService extends IService<GithubUserScoreDO> {
      * @return List<String> 国家列表
      */
     List<String> getTypes();
+
+    /**
+     * 获取用户分数接口排行榜（无需登录）
+     */
+    Integer getGithubUserRank(String login);
 }

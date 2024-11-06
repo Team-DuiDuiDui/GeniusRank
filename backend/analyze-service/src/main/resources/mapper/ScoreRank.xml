@@ -90,4 +90,10 @@
             ORDER BY temp.totalScore DESC
             LIMIT #{size}
         </select>
+
+    <select id="getGithubUserRank" resultType="Integer">
+        SELECT COUNT(*) + 1
+        FROM t_github_user_score
+        WHERE total_score > #{totalScore}
+    </select>
 </mapper>

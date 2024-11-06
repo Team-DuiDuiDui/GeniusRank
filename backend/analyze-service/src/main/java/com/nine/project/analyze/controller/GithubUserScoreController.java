@@ -9,6 +9,7 @@ import com.nine.project.analyze.service.GithubUserScoreService;
 import com.nine.project.framework.result.Result;
 import com.nine.project.framework.web.Results;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -61,11 +62,18 @@ public class GithubUserScoreController {
     }
 
     /**
+     * 获取用户排名接口排行榜（无需登录）
+     */
+    @GetMapping("/api/analyze/score/rank/{login}")
+    public Result<Integer> getUserRank(@PathVariable  String login) {
+        return Results.success(githubUserScoreService.getGithubUserRank(login));
+    }
+
+    /**
      * 查询所有已存在国家
      */
     @GetMapping("/api/analyze/score/type/exist")
     public Result<List<String>> getUser() {
         return Results.success(githubUserScoreService.getTypes());
     }
-
 }

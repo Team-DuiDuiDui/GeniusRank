@@ -28,4 +28,11 @@ public interface GithubUserScoreMapper extends BaseMapper<GithubUserScoreDO> {
             @Param("size")  Integer size,
             @Param("nations") List<String> nations,
             @Param("types") List<String> types);
+
+    /**
+     * 根据用户名查询排名
+     * @param totalScore 分数
+     * @return 排名
+     */
+    Integer getGithubUserRank(@Param("totalScore") Double totalScore);
 }
