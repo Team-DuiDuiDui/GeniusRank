@@ -57,7 +57,7 @@ export const handleRequest = async <T>(
         failedSideEffect?: () => void;
         cleanSideEffect?: () => void;
     }
-): Promise<T | undefined> => {
+): Promise<T> => {
     let attempt = 0;
 
     // eslint-disable-next-line no-constant-condition
@@ -256,7 +256,7 @@ export const handleBackendReq = async <T>(
     req: () => Promise<AxiosResponse<T>>,
     success: (data: AxiosResponse) => Promise<T>,
     errorResolve?: (error: unknown) => void
-): Promise<T | undefined> => {
+): Promise<T> => {
     return handleRequest(
         req,
         (res) => {
