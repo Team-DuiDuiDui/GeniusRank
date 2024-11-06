@@ -103,7 +103,7 @@ export class githubUser {
                 return { pr_and_issue_amount: pr.number };
             }),
             user: {
-                login: this.name,
+                login: this.userData?.login ?? this.name,
                 commit_amount: this.userCommits?.total_count ?? 0,
                 followers: this.userData?.followers ?? 0,
                 issue_amount: this.userIssues?.total_count ?? 0,

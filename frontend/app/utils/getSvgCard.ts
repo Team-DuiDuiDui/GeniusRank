@@ -12,7 +12,7 @@ export const getSvgCard = (score: SingleUserScoreRes['data'], login: string): st
      *
      * 这里的 6.16 为 (314 - 160) / 最高分数
      */
-    const maxD = (314 - 160) / 30;
+    const maxD = (314 - 160) / Math.max(userScore, reposScore, prsScore, issuesScore);
     const base_h = userScore * maxD,
         base_y = 314 - base_h;
     const repo_h = reposScore * maxD,
@@ -37,7 +37,7 @@ export const getSvgCard = (score: SingleUserScoreRes['data'], login: string): st
                 <tspan x="50" y="66.6364" id="svg_6">${name ?? login}</tspan>
             </text>
             <text fill="black" fill-opacity="0.66" xml:space="preserve" font-family="Inter" font-size="20"
-                letter-spacing="0em" id="login" visible=${name ? '"visible"' : '"hidden"'}>
+                letter-spacing="0em" id="login" visibility="${name ? 'visible' : 'hidden'}">
                 <tspan x="50" y="103.773" id="svg_8">${login}</tspan>
             </text>
         </g>
@@ -97,5 +97,20 @@ export const getSvgCard = (score: SingleUserScoreRes['data'], login: string): st
             </text>
         </g>
     </g>
+</svg>`;
+};
+
+export const getErrorSvgCard = (error: { title: string; detail: string }): string => {
+    return `<svg width="1004" height="444" viewBox="0 0 1004 444" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0.5" y="0.5" width="1003" height="443" rx="23.5" fill="white" />
+    <rect x="0.5" y="0.5" width="1003" height="443" rx="23.5" stroke="#C7C7C7" />
+    <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="32" font-weight="800"
+        letter-spacing="0em">
+        <tspan x="56" y="84.1364">${error.title}</tspan>
+    </text>
+    <text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="22"
+        letter-spacing="0em">
+        <tspan x="56" y="133.136">${error.detail}</tspan>
+    </text>
 </svg>`;
 };
