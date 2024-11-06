@@ -115,42 +115,8 @@ const UserNation: React.FC<NationCardProps> = ({
 
     const renderFlag = () => (
         <span
-            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${
-                disable ? 'blur-xl' : ''
-            } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
-    );
-
-    const renderComponent = () => (
-        <>
-            {isCN ? (
-                <Tooltip label={message}>
-                    <CardWithNoShrink
-                        containerClass={`flex-shrink-0 flex-grow-0 overflow-hidden `}
-                        containerClassDelete={['p-8']}>
-                        {loading && <LoadingOverlay visible={loading} loaderProps={{ type: 'dots' }} />}
-                        {renderFlag()}
-                        <div
-                            className={`h-full w-full flex items-center justify-center p-4 `}
-                            style={{ aspectRatio: '4/3' }}>
-                            {renderIcon()}
-                        </div>
-                    </CardWithNoShrink>
-                </Tooltip>
-            ) : (
-                <CardWithNoShrink
-                    containerClass={`flex-shrink-0 flex-grow-0 overflow-hidden `}
-                    containerClassDelete={['p-8']}>
-                    {loading && <LoadingOverlay visible={loading} loaderProps={{ type: 'dots' }} />}
-                    {renderFlag()}
-                    <div
-                        className={`h-full w-full flex items-center justify-center p-4 `}
-                        style={{ aspectRatio: '4/3' }}>
-                        {renderIcon()}
-                        {renderMiddleInfo()}
-                    </div>
-                </CardWithNoShrink>
-            )}
-        </>
+            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${disable ? 'blur-xl' : ''
+                } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
     );
 
     // return (
@@ -279,7 +245,22 @@ const UserNation: React.FC<NationCardProps> = ({
     //         )}
     //     </>
     // );
-    return renderComponent();
+    return (
+        <CardWithNoShrink
+            containerClass={`overflow-hidden h-full`}
+            style={{
+                aspectRatio: '4/3',
+            }}
+            containerClassDelete={['p-8']}>
+            {loading && <LoadingOverlay visible={loading} loaderProps={{ type: 'dots' }} />}
+            {renderFlag()}
+            <div
+                className={`h-full w-full flex items-center justify-center p-4 `} >
+                {renderIcon()}
+                {!isCN && renderMiddleInfo()}
+            </div>
+        </CardWithNoShrink>
+    );
 };
 
 export default UserNation;

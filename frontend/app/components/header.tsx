@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
                 <Link to="/" className="hover:scale-105 active:scale-95 transition-all lg:block hidden">
                     <img src={geniusRank} alt="logo" className="h-10" />
                 </Link>
-                <div className="flex items-center gap-6 ml-8 h-full">
+                <div className="flex items-center gap-6 justify-evenly h-full">
                     <Link
                         to="/user"
                         className={`text-nowrap transition-all py-1 px-2 rounded-lg ${

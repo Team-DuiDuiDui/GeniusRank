@@ -7,14 +7,14 @@ interface cardWithNoShrinkProps {
     children: React.ReactNode
 }
 
-const CardWithNoShrink: React.FC<cardWithNoShrinkProps> = ({ containerClass, children, containerClassDelete }) => {
+const CardWithNoShrink: React.FC<cardWithNoShrinkProps> = ({ containerClass, children, containerClassDelete, style }) => {
     let classString = `flex flex-col bg-white p-8 rounded-xl border shadow-md relative border-slate-200 ${containerClass}`
     containerClassDelete?.forEach((item) => {
-        const regex = new RegExp(item + "\\s*", "g"); // 创建正则表达式，匹配单词和后面的空格
+        const regex = new RegExp(item + "\\s*", "g");
         classString = classString.replace(regex, "");
     });
     return (
-        <div className={classString}>
+        <div className={classString} style={style}>
             {children}
         </div>
     );
