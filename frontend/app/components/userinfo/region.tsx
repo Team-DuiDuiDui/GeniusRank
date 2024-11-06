@@ -29,7 +29,6 @@ const UserNation: React.FC<NationCardProps> = ({
     loading,
     disable,
     message,
-    // confidence,
 }) => {
     const noData = nationISO === '';
     const isCN = nationISO === 'CN';

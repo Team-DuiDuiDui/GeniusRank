@@ -5,13 +5,17 @@
 html,
 body {
   @apply bg-white dark:bg-gray-950 box-border;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 100vh;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
 }
 
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -22,7 +26,7 @@ body {
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
-    background-color: #4a5568; 
+    background-color: #4a5568;
     border-radius: 4px;
   }
 
@@ -31,6 +35,38 @@ body {
   }
 }
 
-.mark{
+.scrollbarHidden::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbarHidden::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+.scrollbarHidden::-webkit-scrollbar-track {
+  display: none;
+}
+
+.mark {
   @apply flex flex-row flex-nowrap gap-1
+}
+
+@keyframes scrollLineO {
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(calc(-450% - 4.5rem));
+  }
+}
+
+@keyframes scrollLineI {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-400% - 4.5rem));
+  }
 }

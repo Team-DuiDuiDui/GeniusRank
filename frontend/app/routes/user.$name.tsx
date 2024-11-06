@@ -59,35 +59,14 @@ export default function User() {
     const navigation = useNavigation();
     const params = useParams();
     const locale = useLocale();
-    // const [nationLoading, setNationLoading] = useState<boolean>(true)
     const beInstance = useAxiosInstanceForBe(data.baseUrl)();
     const githubInstance = useAxiosInstanceForGithub()();
     const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData, githubInstance, beInstance));
-    // const [userRegion, setUserRegion] = useState<NationData | null>(null);
-
-    // const getAndSetUserRegion = useCallback(async () => {
-    //     const nation = await guessRegion({
-    //         locale,
-    //         userData: {
-    //             followers: data.userData.followers,
-    //             followings: data.userData.following,
-    //             login: data.userData.login
-    //         },
-    //         beInstance: beInstance,
-    //         githubInstance: githubInstance,
-    //     });
-    //     setUserRegion(nation);
-    //     setNationLoading(false)
-    // }, [beInstance, data.userData, githubInstance, locale, userRegion]);
 
     useEffect(() => {
         user.current.setUserName(params?.name ?? '');
         user.current.setUserData(data.userData);
     }, [data.userData, params?.name]);
-
-    // useEffect(() => {
-    //     getAndSetUserRegion();
-    // }, [getAndSetUserRegion]);
 
     return (
         <>

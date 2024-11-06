@@ -14,16 +14,17 @@ interface UserCardProps {
         name?: string | null;
     };
     score: Omit<GithubScoreRes['data'], 'updateTime'>;
+    style?: React.CSSProperties;
 }
 
-const UserCard: React.FC<UserCardProps> = ({ userInfo, score }) => {
+const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style }) => {
     const { r, g, b } = interpolateColorsOfScore(score.totalScore);
     const { t } = useTranslation();
 
     return (
         <Accordion.Item value={userInfo.login} className="bg-white">
             <Accordion.Control icon={<Avatar src={userInfo.avatar_url} />}>
-                <div className="flex flex-row items-center justify-between">
+                <div className="flex flex-row items-center justify-between" style={style}>
                     <div className="flex flex-row items-center h-12">
                         <div className="flex flex-col">
                             <div className="text-xl font-bold">{userInfo.name ?? userInfo.login}</div>
@@ -67,12 +68,14 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score }) => {
     );
 };
 
-const UserAccordion: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const UserAccordion: React.FC<{ children: React.ReactNode, style?: React.CSSProperties, className?: string, disabledChevron?: boolean }> = ({ children, style, className, disabledChevron }) => {
     return (
         <Accordion
-            className="w-10/12 min-w-[375px] md:min-w-[511px] md:w-1/2 lg:w-1/3 bg-white box-border"
+            className={`w-10/12 min-w-[375px] md:min-w-[511px] md:w-1/2 lg:w-1/3 bg-white box-border ${className}`}
             variant="contained"
-            radius="lg">
+            radius="lg"
+            classNames={disabledChevron ? { chevron: 'hidden w-0 h-0' } : {}}
+            style={style}>
             {children}
         </Accordion>
     );
