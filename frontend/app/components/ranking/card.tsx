@@ -107,7 +107,7 @@ const parseScoreData = (
     return scores;
 };
 
-const rankIt = (score: number): string => {
+export const rankIt = (score: number): string => {
     if (score >= 75) return 'A';
     else if (score >= 50) return 'B';
     else if (score >= 25) return 'C';

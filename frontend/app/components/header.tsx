@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
         parentRef.current && autoAnimate(parentRef.current, scaleAnimate);
     }, [parentRef, params.pathname]);
     return (
-        <div className="flex items-center justify-between py-3 px-8 shadow-lg sticky top-0 bg-white z-40">
+        <div className="flex items-center justify-between py-3 px-8 shadow-lg sticky top-0 bg-white z-40 h-[68px]">
             <div className="flex items-center gap-4 w-1/3">
                 <ActionIcon variant="default" size="xl" onClick={openDrawer}>
                     <MenuIcon />
@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
                 </div>
             </div>
             <div className="w-2/4 lg:w-1/3" ref={parentRef}>
-                {params.pathname !== '/detail' && params.pathname !== '/user' && (
+                {!params.pathname.startsWith('/detail') && !params.pathname.startsWith('/user') && (
                     <Search logo={octoCat} placeholder={t('search.placeholder')} />
                 )}
             </div>

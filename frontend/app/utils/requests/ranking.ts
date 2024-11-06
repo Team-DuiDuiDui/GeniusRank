@@ -1,5 +1,5 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
-import { UserScoreRanking } from '~/api/typings/beRes';
+import { SingleUserScoreRes, UserScoreRanking } from '~/api/typings/beRes';
 
 export const getRankings = (
     backEndInstance: AxiosInstance,
@@ -14,4 +14,11 @@ export const getRankings = (
             ...(size && { size }),
         },
     });
+};
+
+export const getRankingsByUser = (
+    backEndInstance: AxiosInstance,
+    login: string
+): Promise<AxiosResponse<SingleUserScoreRes>> => {
+    return backEndInstance.get(`/analyze/score/${login}`);
 };
