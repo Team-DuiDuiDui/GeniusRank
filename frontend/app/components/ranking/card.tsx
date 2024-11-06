@@ -24,7 +24,7 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score }) => {
         <Accordion.Item value={userInfo.login} className="bg-white">
             <Accordion.Control icon={<Avatar src={userInfo.avatar_url} />}>
                 <div className="flex flex-row items-center justify-between">
-                    <div className="flex flex-row items-center">
+                    <div className="flex flex-row items-center h-12">
                         <div className="flex flex-col">
                             <div className="text-xl font-bold">{userInfo.name ?? userInfo.login}</div>
                             {userInfo.name && <div className="text-sm text-gray-500">{userInfo.login}</div>}
