@@ -15,15 +15,16 @@ interface UserCardProps {
     };
     score: Omit<GithubScoreRes['data'], 'updateTime'>;
     style?: React.CSSProperties;
+    disabled?: boolean;
 }
 
-const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style }) => {
+const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style, disabled }) => {
     const { r, g, b } = interpolateColorsOfScore(score.totalScore);
     const { t } = useTranslation();
 
     return (
-        <Accordion.Item value={userInfo.login} className="bg-white">
-            <Accordion.Control icon={<Avatar src={userInfo.avatar_url} />}>
+        <Accordion.Item value={userInfo.login} className="bg-white opacity-100">
+            <Accordion.Control icon={<Avatar src={userInfo.avatar_url} />} disabled={disabled} className="opacity-100">
                 <div className="flex flex-row items-center justify-between" style={style}>
                     <div className="flex flex-row items-center h-12">
                         <div className="flex flex-col">
@@ -68,7 +69,12 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style }) => {
     );
 };
 
-const UserAccordion: React.FC<{ children: React.ReactNode, style?: React.CSSProperties, className?: string, disabledChevron?: boolean }> = ({ children, style, className, disabledChevron }) => {
+const UserAccordion: React.FC<{
+    children: React.ReactNode;
+    style?: React.CSSProperties;
+    className?: string;
+    disabledChevron?: boolean;
+}> = ({ children, style, className, disabledChevron }) => {
     return (
         <Accordion
             className={`w-10/12 min-w-[375px] md:min-w-[511px] md:w-1/2 lg:w-1/3 bg-white box-border ${className}`}
@@ -81,10 +87,24 @@ const UserAccordion: React.FC<{ children: React.ReactNode, style?: React.CSSProp
     );
 };
 
-const UserCardFull: React.FC<UserCardProps> = ({ userInfo, score }) => {
+interface UserCardFullProps extends UserCardProps {
+    style?: React.CSSProperties;
+    className?: string;
+    disabledChevron?: boolean;
+    disabled?: boolean;
+}
+
+const UserCardFull: React.FC<UserCardFullProps> = ({
+    userInfo,
+    score,
+    style,
+    className,
+    disabledChevron,
+    disabled,
+}) => {
     return (
-        <UserAccordion>
-            <UserCard userInfo={userInfo} score={score} />
+        <UserAccordion style={style} className={className} disabledChevron={disabledChevron}>
+            <UserCard userInfo={userInfo} score={score} disabled={disabled} />
         </UserAccordion>
     );
 };
