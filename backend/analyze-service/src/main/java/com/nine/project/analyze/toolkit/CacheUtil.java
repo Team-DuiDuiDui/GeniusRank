@@ -58,18 +58,18 @@ public class CacheUtil<T> {
     }
 
     /**
-     * 从缓存中获取 GitHub 用户分数排名列表
+     * 从缓存中获取 GitHub 用户分数排名列表。
      *
-     * @param nation 国家名称，如果为 null 则不根据国家筛选
-     * @param type   用户类型，如果为 null 则不根据类型筛选
-     * @return GitHub 用户分数排名响应 DTO 列表，如果缓存中不存在则返回 null
+     * @param nations 国家名称列表，如果为 null 或空列表则不根据国家筛选。
+     * @param types   用户类型列表，如果为 null 或空列表则不根据类型筛选。
+     * @return GitHub 用户分数排名响应 DTO 列表，如果缓存中不存在则返回 null。
      */
-    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRankFromCache(String nation, String type) {
+    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRankFromCache(List<String> nations, List<String> types) {
         String key;
-        if (type != null) {
-            key = String.format(SCORE_RANK_NATION_TYPE_KEY, nation, type);
+        if (types!= null &&!types.isEmpty()) {
+            key = String.format(SCORE_RANK_NATION_TYPE_KEY, nations, types);
         } else {
-            key = String.format(SCORE_RANK_NATION_KEY, nation);
+            key = String.format(SCORE_RANK_NATION_KEY, nations);
         }
 
         String json = redisTemplate.opsForValue().get(key);
@@ -79,18 +79,18 @@ public class CacheUtil<T> {
     }
 
     /**
-     * 将 GitHub 用户分数排名列表存入缓存
+     * 将 GitHub 用户分数排名列表存入缓存。
      *
-     * @param scoreRankList GitHub 用户分数排名响应 DTO 列表
-     * @param nation        国家名称，如果为 null 则不根据国家筛选
-     * @param type          用户类型，如果为 null 则不根据类型筛选
+     * @param scoreRankList GitHub 用户分数排名响应 DTO 列表。
+     * @param nations       国家名称列表，如果为 null 或空列表则不根据国家筛选。
+     * @param types         用户类型列表，如果为 null 或空列表则不根据类型筛选。
      */
-    public void setGithubUserScoreRankToCache(List<GithubUserScoreRankRespDTO> scoreRankList, String nation, String type) {
+    public void setGithubUserScoreRankToCache(List<GithubUserScoreRankRespDTO> scoreRankList, List<String> nations, List<String> types) {
         String key;
-        if (type != null) {
-            key = String.format(SCORE_RANK_NATION_TYPE_KEY, nation, type);
+        if (types!= null &&!types.isEmpty()) {
+            key = String.format(SCORE_RANK_NATION_TYPE_KEY, nations, types);
         } else {
-            key = String.format(SCORE_RANK_NATION_KEY, nation);
+            key = String.format(SCORE_RANK_NATION_KEY, nations);
         }
 
         redisTemplate.opsForValue().set(key, JSON.toJSONString(scoreRankList), USER_SCORE_RANK_EXPIRE_TIME, TimeUnit.SECONDS);

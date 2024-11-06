@@ -18,65 +18,76 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nine.project.analyze.dao.mapper.GithubUserScoreMapper">
-    <select id="findTopScoresByCountryName" resultType="com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO">
-        SELECT gus.login,
-        gus.name,
-        gus.avatar_url As avatarUrl,
-        gusc.country_iso,
-        gus.total_score AS totalScore,
-        gus.user_score AS userScore,
-        gus.repos_score AS reposScore,
-        gus.prs_score AS prsScore,
-        gus.issues_score AS issuesScore
-        FROM t_github_user_score gus
-        LEFT JOIN t_github_user_country_guess gusc ON gus.login = gusc.login
-        <where>
-            <!-- 如果 nation 不为 null，则添加国家名称的条件 -->
-            <if test="nation != null">
-                AND gusc.country_iso = #{nation}
-            </if>
-        </where>
-        ORDER BY totalScore DESC
-        LIMIT #{size}
-    </select>
+        <!-- 根据国家名称列表查询前几名用户（排行榜） -->
+        <select id="findTopScoresByCountryName" resultType="com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO">
+            SELECT gus.login,
+            gus.name,
+            gus.avatar_url As avatarUrl,
+            gusc.country_iso,
+            gus.total_score AS totalScore,
+            gus.user_score AS userScore,
+            gus.repos_score AS reposScore,
+            gus.prs_score AS prsScore,
+            gus.issues_score AS issuesScore
+            FROM t_github_user_score gus
+            LEFT JOIN t_github_user_country_guess gusc ON gus.login = gusc.login
+            <where>
+                <!-- 如果 nations 不为 null 且不为空列表，则添加国家名称的条件 -->
+                <if test="nations!= null and nations.size > 0">
+                    AND gusc.country_iso IN
+                    <foreach item="nation" collection="nations" open="(" separator="," close=")">
+                        #{nation}
+                    </foreach>
+                </if>
+            </where>
+            ORDER BY totalScore DESC
+            LIMIT #{size}
+        </select>
 
-    <select id="findTopScoresByCountryNameAndType" resultType="com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO">
-        SELECT temp.login,
-               temp.name,
-               temp.avatarUrl,
-        temp.country_iso,
-        temp.totalScore,
-        temp.userScore,
-        temp.reposScore,
-        temp.prsScore,
-        temp.issuesScore
-        FROM (
-        SELECT gus.login,
-        gusc.country_iso,
-        gus.name,
-        gus.avatar_url As avatarUrl,
-        gus.total_score AS totalScore,
-        gus.user_score AS userScore,
-        gus.repos_score AS reposScore,
-        gus.prs_score AS prsScore,
-        gus.issues_score AS issuesScore
-        FROM t_github_user_score gus
-        LEFT JOIN t_github_user_country_guess gusc ON gus.login = gusc.login
-        <where>
-            <!-- 如果 nation 不为 null，则添加国家名称的条件 -->
-            <if test="nation!= null">
-                AND gusc.country_iso = #{nation}
-            </if>
-        </where>
-        ) temp
-        LEFT JOIN t_github_user_developer_type gudt ON temp.login = gudt.login
-        <where>
-            <!-- 如果 developerType 不为 null，则添加开发者领域的条件 -->
-            <if test="type!= null">
-                AND gudt.developer_type = #{type}
-            </if>
-        </where>
-        ORDER BY temp.totalScore DESC
-        LIMIT #{size}
-    </select>
+        <!-- 根据国家名称列表和开发者领域列表查询前几名用户（排行榜） -->
+        <select id="findTopScoresByCountryNameAndType" resultType="com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO">
+            SELECT temp.login,
+            temp.name,
+            temp.avatarUrl,
+            temp.country_iso,
+            temp.totalScore,
+            temp.userScore,
+            temp.reposScore,
+            temp.prsScore,
+            temp.issuesScore
+            FROM (
+            SELECT gus.login,
+            gusc.country_iso,
+            gus.name,
+            gus.avatar_url As avatarUrl,
+            gus.total_score AS totalScore,
+            gus.user_score AS userScore,
+            gus.repos_score AS reposScore,
+            gus.prs_score AS prsScore,
+            gus.issues_score AS issuesScore
+            FROM t_github_user_score gus
+            LEFT JOIN t_github_user_country_guess gusc ON gus.login = gusc.login
+            <where>
+                <!-- 如果 nations 不为 null 且不为空列表，则添加国家名称的条件 -->
+                <if test="nations!= null and nations.size > 0">
+                    AND gusc.country_iso IN
+                    <foreach item="nation" collection="nations" open="(" separator="," close=")">
+                        #{nation}
+                    </foreach>
+                </if>
+            </where>
+            ) temp
+            LEFT JOIN t_github_user_developer_type gudt ON temp.login = gudt.login
+            <where>
+                <!-- 如果 types 不为 null 且不为空列表，则添加开发者领域的条件 -->
+                <if test="types!= null and types.size > 0">
+                    AND gudt.developer_type IN
+                    <foreach item="type" collection="types" open="(" separator="," close=")">
+                        #{type}
+                    </foreach>
+                </if>
+            </where>
+            ORDER BY temp.totalScore DESC
+            LIMIT #{size}
+        </select>
 </mapper>

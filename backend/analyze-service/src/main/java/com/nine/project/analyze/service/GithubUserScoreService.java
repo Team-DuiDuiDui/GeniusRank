@@ -42,5 +42,5 @@ public interface GithubUserScoreService extends IService<GithubUserScoreDO> {
      * @param nation 国家
      * @return List<GithubUserScoreRespDTO> 用户分数
      */
-    List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, String nation, String type);
+    List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, List<String> nation, List<String> type);
 }

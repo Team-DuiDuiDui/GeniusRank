@@ -52,8 +52,10 @@ public class GithubUserScoreController {
      */
     @GetMapping("/api/analyze/score/rank")
     public Result<List<GithubUserScoreRankRespDTO>> getUserScoreRank(@RequestParam(defaultValue = "10") Integer size,
-                                                                     @RequestParam(required = false) String nation,
-                                                                     @RequestParam(required = false) String type) {
-        return Results.success(githubUserScoreService.getGithubUserScoreRank(size, nation, type));
+                                                                     @RequestParam(required = false) String[] nation,
+                                                                     @RequestParam(required = false) String[] type) {
+        List<String> nationList = nation == null ? null : List.of(nation);
+        List<String> typeList = type == null ? null : List.of(type);
+        return Results.success(githubUserScoreService.getGithubUserScoreRank(size, nationList, typeList));
     }
 }

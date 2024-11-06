@@ -103,7 +103,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     }
 
     @Override
-    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, String nation, String type) {
+    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, List<String> nation, List<String> type) {
         List<GithubUserScoreRankRespDTO> scoreRankList;
         if (type!= null) {
             scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, type);
