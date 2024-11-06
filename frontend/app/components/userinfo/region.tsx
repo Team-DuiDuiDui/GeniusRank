@@ -75,7 +75,7 @@ const UserNation: React.FC<NationCardProps> = ({
                         <div className=" text-base drop-shadow-md font-bold text-red-600">
                             {t('user.err.something_wrong_shorter')}
                         </div>
-                        <div className=" text-base drop-shadow-md font-bold text-red-600">
+                        <div className=" text-base drop-shadow-md font-bold text-red-600 text-center">
                             {t('user.err.click_to_reload')}
                         </div>
                     </div>
@@ -115,8 +115,9 @@ const UserNation: React.FC<NationCardProps> = ({
 
     const renderFlag = () => (
         <span
-            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${disable ? 'blur-xl' : ''
-                } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
+            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${
+                disable ? 'blur-xl' : ''
+            } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
     );
 
     return (

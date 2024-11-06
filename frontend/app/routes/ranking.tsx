@@ -1,6 +1,6 @@
 import { Select } from '@mantine/core';
 import { json, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { useLoaderData, useSearchParams } from '@remix-run/react';
+import { isRouteErrorResponse, useLoaderData, useRouteError, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { createInstanceForBe } from '~/api/backend/instance';
 import { RankResp } from '~/api/backend/typings/beRes';
@@ -9,6 +9,8 @@ import { UserAccordion, UserCard } from '~/components/ranking/card';
 import i18nServer from '~/modules/i18n.server';
 import { getRankings } from '~/api/backend/ranking';
 import { user } from '~/cookie';
+import axios from 'axios';
+import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const nation = url.searchParams.get('nation');
@@ -40,20 +42,9 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
             { status: 200 }
         );
     } catch (e) {
-        throw new Response(
-            JSON.stringify({
-                code: 'error',
-                data: null,
-                // message: e.message,
-                success: false,
-            }),
-            {
-                status: 200,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
+        if (axios.isAxiosError(e)) throw new Response(t('ranking.err.ngrok_error'), { status: e.status });
+        if (e instanceof BackEndError) throw new Response(t('ranking.err.error'), { status: e.response?.status });
+        throw new Response(t('ranking.err.error'), { status: 500 });
     }
 }
 
@@ -125,4 +116,26 @@ export default function Ranking() {
             </div>
         </div>
     );
+}
+
+export function ErrorBoundary() {
+    const error = useRouteError();
+    if (isRouteErrorResponse(error)) {
+        return (
+            <div className="flex justify-center items-center my-12">
+                <p>{error.data}</p>
+            </div>
+        );
+    } else if (error instanceof Error) {
+        return (
+            <div>
+                <h1>错误</h1>
+                <p>{error.message}</p>
+                <p>The stack trace is:</p>
+                <pre>{error.stack}</pre>
+            </div>
+        );
+    } else {
+        return <h1>Unknown Error</h1>;
+    }
 }

@@ -13,7 +13,11 @@
       "title": "排名",
       "description": "排名与用户筛选",
       "type": "请选择语言",
-      "nation": "请选择国籍"
+      "nation": "请选择国籍",
+      "err": {
+        "error": "错误",
+        "ngrok_error": "后端内网穿透状态异常，请联系后端管理员"
+      }
     },
     "user": {
       "description": "GitHub 用户分析",

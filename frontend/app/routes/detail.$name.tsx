@@ -21,7 +21,7 @@ import { lng, user } from '~/cookie';
 import i18nServer from '~/modules/i18n.server';
 import { guessRegion } from '~/utils/region/main';
 import { UserDetail } from '~/api/github/graphql/typings/user';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { gqlUser } from '~/api/github/graphql/gqlUser.server';
 
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
@@ -76,17 +76,30 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                     confidence: 0,
                 };
             }
-
-            const scores = await user.getUserScores();
-            return json({
-                data,
-                title: `${params?.name ?? ''} | Genius Rank`,
-                description: t('user.description'),
-                beToken: cookie.be_token,
-                githubToken: cookie.access_token,
-                nationData,
-                scores,
-            });
+            try {
+                const scores = await user.getUserScores();
+                return json({
+                    data,
+                    title: `${params?.name ?? ''} | Genius Rank`,
+                    description: t('user.description'),
+                    beToken: cookie.be_token,
+                    githubToken: cookie.access_token,
+                    nationData,
+                    scores,
+                    scoresError: null,
+                });
+            } catch (e) {
+                return json({
+                    data,
+                    title: `${params?.name ?? ''} | Genius Rank`,
+                    description: t('user.description'),
+                    beToken: cookie.be_token,
+                    githubToken: cookie.access_token,
+                    nationData,
+                    scores: null,
+                    scoresError: e as AxiosError,
+                });
+            }
         } catch (e) {
             console.log(e);
             if (axios.isAxiosError(e)) {
@@ -140,7 +153,7 @@ export default function User() {
                                 }
                             />
                         </div>
-                        <UserScoreDetail scores={data.scores} data={user} />
+                        <UserScoreDetail scores={data.scores} data={user} error={data.scoresError} />
                         <UserReposDetail data={user} />
                         <UserReposContributeDetail data={user} />
                         <UserPullRequestsDetail data={user} />
