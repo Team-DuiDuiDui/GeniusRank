@@ -51,9 +51,12 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     public GithubUserScoreRespDTO getGithubUserScore(String githubUserId) {
         String cacheKey = USER_SCORE_KEY + githubUserId;
 
+        Integer githubUserRank = getGithubUserRank(githubUserId);
+
         // 从缓存中获取
         Map<Object, Object> cachedData = cacheUtil.getMapFromCacheHash(cacheKey);
         if (!cachedData.isEmpty()) {
+            cachedData.put("rank", githubUserRank);
             return BeanUtil.fillBeanWithMap(cachedData, GithubUserScoreRespDTO.builder().build(), true);
         }
 
@@ -69,6 +72,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
+        respDTO.setRank(githubUserRank);
         respDTO.setUpdateTime(Instant.now().getEpochSecond());
 
         // 存入缓存

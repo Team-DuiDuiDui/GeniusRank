@@ -47,6 +47,11 @@ public class GithubUserScoreRespDTO {
     private double issuesScore;
 
     /**
+     * 用户排名
+     */
+    private Integer rank;
+
+    /**
      * 更新时间
      */
     private long updateTime;
