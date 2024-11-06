@@ -3,7 +3,7 @@ import { loader } from './loader';
 import { isRouteErrorResponse, useLoaderData, useNavigation, useParams, useRouteError } from '@remix-run/react';
 import UserBasic from '~/components/userinfo/basic';
 import UserInfo from '~/components/userinfo/info';
-import { githubUser } from '~/utils/requests/ghapis/user';
+import { githubUser } from '~/api/github/rest/user';
 import { useEffect, useRef } from 'react';
 import UserPRs from '~/components/userinfo/prs';
 import UserIssues from '~/components/userinfo/issues';

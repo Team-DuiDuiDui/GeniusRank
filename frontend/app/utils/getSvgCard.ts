@@ -1,4 +1,4 @@
-import { SingleUserScoreRes } from '~/api/typings/beRes';
+import { SingleUserScoreRes } from '~/api/backend/typings/beRes';
 import { interpolateColorsOfScore } from './chore';
 import { rankIt } from '~/components/ranking/card';
 

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { AxiosInstanceForBe, createInstanceForBe } from '~/api/instance';
+import { AxiosInstanceForBe, createInstanceForBe } from '~/api/backend/instance';
 
 /**
  * 用于创建后端 axios 实例，防止重复创建浪费内存

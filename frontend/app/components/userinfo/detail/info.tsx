@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { InfoIcon } from '../../infoLink';
 import { EnvironmentOutlined, ShopOutlined, XOutlined } from '@ant-design/icons';
 import CardWithNoShrink from '../../constant/cardWithNoShrink';
-import { UserDetail } from '~/utils/requests/ghGraphql/typings/user';
+import { UserDetail } from '~/api/github/graphql/typings/user';
 
 interface userInfo {
     data: UserDetail;

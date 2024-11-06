@@ -17,12 +17,12 @@ import { useTranslation } from 'react-i18next';
 import UserNation from '~/components/userinfo/region';
 
 import UserScoreDetail from '~/components/userinfo/detail/score';
-import { createInstanceForBe } from '~/api/instance';
-import { createInstanceForGithub } from '~/utils/requests/instance';
+import { createInstanceForBe } from '~/api/backend/instance';
+import { createInstanceForGithub } from '~/api/github/instance';
 import { lng, user } from '~/cookie';
 import i18nServer from '~/modules/i18n.server';
 import { guessRegion } from '~/utils/region/main';
-import { UserDetail } from '~/utils/requests/ghGraphql/typings/user';
+import { UserDetail } from '~/api/github/graphql/typings/user';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];

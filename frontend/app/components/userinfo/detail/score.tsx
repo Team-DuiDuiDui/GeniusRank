@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Card } from './card';
 import { LoadingOverlay } from '@mantine/core';
 import { UserScoreCharts } from '../score';
-import { GithubScoreRes } from '~/api/typings/beRes';
+import { GithubScoreRes } from '~/api/backend/typings/beRes';
 
 interface userRepositoriesProps {
     scores: GithubScoreRes;

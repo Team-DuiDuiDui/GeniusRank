@@ -2,7 +2,7 @@ import { userSchema } from './schema/user';
 import { User } from './typings/user';
 import { githubUser as GithubUser } from './user';
 import axios, { AxiosInstance } from 'axios';
-import { handleServerReq } from '../request';
+import { handleServerReq } from '../../../utils/request';
 import { createInstanceForGithub } from '../instance';
 
 /**

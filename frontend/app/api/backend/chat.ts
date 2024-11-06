@@ -1,4 +1,4 @@
-import { handleClientReq } from "~/utils/requests/request";
+import { handleClientReq } from "~/utils/request";
 import { AxiosInstanceForBe } from "./instance";
 import { parseStringToJSONfy } from "~/utils/chore";
 
@@ -71,10 +71,10 @@ export const syncChatForNationFromGLM = async (userName: string, beInstance: Axi
  * @param beInstance 后端 axios 实例
  * @returns 返回的结果
  */
-export const syncChat = async (message: string, beInstance: AxiosInstanceForBe, retry=0): Promise<string> => {
+export const syncChat = async (message: string, beInstance: AxiosInstanceForBe, retry = 0): Promise<string> => {
     return await handleClientReq(
         () => beInstance.post('/analyze/chat/sync', { message }),
         async res => res.data.data,
-        retry !== 0 ? (error) => true : undefined, 0, true, false
+        retry !== 0 ? () => true : undefined, 0, true, false
     )
 }

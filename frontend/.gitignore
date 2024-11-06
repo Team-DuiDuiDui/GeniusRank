@@ -1,0 +1,13 @@
+### Frontend Files
+node_modules
+build
+env
+vercel
+cache
+build
+env
+dev.vars
+wrangler
+.env
+.dev.vars
+.wrangler/tmp

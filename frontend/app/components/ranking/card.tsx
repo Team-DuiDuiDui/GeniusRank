@@ -2,7 +2,7 @@ import { LinkOutlined } from '@ant-design/icons';
 import { BarChart } from '@mantine/charts';
 import { Accordion, Avatar } from '@mantine/core';
 import { Link } from '@remix-run/react';
-import { GithubScoreRes } from '~/api/typings/beRes';
+import { GithubScoreRes } from '~/api/backend/typings/beRes';
 import { interpolateColorsOfScore } from '~/utils/chore';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';

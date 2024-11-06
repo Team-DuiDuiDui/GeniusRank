@@ -2,11 +2,11 @@
 import { AxiosInstance } from 'axios';
 import { CommitsSearchResult, IssueSearchResult, User, UserRepos } from './typings/user';
 import { commitsSearchResultSchema, issueSearchResultSchema, userReposSchema } from './schema/user';
-import { handleBackendReq, handleClientGithubReq } from '../request';
+import { handleBackendReq, handleClientGithubReq } from '../../../utils/request';
 import { createInstanceForGithub } from '../instance';
-import { createInstanceForBe } from '~/api/instance';
-import { GithubScoreReqUnLogin } from '../../../api/typings/beReq';
-import { GithubScoreRes } from '~/api/typings/beRes';
+import { createInstanceForBe } from '~/api/backend/instance';
+import { GithubScoreReqUnLogin } from '../../backend/typings/beReq';
+import { GithubScoreRes } from '~/api/backend/typings/beRes';
 
 export class githubUser {
     public name: string;

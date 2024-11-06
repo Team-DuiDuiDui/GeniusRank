@@ -1,6 +1,7 @@
-import { handleBackendReq } from "~/utils/requests/request";
+import { handleBackendReq } from "~/utils/request";
 import { AxiosInstanceForBe } from "./instance";
-import { ScoreRankResp } from "./typings/beRes";
+import { ScoreRankResp, SingleUserScoreRes } from "./typings/beRes";
+import { AxiosResponse } from "axios";
 
 export const getRankings = (
     backEndInstance: AxiosInstanceForBe,
@@ -19,3 +20,10 @@ export const getRankings = (
         (res) => res.data.data
     );
 }
+
+export const getRankingsByUser = (
+    backEndInstance: AxiosInstanceForBe,
+    login: string
+): Promise<AxiosResponse<SingleUserScoreRes>> => {
+    return backEndInstance.get(`/analyze/score/${login}`);
+};

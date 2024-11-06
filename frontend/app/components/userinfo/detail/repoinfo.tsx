@@ -7,7 +7,7 @@ import {
     StarOutlined,
 } from '@ant-design/icons';
 import { Table, Tooltip } from '@mantine/core';
-import { RepositoryDetail } from '~/utils/requests/ghGraphql/typings/user';
+import { RepositoryDetail } from '~/api/github/graphql/typings/user';
 import './repoinfo.css';
 
 interface repoInfoProps {

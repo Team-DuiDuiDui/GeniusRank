@@ -1,7 +1,7 @@
 import { LoaderFunction } from '@remix-run/cloudflare';
-import { createInstanceForBe } from '~/api/instance';
+import { createInstanceForBe } from '~/api/backend/instance';
 import { getSvgCard } from '~/utils/getSvgCard';
-import { getRankingsByUser } from '~/utils/requests/ranking';
+import { getRankingsByUser } from '~/api/backend/ranking';
 
 export const loader: LoaderFunction = async ({ params, context }) => {
     const headers = new Headers();

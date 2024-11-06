@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ZodError } from 'zod';
 import i18nServer from '~/modules/i18n.server';
 import { user } from '~/cookie';
-import { GithubUserServerOnly } from '~/utils/requests/ghapis/user.server';
+import { GithubUserServerOnly } from '~/api/github/rest/user.server';
 
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');

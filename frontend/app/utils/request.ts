@@ -1,11 +1,11 @@
 import toast from 'react-hot-toast';
-import { AxiosInstanceForGithub } from './instance';
+import { AxiosInstanceForGithub } from '../api/github/instance';
 import axios, { AxiosResponse } from 'axios';
 import i18next from 'i18next';
-import sleep from '../sleep';
-import { loading } from '../toastLoading';
+import sleep from './sleep';
+import { loading } from './toastLoading';
 import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
-import handleErrorCode from '../handleErrorCode';
+import handleErrorCode from './handleErrorCode';
 
 export interface GraphQLRequest<T> {
     data: T;

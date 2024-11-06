@@ -5,7 +5,7 @@ import { InfoIcon } from '../constant/info';
 import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { FetcherWithComponents } from '@remix-run/react';
-import { UserDetail } from '~/utils/requests/ghGraphql/typings/user';
+import { UserDetail } from '~/api/github/graphql/typings/user';
 // import { interpolateColorsOfIcon } from '~/utils/chore';
 
 interface NationCardProps {
@@ -115,9 +115,8 @@ const UserNation: React.FC<NationCardProps> = ({
 
     const renderFlag = () => (
         <span
-            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${
-                disable ? 'blur-xl' : ''
-            } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
+            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${disable ? 'blur-xl' : ''
+                } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
     );
 
     // return (

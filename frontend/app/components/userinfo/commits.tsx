@@ -3,9 +3,9 @@ import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'reac
 import autoAnimate from '@formkit/auto-animate';
 import { ZodError } from 'zod';
 import { AxiosError } from 'axios';
-import { githubUser } from '~/utils/requests/ghapis/user';
+import { githubUser } from '~/api/github/rest/user';
 import { useParams } from '@remix-run/react';
-import { CommitSearchResultItem, CommitsSearchResult, User } from '~/utils/requests/ghapis/typings/user';
+import { CommitSearchResultItem, CommitsSearchResult, User } from '~/api/github/rest/typings/user';
 import CardWithScrollableTable from './cardWithScrollableTable'; // 使用通用的 CardWithScrollableTable 组件
 import { TFunction } from 'i18next';
 import { Table } from '@mantine/core';

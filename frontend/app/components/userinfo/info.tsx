@@ -1,6 +1,6 @@
 import { Avatar } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { User } from '~/utils/requests/ghapis/typings/user';
+import { User } from '~/api/github/rest/typings/user';
 import InfoLink, { InfoIcon } from '../infoLink';
 import { EnvironmentOutlined, ShopOutlined, XOutlined } from '@ant-design/icons';
 import CardWithNoShrink from '../constant/cardWithNoShrink';
@@ -14,7 +14,7 @@ const UserInfo: React.FC<userInfo> = ({ data }) => {
     return (
         <CardWithNoShrink containerClass="flex-grow flex-shrink max-h-25 min-h-fit">
             <div className="flex flex-row items-center justify-left gap-8 w-full h-full ">
-                <Avatar src={data.avatar_url} className="flex-shrink-0" radius={data.type !== 'User' ? 'sm' : undefined} style={{width: "6rem", height: "6rem"}} />
+                <Avatar src={data.avatar_url} className="flex-shrink-0" radius={data.type !== 'User' ? 'sm' : undefined} style={{ width: "6rem", height: "6rem" }} />
                 <div className="flex flex-col h-full justify-between">
                     <div className="flex flex-col gap-0.25">
                         {/* data.login 是用户名，data.name 是用户昵称(可选) */}

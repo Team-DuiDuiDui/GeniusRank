@@ -1,9 +1,9 @@
 import { AxiosInstance } from 'axios';
 import { UserDetail, UserData } from './typings/user';
 import { createInstanceForGithub } from '../instance';
-import { handleBackendReq } from '../request';
-import { createInstanceForBe } from '~/api/instance';
-import { GithubScoreRes } from '~/api/typings/beRes';
+import { handleBackendReq } from '../../../utils/request';
+import { createInstanceForBe } from '~/api/backend/instance';
+import { GithubScoreRes } from '~/api/backend/typings/beRes';
 
 export class gqlUser {
     public name: string;

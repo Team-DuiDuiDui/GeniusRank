@@ -4,7 +4,7 @@ import autoAnimate from '@formkit/auto-animate';
 import dayjs from 'dayjs';
 import { Table, Tooltip } from '@mantine/core';
 import { CommonLink } from '../../infoLink';
-import { IssueDetail, UserDetail } from '~/utils/requests/ghGraphql/typings/user';
+import { IssueDetail, UserDetail } from '~/api/github/graphql/typings/user';
 import CardWithScrollableTableDetail from './cardWithScrollableTable';
 import { CheckCircleOutlined, ClockCircleOutlined, ForkOutlined } from '@ant-design/icons';
 import { TFunction } from 'i18next';

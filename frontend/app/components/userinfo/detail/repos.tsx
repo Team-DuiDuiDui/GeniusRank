@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { Table, Tooltip } from '@mantine/core';
 import { CommonLink } from '../../infoLink';
-import { RepositoryDetail, UserDetail } from '~/utils/requests/ghGraphql/typings/user';
+import { RepositoryDetail, UserDetail } from '~/api/github/graphql/typings/user';
 import { ForkOutlined } from '@ant-design/icons';
 import { TFunction } from 'i18next';
 import CardWithScrollableTableDetail from './cardWithScrollableTable';

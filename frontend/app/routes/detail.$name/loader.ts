@@ -1,11 +1,11 @@
 import { json, LoaderFunctionArgs, redirect } from '@remix-run/cloudflare';
 import axios from 'axios';
-import { createInstanceForBe } from '~/api/instance';
+import { createInstanceForBe } from '~/api/backend/instance';
 import i18nServer from '~/modules/i18n.server';
 import { lng, user } from '~/cookie';
 import { guessRegion } from '~/utils/region/main';
-import { gqlUser } from '~/utils/requests/ghGraphql/gqlUser.server';
-import { createInstanceForGithub } from '~/utils/requests/instance';
+import { gqlUser } from '~/api/github/graphql/gqlUser.server';
+import { createInstanceForGithub } from '~/api/github/instance';
 
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');

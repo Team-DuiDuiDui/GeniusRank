@@ -3,8 +3,8 @@ import { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { ZodError } from 'zod';
 import axios, { AxiosError } from 'axios';
-import { githubUser } from '~/utils/requests/ghapis/user';
-import { User } from '~/utils/requests/ghapis/typings/user';
+import { githubUser } from '~/api/github/rest/user';
+import { User } from '~/api/github/rest/typings/user';
 import { Card } from './card';
 import toast from 'react-hot-toast';
 import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
@@ -12,7 +12,7 @@ import handleErrorCode from '~/utils/handleErrorCode';
 import { LoadingOverlay } from '@mantine/core';
 import { BarChart, PieChart, RadarChart } from '@mantine/charts';
 import { TFunction } from 'i18next';
-import { GithubScoreRes } from '~/api/typings/beRes';
+import { GithubScoreRes } from '~/api/backend/typings/beRes';
 
 interface userRepositoriesProps {
     data: User;
