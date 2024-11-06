@@ -53,7 +53,9 @@
         "login_to_see_l2": "的国籍相关信息",
         "no_ranking_data_l1": "暂无排名数据，可以点",
         "no_ranking_data_l2": "这里",
-        "no_ranking_data_l3": "生成自己的报告"
+        "no_ranking_data_l3": "生成自己的报告",
+        "total_users_l1": "当前共有",
+        "total_users_l2": "位 github 用户的数据"
       },
       "userRecentPrs": "最近 80 条已合并的 Pull Requests",
       "userRecentPrs_all": "最近 50 条 Pull Requests",

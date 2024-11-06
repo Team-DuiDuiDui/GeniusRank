@@ -23,8 +23,8 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         login: userCookie.userLogin,
         name: userCookie.username,
         avatar_url: userCookie.userAvatar,
-        rankingInfo: await getUserRanking(beInstance, userCookie.userLogin).catch(() => undefined),
-        // rankingInfo: { rank: 9, score: 17 },
+        // rankingInfo: await getUserRanking(beInstance, userCookie.userLogin).catch(() => undefined),
+        rankingInfo: { rank: 9, score: 17 },
     } as {
         login: string;
         avatar_url: string;
@@ -82,7 +82,7 @@ export default function Ranking() {
                     noData &&
                     <div className=" absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 bg-white/30">
                         <div className="text-base whitespace-nowrap">{t("user.info.no_ranking_data_l1")}</div>
-                        <a href={`/detail/${userInfo.login}`} className=" mx-2 text-blue-400 text-xl font-semibold">{t("user.info.no_ranking_data_l2")}</a>
+                        <a href={`/detail/${userInfo.login}`} className=" drop-shadow-lg mx-2 text-blue-400 text-xl font-semibold">{t("user.info.no_ranking_data_l2")}</a>
                         <div className="text-base whitespace-nowrap">{t("user.info.no_ranking_data_l3")}</div>
                     </div>
                 }
@@ -96,13 +96,14 @@ export default function Ranking() {
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div className="flex items-center gap-1">
+                        <span className="font-bold text-2xl">#</span>
                         <span className="font-bold text-lg" style={{ color: `rgb(${color.r}, ${color.g}, ${color.b})` }}>
                             {userData.rank}
                         </span>
-                        <span className="font-extralight text-sm translate-y-2">
+                        {/* <span className="font-extralight text-sm translate-y-2">
                             /{loaderData.ranking.totalCount}
-                        </span>
+                        </span> */}
                     </div>
                     <span style={{ color: `rgb(${color.r}, ${color.g}, ${color.b})` }} className="text-3xl w-14">
                         {rankIt(userData.score)}
@@ -123,9 +124,9 @@ export default function Ranking() {
     }
 
     return (
-        <div className="my-12 mx-0 sm:mx-8 relative">
+        <div className="my-12 mx-0 sm:mx-8 relative flex justify-center flex-col items-center">
             <LoadingLayout />
-            <div className="flex justify-between items-center relative">
+            <div className="flex justify-between items-center relative w-full">
                 <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4  p-3">
                 </div>
                 <div className="flex flex-row justify-start gap-8">
@@ -174,6 +175,11 @@ export default function Ranking() {
                     {rankingData &&
                         rankingData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
                 </UserAccordion>
+            </div>
+            <div className="flex gap-2 items-center mt-20">
+                <span className="text-slate-600 text-base">{t("user.info.total_users_l1")}</span>
+                <span className="text-slate-900 text-xl">{loaderData.ranking.totalCount}</span>
+                <span className="text-slate-600 text-base">{t("user.info.total_users_l2")}</span>
             </div>
         </div>
     );
