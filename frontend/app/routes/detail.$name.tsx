@@ -14,7 +14,6 @@ import UserReposContributeDetail from '~/components/userinfo/detail/reposContrib
 import UserReposDetail from '~/components/userinfo/detail/repos';
 import { useTranslation } from 'react-i18next';
 import UserNation from '~/components/userinfo/region';
-
 import UserScoreDetail from '~/components/userinfo/detail/score';
 import { createInstanceForBe } from '~/api/backend/instance';
 import { createInstanceForGithub } from '~/api/github/instance';
@@ -65,7 +64,11 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
                     beInstance,
                     githubInstance,
                 });
-                nationData = { ...nationData, confidence: parseFloat(nationData.confidence.toFixed(2)), message: t(nationData.message) };
+                nationData = {
+                    ...nationData,
+                    confidence: parseFloat(nationData.confidence.toFixed(2)),
+                    message: t(nationData.message),
+                };
             } catch (e) {
                 nationData = {
                     nationISO: '',
@@ -100,7 +103,6 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
     }
     return redirect('/');
 }
-
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];

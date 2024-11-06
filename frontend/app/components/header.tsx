@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
                                 ? 'text-gray-500'
                                 : 'hover:text-gray-700 hover:bg-gray-200'
                         }`}>
-                        <span className="text-lg">用户</span>
+                        <span className="text-lg">{t('searching')}</span>
                     </Link>
                     <Link
                         to="/ranking"
@@ -52,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
                                 ? 'text-gray-500'
                                 : 'hover:text-gray-700 hover:bg-gray-200'
                         }`}>
-                        <span className="text-lg">排名</span>
+                        <span className="text-lg">{t('ranking.title')}</span>
                     </Link>
                 </div>
             </div>
