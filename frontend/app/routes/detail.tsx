@@ -39,7 +39,6 @@ export default function Index() {
         <>
             <div
                 className="flex flex-col items-center gap-14 relative"
-                style={{ height: 'calc(100vh - 68px)' }}
                 ref={parentRef}>
                 <LoadingLayout />
                 <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2 w-full h-full">

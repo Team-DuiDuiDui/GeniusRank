@@ -7,4 +7,4 @@
  */
 export const getForm = <T = HTMLInputElement>(e: React.FormEvent<HTMLFormElement>, name: string): T => {
     return e.currentTarget.elements.namedItem(name) as T;
-};
+}

@@ -8,7 +8,6 @@ import {
 } from '@ant-design/icons';
 import { Table, Tooltip } from '@mantine/core';
 import { RepositoryDetail } from '~/api/github/graphql/typings/user';
-import './repoinfo.css';
 
 interface repoInfoProps {
     repository: RepositoryDetail;

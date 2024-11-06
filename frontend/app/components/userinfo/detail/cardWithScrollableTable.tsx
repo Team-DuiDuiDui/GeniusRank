@@ -1,7 +1,7 @@
 import { Loader, Table } from '@mantine/core';
 import { ReactNode, useRef } from 'react';
 import CardWithScroll from '../../constant/cardWithScroll';
-import { throttleWithDeepClone } from '~/utils/chore';
+import { throttleWithDeepClone } from '~/utils/perform';
 import { useTranslation } from 'react-i18next';
 
 interface DataTableProps<T> {

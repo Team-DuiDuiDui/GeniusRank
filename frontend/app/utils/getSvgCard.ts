@@ -1,5 +1,5 @@
 import { SingleUserScoreRes } from '~/api/backend/typings/beRes';
-import { interpolateColorsOfScore } from './chore';
+import { interpolateColorsOfScore } from './color';
 import { rankIt } from '~/components/ranking/card';
 
 export const getSvgCard = (score: SingleUserScoreRes['data'], login: string): string => {
