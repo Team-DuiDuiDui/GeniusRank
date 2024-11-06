@@ -38,7 +38,6 @@ CREATE TABLE t_github_user_score (
    CONSTRAINT idx_login UNIQUE (login)
 ) COMMENT 'GitHub 用户分数表';
 
-
 # 3. 创建 Github 用户所在国家/地区猜测表 (GithubUserCountryGuess)
 CREATE TABLE t_github_user_country_guess (
   id                    BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID' PRIMARY KEY,

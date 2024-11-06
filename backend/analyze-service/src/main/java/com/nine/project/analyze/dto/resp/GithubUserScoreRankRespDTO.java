@@ -31,11 +31,6 @@ public class GithubUserScoreRankRespDTO {
     private String country_iso;
 
     /**
-     * 用户所在国家/地区名称
-     */
-    private String country_name;
-
-    /**
      * Github 用户总分
      */
     private double totalScore;

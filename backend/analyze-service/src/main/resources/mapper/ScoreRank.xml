@@ -23,7 +23,6 @@
         gus.name,
         gus.avatar_url As avatarUrl,
         gusc.country_iso,
-        gusc.country_name,
         gus.total_score AS totalScore,
         gus.user_score AS userScore,
         gus.repos_score AS reposScore,
@@ -34,7 +33,7 @@
         <where>
             <!-- 如果 nation 不为 null，则添加国家名称的条件 -->
             <if test="nation != null">
-                AND gusc.country_name = #{nation}
+                AND gusc.country_iso = #{nation}
             </if>
         </where>
         ORDER BY totalScore DESC
@@ -46,7 +45,6 @@
                temp.name,
                temp.avatarUrl,
         temp.country_iso,
-        temp.country_name,
         temp.totalScore,
         temp.userScore,
         temp.reposScore,
@@ -55,7 +53,6 @@
         FROM (
         SELECT gus.login,
         gusc.country_iso,
-        gusc.country_name,
         gus.name,
         gus.avatar_url As avatarUrl,
         gus.total_score AS totalScore,
@@ -68,7 +65,7 @@
         <where>
             <!-- 如果 nation 不为 null，则添加国家名称的条件 -->
             <if test="nation!= null">
-                AND gusc.country_name = #{nation}
+                AND gusc.country_iso = #{nation}
             </if>
         </where>
         ) temp

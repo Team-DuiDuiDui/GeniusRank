@@ -18,11 +18,6 @@ public class GithubUserCountryReqDTO {
     private String country_iso;
 
     /**
-     * 猜测的国家
-     */
-    private String country_name;
-
-    /**
      * 猜测信息
      */
     private String message;

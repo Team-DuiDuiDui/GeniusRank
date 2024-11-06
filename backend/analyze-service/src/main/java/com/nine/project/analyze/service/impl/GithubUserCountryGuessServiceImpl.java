@@ -71,7 +71,9 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
         GithubUserCountryGuessDO githubUserCountryGuessDTO = BeanUtil.copyProperties(requestParams, GithubUserCountryGuessDO.class);
 
         // 存入国家到 redis
-        cacheUtil.registerNation(requestParams.getCountry_name());
+        if (requestParams.getCountry_iso() != null){
+            cacheUtil.registerNation(requestParams.getCountry_iso());
+        }
 
         // 使用查询计数来判断记录是否存在
         LambdaQueryWrapper<GithubUserCountryGuessDO> queryWrapper = Wrappers.lambdaQuery(GithubUserCountryGuessDO.class)
