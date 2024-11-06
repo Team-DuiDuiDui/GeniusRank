@@ -27,6 +27,7 @@ export default function Index() {
     const { t } = useTranslation();
     const data = useLoaderData<typeof loader>();
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(data.rankingData.resp));
+    console.log(rankingData)
     const rankingDataList: RankResp[][] = [];
     const length = rankingData.length;
     for (let i = 0; i < length; i += length / 3) {
@@ -51,6 +52,7 @@ export default function Index() {
             document.removeEventListener('visibilitychange', listener, false);
         }
     }, []);
+
     return (
         <>
             <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2 relative">

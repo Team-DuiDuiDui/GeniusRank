@@ -23,15 +23,14 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         login: userCookie.userLogin,
         name: userCookie.username,
         avatar_url: userCookie.userAvatar,
-        // rankingInfo: await getUserRanking(beInstance, userCookie.userLogin).catch(() => undefined),
-        rankingInfo: { rank: 9, score: 17 },
+        rankingInfo: await getUserRanking(beInstance, userCookie.userLogin).catch(() => undefined),
+        // rankingInfo: { rank: 9, score: 17 },
     } as {
         login: string;
         avatar_url: string;
         name?: string | null;
         rankingInfo: { rank: number, score: number } | undefined;
     };
-    console.log(userInfo.rankingInfo);
     const type = url.searchParams.get('type');
     const t = await i18nServer.getFixedT(request);
     try {
@@ -70,7 +69,6 @@ export default function Ranking() {
         let noData = true;
         let userData = { score: 39, rank: 39 };
         let color = interpolateColorsOfScore(39);
-        console.log(userInfo.rankingInfo?.score !== 0);
         if (userInfo.rankingInfo?.score) {
             userData = userInfo.rankingInfo;
             color = interpolateColorsOfScore(userData.score);
@@ -126,9 +124,8 @@ export default function Ranking() {
     return (
         <div className="my-12 mx-0 sm:mx-8 relative flex justify-center flex-col items-center">
             <LoadingLayout />
-            <div className="flex justify-between items-center relative w-full">
-                <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4  p-3">
-                </div>
+            <div className={`flex ${loaderData.userInfo.login ? "justify-between" : "justify-center"}  items-center relative w-full`}>
+                {loaderData.userInfo.login && <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3"></div>}
                 <div className="flex flex-row justify-start gap-8">
                     <Select
                         onChange={(value) => {
@@ -162,11 +159,12 @@ export default function Ranking() {
                         clearable
                     />
                 </div>
-                <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 border relative rounded-2xl border-slate-300 p-3">
-                    {renderUserInfo()}
-                </div>
+                {loaderData.userInfo.login &&
+                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 border relative rounded-2xl border-slate-300 p-3">
+                        {renderUserInfo()}
+                    </div>}
             </div>
-            <div className="flex flex-col lg:flex-row justify-around items-center lg:items-start mt-8 w-screen sm:w-auto">
+            <div className="flex w-screen flex-col lg:flex-row justify-around items-center lg:items-start mt-8">
                 <UserAccordion>
                     {splicedData &&
                         splicedData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
