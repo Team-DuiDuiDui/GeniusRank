@@ -35,13 +35,12 @@ export type OAuthLogin = {
      */
     success: boolean;
 };
-
 export type UserScoreRanking = {
     /**
      * 错误码
      */
     code: string;
-    data: ScoreRankResp[];
+    data: ScoreRankResp;
     /**
      * 错误码信息
      */
@@ -56,39 +55,20 @@ export type UserScoreRanking = {
  * ScoreRankResp
  */
 export type ScoreRankResp = {
-    name: string | null;
+    nations: string[];
+    resp: RankResp[];
+    types: string[];
+};
+
+export type RankResp = {
     avatar_url: string;
-    /**
-     * 国家 iso 编码
-     */
-    country_iso: null | string;
-    /**
-     * 国家名字
-     */
-    country_name: null | string;
-    /**
-     * issue 分数
-     */
-    issuesScore: number | number;
-    /**
-     * Github 用户名
-     */
+    country_iso?: string;
+    issuesScore: number;
     login: string;
-    /**
-     * pr 分数
-     */
-    prsScore: number | number;
-    /**
-     * 仓库分数
-     */
-    reposScore: number | number;
-    /**
-     * 总分数
-     */
+    name: string;
+    prsScore: number;
+    reposScore: number;
     totalScore: number;
-    /**
-     * 用户基础分数
-     */
     userScore: number;
 };
 

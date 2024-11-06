@@ -3,7 +3,7 @@ import { json, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import { useLoaderData, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { createInstanceForBe } from '~/api/backend/instance';
-import { ScoreRankResp } from '~/api/backend/typings/beRes';
+import { RankResp } from '~/api/backend/typings/beRes';
 import LoadingLayout from '~/components/loading';
 import { UserAccordion, UserCard } from '~/components/ranking/card';
 import i18nServer from '~/modules/i18n.server';
@@ -22,7 +22,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         login: string;
         avatar_url: string;
         name?: string | null;
-    }
+    };
     const type = url.searchParams.get('type');
     const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL);
     const t = await i18nServer.getFixedT(request);
@@ -65,8 +65,8 @@ export default function Ranking() {
     const loaderData = useLoaderData<typeof loader>();
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
-    const rankingData: ScoreRankResp[] = JSON.parse(JSON.stringify(loaderData.ranking));
-    const splicedData = rankingData.splice(0, Math.ceil(loaderData.ranking.length / 2));
+    const rankingData: RankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.resp));
+    const splicedData = (rankingData && rankingData.splice(0, Math.ceil(loaderData.ranking.nations.length / 2))) || '';
     return (
         <div className="my-12 mx-32 relative">
             <LoadingLayout />
@@ -81,7 +81,7 @@ export default function Ranking() {
                         }}
                         defaultValue={loaderData.type}
                         placeholder={t('ranking.type')}
-                        data={['Java', 'JavaScript', 'Python', 'Golang', 'TypeScript', 'Rust', 'C']}
+                        data={loaderData.ranking.types}
                         searchable
                         clearable
                     />
@@ -94,7 +94,12 @@ export default function Ranking() {
                         }}
                         defaultValue={loaderData.type}
                         placeholder={t('ranking.nation')}
-                        data={['China', 'US']}
+                        data={loaderData.ranking.nations.map((item) => {
+                            return {
+                                label: t(`country.${item.toUpperCase()}`),
+                                value: item,
+                            };
+                        })}
                         searchable
                         clearable
                     />
@@ -110,14 +115,12 @@ export default function Ranking() {
             </div>
             <div className="flex flex-row justify-between mt-8">
                 <UserAccordion>
-                    {splicedData.map((item, index) => (
-                        <UserCard key={index} userInfo={item} score={item} />
-                    ))}
+                    {splicedData &&
+                        splicedData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
                 </UserAccordion>
                 <UserAccordion>
-                    {rankingData.map((item, index) => (
-                        <UserCard key={index} userInfo={item} score={item} />
-                    ))}
+                    {rankingData &&
+                        rankingData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
                 </UserAccordion>
             </div>
         </div>
