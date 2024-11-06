@@ -6,7 +6,7 @@ import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { FetcherWithComponents } from '@remix-run/react';
 import { UserDetail } from '~/utils/requests/ghGraphql/typings/user';
-import { interpolateColorsOfIcon } from '~/utils/chore';
+// import { interpolateColorsOfIcon } from '~/utils/chore';
 
 interface NationCardProps {
     fetcher?: FetcherWithComponents<unknown>;
@@ -29,7 +29,7 @@ const UserNation: React.FC<NationCardProps> = ({
     loading,
     disable,
     message,
-    confidence,
+    // confidence,
 }) => {
     const noData = nationISO === '';
     const isCN = nationISO === 'CN';
@@ -115,8 +115,9 @@ const UserNation: React.FC<NationCardProps> = ({
 
     const renderFlag = () => (
         <span
-            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${disable ? 'blur-xl' : ''
-                } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
+            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${
+                disable ? 'blur-xl' : ''
+            } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
     );
 
     // return (
@@ -247,15 +248,11 @@ const UserNation: React.FC<NationCardProps> = ({
     // );
     return (
         <CardWithNoShrink
-            containerClass={`overflow-hidden h-full`}
-            style={{
-                aspectRatio: '4/3',
-            }}
+            containerClass={`overflow-hidden h-full aspect-[4/3] shrink-0`}
             containerClassDelete={['p-8']}>
             {loading && <LoadingOverlay visible={loading} loaderProps={{ type: 'dots' }} />}
             {renderFlag()}
-            <div
-                className={`h-full w-full flex items-center justify-center p-4 `} >
+            <div className={`h-full w-full flex items-center justify-center p-4`}>
                 {renderIcon()}
                 {!isCN && renderMiddleInfo()}
             </div>

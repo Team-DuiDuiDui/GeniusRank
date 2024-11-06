@@ -60,7 +60,7 @@ export default function User() {
 
     return (
         <>
-            <div className="flex items-center justify-center w-full mt-16 z-0">
+            <div className="flex items-center justify-center w-full mt-5 z-0">
                 <div className="flex flex-row items-center gap-16 w-full h-full justify-center relative">
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}

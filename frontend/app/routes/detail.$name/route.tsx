@@ -38,7 +38,7 @@ export default function User() {
     const isStillHim = fetcher.data?.login === user.login;
     return (
         <>
-            <div className="flex items-center justify-center w-full mt-16 z-0">
+            <div className="flex items-center justify-center w-full mt-5 z-0">
                 <div className="flex flex-row items-center gap-16 w-full h-full justify-center relative">
                     <UserBasic>
                         <div className="flex gap-4 w-full h-40 items-start">
