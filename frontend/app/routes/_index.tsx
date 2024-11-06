@@ -9,7 +9,7 @@ import { user } from '~/cookie';
 import cloneDeep from 'lodash/cloneDeep';
 import i18nServer from '~/modules/i18n.server';
 import { RankResp, ScoreRankResp } from '~/api/backend/typings/beRes';
-import { UserAccordion, UserCard } from '~/components/ranking/card';
+import { UserAccordion, UserCard, UserCardFull } from '~/components/ranking/card';
 import { useEffect } from 'react';
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
@@ -30,9 +30,9 @@ export default function Index() {
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(data.rankingData.resp));
     const rankingDataList: RankResp[][] = [];
     const length = rankingData.length;
-    console.log(length)
+    console.log(length);
     for (let i = 0; i < length; i += length / 3) {
-        const data = rankingData.slice(i, i + length / 3)
+        const data = rankingData.slice(i, i + length / 3);
         rankingDataList.push([...data, ...data]);
     }
     useEffect(() => {
@@ -42,16 +42,16 @@ export default function Index() {
 
         const listener = () => {
             if (document.visibilityState === 'visible') {
-                scrollContent.forEach(element => (element as HTMLElement).style.animationPlayState = 'running');
+                scrollContent.forEach((element) => ((element as HTMLElement).style.animationPlayState = 'running'));
             } else {
-                scrollContent.forEach(element => (element as HTMLElement).style.animationPlayState = 'paused');
+                scrollContent.forEach((element) => ((element as HTMLElement).style.animationPlayState = 'paused'));
             }
-        }
+        };
 
         document.addEventListener('visibilitychange', listener, false);
         return () => {
             document.removeEventListener('visibilitychange', listener, false);
-        }
+        };
     }, []);
     return (
         <>
@@ -65,16 +65,18 @@ export default function Index() {
             </div>
             <div className="flex flex-row flex-wrap h-max flex-grow py-20">
                 {rankingDataList.map((data, lineIndex) => (
-                    <div key={lineIndex}
-                        className={`flex overflow-auto relative width-auto gap-4 scrollbarHidden`}>
+                    <div key={lineIndex} className={`flex overflow-auto relative width-auto gap-4 scrollbarHidden`}>
                         {data.map((item, index) => (
-                            <UserAccordion key={index}
+                            <UserCardFull
+                                key={index}
+                                userInfo={item}
+                                score={item}
                                 style={{
-                                    animation: `${lineIndex % 2 ? "scrollLineO" : "scrollLineI"} 60s linear infinite`,
+                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 60s linear infinite`,
                                 }}
-                                disabledChevron={true}>
-                                <UserCard key={index} userInfo={item} score={item} />
-                            </UserAccordion>
+                                disabledChevron
+                                disabled
+                            />
                         ))}
                     </div>
                 ))}
