@@ -123,4 +123,9 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         // 返回结果
         return new RankRespDTO(scoreRankList, new ArrayList<>(cacheUtil.getCountries()), new ArrayList<>(cacheUtil.getTypes()));
     }
+
+    @Override
+    public List<String> getTypes() {
+        return new ArrayList<>(cacheUtil.getTypes());
+    }
 }

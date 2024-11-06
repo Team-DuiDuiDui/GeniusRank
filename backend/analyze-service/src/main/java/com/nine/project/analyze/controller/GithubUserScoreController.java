@@ -59,4 +59,13 @@ public class GithubUserScoreController {
         List<String> typeList = type == null ? null : List.of(type);
         return Results.success(githubUserScoreService.getGithubUserScoreRank(size, nationList, typeList));
     }
+
+    /**
+     * 查询所有已存在国家
+     */
+    @GetMapping("/api/analyze/score/type/exist")
+    public Result<List<String>> getUser() {
+        return Results.success(githubUserScoreService.getTypes());
+    }
+
 }
