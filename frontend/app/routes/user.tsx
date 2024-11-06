@@ -34,7 +34,7 @@ export default function Index() {
     return (
         <>
             <div
-                className="flex flex-col items-center gap-14 relative"
+                className="flex flex-col items-center gap-14 relative "
                 ref={parentRef}>
                 <LoadingLayout />
                 <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2 w-full h-full">
