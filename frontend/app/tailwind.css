@@ -26,6 +26,91 @@ body {
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
+    html,
+    body {
+      @apply bg-white dark:bg-gray-950 box-border;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-height: 100vh;
+
+      @media (prefers-color-scheme: dark) {
+        color-scheme: dark;
+      }
+    }
+
+    body::-webkit-scrollbar {
+      width: 0.25rem;
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background-color: #4a5568;
+      border-radius: 4px;
+    }
+
+    body::-webkit-scrollbar-track {
+      background-color: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    @layer utilities {
+      .scrollbar::-webkit-scrollbar {
+        width: 0.125rem;
+      }
+
+      .scrollbar::-webkit-scrollbar-thumb {
+        background-color: #4a5568;
+        border-radius: 4px;
+      }
+
+      .scrollbar::-webkit-scrollbar-track {
+        background-color: #e2e8f0;
+      }
+    }
+
+    .scrollbarHidden::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollbarHidden::-webkit-scrollbar-thumb {
+      display: none;
+    }
+
+    .scrollbarHidden::-webkit-scrollbar-track {
+      display: none;
+    }
+
+    .mark {
+      @apply flex flex-row flex-nowrap gap-1
+    }
+
+    @keyframes scrollLineO {
+      0% {
+        transform: translateX(-50%);
+      }
+
+      100% {
+        transform: translateX(calc(-450% - 4.5rem));
+      }
+    }
+
+    @keyframes scrollLineI {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(calc(-400% - 4.5rem));
+      }
+    }
+
     background-color: #4a5568;
     border-radius: 4px;
   }
