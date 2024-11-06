@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
         parentRef.current && autoAnimate(parentRef.current, scaleAnimate);
     }, [parentRef, params.pathname]);
     return (
-        <div className="flex items-center justify-between py-3 px-8 shadow-lg sticky">
+        <div className="flex items-center justify-between py-3 px-8 shadow-lg sticky top-0 bg-white z-40">
             <div className="flex items-center gap-4 w-1/3">
                 <ActionIcon variant="default" size="xl" onClick={openDrawer}>
                     <MenuIcon />
