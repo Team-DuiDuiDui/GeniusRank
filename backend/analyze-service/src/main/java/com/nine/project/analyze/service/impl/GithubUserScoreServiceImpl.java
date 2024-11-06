@@ -107,6 +107,8 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     @Override
     public RankRespDTO getGithubUserScoreRank(Integer size, List<String> nation, List<String> type) {
         List<GithubUserScoreRankRespDTO> scoreRankList;
+        Long count = baseMapper.selectCount(Wrappers.lambdaQuery(GithubUserScoreDO.class).eq(GithubUserScoreDO::getDelFlag, 0));
+
         if (type!= null) {
             scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, type);
             if (scoreRankList == null) {
@@ -121,7 +123,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
             }
         }
         // 返回结果
-        return new RankRespDTO(scoreRankList, new ArrayList<>(cacheUtil.getCountries()), new ArrayList<>(cacheUtil.getTypes()));
+        return new RankRespDTO(scoreRankList, new ArrayList<>(cacheUtil.getCountries()), new ArrayList<>(cacheUtil.getTypes()),count);
     }
 
     @Override

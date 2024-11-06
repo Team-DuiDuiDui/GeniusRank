@@ -25,4 +25,9 @@ public class RankRespDTO {
      * 全部的语言
      */
     private List<String> types;
+
+    /**
+     * 总数
+     */
+    private Long totalCount;
 }
