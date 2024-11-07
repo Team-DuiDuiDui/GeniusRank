@@ -22,9 +22,9 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     console.log(Date.now());
     try {
         const rankingData = await getRankings(beInstance, null, null, 21);
-        return json({ title: t('title'), description: t('user.description'), rankingData }, { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=86400' } });
+        return json({ title: t('title'), description: t('user.description'), rankingData }, { headers: { 'Cache-Control': 'public, max-age=300, s-maxage=86400' } });
     } catch {
-        return json({ title: t('title'), description: t('user.description'), rankingData: fallBackData }, { headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=86400' } });
+        return json({ title: t('title'), description: t('user.description'), rankingData: fallBackData }, { headers: { 'Cache-Control': 'public, max-age=300, s-maxage=86400' } });
     }
 }
 
