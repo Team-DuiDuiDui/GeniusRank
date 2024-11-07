@@ -74,10 +74,10 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
                             <input
                                 className="px-4 py-2 focus-visible:outline-none w-80"
                                 readOnly
-                                value={`[![Genius Rank](https://geniusrank.heuluck.top/card/${data.login})](https://geniusrank.heuluck.top/)]`}
+                                value={`[![Genius Rank](https://geniusrank.heuluck.top/card/${data.login})](https://geniusrank.heuluck.top/)`}
                             />
                             <CopyButton
-                                value={`[![Genius Rank](https://geniusrank.heuluck.top/card/${data.login})](https://geniusrank.heuluck.top/)]`}>
+                                value={`[![Genius Rank](https://geniusrank.heuluck.top/card/${data.login})](https://geniusrank.heuluck.top/)`}>
                                 {({ copied, copy }) => (
                                     <Tooltip label={copied ? t('user.score.copied') : t('user.score.copy')}>
                                         <button
