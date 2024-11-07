@@ -42,7 +42,7 @@ export default function Index() {
                         <Search logo={octoCat} placeholder={t('search.placeholder')} />
                     </div>
                 </div>
-                <Outlet />
+                {pathname === '/user' ? <></> : <Outlet />}
             </div>
         </>
     );
