@@ -4,6 +4,7 @@ import { ZodError } from 'zod';
 import { GithubUserServerOnly } from '~/api/github/rest/user.server';
 import { user } from '~/cookie';
 import i18nServer from '~/modules/i18n.server';
+import { cacheHeader } from '~/utils/cacheHeader';
 
 export default async function loader({ request, params, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
@@ -19,7 +20,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 userData: data,
                 title: `${params?.name ?? ''} | Genius Rank`,
                 description: t('user.description'),
-            });
+            }, cacheHeader(300));
         } catch (e) {
             // eslint-disable-next-line import/no-named-as-default-member
             if (axios.isAxiosError(e)) {
