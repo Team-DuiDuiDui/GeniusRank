@@ -7,6 +7,7 @@ import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 import com.nine.project.analyze.dto.resp.RankRespDTO;
+import com.nine.project.analyze.dto.resp.UserRankRespDTO;
 
 import java.util.List;
 
@@ -54,5 +55,5 @@ public interface GithubUserScoreService extends IService<GithubUserScoreDO> {
     /**
      * 获取用户分数接口排行榜（无需登录）
      */
-    Integer getGithubUserRank(String login);
+    UserRankRespDTO getGithubUserRank(String login);
 }

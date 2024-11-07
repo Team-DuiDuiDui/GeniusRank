@@ -12,6 +12,7 @@ import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 import com.nine.project.analyze.dto.resp.RankRespDTO;
+import com.nine.project.analyze.dto.resp.UserRankRespDTO;
 import com.nine.project.analyze.mq.event.SaveDetailedScoreAndTypeEvent;
 import com.nine.project.analyze.mq.event.SaveScoreAndTypeEvent;
 import com.nine.project.analyze.mq.produce.SaveDetailedScoreAndTypeProducer;
@@ -51,12 +52,13 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     public GithubUserScoreRespDTO getGithubUserScore(String githubUserId) {
         String cacheKey = USER_SCORE_KEY + githubUserId;
 
-        Integer githubUserRank = getGithubUserRank(githubUserId);
+        UserRankRespDTO githubUserRank = getGithubUserRank(githubUserId);
+        Integer rank = githubUserRank.getRank();
 
         // 从缓存中获取
         Map<Object, Object> cachedData = cacheUtil.getMapFromCacheHash(cacheKey);
         if (!cachedData.isEmpty()) {
-            cachedData.put("rank", githubUserRank);
+            cachedData.put("rank", rank);
             return BeanUtil.fillBeanWithMap(cachedData, GithubUserScoreRespDTO.builder().build(), true);
         }
 
@@ -72,7 +74,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
-        respDTO.setRank(githubUserRank);
+        respDTO.setRank(rank);
         respDTO.setUpdateTime(Instant.now().getEpochSecond());
 
         // 存入缓存
@@ -137,7 +139,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     }
 
     @Override
-    public Integer getGithubUserRank(String login) {
+    public UserRankRespDTO getGithubUserRank(String login) {
         QueryWrapper<GithubUserScoreDO> queryWrapper = Wrappers.<GithubUserScoreDO>query()
                 .eq("login", login);
         GithubUserScoreDO userScoreDO = this.getOne(queryWrapper);
@@ -146,7 +148,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
             throw new ClientException(USER_SCORE_NOT_FOUND);
         }
         double totalScore = userScoreDO.getTotalScore();
-
-        return baseMapper.getGithubUserRank(totalScore);
+        Integer githubUserRank = baseMapper.getGithubUserRank(totalScore);
+        return new UserRankRespDTO(githubUserRank,totalScore);
     }
 }

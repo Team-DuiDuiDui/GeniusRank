@@ -5,6 +5,7 @@ import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
 import com.nine.project.analyze.dto.resp.RankRespDTO;
+import com.nine.project.analyze.dto.resp.UserRankRespDTO;
 import com.nine.project.analyze.service.GithubUserScoreService;
 import com.nine.project.framework.result.Result;
 import com.nine.project.framework.web.Results;
@@ -65,7 +66,7 @@ public class GithubUserScoreController {
      * 获取用户排名接口排行榜（无需登录）
      */
     @GetMapping("/api/analyze/score/rank/{login}")
-    public Result<Integer> getUserRank(@PathVariable  String login) {
+    public Result<UserRankRespDTO> getUserRank(@PathVariable  String login) {
         return Results.success(githubUserScoreService.getGithubUserRank(login));
     }
 
