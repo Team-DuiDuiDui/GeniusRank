@@ -13,7 +13,11 @@
       "title": "排名",
       "description": "排名与用户筛选",
       "type": "请选择语言",
-      "nation": "请选择国籍"
+      "nation": "请选择国籍",
+      "err": {
+        "ngrok_error": "后端内网穿透状态异常，请联系后端管理员",
+        "error": "错误"
+      }
     },
     "user": {
       "description": "GitHub 用户分析",
@@ -117,7 +121,11 @@
       "login": "登录",
       "login_github": "使用 GitHub 登录",
       "anonymous": "匿名用户",
-      "logout": "退出登录"
+      "logout": "退出登录",
+      "err": {
+        "ngrok_error": "后端内网穿透状态异常，请联系后端管理员",
+        "error": "错误"
+      }
     },
     "oauth": {
       "err": {
