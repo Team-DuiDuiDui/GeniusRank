@@ -73,9 +73,6 @@ export const guessRegion = async ({
     beUrl,
     beToken,
 }: GuessNationProps): Promise<NationData> => {
-    console.log('------------------------------------------------------------------------------------')
-    const dataFromFollowers = await guessRegionFromFollowersBetter(userData, beInstance, githubInstance, beUrl, beToken);
-    if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, null, beInstance);
     // throw new Error('Not implemented');
     const dataFromBe = await getUserNation(userData.login, beInstance);
     if (dataFromBe?.confidence === 1) {
