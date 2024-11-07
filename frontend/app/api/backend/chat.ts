@@ -78,3 +78,39 @@ export const syncChat = async (message: string, beInstance: AxiosInstanceForBe, 
         retry !== 0 ? () => true : undefined, 0, true, false
     )
 }
+
+export const streamChat = async (message: string, beInstance: AxiosInstanceForBe): Promise<string> => {
+    try {
+        // 发起流式请求，设置 responseType 为 'stream'
+        const response = await beInstance.post('/analyze/chat/stream/question', { message }, { responseType: 'stream' });
+
+        let result = '';  // 用于拼接流中的数据块
+
+        // 监听流的 'data' 事件，将每个数据块拼接到 result 中
+        response.data.on('data', (chunk: Buffer) => {
+            // 将 Buffer 转为字符串
+            const chunkStr = chunk.toString();
+
+            // 清理多余的 `data:` 前缀部分
+            const cleanedChunk = chunkStr.replace(/^data:/, '').trim();
+
+            // 将清理后的块拼接到 result 中
+            result += cleanedChunk;
+        });
+
+        // 监听流的 'end' 事件，当流结束时返回拼接后的完整字符串
+        return new Promise<string>((resolve, reject) => {
+            response.data.on('end', () => {
+                resolve(result);  // 返回拼接后的完整字符串
+            });
+
+            // 错误处理
+            response.data.on('error', (err: Error) => {
+                reject(err);  // 如果流发生错误，抛出错误
+            });
+        });
+    } catch (error) {
+        console.error('请求失败:', error);
+        throw error;
+    }
+}

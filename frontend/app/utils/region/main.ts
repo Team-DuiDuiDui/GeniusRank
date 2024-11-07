@@ -2,6 +2,7 @@ import { AxiosInstanceForGithub } from '../../api/github/instance';
 import { AxiosInstanceForBe } from '~/api/backend/instance';
 import {
     guessRegionFromFollowers,
+    guessRegionFromFollowersBetter,
     guessRegionFromFollowings,
     guessRegionFromGLM,
     guessRegionFromReadme,
@@ -72,18 +73,23 @@ export const guessRegion = async ({
         console.log("共识")
         return dataFromBe
     }
-    if (userData.followers > 50000) {
-        const dataFromGLM = await guessRegionFromGLM(userData.login, beInstance);
-        if (dataFromGLM?.nationISO) return await checkAndUpdateBeData(dataFromGLM, dataFromBe, beInstance);
+    try {
+        if (userData.followers > 50000) {
+            const dataFromGLM = await guessRegionFromGLM(userData.login, beInstance);
+            if (dataFromGLM?.nationISO) return await checkAndUpdateBeData(dataFromGLM, dataFromBe, beInstance);
+        }
+        const dataFromReadme = await guessRegionFromReadme(userData, beInstance, githubInstance);
+        if (dataFromReadme.nationISO) return await checkAndUpdateBeData(dataFromReadme, dataFromBe, beInstance);
+
+        const dataFromFollowers = await guessRegionFromFollowersBetter(userData, beInstance, githubInstance);
+        if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
+
+        const dataFromFollowings = await guessRegionFromFollowings(userData, beInstance, githubInstance);
+        if (dataFromFollowings.nationISO) return await checkAndUpdateBeData(dataFromFollowings, dataFromBe, beInstance);
+    } catch (error) {
+        console.log(error)
+        if (dataFromBe) return dataFromBe;
     }
-    const dataFromReadme = await guessRegionFromReadme(userData, beInstance, githubInstance);
-    if (dataFromReadme.nationISO) return await checkAndUpdateBeData(dataFromReadme, dataFromBe, beInstance);
-
-    const dataFromFollowers = await guessRegionFromFollowers(userData, beInstance, githubInstance);
-    if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
-
-    const dataFromFollowings = await guessRegionFromFollowings(userData, beInstance, githubInstance);
-    if (dataFromFollowings.nationISO) return await checkAndUpdateBeData(dataFromFollowings, dataFromBe, beInstance);
 
     return {
         nationISO: '',
