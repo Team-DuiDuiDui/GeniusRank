@@ -29,6 +29,8 @@ export default async function action({ request, context }: ActionFunctionArgs) {
                 },
                 beInstance,
                 githubInstance,
+                beUrl: context.cloudflare.env.BASE_URL,
+                beToken: cookie.be_token,
             });
             return json({ ...nationData, message: t(nationData.message), donotLoad: true });
         } catch {
