@@ -19,11 +19,12 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
     const userCookie = (await user.parse(cookieHeader)) || {};
     const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, userCookie.be_token);
+    console.log(Date.now());
     try {
         const rankingData = await getRankings(beInstance, null, null, 21);
-        return json({ title: t('title'), description: t('user.description'), rankingData });
+        return json({ title: t('title'), description: t('user.description'), rankingData }, { headers: { 'Cache-Control': 'public, max-age=86400' } });
     } catch {
-        return json({ title: t('title'), description: t('user.description'), rankingData: fallBackData });
+        return json({ title: t('title'), description: t('user.description'), rankingData: fallBackData }, { headers: { 'Cache-Control': 'public, max-age=86400' } });
     }
 }
 

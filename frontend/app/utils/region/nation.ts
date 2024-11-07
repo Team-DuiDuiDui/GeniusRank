@@ -1,4 +1,4 @@
-import { streamChat, syncChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/backend/chat";
+import { streamChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/backend/chat";
 import { AxiosInstanceForBe } from "~/api/backend/instance";
 import { AxiosInstanceForGithub } from "../../api/github/instance";
 import { handleClientGithubGraphQLReq } from "../request";
