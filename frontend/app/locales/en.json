@@ -3,9 +3,9 @@
     "opposite_lng": "zh",
     "opposite_lng_name": "中文",
     "title": "Genius Rank - GitHub user analysis",
-    "description": "GitHub user data, analysis, evaluation, and nationality prediction",
+    "description": "GitHub user data, analysis, evaluation, nationality prediction and stats card generation",
     "languages": "Languages",
-    "lookup_docs": "Read the docs",
+    "lookup_docs": "Search Now",
     "search": {
       "placeholder": "Input the username on GitHub..."
     },
@@ -368,6 +368,7 @@
       "ZM": "Zambia",
       "ZW": "Zimbabwe"
     },
-    "searching": "Searching"
+    "searching": "Searching",
+    "see_ranking": "Rankings"
   }
 }

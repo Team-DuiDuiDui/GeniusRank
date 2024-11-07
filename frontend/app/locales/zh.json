@@ -3,9 +3,9 @@
     "opposite_lng": "en",
     "opposite_lng_name": "English",
     "title": "Genius Rank - GitHub 用户分析",
-    "description": "GitHub 用户数据查看、分析、评价与国籍猜测",
+    "description": "GitHub 用户数据查看、分析、国籍猜测与信息卡片展示",
     "languages": "语言",
-    "lookup_docs": "阅读文档",
+    "lookup_docs": "立即开始",
     "search": {
       "placeholder": "请输入 GitHub 用户名称..."
     },
@@ -370,6 +370,7 @@
       "ZM": "赞比亚",
       "ZW": "津巴布韦"
     },
-    "searching": "用户"
+    "searching": "用户",
+    "see_ranking": "查看排名"
   }
 }
