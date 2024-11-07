@@ -94,7 +94,9 @@ const prompt = `
 export const guessRegionFromFollowersBetter = async (
     userData: UserDataProps,
     beInstance: AxiosInstanceForBe,
-    githubInstance: AxiosInstanceForGithub
+    githubInstance: AxiosInstanceForGithub,
+    beUrl: string,
+    beToken: string,
 ): Promise<NationData> => {
     interface Followers {
         login: string;
@@ -140,17 +142,13 @@ export const guessRegionFromFollowersBetter = async (
         }
     ))!;
 
-    const chatResult = await streamChat(`${locationList.map(node => node.location || "null")} ${prompt}`, beInstance)
-    console.log(`${locationList.map(node => node.location || "null")} ${prompt}`)
-    console.log("chatResult", chatResult)
+    const chatResult = await streamChat(`${locationList.map(node => node.location || "null")} ${prompt}`, beUrl, beToken)
     const resultJSON: string[] = JSON.parse(parseStringToArrayLike(chatResult))
-    // console.log(resultJSON)
     const resAll = calculateNationPrediction(locationList.map((item, index) => ({
         ...item,
         location: resultJSON[index] === undefined ? null : resultJSON[index],
     })))
     const res = resAll[0]
-    console.log(resAll.slice(0, 5))
     return { ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" }
 }
 

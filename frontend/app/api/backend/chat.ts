@@ -62,7 +62,6 @@ export const syncChatForNationFromGLM = async (userName: string, beInstance: Axi
     }
     `
     const result = await syncChat(message, beInstance)
-    console.log(result)
     return JSON.parse(parseStringToJSONfy(result))
 }
 
@@ -80,42 +79,56 @@ export const syncChat = async (message: string, beInstance: AxiosInstanceForBe, 
     )
 }
 
-export const streamChat = async (message: string, beInstance: AxiosInstanceForBe): Promise<string> => {
+export const streamChat = async (message: string, url: string, token: string): Promise<string> => {
     try {
-        // 发起流式请求，设置 responseType 为 'stream'
-        const response = await beInstance.post('/analyze/chat/stream/question', { message }, { responseType: 'stream' });
-
-        let result = '';  // 用于拼接流中的数据块
-
-        // 监听流的 'data' 事件，将每个数据块拼接到 result 中
-        response.data.on('data', (chunk: Buffer) => {
-            // 将 Buffer 转为字符串
-            const chunkStr = chunk.toString();
-
-            // 清理多余的 `data:` 前缀部分
-            const cleanedChunk = chunkStr
-                .split('\n')
-                .map(line => line.replace(/^data:/, '').trim()) // 移除 `data:` 前缀并修剪空白
-                .join('');
-
-            // 将清理后的块拼接到 result 中
-            result += cleanedChunk;
+        const response = await fetch(`${url}/analyze/chat/stream/question`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: token,
+            },
+            body: JSON.stringify({ message })
         });
 
-        // 监听流的 'end' 事件，当流结束时返回拼接后的完整字符串
-        return new Promise<string>((resolve, reject) => {
-            response.data.on('end', () => {
-                console.log('流结束', result);
-                resolve(result);  // 返回拼接后的完整字符串
-            });
+        if (!response.body) {
+            throw new Error('Response body is null');
+        }
 
-            // 错误处理
-            response.data.on('error', (err: Error) => {
-                reject(err);  // 如果流发生错误，抛出错误
-            });
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let result = '';  // 用于拼接流中的数据块
+
+        return new Promise<string>((resolve, reject) => {
+            const readChunk = async () => {
+                try {
+                    const { done, value } = await reader.read();
+                    if (done) {
+                        resolve(result);  // 返回拼接后的完整字符串
+                        return;
+                    }
+
+                    // 解码数据并清理多余的 `data:` 前缀部分
+                    const chunkStr = decoder.decode(value, { stream: true });
+                    const cleanedChunk = chunkStr
+                        .split('\n')
+                        .map(line => line.replace(/^data:/, '').trim()) // 移除 `data:` 前缀并修剪空白
+                        .join('');
+
+                    // 将清理后的块拼接到 result 中
+                    result += cleanedChunk;
+
+                    // 继续读取下一个数据块
+                    readChunk();
+                } catch (err) {
+                    reject(err);  // 如果读取发生错误，抛出错误
+                }
+            };
+
+            readChunk();  // 开始读取数据流
         });
     } catch (error) {
         console.error('请求失败:', error);
         throw error;
     }
 };
+

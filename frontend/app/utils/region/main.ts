@@ -15,6 +15,8 @@ export interface GuessNationProps {
     beInstance: AxiosInstanceForBe;
     githubInstance: AxiosInstanceForGithub;
     userData: UserDataProps;
+    beUrl: string;
+    beToken: string;
 }
 
 interface NationData {
@@ -68,7 +70,12 @@ export const guessRegion = async ({
     userData,
     beInstance,
     githubInstance,
+    beUrl,
+    beToken,
 }: GuessNationProps): Promise<NationData> => {
+    console.log('------------------------------------------------------------------------------------')
+    const dataFromFollowers = await guessRegionFromFollowersBetter(userData, beInstance, githubInstance, beUrl, beToken);
+    if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, null, beInstance);
     // throw new Error('Not implemented');
     const dataFromBe = await getUserNation(userData.login, beInstance);
     if (dataFromBe?.confidence === 1) {
@@ -95,7 +102,7 @@ export const guessRegion = async ({
             }, dataFromBe, beInstance);
         }
 
-        const dataFromFollowers = await guessRegionFromFollowersBetter(userData, beInstance, githubInstance);
+        const dataFromFollowers = await guessRegionFromFollowersBetter(userData, beInstance, githubInstance, beUrl, beToken);
         if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
 
         const dataFromFollowings = await guessRegionFromFollowings(userData, beInstance, githubInstance);
