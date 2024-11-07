@@ -47,6 +47,8 @@ export default async function loader({ request, params, context }: LoaderFunctio
                     },
                     beInstance,
                     githubInstance,
+                    beUrl: context.cloudflare.env.BASE_URL,
+                    beToken: cookie.be_token,
                 });
                 nationData = {
                     ...nationData,
