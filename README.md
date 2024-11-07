@@ -105,15 +105,11 @@ $ yarn
 
 在前端文件根目录下创建`.dev.vars`文件，按注释在 GitHub 生成并写入相应信息
 
-```
-# 生成的 GitHub Fine-grained personal access tokens
-GITHUB_ACCESS_TOKEN =
-# 生成的 GitHub OAuth Client ID
-GITHUB_CLIENT_ID =
-# 生成的 GitHub OAuth Client Secret
-GITHUB_CLIENT_SECRET =
-# 后端 BASE_URL
-BASE_URL =
+```yaml
+GITHUB_ACCESS_TOKEN = # 生成的 GitHub Fine-grained personal access tokens
+GITHUB_CLIENT_ID = # 生成的 GitHub OAuth Client ID
+GITHUB_CLIENT_SECRET = # 生成的 GitHub OAuth Client Secret
+BASE_URL = # 后端 BASE_URL
 ```
 
 ### 启动项目
@@ -131,11 +127,17 @@ $ yarn dev
 # 🖥️ 技术架构
 
 ## 总体架构
+![](./.github/image/Framwork.png)
+GeniusRank 前端及其服务端使用 Remix.js，后端使用 Spring-Cloud 作为微服务框架，包括 API 层和 RPC 层。API 层与前端交互，提供功能中间件。RPC 层实现业务逻辑，使用 Nacos 进行服务注册和发现。存储方面，使用 MySQL 持久化、 Redis 作为缓存、RocketMQ 作为消息队列。算法支持包括得分算法，国籍猜测算法和语言大模型。服务可观测性通过链路追踪和服务监控实现。
+
 
 ## 前端架构
+使用 [Remix.js](https://remix.run/) 框架构建（包含用户界面与 Remix 服务端），以 Tailwind 作为 CSS 框架，利用 TypeScript 与 Zod 进行类型检查，使用 i18next 实现多语言服务，以 Mantine 为前端 UI 与图表组件库，部署于 CloudFlare Pages。
+
+支持服务端渲染（SSR），在必要处均遵循渐进增强原则，可以在无 JavaScript 的情况下使用最基本功能；同时支持增量静态生成(ISSG)与静态生成(SSG)，减少 Remix 服务端压力，提升用户体验。
 
 ## 后端架构
-
+![](./.github/image/Framwork_be.png)
 选择了基于 Spring Boot 3 和 JDK17 进行底层建设，同时组件库的版本大多也是最新的。这样做既能享受新技术带来的性能提升，也能体验到新特性带来的惊喜。
 技术架构涵盖了 SpringBoot 3、SpringCloudAlibaba、Nacos、Sentinel、Skywalking、RocketMQ 5.x、Redis、MySQL、EasyExcel、Redisson 等技术。
 框架技术和版本号关系如下表格所示。
