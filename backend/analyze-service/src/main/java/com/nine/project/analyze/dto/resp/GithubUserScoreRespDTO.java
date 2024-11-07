@@ -17,6 +17,16 @@ public class GithubUserScoreRespDTO {
     private double totalScore;
 
     /**
+     * 昵称
+     */
+    private String name;
+
+    /**
+     * 头像
+     */
+    private String avatarUrl;
+
+    /**
      * Github 用户基础数据得分
      */
     private double userScore;
@@ -35,6 +45,11 @@ public class GithubUserScoreRespDTO {
      * Github 用户 issues 数据得分
      */
     private double issuesScore;
+
+    /**
+     * 用户排名
+     */
+    private Integer rank;
 
     /**
      * 更新时间

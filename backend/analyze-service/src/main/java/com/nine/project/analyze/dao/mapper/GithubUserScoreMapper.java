@@ -18,7 +18,7 @@ public interface GithubUserScoreMapper extends BaseMapper<GithubUserScoreDO> {
      */
     List<GithubUserScoreRankRespDTO> findTopScoresByCountryName(
             @Param("size")  Integer size,
-            @Param("nation") String nation);
+            @Param("nations") List<String> nations);
 
 
     /**
@@ -26,6 +26,13 @@ public interface GithubUserScoreMapper extends BaseMapper<GithubUserScoreDO> {
      */
     List<GithubUserScoreRankRespDTO> findTopScoresByCountryNameAndType(
             @Param("size")  Integer size,
-            @Param("nation") String nation,
-            @Param("type") String type);
+            @Param("nations") List<String> nations,
+            @Param("types") List<String> types);
+
+    /**
+     * 根据用户名查询排名
+     * @param totalScore 分数
+     * @return 排名
+     */
+    Integer getGithubUserRank(@Param("totalScore") Double totalScore);
 }

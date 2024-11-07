@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.nine.project.analyze.constant.RedisCacheConstant.USER_SCORE_EXPIRE_TIME;
@@ -79,6 +80,8 @@ public class SaveDevelopTypeConsumer implements RocketMQListener<GeneralMessageE
             // 封装持久化数据分数逻辑
             GithubUserScoreDO userScoreDO = BeanUtil.copyProperties(scores, GithubUserScoreDO.class);
             userScoreDO.setLogin(login);
+            userScoreDO.setName(requestParams.getUser().getName());
+            userScoreDO.setAvatarUrl(requestParams.getUser().getAvatar_url());
             saveOrUpdate(existsInDatabase, userScoreDO, queryWrapper, USER_SCORE_KEY + login);
 
             // 封装持久化数据开发者领域逻辑
@@ -87,7 +90,12 @@ public class SaveDevelopTypeConsumer implements RocketMQListener<GeneralMessageE
             List<String> topThreeLanguages = LanguageFrequencyCounter.getTopThreeLanguages(requestParams.getRepos());
             List<GithubUserDeveloperDO> developerDOList = new ArrayList<>();
 
-            for (String language : topThreeLanguages) {
+            // 存入 Redis 中
+            if (topThreeLanguages != null && !topThreeLanguages.isEmpty()) {
+                topThreeLanguages.forEach(cacheUtil::registerType);
+            }
+
+            for (String language : Objects.requireNonNull(topThreeLanguages)) {
                 GithubUserDeveloperDO developerDO = new GithubUserDeveloperDO();
                 developerDO.setLogin(login);
                 developerDO.setDeveloper_type(language);
@@ -123,6 +131,8 @@ public class SaveDevelopTypeConsumer implements RocketMQListener<GeneralMessageE
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
         respDTO.setUpdateTime(Instant.now().getEpochSecond());
+        respDTO.setName(userScoreDO.getName());
+        respDTO.setAvatarUrl(userScoreDO.getAvatarUrl());
 
         // 存入缓存
         cacheUtil.send2CacheHash(cacheKey, respDTO, USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);

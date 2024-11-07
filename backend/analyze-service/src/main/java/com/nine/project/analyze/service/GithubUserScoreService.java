@@ -6,6 +6,8 @@ import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
+import com.nine.project.analyze.dto.resp.RankRespDTO;
+import com.nine.project.analyze.dto.resp.UserRankRespDTO;
 
 import java.util.List;
 
@@ -42,5 +44,16 @@ public interface GithubUserScoreService extends IService<GithubUserScoreDO> {
      * @param nation 国家
      * @return List<GithubUserScoreRespDTO> 用户分数
      */
-    List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, String nation, String type);
+    RankRespDTO getGithubUserScoreRank(Integer size, List<String> nation, List<String> type);
+
+    /**
+     * 获取所有已存在的国家
+     * @return List<String> 国家列表
+     */
+    List<String> getTypes();
+
+    /**
+     * 获取用户分数接口排行榜（无需登录）
+     */
+    UserRankRespDTO getGithubUserRank(String login);
 }

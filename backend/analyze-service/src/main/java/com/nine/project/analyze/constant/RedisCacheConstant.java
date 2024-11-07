@@ -39,4 +39,10 @@ public class RedisCacheConstant {
 
     public static final String SCORE_RANK_NATION_KEY = "general-project:user-score-rank:nation:%s";
     public static final String SCORE_RANK_NATION_TYPE_KEY = "general-project:user-score-rank:type:%s-%s";
+
+    /**
+     * 用户类型统计
+     */
+    public static final String TYPE_COUNTER_KEY = "general-project:counter-types:";
+    public static final String TYPE_KEY = "general-project:user-types";
 }

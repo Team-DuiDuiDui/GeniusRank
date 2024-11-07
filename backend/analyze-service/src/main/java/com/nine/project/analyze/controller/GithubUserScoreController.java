@@ -4,10 +4,13 @@ import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
+import com.nine.project.analyze.dto.resp.RankRespDTO;
+import com.nine.project.analyze.dto.resp.UserRankRespDTO;
 import com.nine.project.analyze.service.GithubUserScoreService;
 import com.nine.project.framework.result.Result;
 import com.nine.project.framework.web.Results;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,9 +54,27 @@ public class GithubUserScoreController {
      * 获取用户分数接口排行榜（无需登录）
      */
     @GetMapping("/api/analyze/score/rank")
-    public Result<List<GithubUserScoreRankRespDTO>> getUserScoreRank(@RequestParam(defaultValue = "10") Integer size,
-                                                                     @RequestParam(required = false) String nation,
-                                                                     @RequestParam(required = false) String type) {
-        return Results.success(githubUserScoreService.getGithubUserScoreRank(size, nation, type));
+    public Result<RankRespDTO> getUserScoreRank(@RequestParam(defaultValue = "10") Integer size,
+                                                @RequestParam(required = false) String[] nation,
+                                                @RequestParam(required = false) String[] type) {
+        List<String> nationList = nation == null ? null : List.of(nation);
+        List<String> typeList = type == null ? null : List.of(type);
+        return Results.success(githubUserScoreService.getGithubUserScoreRank(size, nationList, typeList));
+    }
+
+    /**
+     * 获取用户排名接口排行榜（无需登录）
+     */
+    @GetMapping("/api/analyze/score/rank/{login}")
+    public Result<UserRankRespDTO> getUserRank(@PathVariable  String login) {
+        return Results.success(githubUserScoreService.getGithubUserRank(login));
+    }
+
+    /**
+     * 查询所有已存在国家
+     */
+    @GetMapping("/api/analyze/score/type/exist")
+    public Result<List<String>> getUser() {
+        return Results.success(githubUserScoreService.getTypes());
     }
 }

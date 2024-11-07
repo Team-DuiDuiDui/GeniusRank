@@ -2,6 +2,7 @@ package com.nine.project.analyze.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nine.project.analyze.dao.entity.GithubUserScoreDO;
@@ -10,6 +11,8 @@ import com.nine.project.analyze.dto.req.GithubDetailedScoreReqDTO;
 import com.nine.project.analyze.dto.req.GithubUserScoreReqDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRankRespDTO;
 import com.nine.project.analyze.dto.resp.GithubUserScoreRespDTO;
+import com.nine.project.analyze.dto.resp.RankRespDTO;
+import com.nine.project.analyze.dto.resp.UserRankRespDTO;
 import com.nine.project.analyze.mq.event.SaveDetailedScoreAndTypeEvent;
 import com.nine.project.analyze.mq.event.SaveScoreAndTypeEvent;
 import com.nine.project.analyze.mq.produce.SaveDetailedScoreAndTypeProducer;
@@ -24,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -48,9 +52,13 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     public GithubUserScoreRespDTO getGithubUserScore(String githubUserId) {
         String cacheKey = USER_SCORE_KEY + githubUserId;
 
+        UserRankRespDTO githubUserRank = getGithubUserRank(githubUserId);
+        Integer rank = githubUserRank.getRank();
+
         // 从缓存中获取
         Map<Object, Object> cachedData = cacheUtil.getMapFromCacheHash(cacheKey);
         if (!cachedData.isEmpty()) {
+            cachedData.put("rank", rank);
             return BeanUtil.fillBeanWithMap(cachedData, GithubUserScoreRespDTO.builder().build(), true);
         }
 
@@ -66,6 +74,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
+        respDTO.setRank(rank);
         respDTO.setUpdateTime(Instant.now().getEpochSecond());
 
         // 存入缓存
@@ -81,6 +90,8 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         saveScoreAndTypeProducer.sendMessage(new SaveScoreAndTypeEvent(requestParams, scores));
 
         // 封装并返回分数
+        scores.setName(requestParams.getUser().getName());
+        scores.setAvatarUrl(requestParams.getUser().getAvatar_url());
         scores.setUpdateTime(Instant.now().getEpochSecond());
         return scores;
     }
@@ -94,13 +105,17 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         saveDetailedScoreAndTypeProducer.sendMessage(new SaveDetailedScoreAndTypeEvent(requestParams, scores));
 
         // 封装并返回分数
+        scores.setName(requestParams.getName());
+        scores.setAvatarUrl(requestParams.getAvatarUrl());
         scores.setUpdateTime(Instant.now().getEpochSecond());
         return scores;
     }
 
     @Override
-    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRank(Integer size, String nation, String type) {
+    public RankRespDTO getGithubUserScoreRank(Integer size, List<String> nation, List<String> type) {
         List<GithubUserScoreRankRespDTO> scoreRankList;
+        Long count = baseMapper.selectCount(Wrappers.lambdaQuery(GithubUserScoreDO.class).eq(GithubUserScoreDO::getDelFlag, 0));
+
         if (type!= null) {
             scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, type);
             if (scoreRankList == null) {
@@ -114,6 +129,26 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
                 cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, null);
             }
         }
-        return scoreRankList;
+        // 返回结果
+        return new RankRespDTO(scoreRankList, new ArrayList<>(cacheUtil.getCountries()), new ArrayList<>(cacheUtil.getTypes()),count);
+    }
+
+    @Override
+    public List<String> getTypes() {
+        return new ArrayList<>(cacheUtil.getTypes());
+    }
+
+    @Override
+    public UserRankRespDTO getGithubUserRank(String login) {
+        QueryWrapper<GithubUserScoreDO> queryWrapper = Wrappers.<GithubUserScoreDO>query()
+                .eq("login", login);
+        GithubUserScoreDO userScoreDO = this.getOne(queryWrapper);
+        if (userScoreDO == null) {
+            log.error("用户分数不存在");
+            throw new ClientException(USER_SCORE_NOT_FOUND);
+        }
+        double totalScore = userScoreDO.getTotalScore();
+        Integer githubUserRank = baseMapper.getGithubUserRank(totalScore);
+        return new UserRankRespDTO(githubUserRank,totalScore);
     }
 }

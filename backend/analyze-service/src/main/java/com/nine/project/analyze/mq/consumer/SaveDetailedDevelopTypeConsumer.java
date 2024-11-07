@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -80,6 +81,8 @@ public class SaveDetailedDevelopTypeConsumer implements RocketMQListener<General
             // 封装持久化数据分数逻辑
             GithubUserScoreDO userScoreDO = BeanUtil.copyProperties(scores, GithubUserScoreDO.class);
             userScoreDO.setLogin(login);
+            userScoreDO.setName(requestParams.getName());
+            userScoreDO.setAvatarUrl(requestParams.getAvatarUrl());
             saveOrUpdate(existsInDatabase, userScoreDO, queryWrapper, USER_SCORE_KEY + login);
 
             // 封装持久化数据开发者领域逻辑
@@ -91,9 +94,15 @@ public class SaveDetailedDevelopTypeConsumer implements RocketMQListener<General
             ).toList();
 
             List<String> topThreeLanguages = LanguageFrequencyCounter.getDetailedTopThreeLanguages(repositoryList);
+
+            // 存入 Redis 中
+            if (topThreeLanguages != null && !topThreeLanguages.isEmpty()) {
+                topThreeLanguages.forEach(cacheUtil::registerType);
+            }
+
             List<GithubUserDeveloperDO> developerDOList = new ArrayList<>();
 
-            for (String language : topThreeLanguages) {
+            for (String language : Objects.requireNonNull(topThreeLanguages)) {
                 GithubUserDeveloperDO developerDO = new GithubUserDeveloperDO();
                 developerDO.setLogin(requestParams.getLogin());
                 developerDO.setDeveloper_type(language);
@@ -129,6 +138,8 @@ public class SaveDetailedDevelopTypeConsumer implements RocketMQListener<General
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
         respDTO.setUpdateTime(Instant.now().getEpochSecond());
+        respDTO.setName(userScoreDO.getName());
+        respDTO.setAvatarUrl(userScoreDO.getAvatarUrl());
 
         // 存入缓存
         cacheUtil.send2CacheHash(cacheKey, respDTO, USER_SCORE_EXPIRE_TIME, TimeUnit.SECONDS);

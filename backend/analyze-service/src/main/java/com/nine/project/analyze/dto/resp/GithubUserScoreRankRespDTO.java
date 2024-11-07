@@ -3,6 +3,8 @@ package com.nine.project.analyze.dto.resp;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 
 /**
  * Github 用户得分响应
@@ -16,14 +18,19 @@ public class GithubUserScoreRankRespDTO {
     private String login;
 
     /**
+     * 昵称
+     */
+    private String name;
+
+    /**
+     * 头像
+     */
+    private String avatar_url;
+
+    /**
      * 用户所在国家/地区 iso 代码
      */
     private String country_iso;
-
-    /**
-     * 用户所在国家/地区名称
-     */
-    private String country_name;
 
     /**
      * Github 用户总分

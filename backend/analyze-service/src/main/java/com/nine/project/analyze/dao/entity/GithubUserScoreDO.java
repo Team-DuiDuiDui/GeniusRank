@@ -24,6 +24,16 @@ public class GithubUserScoreDO extends BaseDO {
     private String login;
 
     /**
+     * 昵称
+     */
+    private String name;
+
+    /**
+     * 头像
+     */
+    private String avatarUrl;
+
+    /**
      * Github 用户总分
      */
     private double totalScore;
