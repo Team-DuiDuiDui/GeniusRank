@@ -1,6 +1,7 @@
 <div align="center">
 
 [![Genius Rank](./.github/image/geniusRank.svg)](https://geniusrank.heuluck.top/)
+
 GitHub 用户数据查看、分析、国籍猜测与信息卡片展示
 
 </div>
@@ -127,7 +128,7 @@ $ yarn dev
 # 🖥️ 技术架构
 
 ## 总体架构
-![](./.github/image/Framwork.png)
+![](./.github/image/Framwork.jpg)
 GeniusRank 前端及其服务端使用 Remix.js，后端使用 Spring-Cloud 作为微服务框架，包括 API 层和 RPC 层。API 层与前端交互，提供功能中间件。RPC 层实现业务逻辑，使用 Nacos 进行服务注册和发现。存储方面，使用 MySQL 持久化、 Redis 作为缓存、RocketMQ 作为消息队列。算法支持包括得分算法，国籍猜测算法和语言大模型。服务可观测性通过链路追踪和服务监控实现。
 
 
