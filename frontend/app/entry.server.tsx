@@ -64,14 +64,14 @@ async function handleBotRequest(
 }
 
 async function handleBrowserRequest(
-  request: Request,
-  responseStatusCode: number,
-  responseHeaders: Headers,
-  remixContext: EntryContext,
-  _loadContext: AppLoadContext,
-  i18next: i18next
+    request: Request,
+    responseStatusCode: number,
+    responseHeaders: Headers,
+    remixContext: EntryContext,
+    _loadContext: AppLoadContext,
+    i18next: i18next
 ) {
-      const body = await renderToReadableStream(
+    const body = await renderToReadableStream(
         <I18nextProvider i18n={i18next}>
             <RemixServer context={remixContext} url={request.url} />
         </I18nextProvider>,

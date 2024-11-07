@@ -41,7 +41,17 @@ const UserNation: React.FC<NationCardProps> = ({
 
         if (noData && fetcher)
             return (
-                <fetcher.Form method="post" onSubmit={() => setLoading(true)}>
+                <fetcher.Form
+                    method="post"
+                    onSubmit={() => {
+                        fetcher.submit(
+                            {},
+                            {
+                                action: '/reset-fetcher',
+                            }
+                        );
+                        setLoading(true);
+                    }}>
                     <input type="hidden" name="userData" value={JSON.stringify(userData)} />
                     <Tooltip label={t('user.reload_nation')}>
                         <button
@@ -117,8 +127,9 @@ const UserNation: React.FC<NationCardProps> = ({
 
     const renderFlag = () => (
         <span
-            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${disable ? 'blur-xl' : ''
-                } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
+            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${
+                disable ? 'blur-xl' : ''
+            } p-0 h-full w-full ${nationISO !== 'CN' ? 'blur scale-95' : ''}`}></span>
     );
 
     return (
