@@ -4,8 +4,10 @@
 
 GitHub 用户数据查看、分析、国籍猜测与信息卡片展示
 
-[![Genius Rank](https://geniusrank.heuluck.top/card/octocat)]
+![](./.github/image/octocatStat.svg)
 <p>GitHub 官方吉祥物 Octocat 的卡片展示</p>
+
+[查看 Octocat 实时卡片](https://geniusrank.heuluck.top/card/octocat) 
 
 </div>
 
@@ -23,10 +25,9 @@ GeniusRank 是一个开发者评估应用，致力于为用户提供 GitHub 用�
     项目详细介绍请看 docs
 
 # 🚀 功能演示
-
-[👀 仓库地址](https://github.com/Team-DuiDuiDui/GeniusRank)
-[📚 接口文档](https://apifox.com/apidoc/shared-9686d680-3909-4a99-af4c-41c6120c169e)
-🥽 视频地址
+- [👀 仓库地址](https://github.com/Team-DuiDuiDui/GeniusRank)
+- [📚 接口文档](https://apifox.com/apidoc/shared-9686d680-3909-4a99-af4c-41c6120c169e)
+- [🎬 视频演示](./.github/video/1024.mp4) · [Bilibili](https://www.bilibili.com/video/BV18FDQYaEoq)
 
 # 📦 使用方法
 
@@ -171,4 +172,5 @@ GeniusRank 前端及其服务端使用 Remix.js，后端使用 Spring-Cloud 作�
 | 王朝伟   | 后端架构设计，用户模块，大模型模块，算法设计，缓存设计，限流，服务监控等 |
 | 陆永祥   | 前端架构设计，样式设计，GitHub 用户数据获取、查看、分析，代码审查，服务端渲染等        |
 | 张润诚   | 前端架构设计，国籍猜测模块、猜测与置信度算法设计等                                             |
-<!-- [![Contributors](https://contrib.rocks/image?repo=Team-DuiDuiDui/GeniusRank)](https://github.com/Team-DuiDuiDui/GeniusRank/graphs/contributors) -->
+
+[![Contributors](https://contrib.rocks/image?repo=Team-DuiDuiDui/GeniusRank)](https://github.com/Team-DuiDuiDui/GeniusRank/graphs/contributors)
