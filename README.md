@@ -175,4 +175,4 @@ GeniusRank 前端及其服务端使用 Remix.js，后端使用 Spring-Cloud 作�
 | 陆永祥   | 前端架构设计，样式设计，GitHub 用户数据获取、查看、分析，代码审查，服务端渲染等        |
 | 张润诚   | 前端架构设计，国籍猜测模块、猜测与置信度算法设计等                                             |
 
-[![Contributors](https://contrib.rocks/image?repo=Team-DuiDuiDui/GeniusRank)](https://github.com/Team-DuiDuiDui/GeniusRank/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=Team-DuiDuiDui%2fGeniusRank)](https://github.com/Team-DuiDuiDui/GeniusRank/graphs/contributors)
