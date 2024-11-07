@@ -10,6 +10,7 @@ import i18nServer from '~/modules/i18n.server';
 import { RankResp } from '~/api/backend/typings/beRes';
 import { useEffect } from 'react';
 import { UserCardFull } from '~/components/ranking/card';
+import { cacheHeader } from '~/utils/cacheHeader';
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };
@@ -22,9 +23,9 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     console.log(Date.now());
     try {
         const rankingData = await getRankings(beInstance, null, null, 21);
-        return json({ title: t('title'), description: t('user.description'), rankingData }, { headers: { 'Cache-Control': 'public, max-age=300, s-maxage=86400' } });
+        return json({ title: t('title'), description: t('user.description'), rankingData }, cacheHeader(300, 86400));
     } catch {
-        return json({ title: t('title'), description: t('user.description'), rankingData: fallBackData }, { headers: { 'Cache-Control': 'public, max-age=300, s-maxage=86400' } });
+        return json({ title: t('title'), description: t('user.description'), rankingData: fallBackData }, cacheHeader(300, 86400));
     }
 }
 
@@ -85,7 +86,7 @@ export default function Index() {
                                 userInfo={item}
                                 score={item}
                                 style={{
-                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 90s linear infinite ${lineIndex % 2 ? 'reverse' : ''
+                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 60s linear infinite ${lineIndex % 2 ? 'reverse' : ''
                                         }`,
                                 }}
                                 disabledChevron

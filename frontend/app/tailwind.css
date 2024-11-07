@@ -71,7 +71,7 @@ body::-webkit-scrollbar-track {
   }
 
   100% {
-    transform: translateX(calc(-450% - 4.5rem));
+    transform: translateX(calc(-750% - 7.5rem));
   }
 }
 
@@ -81,6 +81,6 @@ body::-webkit-scrollbar-track {
   }
 
   100% {
-    transform: translateX(calc(-400% - 4.5rem));
+    transform: translateX(calc(-700% - 7.5rem));
   }
 }

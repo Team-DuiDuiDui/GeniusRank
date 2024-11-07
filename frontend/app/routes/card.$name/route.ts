@@ -22,6 +22,7 @@ export const loader: LoaderFunction = async ({ params, context, request }) => {
                 status: 200,
                 headers: {
                     'Content-Type': 'application/json',
+                    'Cache-Control': 'public, max-age=300',
                 },
             }
         );
