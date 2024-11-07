@@ -1,6 +1,7 @@
 /* eslint-disable import/no-named-as-default-member */
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Button, Popover } from '@mantine/core';
+import { useNavigate } from '@remix-run/react';
 import axios, { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 import { ZodError } from 'zod';
@@ -14,6 +15,7 @@ interface ErrorProps {
 
 const ErrorNote: React.FC<ErrorProps> = ({ error, isBackendRequest = false, reload }) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     return (
         <>
             {error ? (
@@ -55,7 +57,18 @@ const ErrorNote: React.FC<ErrorProps> = ({ error, isBackendRequest = false, relo
                                     ? JSON.stringify(error.flatten().fieldErrors)
                                     : t('user.no_message')}
                             </p>
-                            {reload && <Button onClick={reload}>{t('user.err.reload')}</Button>}
+                            {reload ? (
+                                <Button onClick={reload}>{t('user.err.reload')}</Button>
+                            ) : (
+                                <Button
+                                    onClick={() => {
+                                        navigate('#', {
+                                            replace: true,
+                                        });
+                                    }}>
+                                    刷新页面
+                                </Button>
+                            )}
                         </Popover.Dropdown>
                     </Popover>
                 </span>

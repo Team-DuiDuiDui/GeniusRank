@@ -46,7 +46,7 @@ export default function App() {
     return (
         <>
             <ClientOnly>{() => <Toaster />}</ClientOnly>
-            <Header openDrawer={openDrawer} userData={{ avatar: userAvatar, name: username, login: userLogin }} />
+            <Header openDrawer={openDrawer} userData={{ avatar: userAvatar, name: username, login: userLogin }} client_id={client_id} />
             <SettingDrawer
                 opened={drawerOpened}
                 close={closeDrawer}
@@ -64,14 +64,14 @@ export default function App() {
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const locale = await i18nServer.getLocale(request);
     const cookieHeader = request.headers.get('Cookie');
-    const cookie = (await user.parse(cookieHeader)) || {};
+    const userCookie = (await user.parse(cookieHeader)) || {};
     return json(
         {
             locale,
-            userAvatar: cookie.userAvatar,
-            username: cookie.username,
-            userLogin: cookie.userLogin,
-            userEmail: cookie.userEmail,
+            userAvatar: userCookie.userAvatar,
+            username: userCookie.username,
+            userLogin: userCookie.userLogin,
+            userEmail: userCookie.userEmail,
             client_id: context.cloudflare.env.GITHUB_CLIENT_ID,
         },
         { headers: { 'Set-Cookie': await localeCookie.serialize(locale) } }

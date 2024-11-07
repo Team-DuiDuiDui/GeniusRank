@@ -24,8 +24,10 @@ export const updateUserNation = async (data: {
     message: string,
     confidence: number,
 }, instance: AxiosInstanceForBe): Promise<NationData> => {
+    const body = { "country_iso": data.nationISO, "login": data.login, "message": data.message, "confidence": data.confidence }
+    console.log(body)
     return handleRequest(
-        () => instance.post(`/analyze/country/${data.login}`, { "country_iso": data.nationISO, "login": data.login, "message": data.message, "confidence": data.confidence }),
+        () => instance.post(`/analyze/country`, body),
         async res => res.data.data,
         undefined, 0, false, false
     )

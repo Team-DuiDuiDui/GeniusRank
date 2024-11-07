@@ -6,6 +6,7 @@ import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { FetcherWithComponents } from '@remix-run/react';
 import { UserDetail } from '~/api/github/graphql/typings/user';
+import { useEffect, useState } from 'react';
 // import { interpolateColorsOfIcon } from '~/utils/chore';
 
 interface NationCardProps {
@@ -13,11 +14,10 @@ interface NationCardProps {
     userData?: Pick<UserDetail, 'followers' | 'following' | 'login'>;
     nationISO: string;
     nationLocale: string;
+    isStillHim?: boolean;
     message: string | React.ReactNode;
     confidence?: number;
-    loading?: boolean;
     disable?: boolean;
-    warning?: string;
 }
 
 const UserNation: React.FC<NationCardProps> = ({
@@ -25,21 +25,23 @@ const UserNation: React.FC<NationCardProps> = ({
     userData,
     nationISO,
     nationLocale,
-    warning: _,
-    loading,
+    isStillHim,
     disable,
     message,
-    // confidence,
 }) => {
     const noData = nationISO === '';
     const isCN = nationISO === 'CN';
+    const [loading, setLoading] = useState(isStillHim);
+    useEffect(() => {
+        if (isStillHim && fetcher?.data && loading) setLoading(false);
+    }, [fetcher?.data, isStillHim, loading]);
     const { t } = useTranslation();
     const renderIcon = () => {
         if (disable) return;
 
         if (noData && fetcher)
             return (
-                <fetcher.Form method="post">
+                <fetcher.Form method="post" onSubmit={() => setLoading(true)}>
                     <input type="hidden" name="userData" value={JSON.stringify(userData)} />
                     <Tooltip label={t('user.reload_nation')}>
                         <button
@@ -75,7 +77,7 @@ const UserNation: React.FC<NationCardProps> = ({
                         <div className=" text-base drop-shadow-md font-bold text-red-600">
                             {t('user.err.something_wrong_shorter')}
                         </div>
-                        <div className=" text-base drop-shadow-md font-bold text-red-600">
+                        <div className=" text-base drop-shadow-md font-bold text-red-600 text-center">
                             {t('user.err.click_to_reload')}
                         </div>
                     </div>

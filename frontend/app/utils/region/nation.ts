@@ -1,9 +1,11 @@
-import { syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/backend/chat";
+import { streamChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/backend/chat";
 import { AxiosInstanceForBe } from "~/api/backend/instance";
 import { AxiosInstanceForGithub } from "../../api/github/instance";
 import { handleClientGithubGraphQLReq } from "../request";
 import { UserDataProps } from "./main";
 import { NationData } from "~/api/backend/region";
+import { parseStringToArrayLike } from "../parse";
+import { calculateNationPrediction, User } from "./betterRegion";
 
 const defaultValue: NationData = {
     nationISO: "",
@@ -43,6 +45,9 @@ export const guessRegionFromFollowers = async (
                             followers {
                                 totalCount
                                 }
+                            followings {
+                                totalCount
+                                }
                             }
                         totalCount 
                         }
@@ -77,6 +82,78 @@ export const guessRegionFromFollowers = async (
     }
     return defaultValue
 };
+
+const prompt = `
+这是一个包含了位置信息或者 null 的一个数组。
+请你根据你的知识库，判断一下这里面的位置信息都属于哪个国家，并找到对应的 ISO 两个字母的简写形式。
+如果是标准国家名称，比如 China ，就返回 CN 。如果不标准，是这个国家中的某个地方，比如 California ，就返回 US 。
+需要你返回一个数组，这里面的值是 null 或者将这个不确定格式的位置信息替换为双引号包裹的字符串形式的对应国家的 ISO 简写。
+注意：你只需要返回同样的数组即可，不要有任何多余内容，我需要直接将你的答案用到JSON.parse中
+`
+
+export const guessRegionFromFollowersBetter = async (
+    userData: UserDataProps,
+    beInstance: AxiosInstanceForBe,
+    githubInstance: AxiosInstanceForGithub
+): Promise<NationData> => {
+    interface Followers {
+        login: string;
+        name: string;
+        location: string;
+        company: string;
+        followers: {
+            totalCount: number;
+        };
+        following: {
+            totalCount: number;
+        };
+    }
+    const query = `
+                query($userName: String!) {
+                    user(login: $userName) {
+                        followers(last: 80) {
+                        nodes {
+                            login
+                            name
+                            location
+                            company
+                            followers {
+                                totalCount
+                                }
+                            following {
+                                totalCount
+                                }
+                            }
+                        totalCount
+                        }
+                    }
+                }`;
+    const variables = { userName: userData.login };
+    const locationList: User[] = (await handleClientGithubGraphQLReq<User[]>(
+        { axiosInstance: githubInstance, query, variables },
+        async res => {
+            return res.data.data.user.followers.nodes.map((node: Followers) => ({
+                location: node.location || null,
+                followers: node.followers.totalCount,
+                followings: node.following.totalCount
+            })).reverse()
+        }
+    ))!;
+
+    const chatResult = await streamChat(`${locationList.map(node => node.location || "null")} ${prompt}`, beInstance)
+    console.log(`${locationList.map(node => node.location || "null")} ${prompt}`)
+    console.log("chatResult", chatResult)
+    const resultJSON: string[] = JSON.parse(parseStringToArrayLike(chatResult))
+    // console.log(resultJSON)
+    const resAll = calculateNationPrediction(locationList.map((item, index) => ({
+        ...item,
+        location: resultJSON[index] === undefined ? null : resultJSON[index],
+    })))
+    const res = resAll[0]
+    console.log(resAll.slice(0, 5))
+    return { ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" }
+}
+
 
 /**
  * 从用户的 followings 角度猜测用户所在国家

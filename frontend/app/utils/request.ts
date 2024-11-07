@@ -85,7 +85,9 @@ export const handleRequest = async <T>(
                     continue;
                 }
             }
-            sideEffect?.failedSideEffect ? sideEffect?.failedSideEffect() : null;
+            if (sideEffect?.failedSideEffect) {
+                sideEffect.failedSideEffect();
+            }
             throw error;
         }
     }

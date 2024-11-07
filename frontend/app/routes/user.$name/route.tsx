@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs, redirect, type MetaFunction } from '@remix-run/cloudflare';
+import { type MetaFunction } from '@remix-run/cloudflare';
 import { isRouteErrorResponse, useLoaderData, useNavigation, useParams, useRouteError } from '@remix-run/react';
 import UserBasic from '~/components/userinfo/basic';
 import UserInfo from '~/components/userinfo/info';
@@ -15,40 +15,9 @@ import useAxiosInstanceForGithub from '~/hooks/useAxiosInstanceForGithub';
 import UserNation from '~/components/userinfo/region';
 import UserScore from '~/components/userinfo/score';
 import { t } from 'i18next';
-import axios from 'axios';
-import { ZodError } from 'zod';
-import { GithubUserServerOnly } from '~/api/github/rest/user.server';
-import { user } from '~/cookie';
-import i18nServer from '~/modules/i18n.server';
+import loader from './loader';
 
-export async function loader({ request, params, context }: LoaderFunctionArgs) {
-    const cookieHeader = request.headers.get('Cookie');
-    const cookie = (await user.parse(cookieHeader)) || {};
-    if (cookie.access_token) return redirect(`/detail/${params.name}`);
-    const t = await i18nServer.getFixedT(request);
-    if (params.name) {
-        const user = new GithubUserServerOnly(params.name, context.cloudflare.env.GITHUB_ACCESS_TOKEN);
-        try {
-            const data = (await user.getUser())!;
-            return json({
-                baseUrl: context.cloudflare.env.BASE_URL,
-                userData: data,
-                title: `${params?.name ?? ''} | Genius Rank`,
-                description: t('user.description'),
-            });
-        } catch (e) {
-            // eslint-disable-next-line import/no-named-as-default-member
-            if (axios.isAxiosError(e)) {
-                if (e.status === 404) throw new Response(t('user.err.not_found'), { status: 404 });
-                if (e.status === 403) {
-                    throw new Response(t('user.err.rate_limit'), { status: 403 });
-                } else throw new Response(t('user.err.something_wrong'), { status: 500 });
-            } else if (e instanceof ZodError) throw new Response(t('user.err.parse_error'), { status: 500 });
-            else throw new Response(t('user.err.something_wrong'), { status: 500 });
-        }
-    }
-    return redirect('/');
-}
+export { loader };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
@@ -59,35 +28,13 @@ export default function User() {
     const navigation = useNavigation();
     const params = useParams();
     const locale = useLocale();
-    // const [nationLoading, setNationLoading] = useState<boolean>(true)
     const beInstance = useAxiosInstanceForBe(data.baseUrl)();
     const githubInstance = useAxiosInstanceForGithub()();
     const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData, githubInstance, beInstance));
-    // const [userRegion, setUserRegion] = useState<NationData | null>(null);
-
-    // const getAndSetUserRegion = useCallback(async () => {
-    //     const nation = await guessRegion({
-    //         locale,
-    //         userData: {
-    //             followers: data.userData.followers,
-    //             followings: data.userData.following,
-    //             login: data.userData.login
-    //         },
-    //         beInstance: beInstance,
-    //         githubInstance: githubInstance,
-    //     });
-    //     setUserRegion(nation);
-    //     setNationLoading(false)
-    // }, [beInstance, data.userData, githubInstance, locale, userRegion]);
-
     useEffect(() => {
         user.current.setUserName(params?.name ?? '');
         user.current.setUserData(data.userData);
     }, [data.userData, params?.name]);
-
-    // useEffect(() => {
-    //     getAndSetUserRegion();
-    // }, [getAndSetUserRegion]);
 
     return (
         <>

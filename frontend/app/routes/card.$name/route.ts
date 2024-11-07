@@ -27,7 +27,6 @@ export const loader: LoaderFunction = async ({ params, context, request }) => {
         );
     try {
         const res = await getRankingsByUser(beInstance, params.name);
-        console.log(res);
         if (res.data.code !== '0') throw new BackEndError(res, handleErrorCode(res.data.code, t));
         const svgContent = getSvgCard(res.data.data, params.name);
         headers.append('Content-Type', 'image/svg+xml');

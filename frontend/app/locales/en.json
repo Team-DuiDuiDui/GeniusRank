@@ -3,9 +3,9 @@
     "opposite_lng": "zh",
     "opposite_lng_name": "中文",
     "title": "Genius Rank - GitHub user analysis",
-    "description": "GitHub user data, analysis, evaluation, and nationality prediction",
+    "description": "GitHub user data, analysis, evaluation, nationality prediction and stats card generation",
     "languages": "Languages",
-    "lookup_docs": "Read the docs",
+    "lookup_docs": "Search Now",
     "search": {
       "placeholder": "Input the username on GitHub..."
     },
@@ -13,7 +13,11 @@
       "title": "Ranking",
       "description": "Ranking of the users",
       "type": "Please pick a language",
-      "nation": "Please pick a nation"
+      "nation": "Please pick a nation",
+      "err": {
+        "ngrok_error": "Backend internal network tunneling status abnormal, please contact with the backend administrator",
+        "error": "Error"
+      }
     },
     "user": {
       "description": "GitHub User Analysis",
@@ -31,7 +35,7 @@
         "message": "Error message: ",
         "may_help": "The following information may be helpful: ",
         "reload": "Try to reload",
-        "something_wrong_shorter": "Something wrong",
+        "something_wrong_shorter": "Error",
         "click_to_reload": "Click to reload",
         "may_hide": "The user may be set to private",
         "may_reason": "Possible reasons: ",
@@ -46,11 +50,17 @@
         "from_glm": "From recent data in network",
         "from_followers": "From early followers",
         "from_followings": "From early followings",
+        "no_full_data": "Due to insufficient information, the personal information on GitHub is used",
         "from_followers_and_followings": "From early followers and followings",
         "different_from_location": "May be different from the current location in GitHub",
         "confidence_low": "Confidence is low",
         "login_to_see_l1": "Login to see the",
-        "login_to_see_l2": "info of nation"
+        "login_to_see_l2": "info of nation",
+        "no_ranking_data_l1": "No ranking data yet, click",
+        "no_ranking_data_l2": "HERE",
+        "no_ranking_data_l3": "to see your report",
+        "total_users_l1": "There are currently",
+        "total_users_l2": "GitHub users' data"
       },
       "userRecentPrs": "Recent 80 Merged Pull Requests",
       "userRecentPrs_all": "Recent 80 Pull Requests",
@@ -358,6 +368,7 @@
       "ZM": "Zambia",
       "ZW": "Zimbabwe"
     },
-    "searching": "Searching"
+    "searching": "Searching",
+    "see_ranking": "Rankings"
   }
 }

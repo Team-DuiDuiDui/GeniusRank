@@ -3,7 +3,7 @@ import { interpolateColorsOfScore } from './color';
 import { rankIt } from '~/components/ranking/card';
 
 export const getSvgCard = (score: SingleUserScoreRes['data'], login: string): string => {
-    const { name, userScore, reposScore, prsScore, issuesScore, totalScore } = score;
+    const { name, userScore, reposScore, prsScore, issuesScore, totalScore, avatarUrl } = score;
     const { r, g, b } = interpolateColorsOfScore(totalScore);
     /**
      * 条形图的 y 和 height 需满足 y + height = 314
@@ -24,21 +24,25 @@ export const getSvgCard = (score: SingleUserScoreRes['data'], login: string): st
     return `
     <svg width="502" height="187" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 1004 373">
     <defs>
-        <clipPath id="clip0_187_281">
-            <rect width="497" height="73" fill="white" y="35.5" x="50" id="svg_1" />
+        <clipPath id="circleClip">
+        <circle cx="75" cy="70" r="38" />
         </clipPath>
     </defs>
     <g>
         <rect x="0.5" y="0.5" width="1003" height="372" rx="23.5" fill="white" id="bg" />
         <rect x="0.5" y="0.5" width="1003" height="372" rx="23.5" stroke="#C7C7C7" id="svg_3" />
-        <g clip-path="url(#clip0_187_281)" id="svg_4">
+        <g id="svg_4">
+            <image x="35" y="32" width="80" height="80" href="${avatarUrl.replaceAll(
+                '&',
+                '&amp;'
+            )}>" clip-path="url(#circleClip)" />
             <text fill="black" xml:space="preserve" font-family="Inter" font-size="32" font-weight="600"
                 letter-spacing="0em" id="name">
-                <tspan x="50" y="66.6364" id="svg_6">${name ?? login}</tspan>
+                <tspan x="130" y="66.6364" id="svg_6">${name ?? login}</tspan>
             </text>
             <text fill="black" fill-opacity="0.66" xml:space="preserve" font-family="Inter" font-size="20"
                 letter-spacing="0em" id="login" visibility="${name ? 'visible' : 'hidden'}">
-                <tspan x="50" y="103.773" id="svg_8">${login}</tspan>
+                <tspan x="130" y="103.773" id="svg_8">${login}</tspan>
             </text>
         </g>
         <text fill="rgb(${r},${g},${b})" xml:space="preserve" font-family="Inter" font-size="64" letter-spacing="0em" id="ranking">
@@ -60,7 +64,7 @@ export const getSvgCard = (score: SingleUserScoreRes['data'], login: string): st
             <tspan x="638" y="338" id="svg_25">REPO</tspan>
         </text>
         <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="22" letter-spacing="0em" id="pr_title">
-            <tspan x="726" y="338" id="svg_27">PR</tspan>
+            <tspan x="732" y="338" id="svg_27">PR</tspan>
         </text>
         <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="22" letter-spacing="0em"
             id="issue_title">

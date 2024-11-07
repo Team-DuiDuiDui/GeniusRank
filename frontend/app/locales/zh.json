@@ -3,9 +3,9 @@
     "opposite_lng": "en",
     "opposite_lng_name": "English",
     "title": "Genius Rank - GitHub 用户分析",
-    "description": "GitHub 用户数据查看、分析、评价与国籍猜测",
+    "description": "GitHub 用户数据查看、分析、国籍猜测与信息卡片展示",
     "languages": "语言",
-    "lookup_docs": "阅读文档",
+    "lookup_docs": "立即开始",
     "search": {
       "placeholder": "请输入 GitHub 用户名称..."
     },
@@ -13,7 +13,11 @@
       "title": "排名",
       "description": "排名与用户筛选",
       "type": "请选择语言",
-      "nation": "请选择国籍"
+      "nation": "请选择国籍",
+      "err": {
+        "ngrok_error": "后端内网穿透状态异常，请联系后端管理员",
+        "error": "错误"
+      }
     },
     "user": {
       "description": "GitHub 用户分析",
@@ -46,11 +50,17 @@
         "from_glm": "来自最近的互联网数据",
         "from_followers_and_followings": "来自早期粉丝和关注判断而来",
         "different_from_location": "可能与当前 GitHub 中的 location 不同",
+        "no_full_data": "由于相关信息太少不足以猜测，遂沿用 GitHub 上的个人信息",
         "confidence_low": "置信度较低",
         "from_followers": "来自早期粉丝",
         "from_followings": "来自早期关注者",
         "login_to_see_l1": "登录后查看猜测",
-        "login_to_see_l2": "的国籍相关信息"
+        "login_to_see_l2": "的国籍相关信息",
+        "no_ranking_data_l1": "暂无排名数据，可以点",
+        "no_ranking_data_l2": "这里",
+        "no_ranking_data_l3": "生成自己的报告",
+        "total_users_l1": "当前共有",
+        "total_users_l2": "位 github 用户的数据"
       },
       "userRecentPrs": "最近 80 条已合并的 Pull Requests",
       "userRecentPrs_all": "最近 50 条 Pull Requests",
@@ -112,7 +122,11 @@
       "login": "登录",
       "login_github": "使用 GitHub 登录",
       "anonymous": "匿名用户",
-      "logout": "退出登录"
+      "logout": "退出登录",
+      "err": {
+        "ngrok_error": "后端内网穿透状态异常，请联系后端管理员",
+        "error": "错误"
+      }
     },
     "oauth": {
       "err": {
@@ -356,6 +370,7 @@
       "ZM": "赞比亚",
       "ZW": "津巴布韦"
     },
-    "searching": "用户"
+    "searching": "用户",
+    "see_ranking": "查看排名"
   }
 }

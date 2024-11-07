@@ -7,9 +7,20 @@ interface RGB {
 }
 
 const scoreHexColors: string[] = [
-    "#ef4444", "#f97316", "#f59e0b", "#eab308", "#84cc16",
-    "#22c55e", "#10b981", "#14b8a6", "#06b6d4", "#0ea5e9",
-    "#3b82f6", "#6366f1", "#8b5cf6", "#a855f7"
+    '#a855f7',
+    '#8b5cf6',
+    '#6366f1',
+    '#3b82f6',
+    '#0ea5e9',
+    '#06b6d4',
+    '#14b8a6',
+    '#10b981',
+    '#22c55e',
+    '#84cc16',
+    '#eab308',
+    '#f59e0b',
+    '#f97316',
+    '#ef4444'
 ]
 
 export const interpolateColors = (colors: RGB[], percentage: number): RGB => {
