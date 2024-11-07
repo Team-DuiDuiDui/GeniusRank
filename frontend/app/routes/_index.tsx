@@ -76,7 +76,7 @@ export default function Index() {
                                 userInfo={item}
                                 score={item}
                                 style={{
-                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 60s linear infinite`,
+                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 90s linear infinite ${lineIndex % 2 ? 'reverse' : ''}`,
                                 }}
                                 disabledChevron
                                 disabled

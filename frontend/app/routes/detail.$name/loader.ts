@@ -52,7 +52,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                     confidence: parseFloat(nationData.confidence.toFixed(2)),
                     message: t(nationData.message),
                 };
-            } catch (e) {
+            } catch {
                 nationData = {
                     nationISO: '',
                     message: t('user.info.from_followers_and_followings'),
