@@ -4,6 +4,9 @@
 
 GitHub 用户数据查看、分析、国籍猜测与信息卡片展示
 
+[![Genius Rank](https://geniusrank.heuluck.top/card/octocat)]
+<p>GitHub 官方吉祥物 Octocat 的卡片展示</p>
+
 </div>
 
 # 📖 简介
