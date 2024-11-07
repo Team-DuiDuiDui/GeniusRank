@@ -53,6 +53,9 @@ export default function Index() {
         };
     }, []);
 
+
+
+
     return (
         <>
             <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2 relative">
