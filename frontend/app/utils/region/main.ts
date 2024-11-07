@@ -1,7 +1,6 @@
 import { AxiosInstanceForGithub } from '../../api/github/instance';
 import { AxiosInstanceForBe } from '~/api/backend/instance';
 import {
-    guessRegionFromFollowers,
     guessRegionFromFollowersBetter,
     guessRegionFromFollowings,
     guessRegionFromGLM,
