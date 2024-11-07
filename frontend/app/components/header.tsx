@@ -10,6 +10,7 @@ import autoAnimate from '@formkit/auto-animate';
 import scaleAnimate from '~/utils/auto-animate-plugin/scale';
 
 interface HeaderProps {
+    client_id: string;
     openDrawer: () => void;
     userData: {
         avatar: string;
@@ -18,7 +19,7 @@ interface HeaderProps {
     };
 }
 
-const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
+const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
     const { t, i18n } = useTranslation();
     const fetcher = useFetcher();
     const params = useLocation();
@@ -39,16 +40,16 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
                     <Link
                         to="/user"
                         className={`text-nowrap transition-all py-1 px-2 rounded-lg ${params.pathname.startsWith('/user') || params.pathname.startsWith('/detail')
-                                ? 'text-gray-500'
-                                : 'hover:text-gray-700 hover:bg-gray-200'
+                            ? 'text-gray-500'
+                            : 'hover:text-gray-700 hover:bg-gray-200'
                             }`}>
                         <span className="text-lg">{t('searching')}</span>
                     </Link>
                     <Link
                         to="/ranking"
                         className={`text-nowrap transition-all py-1 px-2 rounded-lg ${params.pathname.startsWith('/ranking')
-                                ? 'text-gray-500'
-                                : 'hover:text-gray-700 hover:bg-gray-200'
+                            ? 'text-gray-500'
+                            : 'hover:text-gray-700 hover:bg-gray-200'
                             }`}>
                         <span className="text-lg">{t('ranking.title')}</span>
                     </Link>
@@ -78,9 +79,12 @@ const Header: React.FC<HeaderProps> = ({ openDrawer, userData }) => {
                         <div className="text-md font-semibold">{userData.name || userData.login}</div>
                         {userData.name ? <div className="text-xs text-gray-950">{userData.login}</div> : <></>}
                     </div>
-                    <button onClick={openDrawer} className="hidden sm:block">
+                    <Button
+                        unstyled
+                        component="a"
+                        href={userData.login ? undefined : `https://github.com/login/oauth/authorize/?client_id=${client_id}&scope=user:email,read:user`} onClick={(e) => { e.preventDefault(); openDrawer() }} className="hidden sm:block">
                         <Avatar size="md" className="scale-125" src={userData.avatar ?? undefined} />
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

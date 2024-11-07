@@ -46,7 +46,7 @@ export default function App() {
     return (
         <>
             <ClientOnly>{() => <Toaster />}</ClientOnly>
-            <Header openDrawer={openDrawer} userData={{ avatar: userAvatar, name: username, login: userLogin }} />
+            <Header openDrawer={openDrawer} userData={{ avatar: userAvatar, name: username, login: userLogin }} client_id={client_id} />
             <SettingDrawer
                 opened={drawerOpened}
                 close={closeDrawer}
