@@ -1,16 +1,21 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { LoaderFunctionArgs, json } from '@remix-run/cloudflare';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRouteLoaderData } from '@remix-run/react';
 import i18nServer, { localeCookie } from './modules/i18n.server';
 import { useChangeLanguage } from 'remix-i18next/react';
 import { Toaster } from 'react-hot-toast';
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { ClientOnly } from 'remix-utils/client-only';
+import '@mantine/core/styles.css';
+import '@mantine/charts/styles.css';
 import './tailwind.css';
+import { useDisclosure } from '@mantine/hooks';
+import { user } from './cookie';
+import SettingDrawer from './components/drawer';
+import Header from './components/header';
 
 export const handle = { i18n: ['translation'] };
-
-export async function loader({ request }: LoaderFunctionArgs) {
-    const locale = await i18nServer.getLocale(request);
-    return json({ locale }, { headers: { 'Set-Cookie': await localeCookie.serialize(locale) } });
-}
 
 export function Layout({ children }: { children: React.ReactNode }) {
     const loaderData = useRouteLoaderData<typeof loader>('root');
@@ -22,10 +27,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta />
                 <Links />
+                <ColorSchemeScript />
             </head>
             <body>
-                <Toaster />
-                {children}
+                <MantineProvider>{children}</MantineProvider>
                 <ScrollRestoration />
                 <Scripts />
             </body>
@@ -34,7 +39,41 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    const { locale } = useLoaderData<typeof loader>();
+    const loaderData = useLoaderData<typeof loader>();
+    const { locale, client_id, userAvatar, userLogin, username, userEmail } = loaderData;
+    const [drawerOpened, { open: openDrawer, close: closeDrawer }] = useDisclosure(false);
     useChangeLanguage(locale);
-    return <Outlet />;
+    return (
+        <>
+            <ClientOnly>{() => <Toaster />}</ClientOnly>
+            <Header openDrawer={openDrawer} userData={{ avatar: userAvatar, name: username, login: userLogin }} client_id={client_id} />
+            <SettingDrawer
+                opened={drawerOpened}
+                close={closeDrawer}
+                userLogin={userLogin}
+                userEmail={userEmail}
+                userAvatar={userAvatar}
+                username={username}
+                client_id={client_id}
+            />
+            <Outlet />
+        </>
+    );
+}
+
+export async function loader({ request, context }: LoaderFunctionArgs) {
+    const locale = await i18nServer.getLocale(request);
+    const cookieHeader = request.headers.get('Cookie');
+    const userCookie = (await user.parse(cookieHeader)) || {};
+    return json(
+        {
+            locale,
+            userAvatar: userCookie.userAvatar,
+            username: userCookie.username,
+            userLogin: userCookie.userLogin,
+            userEmail: userCookie.userEmail,
+            client_id: context.cloudflare.env.GITHUB_CLIENT_ID,
+        },
+        { headers: { 'Set-Cookie': await localeCookie.serialize(locale) } }
+    );
 }

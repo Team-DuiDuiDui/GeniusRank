@@ -1,138 +1,307 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
-
-export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
+import { Button } from '@mantine/core';
+import { json, LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
+import { Link, useLoaderData } from '@remix-run/react';
+import { useTranslation } from 'react-i18next';
+import { createInstanceForBe } from '~/api/backend/instance';
+import { getRankings } from '~/api/backend/ranking';
+import LoadingLayout from '~/components/loading';
+import { user } from '~/cookie';
+import i18nServer from '~/modules/i18n.server';
+import { RankResp } from '~/api/backend/typings/beRes';
+import { useEffect } from 'react';
+import { UserCardFull } from '~/components/ranking/card';
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+    return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };
 
-export default function Index() {
-  return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="flex flex-col items-center gap-16">
-        <header className="flex flex-col items-center gap-9">
-          <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
-            Welcome to <span className="sr-only">Remix</span>
-          </h1>
-          <div className="h-[144px] w-[434px]">
-            <img
-              src="/logo-light.png"
-              alt="Remix"
-              className="block w-full dark:hidden"
-            />
-            <img
-              src="/logo-dark.png"
-              alt="Remix"
-              className="hidden w-full dark:block"
-            />
-          </div>
-        </header>
-        <nav className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-gray-200 p-6 dark:border-gray-700">
-          <p className="leading-6 text-gray-700 dark:text-gray-200">
-            What&apos;s next?
-          </p>
-          <ul>
-            {resources.map(({ href, text, icon }) => (
-              <li key={href}>
-                <a
-                  className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {icon}
-                  {text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-    </div>
-  );
+export async function loader({ request, context }: LoaderFunctionArgs) {
+    const t = await i18nServer.getFixedT(request);
+    const cookieHeader = request.headers.get('Cookie');
+    const userCookie = (await user.parse(cookieHeader)) || {};
+    const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, userCookie.be_token);
+    console.log(Date.now());
+    try {
+        const rankingData = await getRankings(beInstance, null, null, 21);
+        return json({ title: t('title'), description: t('user.description'), rankingData }, { headers: { 'Cache-Control': 'public, max-age=86400' } });
+    } catch {
+        return json({ title: t('title'), description: t('user.description'), rankingData: fallBackData }, { headers: { 'Cache-Control': 'public, max-age=86400' } });
+    }
 }
 
-const resources = [
-  {
-    href: "https://remix.run/start/quickstart",
-    text: "Quick Start (5 min)",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M8.51851 12.0741L7.92592 18L15.6296 9.7037L11.4815 7.33333L12.0741 2L4.37036 10.2963L8.51851 12.0741Z"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
-  },
-  {
-    href: "https://remix.run/start/tutorial",
-    text: "Tutorial (30 min)",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M4.561 12.749L3.15503 14.1549M3.00811 8.99944H1.01978M3.15503 3.84489L4.561 5.2508M8.3107 1.70923L8.3107 3.69749M13.4655 3.84489L12.0595 5.2508M18.1868 17.0974L16.635 18.6491C16.4636 18.8205 16.1858 18.8205 16.0144 18.6491L13.568 16.2028C13.383 16.0178 13.0784 16.0347 12.915 16.239L11.2697 18.2956C11.047 18.5739 10.6029 18.4847 10.505 18.142L7.85215 8.85711C7.75756 8.52603 8.06365 8.21994 8.39472 8.31453L17.6796 10.9673C18.0223 11.0653 18.1115 11.5094 17.8332 11.7321L15.7766 13.3773C15.5723 13.5408 15.5554 13.8454 15.7404 14.0304L18.1868 16.4767C18.3582 16.6481 18.3582 16.926 18.1868 17.0974Z"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
-  },
-  {
-    href: "https://remix.run/docs",
-    text: "Remix Docs",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M9.99981 10.0751V9.99992M17.4688 17.4688C15.889 19.0485 11.2645 16.9853 7.13958 12.8604C3.01467 8.73546 0.951405 4.11091 2.53116 2.53116C4.11091 0.951405 8.73546 3.01467 12.8604 7.13958C16.9853 11.2645 19.0485 15.889 17.4688 17.4688ZM2.53132 17.4688C0.951566 15.8891 3.01483 11.2645 7.13974 7.13963C11.2647 3.01471 15.8892 0.951453 17.469 2.53121C19.0487 4.11096 16.9854 8.73551 12.8605 12.8604C8.73562 16.9853 4.11107 19.0486 2.53132 17.4688Z"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-      </svg>
-    ),
-  },
-  {
-    href: "https://rmx.as/discord",
-    text: "Join Discord",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="20"
-        viewBox="0 0 24 20"
-        fill="none"
-        className="stroke-gray-600 group-hover:stroke-current dark:stroke-gray-300"
-      >
-        <path
-          d="M15.0686 1.25995L14.5477 1.17423L14.2913 1.63578C14.1754 1.84439 14.0545 2.08275 13.9422 2.31963C12.6461 2.16488 11.3406 2.16505 10.0445 2.32014C9.92822 2.08178 9.80478 1.84975 9.67412 1.62413L9.41449 1.17584L8.90333 1.25995C7.33547 1.51794 5.80717 1.99419 4.37748 2.66939L4.19 2.75793L4.07461 2.93019C1.23864 7.16437 0.46302 11.3053 0.838165 15.3924L0.868838 15.7266L1.13844 15.9264C2.81818 17.1714 4.68053 18.1233 6.68582 18.719L7.18892 18.8684L7.50166 18.4469C7.96179 17.8268 8.36504 17.1824 8.709 16.4944L8.71099 16.4904C10.8645 17.0471 13.128 17.0485 15.2821 16.4947C15.6261 17.1826 16.0293 17.8269 16.4892 18.4469L16.805 18.8725L17.3116 18.717C19.3056 18.105 21.1876 17.1751 22.8559 15.9238L23.1224 15.724L23.1528 15.3923C23.5873 10.6524 22.3579 6.53306 19.8947 2.90714L19.7759 2.73227L19.5833 2.64518C18.1437 1.99439 16.6386 1.51826 15.0686 1.25995ZM16.6074 10.7755L16.6074 10.7756C16.5934 11.6409 16.0212 12.1444 15.4783 12.1444C14.9297 12.1444 14.3493 11.6173 14.3493 10.7877C14.3493 9.94885 14.9378 9.41192 15.4783 9.41192C16.0471 9.41192 16.6209 9.93851 16.6074 10.7755ZM8.49373 12.1444C7.94513 12.1444 7.36471 11.6173 7.36471 10.7877C7.36471 9.94885 7.95323 9.41192 8.49373 9.41192C9.06038 9.41192 9.63892 9.93712 9.6417 10.7815C9.62517 11.6239 9.05462 12.1444 8.49373 12.1444Z"
-          strokeWidth="1.5"
-        />
-      </svg>
-    ),
-  },
-];
+export default function Index() {
+    const { t } = useTranslation();
+    const data = useLoaderData<typeof loader>();
+    const rankingData: RankResp[] = JSON.parse(JSON.stringify(data.rankingData.resp));
+    const rankingDataList: RankResp[][] = [];
+    const length = rankingData.length;
+    for (let i = 0; i < length; i += length / 3) {
+        const data = rankingData.slice(i, i + length / 3);
+        rankingDataList.push([...data, ...data]);
+    }
+    useEffect(() => {
+        const scrollContentLine1 = Array.from(document.querySelectorAll('.scrollLineO'));
+        const scrollContentLine2 = Array.from(document.querySelectorAll('.scrollLineI'));
+        const scrollContent = [...scrollContentLine1, ...scrollContentLine2];
+
+        const listener = () => {
+            if (document.visibilityState === 'visible') {
+                scrollContent.forEach((element) => ((element as HTMLElement).style.animationPlayState = 'running'));
+            } else {
+                scrollContent.forEach((element) => ((element as HTMLElement).style.animationPlayState = 'paused'));
+            }
+        };
+
+        document.addEventListener('visibilitychange', listener, false);
+        return () => {
+            document.removeEventListener('visibilitychange', listener, false);
+        };
+    }, []);
+
+    return (
+        <>
+            <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2 relative">
+                <LoadingLayout />
+                <h1 className="text-6xl font-bold">Genius Rank</h1>
+                <h2 className="text-2xl">{t('description')}</h2>
+                <div className="flex flex-row gap-7">
+                    <Link to="/user">
+                        <Button size="md" className="mt-4">
+                            {t('lookup_docs')}
+                        </Button>
+                    </Link>
+                    <Link to="/ranking">
+                        <Button variant="default" size="md" className="mt-4">
+                            {t('see_ranking')}
+                        </Button>
+                    </Link>
+                </div>
+            </div>
+            <div className="flex flex-row flex-wrap h-max flex-grow py-20">
+                {rankingDataList.slice(0, 15).map((data, lineIndex) => (
+                    <div key={lineIndex} className={`flex overflow-auto relative width-auto gap-4 scrollbarHidden`}>
+                        {data.map((item, index) => (
+                            <UserCardFull
+                                key={index}
+                                userInfo={item}
+                                score={item}
+                                style={{
+                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 90s linear infinite ${lineIndex % 2 ? 'reverse' : ''
+                                        }`,
+                                }}
+                                disabledChevron
+                                disabled
+                            />
+                        ))}
+                    </div>
+                ))}
+            </div>
+        </>
+    );
+}
+
+const fallBackData = {
+    resp: [
+        {
+            login: 'karpathy',
+            name: 'Andrej',
+            avatar_url: 'https://avatars.githubusercontent.com/u/241138?u=05376db54475c3d23b3a409f4c47d14c4855dc28&v=4',
+            country_iso: null,
+            totalScore: 82.43,
+            userScore: 25.85,
+            reposScore: 42.31,
+            prsScore: 11.78,
+            issuesScore: 2.49,
+        },
+        {
+            login: 'ruanyf',
+            name: 'Ruan YiFeng',
+            avatar_url: 'https://avatars.githubusercontent.com/u/905434?v=4',
+            country_iso: null,
+            totalScore: 69.01,
+            userScore: 21.79,
+            reposScore: 41.66,
+            prsScore: 0.91,
+            issuesScore: 4.65,
+        },
+        {
+            login: 'torvalds',
+            name: 'Linus Torvalds',
+            avatar_url: 'https://avatars.githubusercontent.com/u/1024025?v=4',
+            country_iso: 'US',
+            totalScore: 67.12,
+            userScore: 8,
+            reposScore: 31.4,
+            prsScore: 21.71,
+            issuesScore: 6.01,
+        },
+        {
+            login: 'microsoft',
+            name: 'Microsoft',
+            avatar_url: null,
+            country_iso: null,
+            totalScore: 55,
+            userScore: 10,
+            reposScore: 45,
+            prsScore: 0,
+            issuesScore: 0,
+        },
+        {
+            login: 'yyx990803',
+            name: 'Evan You',
+            avatar_url: 'https://avatars.githubusercontent.com/u/499550?u=dd9a9ba40daf29be7c310f7075e74251609b03f3&v=4',
+            country_iso: 'CN',
+            totalScore: 52.19,
+            userScore: 8,
+            reposScore: 11.85,
+            prsScore: 23.49,
+            issuesScore: 8.85,
+        },
+        {
+            login: 'afc163',
+            name: 'afc163',
+            avatar_url: 'https://avatars.githubusercontent.com/u/507615?u=63a8ef8e8876c4c1fad07a7737684f5281fedaaa&v=4',
+            country_iso: null,
+            totalScore: 52.16,
+            userScore: 8,
+            reposScore: 13.19,
+            prsScore: 22.44,
+            issuesScore: 8.53,
+        },
+        {
+            login: 'gaearon',
+            name: 'dan',
+            avatar_url: 'https://avatars.githubusercontent.com/u/810438?u=9a342ce34340637775698b6391d1c77f1a911f5b&v=4',
+            country_iso: null,
+            totalScore: 51.18,
+            userScore: 8,
+            reposScore: 10,
+            prsScore: 27.38,
+            issuesScore: 5.8,
+        },
+        {
+            login: 'dg',
+            name: 'David Grudl',
+            avatar_url: 'https://avatars.githubusercontent.com/u/194960?v=4',
+            country_iso: 'CZ',
+            totalScore: 37.3,
+            userScore: 6.74,
+            reposScore: 8.06,
+            prsScore: 15.61,
+            issuesScore: 6.89,
+        },
+        {
+            login: 'peng-zhihui',
+            name: '稚晖',
+            avatar_url:
+                'https://avatars.githubusercontent.com/u/12994887?u=6bfec84cb512892557cfed7fd7c52b0b0f41f95b&v=4',
+            country_iso: null,
+            totalScore: 32.85,
+            userScore: 8,
+            reposScore: 9.17,
+            prsScore: 12.8,
+            issuesScore: 2.88,
+        },
+        {
+            login: 'd',
+            name: 'Jesse Zhang',
+            avatar_url: 'https://avatars.githubusercontent.com/u/440892?v=4',
+            country_iso: 'CN',
+            totalScore: 26.57,
+            userScore: 2.99,
+            reposScore: 15.68,
+            prsScore: 6.21,
+            issuesScore: 1.69,
+        },
+        {
+            login: 'FuzzyFade',
+            name: 'Rhuzerv',
+            avatar_url:
+                'https://avatars.githubusercontent.com/u/25416941?u=37f6268a5ff66712fc32d053e9a6d24c953e5d70&v=4',
+            country_iso: null,
+            totalScore: 26.09,
+            userScore: 1.35,
+            reposScore: 8.15,
+            prsScore: 13.85,
+            issuesScore: 2.74,
+        },
+        {
+            login: 'gustavoguanabara',
+            name: 'Gustavo Guanabara',
+            avatar_url:
+                'https://avatars.githubusercontent.com/u/8683378?u=01b06a154f04dadaa4e4131497fa2442e6323cbc&v=4',
+            country_iso: null,
+            totalScore: 19.4,
+            userScore: 8,
+            reposScore: 10.08,
+            prsScore: 0,
+            issuesScore: 1.32,
+        },
+        {
+            login: 'NEKO-CwC',
+            name: 'NEKO-CwC',
+            avatar_url:
+                'https://avatars.githubusercontent.com/u/146005314?u=dd8778b1918dbb8d3f052a7049cdf0e57ac352e1&v=4',
+            country_iso: 'NULL',
+            totalScore: 17.71,
+            userScore: 0.16,
+            reposScore: 7.7,
+            prsScore: 1.84,
+            issuesScore: 8.01,
+        },
+        {
+            login: 'INDIAN2020',
+            name: 'Gogula Sivannarayana',
+            avatar_url:
+                'https://avatars.githubusercontent.com/u/3226765?u=f5939557f4f4bc14bc1de87c5c2501f45577c13f&v=4',
+            country_iso: 'IN',
+            totalScore: 13.82,
+            userScore: 0.41,
+            reposScore: 8.02,
+            prsScore: 0,
+            issuesScore: 5.39,
+        },
+        {
+            login: 'Heuluck',
+            name: 'Heuluck Lu',
+            avatar_url:
+                'https://avatars.githubusercontent.com/u/89375068?u=7df7cd11ca5f1822ada8588cdc56af92664f1a92&v=4',
+            country_iso: null,
+            totalScore: 8.55,
+            userScore: 0.24,
+            reposScore: 7.5,
+            prsScore: 0.81,
+            issuesScore: 0,
+        },
+        {
+            login: 'EST-NINE',
+            name: 'EST-NINE',
+            avatar_url:
+                'https://avatars.githubusercontent.com/u/143050853?u=51c7c5d63f4f5cb24902d1a7639db930effc5f36&v=4',
+            country_iso: 'CN',
+            totalScore: 8.45,
+            userScore: 7.58,
+            reposScore: 0.07,
+            prsScore: 0.8,
+            issuesScore: 0,
+        },
+    ],
+    nations: ['CN', 'US', 'NULL', 'FI', 'CZ', 'CH', 'IN'],
+    types: [
+        'TypeScript',
+        'Go',
+        'Python',
+        'JavaScript',
+        'Java',
+        'HTML',
+        'CSS',
+        'C++',
+        'Vue',
+        'C',
+        'Shell',
+        'PHP',
+        'Latte',
+        'Jupyter Notebook',
+        'Ruby',
+    ],
+    totalCount: 16,
+};
