@@ -151,7 +151,7 @@ export const guessRegionFromFollowersBetter = async (
     })))
     const res = resAll[0]
     console.log(resAll.slice(0, 5))
-    return { ...res, nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" }
+    return { ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" }
 }
 
 

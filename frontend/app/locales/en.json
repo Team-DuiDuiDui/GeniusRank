@@ -35,7 +35,7 @@
         "message": "Error message: ",
         "may_help": "The following information may be helpful: ",
         "reload": "Try to reload",
-        "something_wrong_shorter": "Something wrong",
+        "something_wrong_shorter": "Error",
         "click_to_reload": "Click to reload",
         "may_hide": "The user may be set to private",
         "may_reason": "Possible reasons: ",

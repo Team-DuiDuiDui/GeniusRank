@@ -55,6 +55,7 @@ export default function User() {
                                         </span>
                                     </div>
                                 }
+                                isStillHim={isStillHim}
                             />
                         </div>
                         <UserScoreDetail scores={data.scores} data={user} error={data.scoresError} />

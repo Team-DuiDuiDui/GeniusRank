@@ -1,7 +1,6 @@
 import { AxiosInstanceForGithub } from '../../api/github/instance';
 import { AxiosInstanceForBe } from '~/api/backend/instance';
 import {
-    guessRegionFromFollowers,
     guessRegionFromFollowersBetter,
     guessRegionFromFollowings,
     guessRegionFromGLM,
@@ -70,7 +69,7 @@ export const guessRegion = async ({
     // throw new Error('Not implemented');
     const dataFromBe = await getUserNation(userData.login, beInstance);
     if (dataFromBe?.confidence === 1) {
-        console.log("共识")
+        // 已经经过无数验证非常确定的答案，直接返回
         return dataFromBe
     }
     try {
