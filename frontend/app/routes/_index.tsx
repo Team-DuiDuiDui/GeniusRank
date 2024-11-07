@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core';
 import { json, LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { createInstanceForBe } from '~/api/backend/instance';
 import { getRankings } from '~/api/backend/ranking';
@@ -58,13 +58,22 @@ export default function Index() {
 
     return (
         <>
-            <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2">
+            <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2 relative">
                 <LoadingLayout />
                 <h1 className="text-6xl font-bold">Genius Rank</h1>
                 <h2 className="text-2xl">{t('description')}</h2>
-                <Button variant="default" size="md" className="mt-4">
-                    {t('lookup_docs')}
-                </Button>
+                <div className="flex flex-row gap-7">
+                    <Link to="/user">
+                        <Button size="md" className="mt-4">
+                            {t('lookup_docs')}
+                        </Button>
+                    </Link>
+                    <Link to="/ranking">
+                        <Button variant="default" size="md" className="mt-4">
+                            {t('see_ranking')}
+                        </Button>
+                    </Link>
+                </div>
             </div>
             <div className="flex flex-row flex-wrap h-max flex-grow py-20">
                 {rankingDataList.slice(0, 15).map((data, lineIndex) => (
