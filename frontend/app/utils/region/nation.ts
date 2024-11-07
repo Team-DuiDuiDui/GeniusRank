@@ -1,4 +1,4 @@
-import { syncChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/backend/chat";
+import { streamChat, syncChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/backend/chat";
 import { AxiosInstanceForBe } from "~/api/backend/instance";
 import { AxiosInstanceForGithub } from "../../api/github/instance";
 import { handleClientGithubGraphQLReq } from "../request";
@@ -140,9 +140,9 @@ export const guessRegionFromFollowersBetter = async (
         }
     ))!;
 
-    const chatResult = await syncChat(`${locationList.map(node => node.location || "null")} ${prompt}`, beInstance)
+    const chatResult = await streamChat(`${locationList.map(node => node.location || "null")} ${prompt}`, beInstance)
     console.log(`${locationList.map(node => node.location || "null")} ${prompt}`)
-    console.log(chatResult)
+    console.log("chatResult", chatResult)
     const resultJSON: string[] = JSON.parse(parseStringToArrayLike(chatResult))
     // console.log(resultJSON)
     const resAll = calculateNationPrediction(locationList.map((item, index) => ({

@@ -7,6 +7,8 @@ import {
     guessRegionFromReadme,
 } from './nation';
 import { getUserNation, updateUserNation } from '~/api/backend/region';
+import { syncChat } from '~/api/backend/chat';
+import { parseStringToCodeBlockLike } from '../parse';
 
 export interface GuessNationProps {
     locale: string;
@@ -24,6 +26,7 @@ interface NationData {
 
 export interface UserDataProps {
     t: (key: string) => string;
+    location?: string;
     followers: number;
     followings: number;
     login: string;
@@ -77,8 +80,20 @@ export const guessRegion = async ({
             const dataFromGLM = await guessRegionFromGLM(userData.login, beInstance);
             if (dataFromGLM?.nationISO) return await checkAndUpdateBeData(dataFromGLM, dataFromBe, beInstance);
         }
+
         const dataFromReadme = await guessRegionFromReadme(userData, beInstance, githubInstance);
         if (dataFromReadme.nationISO) return await checkAndUpdateBeData(dataFromReadme, dataFromBe, beInstance);
+
+        if (userData.followers < 40 && userData.location) {
+            const nationISO = parseStringToCodeBlockLike(await syncChat(`请你告诉我这个位置信息对应的国家在哪里${userData.location}，你只需要返回这个国家对应的 ISO 代码并将他包裹在一个代码块中即可，不需要多余返回任何内容`, beInstance));
+            console.log(nationISO)
+            return await checkAndUpdateBeData({
+                nationISO: nationISO,
+                confidence: 0.5,
+                login: userData.login,
+                message: 'user.info.no_full_data',
+            }, dataFromBe, beInstance);
+        }
 
         const dataFromFollowers = await guessRegionFromFollowersBetter(userData, beInstance, githubInstance);
         if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);

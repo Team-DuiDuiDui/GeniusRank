@@ -50,6 +50,7 @@
         "from_glm": "来自最近的互联网数据",
         "from_followers_and_followings": "来自早期粉丝和关注判断而来",
         "different_from_location": "可能与当前 GitHub 中的 location 不同",
+        "no_full_data": "由于相关信息太少不足以猜测，遂沿用 GitHub 上的个人信息",
         "confidence_low": "置信度较低",
         "from_followers": "来自早期粉丝",
         "from_followings": "来自早期关注者",

@@ -40,6 +40,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                     locale,
                     userData: {
                         t,
+                        location: data.user.location as string | undefined,
                         followers: data.user.followers.totalCount,
                         followings: data.user.following.totalCount,
                         login: data.user.login,

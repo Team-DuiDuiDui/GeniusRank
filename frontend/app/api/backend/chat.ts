@@ -36,9 +36,10 @@ export const syncChatForNationFromUserList = async (data: string, beInstance: Ax
  */
 export const syncChatForNationFromReadme = async (data: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
     const message = `${data}
-    这是一个 README 文件中的内容，里面可能包含了作者的国家信息。
-    请你从这里面找寻作者明确声明了自己属于某个地区的信息，并且告诉我这个地区属于哪个国家。
-    注意，一定要从作者明确声明的地区，不要猜测。如果作者未声明地区，在 nationISO 字段中返回空字符串即可。
+    这是一个 README 文件中的内容，里面可能包含了作者的国籍信息。
+    请你从这里面找寻作者明确声明了自己的国籍属于某个地区的信息，并且告诉我这个地区属于哪个国家。
+    注意，一定要从作者明确声明的地区，不要猜测。如果作者仅仅说现在居住在某个地方，那么这个地方不是作者的国籍。读书也不算，以此类推
+    如果作者未声明地区，在 nationISO 字段中返回空字符串即可。
     你的输出内容需要是如下 json 格式的文本，格式如下（[]中是需要你判断的内容）。**注意：你的回答需要且只需要包含下面格式的 json 内容即可，不要有任何多余内容**
     {
         "nationName": [国家的英文全称],
@@ -92,7 +93,10 @@ export const streamChat = async (message: string, beInstance: AxiosInstanceForBe
             const chunkStr = chunk.toString();
 
             // 清理多余的 `data:` 前缀部分
-            const cleanedChunk = chunkStr.replace(/^data:/, '').trim();
+            const cleanedChunk = chunkStr
+                .split('\n')
+                .map(line => line.replace(/^data:/, '').trim()) // 移除 `data:` 前缀并修剪空白
+                .join('');
 
             // 将清理后的块拼接到 result 中
             result += cleanedChunk;
@@ -101,6 +105,7 @@ export const streamChat = async (message: string, beInstance: AxiosInstanceForBe
         // 监听流的 'end' 事件，当流结束时返回拼接后的完整字符串
         return new Promise<string>((resolve, reject) => {
             response.data.on('end', () => {
+                console.log('流结束', result);
                 resolve(result);  // 返回拼接后的完整字符串
             });
 
@@ -113,4 +118,4 @@ export const streamChat = async (message: string, beInstance: AxiosInstanceForBe
         console.error('请求失败:', error);
         throw error;
     }
-}
+};

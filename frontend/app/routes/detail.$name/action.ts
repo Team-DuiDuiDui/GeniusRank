@@ -16,12 +16,13 @@ export default async function action({ request, context }: ActionFunctionArgs) {
     const stringUserData = body.get('userData')?.toString();
     const locale = (await lng.parse(cookieHeader)) as string;
     if (body.get('reload-nation') === 'reload' && stringUserData) {
-        const userData = JSON.parse(stringUserData) as Pick<UserDetail, 'followers' | 'following' | 'login'>;
+        const userData = JSON.parse(stringUserData) as Pick<UserDetail, 'followers' | 'following' | 'login' | 'location'>;
         try {
             const nationData = await guessRegion({
                 locale,
                 userData: {
                     t,
+                    location: userData.location as string | undefined,
                     followers: userData.followers.totalCount,
                     followings: userData.following.totalCount,
                     login: userData.login,
@@ -30,7 +31,7 @@ export default async function action({ request, context }: ActionFunctionArgs) {
                 githubInstance,
             });
             return json({ ...nationData, message: t(nationData.message), donotLoad: true });
-        } catch (e) {
+        } catch {
             const nationData = {
                 nationISO: '',
                 nationName: '',

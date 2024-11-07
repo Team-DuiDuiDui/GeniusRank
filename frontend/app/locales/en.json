@@ -50,6 +50,7 @@
         "from_glm": "From recent data in network",
         "from_followers": "From early followers",
         "from_followings": "From early followings",
+        "no_full_data": "Due to insufficient information, the personal information on GitHub is used",
         "from_followers_and_followings": "From early followers and followings",
         "different_from_location": "May be different from the current location in GitHub",
         "confidence_low": "Confidence is low",

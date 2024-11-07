@@ -22,7 +22,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     try {
         const rankingData = await getRankings(beInstance, null, null, 21);
         return json({ title: t('title'), description: t('user.description'), rankingData });
-    } catch (e) {
+    } catch {
         return json({ title: t('title'), description: t('user.description'), rankingData: fallBackData });
     }
 }
@@ -75,9 +75,8 @@ export default function Index() {
                                 userInfo={item}
                                 score={item}
                                 style={{
-                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 90s linear infinite ${
-                                        lineIndex % 2 ? 'reverse' : ''
-                                    }`,
+                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 90s linear infinite ${lineIndex % 2 ? 'reverse' : ''
+                                        }`,
                                 }}
                                 disabledChevron
                                 disabled
