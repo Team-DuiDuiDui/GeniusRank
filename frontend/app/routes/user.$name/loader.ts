@@ -1,9 +1,9 @@
-import { LoaderFunctionArgs, redirect, json } from "@remix-run/cloudflare";
-import axios from "axios";
-import { ZodError } from "zod";
-import { GithubUserServerOnly } from "~/api/github/rest/user.server";
-import { user } from "~/cookie";
-import i18nServer from "~/modules/i18n.server";
+import { LoaderFunctionArgs, redirect, json } from '@remix-run/cloudflare';
+import axios from 'axios';
+import { ZodError } from 'zod';
+import { GithubUserServerOnly } from '~/api/github/rest/user.server';
+import { user } from '~/cookie';
+import i18nServer from '~/modules/i18n.server';
 
 export default async function loader({ request, params, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');

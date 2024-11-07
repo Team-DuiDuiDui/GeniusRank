@@ -17,6 +17,8 @@ import UserScore from '~/components/userinfo/score';
 import { t } from 'i18next';
 import loader from './loader';
 
+export { loader };
+
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
 };
@@ -29,7 +31,6 @@ export default function User() {
     const beInstance = useAxiosInstanceForBe(data.baseUrl)();
     const githubInstance = useAxiosInstanceForGithub()();
     const user = useRef(new githubUser(params?.name ?? '', undefined, data.userData, githubInstance, beInstance));
-
     useEffect(() => {
         user.current.setUserName(params?.name ?? '');
         user.current.setUserData(data.userData);
