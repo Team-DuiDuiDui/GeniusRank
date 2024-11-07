@@ -5,6 +5,7 @@ import { gqlUser } from "~/api/github/graphql/gqlUser.server";
 import { createInstanceForGithub } from "~/api/github/instance";
 import { user, lng } from "~/cookie";
 import i18nServer from "~/modules/i18n.server";
+import { cacheHeader } from "~/utils/cacheHeader";
 import { guessRegion } from "~/utils/region/main";
 
 export default async function loader({ request, params, context }: LoaderFunctionArgs) {
@@ -73,7 +74,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                     nationData,
                     scores,
                     scoresError: null,
-                });
+                }, cacheHeader(300));
             } catch (e) {
                 return json({
                     data,
@@ -84,7 +85,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                     nationData,
                     scores: null,
                     scoresError: e as AxiosError,
-                });
+                }, cacheHeader(300));
             }
         } catch (e) {
             console.log(e);
