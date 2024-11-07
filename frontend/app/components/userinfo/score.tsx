@@ -14,6 +14,7 @@ import { BarChart, PieChart, RadarChart } from '@mantine/charts';
 import { TFunction } from 'i18next';
 import { GithubScoreRes } from '~/api/backend/typings/beRes';
 import { CheckOutlined, CopyOutlined, LinkOutlined } from '@ant-design/icons';
+import { ClientOnly } from 'remix-utils/client-only';
 
 interface userRepositoriesProps {
     data: User;
@@ -122,46 +123,56 @@ export const UserScoreCharts: React.FC<{ scores: GithubScoreRes; t: TFunction<'t
                     <span className="text-xl font-normal ml-3">/100</span>
                 </p>
             </div>
-            <>
-                <div className="flex flex-col gap-8 text-center">
-                    <h3 className="text-xl font-bold">{t('user.score.score_detail')}</h3>
-                    <BarChart
-                        className="m-auto"
-                        h={180}
-                        w={400}
-                        series={[{ name: 'value', color: '#1e90ff' }]}
-                        data={data}
-                        withBarValueLabel
-                        dataKey="name"
-                    />
-                </div>
-                <div className="flex flex-col gap-8 text-center overflow-visible">
-                    <h3 className="text-xl font-bold">{t('user.score.score_proportion')}</h3>
-                    <PieChart
-                        w={260}
-                        className="m-auto"
-                        data={parseScoreData(scores, t, true)}
-                        withTooltip
-                        tooltipDataSource="segment"
-                        labelsType="percent"
-                        withLabels
-                        withLabelsLine
-                        labelsPosition="outside"
-                    />
-                </div>
-                <div className="flex flex-col gap-8 text-center overflow-visible">
-                    <h3 className="text-xl font-bold">{t('user.score.score_radar')}</h3>
-                    <RadarChart
-                        h={250}
-                        w={350}
-                        data={data}
-                        dataKey="name"
-                        series={[{ name: 'value', color: 'blue.4', opacity: 0.2 }]}
-                        withPolarRadiusAxis
-                        withPolarAngleAxis
-                    />
-                </div>
-            </>
+            <div className="flex flex-col gap-8 text-center">
+                <h3 className="text-xl font-bold">{t('user.score.score_detail')}</h3>
+                <ClientOnly>
+                    {() => (
+                        <BarChart
+                            className="m-auto"
+                            h={180}
+                            w={400}
+                            series={[{ name: 'value', color: '#1e90ff' }]}
+                            data={data}
+                            withBarValueLabel
+                            dataKey="name"
+                        />
+                    )}
+                </ClientOnly>
+            </div>
+            <div className="flex flex-col gap-8 text-center overflow-visible">
+                <h3 className="text-xl font-bold">{t('user.score.score_proportion')}</h3>
+                <ClientOnly>
+                    {() => (
+                        <PieChart
+                            w={260}
+                            className="m-auto"
+                            data={parseScoreData(scores, t, true)}
+                            withTooltip
+                            tooltipDataSource="segment"
+                            labelsType="percent"
+                            withLabels
+                            withLabelsLine
+                            labelsPosition="outside"
+                        />
+                    )}
+                </ClientOnly>
+            </div>
+            <div className="flex flex-col gap-8 text-center overflow-visible">
+                <h3 className="text-xl font-bold">{t('user.score.score_radar')}</h3>
+                <ClientOnly>
+                    {() => (
+                        <RadarChart
+                            h={250}
+                            w={350}
+                            data={data}
+                            dataKey="name"
+                            series={[{ name: 'value', color: 'blue.4', opacity: 0.2 }]}
+                            withPolarRadiusAxis
+                            withPolarAngleAxis
+                        />
+                    )}
+                </ClientOnly>
+            </div>
         </div>
     );
 };

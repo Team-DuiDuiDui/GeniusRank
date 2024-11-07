@@ -13,7 +13,11 @@
       "title": "Ranking",
       "description": "Ranking of the users",
       "type": "Please pick a language",
-      "nation": "Please pick a nation"
+      "nation": "Please pick a nation",
+      "err": {
+        "ngrok_error": "Backend internal network tunneling status abnormal, please contact with the backend administrator",
+        "error": "Error"
+      }
     },
     "user": {
       "description": "GitHub User Analysis",

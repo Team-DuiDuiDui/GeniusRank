@@ -29,7 +29,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         login: string;
         avatar_url: string;
         name?: string | null;
-        rankingInfo: { rank: number, score: number } | undefined;
+        rankingInfo: { rank: number; score: number } | undefined;
     };
     const type = url.searchParams.get('type');
     const t = await i18nServer.getFixedT(request);
@@ -76,15 +76,18 @@ export default function Ranking() {
         }
         return (
             <>
-                {
-                    noData &&
+                {noData && (
                     <div className=" absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 bg-white/30">
-                        <div className="text-base whitespace-nowrap">{t("user.info.no_ranking_data_l1")}</div>
-                        <a href={`/detail/${userInfo.login}`} className=" drop-shadow-lg mx-2 text-blue-400 text-xl font-semibold">{t("user.info.no_ranking_data_l2")}</a>
-                        <div className="text-base whitespace-nowrap">{t("user.info.no_ranking_data_l3")}</div>
+                        <div className="text-base whitespace-nowrap">{t('user.info.no_ranking_data_l1')}</div>
+                        <a
+                            href={`/detail/${userInfo.login}`}
+                            className=" drop-shadow-lg mx-2 text-blue-400 text-xl font-semibold">
+                            {t('user.info.no_ranking_data_l2')}
+                        </a>
+                        <div className="text-base whitespace-nowrap">{t('user.info.no_ranking_data_l3')}</div>
                     </div>
-                }
-                <div className={`${noData ? "blur-sm" : ""} flex flex-row items-center justify-between`}>
+                )}
+                <div className={`${noData ? 'blur-sm' : ''} flex flex-row items-center justify-between`}>
                     <div className="flex gap-2 items-center">
                         <Avatar src={userInfo.avatar_url} />
                         <div className="flex flex-row items-center h-12">
@@ -96,7 +99,9 @@ export default function Ranking() {
                     </div>
                     <div className="flex items-center gap-1">
                         <span className="font-bold text-2xl">#</span>
-                        <span className="font-bold text-lg" style={{ color: `rgb(${color.r}, ${color.g}, ${color.b})` }}>
+                        <span
+                            className="font-bold text-lg"
+                            style={{ color: `rgb(${color.r}, ${color.g}, ${color.b})` }}>
                             {userData.rank}
                         </span>
                     </div>
@@ -114,15 +119,19 @@ export default function Ranking() {
                     </Link>
                 </div>
             </>
-
-        )
-    }
+        );
+    };
 
     return (
         <div className="my-12 mx-0 sm:mx-8 relative flex justify-center flex-col items-center">
             <LoadingLayout />
-            <div className={`flex ${loaderData.userInfo.login ? "justify-between" : "justify-center"}  items-center relative w-full`}>
-                {loaderData.userInfo.login && <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3"></div>}
+            <div
+                className={`flex ${
+                    loaderData.userInfo.login ? 'justify-between' : 'justify-center'
+                }  items-center relative w-full`}>
+                {loaderData.userInfo.login && (
+                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3"></div>
+                )}
                 <div className="flex flex-row justify-start gap-8">
                     <Select
                         onChange={(value) => {
@@ -146,20 +155,24 @@ export default function Ranking() {
                         }}
                         defaultValue={loaderData.type}
                         placeholder={t('ranking.nation')}
-                        data={loaderData.ranking.nations.map((item) => {
-                            return {
-                                label: t(`country.${item.toUpperCase()}`),
-                                value: item,
-                            };
-                        })}
+                        data={loaderData.ranking.nations
+                            .map((item) => {
+                                if (item.toUpperCase() !== 'NULL')
+                                    return {
+                                        label: t(`country.${item.toUpperCase()}`),
+                                        value: item,
+                                    };
+                            })
+                            .filter((item): item is { label: string; value: string } => item !== undefined)}
                         searchable
                         clearable
                     />
                 </div>
-                {loaderData.userInfo.login &&
+                {loaderData.userInfo.login && (
                     <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 border relative rounded-2xl border-slate-300 p-3">
                         {renderUserInfo()}
-                    </div>}
+                    </div>
+                )}
             </div>
             <div className="flex w-full flex-col lg:flex-row justify-around items-center lg:items-start mt-8">
                 <UserAccordion>
@@ -172,9 +185,9 @@ export default function Ranking() {
                 </UserAccordion>
             </div>
             <div className="flex gap-2 items-center mt-20">
-                <span className="text-slate-600 text-base">{t("user.info.total_users_l1")}</span>
+                <span className="text-slate-600 text-base">{t('user.info.total_users_l1')}</span>
                 <span className="text-slate-900 text-xl">{loaderData.ranking.totalCount}</span>
-                <span className="text-slate-600 text-base">{t("user.info.total_users_l2")}</span>
+                <span className="text-slate-600 text-base">{t('user.info.total_users_l2')}</span>
             </div>
         </div>
     );
