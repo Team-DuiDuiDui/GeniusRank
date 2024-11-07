@@ -71,10 +71,10 @@ public class GithubDetailedScoreCalculator {
         }
 
         // followers 的得分计算
-        double followersScore = calculateFunction(8, 1000, followersNum.getTotalCount());
+        double followersScore = calculateFunction(9, 500, followersNum.getTotalCount());
 
         // lifetimeReceivedSponsorshipValues 的得分计算
-        double lifetimeReceivedSponsorshipValuesScore = calculateFunction(2, 50, lifetimeReceivedSponsorshipValues.getTotalCount());
+        double lifetimeReceivedSponsorshipValuesScore = calculateFunction(1, 10, lifetimeReceivedSponsorshipValues.getTotalCount());
 
         return followersScore + lifetimeReceivedSponsorshipValuesScore;
     }
@@ -89,12 +89,14 @@ public class GithubDetailedScoreCalculator {
         if (repositories == null || repositoriesContributedTo == null) {
             return 0;
         }
+        Collections.reverse(repositories.getNodes());
+        Collections.reverse(repositoriesContributedTo.getNodes());
 
         // repositories 的得分计算
-        double repositoriesScore = calculateFunction(3, 10, repositories.getTotalCount());
+        double repositoriesScore = calculateFunction(3, 3, repositories.getTotalCount());
 
         // user repositories 的得分计算
-        double userRepositoriesScore = 0;
+        double userRepositoriesScore;
         if (repositories.getNodes().size() > 3) {
             userRepositoriesScore = calculateRepoScore(17, new ArrayList<>(repositories.getNodes().subList(0, 3)));
         } else {
@@ -102,10 +104,10 @@ public class GithubDetailedScoreCalculator {
         }
 
         // repositoriesContributedTo 的得分计算
-        double repositoriesContributedToScore = calculateFunction(5, 10, repositories.getTotalCount());
+        double repositoriesContributedToScore = calculateFunction(5, 3, repositories.getTotalCount());
 
         // User repositoriesContributedTo 的得分计算
-        double userRepositoriesContributedToScore = 0;
+        double userRepositoriesContributedToScore;
         if (repositoriesContributedTo.getNodes().size() > 3) {
             userRepositoriesContributedToScore = calculateRepoScore(25, new ArrayList<>(repositoriesContributedTo.getNodes().subList(0, 3)));
         } else {
@@ -134,19 +136,19 @@ public class GithubDetailedScoreCalculator {
         double MaxWatchesScore = maxValue * 0.1 / repos.toArray().length;
         for (GithubDetailedScoreReqDTO.Repository repo : repos) {
             // stars 的得分计算
-            double starsScore = calculateFunction(MaxStargazerCountScore, 5000, repo.getStargazerCount());
+            double starsScore = calculateFunction(MaxStargazerCountScore, 1000, repo.getStargazerCount());
 
             // forks 的得分计算
-            double forkScore = calculateFunction(MaxForkScore, 200, repo.getForkCount());
+            double forkScore = calculateFunction(MaxForkScore, 50, repo.getForkCount());
 
             // pullRequests 的得分计算
-            double pullRequestsScore = calculateFunction(MaxPullRequests, 1000, repo.getPullRequests().getTotalCount());
+            double pullRequestsScore = calculateFunction(MaxPullRequests, 100, repo.getPullRequests().getTotalCount());
 
             // openIssues 的得分计算
-            double openIssuesScore = calculateFunction(MaxOpenIssuesScore, 500, repo.getIssues().getTotalCount());
+            double openIssuesScore = calculateFunction(MaxOpenIssuesScore, 50, repo.getIssues().getTotalCount());
 
             // watches 的得分计算
-            double watchesScore = calculateFunction(MaxWatchesScore, 500, repo.getWatchers().getTotalCount());
+            double watchesScore = calculateFunction(MaxWatchesScore, 20, repo.getWatchers().getTotalCount());
 
             totalScore += starsScore + forkScore + pullRequestsScore + openIssuesScore + watchesScore;
         }
@@ -167,7 +169,7 @@ public class GithubDetailedScoreCalculator {
         // pull 质量计算
         double calculatePrScore = calculatePrScore(prs.getNodes());
         // pr 数量计算
-        double calculatePrCountScore = calculateFunction(5, 500, prs.getTotalCount());
+        double calculatePrCountScore = calculateFunction(5, 100, prs.getTotalCount());
 
         return calculatePrScore + calculatePrCountScore;
     }
@@ -217,7 +219,7 @@ public class GithubDetailedScoreCalculator {
         // issues 质量得分
         double calculateIssueScore = calculateIssueScore(issues.getNodes());
         // issues 数量得分
-        double calculateIssueAmountScore = calculateFunction(2, 500, issues.getTotalCount());
+        double calculateIssueAmountScore = calculateFunction(2, 50, issues.getTotalCount());
 
         return calculateIssueScore + calculateIssueAmountScore;
     }
