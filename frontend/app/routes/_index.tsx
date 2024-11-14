@@ -2,10 +2,10 @@ import { Button } from '@mantine/core';
 import { json, LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
 import { Link, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
-import { createInstanceForBe } from '~/api/backend/instance';
-import { getRankings } from '~/api/backend/ranking';
+// import { createInstanceForBe } from '~/api/backend/instance';
+// import { getRankings } from '~/api/backend/ranking';
 import LoadingLayout from '~/components/loading';
-import { user } from '~/cookie';
+// import { user } from '~/cookie';
 import i18nServer from '~/modules/i18n.server';
 import { RankResp } from '~/api/backend/typings/beRes';
 import { useEffect } from 'react';
@@ -17,16 +17,16 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const t = await i18nServer.getFixedT(request);
-    const cookieHeader = request.headers.get('Cookie');
-    const userCookie = (await user.parse(cookieHeader)) || {};
-    const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, userCookie.be_token);
-    console.log(Date.now());
-    try {
-        const rankingData = await getRankings(beInstance, null, null, 21);
-        return json({ title: t('title'), description: t('user.description'), rankingData }, cacheHeader(300, 86400));
-    } catch {
+    // const cookieHeader = request.headers.get('Cookie');
+    // const userCookie = (await user.parse(cookieHeader)) || {};
+    // const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, userCookie.be_token);
+    // console.log(Date.now());
+    // try {
+    //     const rankingData = await getRankings(beInstance, null, null, 21);
+    //     return json({ title: t('title'), description: t('user.description'), rankingData }, cacheHeader(300, 86400));
+    // } catch {
         return json({ title: t('title'), description: t('user.description'), rankingData: fallBackData }, cacheHeader(300, 86400));
-    }
+    // }
 }
 
 export default function Index() {
