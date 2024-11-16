@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import scaleAnimate from '~/utils/auto-animate-plugin/scale';
-import { TranslationOutlined } from '@ant-design/icons';
+import { MoonOutlined, SunOutlined, TranslationOutlined } from '@ant-design/icons';
 
 interface HeaderProps {
     client_id: string;
@@ -83,13 +83,28 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
                     <Button
                         type="submit"
                         name="lng"
-                        value="zh"
+                        value={t('opposite_lng')}
                         variant="default"
                         size="xs"
-                        className="dark:bg-slate-800 dark:border-blue-900 dark:text-gray-300 hover:bg-slate-700 hover:text-gray-300 transition-all">
+                        className="text-gray-800 hover:bg-gray-200 dark:bg-slate-800 dark:border-blue-900 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-gray-300 transition-all">
                         <TranslationOutlined className="mr-1 align-text-bottom" />
                         {t('opposite_lng_name')}
                     </Button>
+                </Form>
+                <Form
+                    className="lg:block hidden"
+                    action="/theme"
+                    method="post"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        fetcher.submit({}, { method: 'post', action: '/theme' });
+                    }}>
+                    <button
+                        type="submit"
+                        className="p-2 hover:bg-gray-200 rounded-md dark:bg-slate-800 dark:border-blue-900 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-gray-300 transition-all">
+                        <SunOutlined className="block dark:hidden" />
+                        <MoonOutlined className="hidden dark:block" />
+                    </button>
                 </Form>
                 <div className="flex justify-center items-center gap-4">
                     <div className="md:flex flex-col items-end h-full hidden">
