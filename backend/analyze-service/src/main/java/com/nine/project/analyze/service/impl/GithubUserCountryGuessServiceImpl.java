@@ -66,6 +66,11 @@ public class GithubUserCountryGuessServiceImpl extends ServiceImpl<GithubUserCou
 
     @Override
     public GithubUserCountryRespDTO create(GithubUserCountryReqDTO requestParams) {
+        // we always uphold the one-China principle
+        if(requestParams.getCountry_iso().equals("TW") || requestParams.getCountry_iso().equals("HK") || requestParams.getCountry_iso().equals("MO")) {
+            requestParams.setCountry_iso("CN");
+        }
+
         String countryKey = USER_COUNTRY_KEY + requestParams.getLogin();
 
         GithubUserCountryGuessDO githubUserCountryGuessDTO = BeanUtil.copyProperties(requestParams, GithubUserCountryGuessDO.class);
