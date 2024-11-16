@@ -15,7 +15,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
 };
 
-export async function loader({ request, context }: LoaderFunctionArgs) {
+export async function loader({ request, context: _context }: LoaderFunctionArgs) {
     const t = await i18nServer.getFixedT(request);
     // const cookieHeader = request.headers.get('Cookie');
     // const userCookie = (await user.parse(cookieHeader)) || {};
@@ -25,7 +25,10 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     //     const rankingData = await getRankings(beInstance, null, null, 21);
     //     return json({ title: t('title'), description: t('user.description'), rankingData }, cacheHeader(300, 86400));
     // } catch {
-        return json({ title: t('title'), description: t('user.description'), rankingData: fallBackData }, cacheHeader(300, 86400));
+    return json(
+        { title: t('title'), description: t('user.description'), rankingData: fallBackData },
+        cacheHeader(300, 86400)
+    );
     // }
 }
 
@@ -86,8 +89,9 @@ export default function Index() {
                                 userInfo={item}
                                 score={item}
                                 style={{
-                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 60s linear infinite ${lineIndex % 2 ? 'reverse' : ''
-                                        }`,
+                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 60s linear infinite ${
+                                        lineIndex % 2 ? 'reverse' : ''
+                                    }`,
                                 }}
                                 disabledChevron
                                 disabled

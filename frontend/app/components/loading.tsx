@@ -16,20 +16,36 @@ const LoadingLayout = () => {
         }
     };
     return (
-        <LoadingOverlay
-            visible={navigation.state === 'loading'}
-            className="items-start py-20"
-            zIndex={30}
-            overlayProps={{ radius: 'sm', blur: 2, center: false }}
-            loaderProps={{
-                children: (
-                    <div className="flex flex-col justify-center items-center gap-4">
-                        <Loader variant="dots" />
-                        <p className="text-base text-gray-500">{getText()}</p>
-                    </div>
-                ),
-            }}
-        />
+        <>
+            <LoadingOverlay
+                visible={navigation.state === 'loading'}
+                className="items-start py-20 dark:hidden"
+                zIndex={30}
+                overlayProps={{ radius: 'sm', blur: 2, center: false }}
+                loaderProps={{
+                    children: (
+                        <div className="flex flex-col justify-center items-center gap-4">
+                            <Loader variant="dots" />
+                            <p className="text-base text-gray-500">{getText()}</p>
+                        </div>
+                    ),
+                }}
+            />
+            <LoadingOverlay
+                visible={navigation.state === 'loading'}
+                className="items-start py-20 dark:flex hidden"
+                zIndex={30}
+                overlayProps={{ radius: 'sm', blur: 2, center: false, color: 'rgb(30,41,59)' }}
+                loaderProps={{
+                    children: (
+                        <div className="flex flex-col justify-center items-center gap-4">
+                            <Loader variant="dots" />
+                            <p className="text-base text-gray-500">{getText()}</p>
+                        </div>
+                    ),
+                }}
+            />
+        </>
     );
 };
 
