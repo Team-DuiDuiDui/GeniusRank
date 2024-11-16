@@ -10,6 +10,10 @@ spring:
     nacos:
       discovery:
         server-addr: ${project.nacos.host}:${project.nacos.port}
+    sentinel:
+      transport:
+        dashboard: ${project.sentinel.dashboard}
+        port: ${project.sentinel.port}
   data:
     redis:
       host: ${project.redis.host}

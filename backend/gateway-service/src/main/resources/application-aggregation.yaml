@@ -57,6 +57,9 @@ project:
   nacos:
     host: 127.0.0.1
     port: 8848
+  sentinel:
+    dashboard: 127.0.0.1:8090
+    port: 9000
   redis:
     host: 127.0.0.1
     port: 6379
