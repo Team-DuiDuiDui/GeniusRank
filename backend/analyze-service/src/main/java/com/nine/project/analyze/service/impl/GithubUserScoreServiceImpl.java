@@ -112,21 +112,21 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     }
 
     @Override
-    public RankRespDTO getGithubUserScoreRank(Integer size, List<String> nation, List<String> type) {
+    public RankRespDTO getGithubUserScoreRank(Integer size, Integer page, List<String> nation, List<String> type) {
         List<GithubUserScoreRankRespDTO> scoreRankList;
         Long count = baseMapper.selectCount(Wrappers.lambdaQuery(GithubUserScoreDO.class).eq(GithubUserScoreDO::getDelFlag, 0));
 
         if (type!= null) {
-            scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, type, size);
+            scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, type, size, page);
             if (scoreRankList == null) {
-                scoreRankList = baseMapper.findTopScoresByCountryNameAndType(size, nation, type);
-                cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, type, size);
+                scoreRankList = baseMapper.findTopScoresByCountryNameAndType(size,(page - 1) * size, nation, type);
+                cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, type, size, page);
             }
         } else {
-            scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, null, size);
+            scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, null, size, page);
             if (scoreRankList == null) {
-                scoreRankList = baseMapper.findTopScoresByCountryName(size, nation);
-                cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, null, size);
+                scoreRankList = baseMapper.findTopScoresByCountryName(size,(page - 1) * size, nation);
+                cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, null, size, page);
             }
         }
         // 返回结果

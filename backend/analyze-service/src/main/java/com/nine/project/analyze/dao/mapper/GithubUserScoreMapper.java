@@ -18,6 +18,7 @@ public interface GithubUserScoreMapper extends BaseMapper<GithubUserScoreDO> {
      */
     List<GithubUserScoreRankRespDTO> findTopScoresByCountryName(
             @Param("size")  Integer size,
+            @Param("pageOffset") Integer pageOffset,
             @Param("nations") List<String> nations);
 
 
@@ -26,6 +27,7 @@ public interface GithubUserScoreMapper extends BaseMapper<GithubUserScoreDO> {
      */
     List<GithubUserScoreRankRespDTO> findTopScoresByCountryNameAndType(
             @Param("size")  Integer size,
+            @Param("pageOffset") Integer pageOffset,
             @Param("nations") List<String> nations,
             @Param("types") List<String> types);
 
