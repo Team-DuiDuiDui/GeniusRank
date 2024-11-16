@@ -26,7 +26,7 @@ public class GithubUserScoreController {
     private final GithubUserScoreService githubUserScoreService;
 
     /**
-     * 查询对于 githubUserId 的用户分数接口
+     * 根据 login 查询用户分数和排名接口
      */
     @GetMapping("/api/analyze/score/{login}")
     public Result<GithubUserScoreRespDTO> getUserScore(@PathVariable String login) {
