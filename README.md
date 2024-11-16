@@ -48,7 +48,7 @@ IDEA 导入 Maven 项目，等待依赖下载完成。( jdk 版本要求为 17�
 ### 配置数据库（MySQL / Redis）
 
 在 gateway-service，user-service，analyze-service 包下修改 shardingsphere-config-dev.yaml 中配置 mysql 数据库连接信息
-执行 resources/database 包 project.sql 初始化数据库表结构。
+执行 resources/database 包 project.sql 初始化数据库表结构。并将项目启动方式从 prod 正式环境改成 dev 开发环境。
 
 在 gateway, user, analyze 包下修改 application.yml 中配置 redis 连接信息
 
@@ -64,6 +64,14 @@ rocketmq:
         send-message-timeout: 2000
         retry-times-when-send-failed: 1
         retry-times-when-send-async-failed: 1
+```
+
+#### 配置 ChatGLM 服务
+
+```yaml
+project:
+  ai:
+    apiKey: # ChatGLM API Key
 ```
 
 #### 配置 QQ-Mail 服务
