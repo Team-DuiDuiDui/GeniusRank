@@ -84,6 +84,13 @@
             <artifactId>aliyun-sdk-oss</artifactId>
         </dependency>
 
+        <!-- 七牛云 SDK -->
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>7.7.0</version>
+        </dependency>
+
         <!-- 工具类和其他库 -->
         <dependency>
             <groupId>cn.hutool</groupId>
