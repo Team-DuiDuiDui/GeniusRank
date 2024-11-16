@@ -117,16 +117,16 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         Long count = baseMapper.selectCount(Wrappers.lambdaQuery(GithubUserScoreDO.class).eq(GithubUserScoreDO::getDelFlag, 0));
 
         if (type!= null) {
-            scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, type);
+            scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, type, size);
             if (scoreRankList == null) {
                 scoreRankList = baseMapper.findTopScoresByCountryNameAndType(size, nation, type);
-                cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, type);
+                cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, type, size);
             }
         } else {
-            scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, null);
+            scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, null, size);
             if (scoreRankList == null) {
                 scoreRankList = baseMapper.findTopScoresByCountryName(size, nation);
-                cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, null);
+                cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, null, size);
             }
         }
         // 返回结果
