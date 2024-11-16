@@ -24,17 +24,17 @@ public class GithubUserScoreCalculator {
         BigDecimal userScoreDecimal = BigDecimal.valueOf(userScore).setScale(2, RoundingMode.HALF_UP);
 
         // 计算仓库得分并保留两位小数
-        BigDecimal repoScoreDecimal = BigDecimal.valueOf(0);
+        BigDecimal repoScoreDecimal;
 
         // 先根据 stars 进行排序一层
         githubUserScoreReqDTO.getRepos().sort((r1, r2) -> r2.getStars() - r1.getStars());
+        double repoScore;
         if(githubUserScoreReqDTO.getRepos().size() > 3) {
-            double repoScore = calculateRepoScore(new ArrayList<>(githubUserScoreReqDTO.getRepos().subList(0, 3)));
-            repoScoreDecimal = BigDecimal.valueOf(repoScore).setScale(2, RoundingMode.HALF_UP);
+            repoScore = calculateRepoScore(new ArrayList<>(githubUserScoreReqDTO.getRepos().subList(0, 3)));
         } else{
-            double repoScore = calculateRepoScore(githubUserScoreReqDTO.getRepos());
-            repoScoreDecimal = BigDecimal.valueOf(repoScore).setScale(2, RoundingMode.HALF_UP);
+            repoScore = calculateRepoScore(githubUserScoreReqDTO.getRepos());
         }
+        repoScoreDecimal = BigDecimal.valueOf(repoScore).setScale(2, RoundingMode.HALF_UP);
 
         // 计算拉取请求得分并保留两位小数
         double prScore = calculatePrScore(githubUserScoreReqDTO.getPrs());
@@ -74,7 +74,7 @@ public class GithubUserScoreCalculator {
      */
     private static double calculateUserScore(GithubUserScoreReqDTO.User user) {
         // followers 的得分计算
-        double followersScore = calculateFunction(8, 1000, user.getFollowers());
+        double followersScore = calculateFunction(8, 500, user.getFollowers());
 
         // publicRepos 的得分计算
         double publicReposScore = calculateFunction(2, 10, user.getPublic_repos());
@@ -86,7 +86,7 @@ public class GithubUserScoreCalculator {
         double prAmountScore = calculateFunction(10, 100, user.getPr_amount());
 
         // issue_amount 的得分计算
-        double issueAmountScore = calculateFunction(5, 100, user.getIssue_amount());
+        double issueAmountScore = calculateFunction(5, 50, user.getIssue_amount());
 
         return followersScore + publicReposScore + commitAmountScore + prAmountScore + issueAmountScore;
     }
@@ -102,8 +102,8 @@ public class GithubUserScoreCalculator {
         }
 
         double totalScore = 0;
-        double MaxisForkedScore = 5.0 / repos.toArray().length;
-        double MaxStarsScore = 20.0 / repos.toArray().length;
+        double MaxisForkedScore = 1.0 / repos.toArray().length;
+        double MaxStarsScore = 24.0 / repos.toArray().length;
         double MaxForksScoreScore = 15.0 / repos.toArray().length;
         double MaxWatchesScore = 5.0 / repos.toArray().length;
         double MaxOpenIssuesScore = 5.0 / repos.toArray().length;
@@ -112,16 +112,16 @@ public class GithubUserScoreCalculator {
             double isForkedScore = repo.isForked()? MaxisForkedScore : 0;
 
             // stars 的得分计算
-            double starsScore = calculateFunction(MaxStarsScore, 5000, repo.getStars());
+            double starsScore = calculateFunction(MaxStarsScore, 1000, repo.getStars());
 
             // forks 的得分计算
-            double forksScore = calculateFunction(MaxForksScoreScore, 1000, repo.getForks());
+            double forksScore = calculateFunction(MaxForksScoreScore, 50, repo.getForks());
 
             // watches 的得分计算
-            double watchesScore = calculateFunction(MaxWatchesScore, 500, repo.getWatchers());
+            double watchesScore = calculateFunction(MaxWatchesScore, 20, repo.getWatchers());
 
             // openIssues 的得分计算
-            double openIssuesScore = calculateFunction(MaxOpenIssuesScore, 500, repo.getOpen_issues());
+            double openIssuesScore = calculateFunction(MaxOpenIssuesScore, 50, repo.getOpen_issues());
 
             totalScore += isForkedScore + starsScore + forksScore + watchesScore + openIssuesScore;
         }
@@ -141,7 +141,7 @@ public class GithubUserScoreCalculator {
         double totalScore = 0;
         double MaxPrAndIssueAmountMaxScore = 15.0 / prs.toArray().length;
         for (GithubUserScoreReqDTO.pr pr : prs) {
-            totalScore += calculateFunction(MaxPrAndIssueAmountMaxScore, 500, pr.getPr_and_issue_amount());
+            totalScore += calculateFunction(MaxPrAndIssueAmountMaxScore, 150, pr.getPr_and_issue_amount());
         }
         return totalScore;
     }
@@ -159,7 +159,7 @@ public class GithubUserScoreCalculator {
         double totalScore = 0;
         double MaxPrAndIssueAmountMaxScore = 5.0 / issues.toArray().length;
         for (GithubUserScoreReqDTO.issue issue : issues) {
-            totalScore += calculateFunction(MaxPrAndIssueAmountMaxScore, 500, issue.getPr_and_issue_amount());
+            totalScore += calculateFunction(MaxPrAndIssueAmountMaxScore, 150, issue.getPr_and_issue_amount());
         }
         return totalScore;
     }
