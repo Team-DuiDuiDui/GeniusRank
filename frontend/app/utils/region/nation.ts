@@ -1,4 +1,4 @@
-import { streamChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/backend/chat";
+import { streamChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList, syncChatFromDeepSeek } from "~/api/backend/chat";
 import { AxiosInstanceForDeepSeek } from "~/api/backend/instance";
 import { AxiosInstanceForGithub } from "../../api/github/instance";
 import { handleClientGithubGraphQLReq } from "../request";
@@ -19,69 +19,69 @@ const defaultValue: NationData = {
  * @params 同 guessRegion
  * @returns 返回一个数组，第一个元素是国家，第二个元素是置信度
  */
-export const guessRegionFromFollowers = async (
-    userData: UserDataProps,
-    deepSeekInstance: AxiosInstanceForDeepSeek,
-    githubInstance: AxiosInstanceForGithub
-): Promise<NationData> => {
-    interface Followers {
-        login: string;
-        name: string;
-        location: string;
-        company: string;
-        followers: {
-            totalCount: number;
-        };
-    }
-    const query = `
-                query($userName: String!) {
-                    user(login: $userName) {
-                        followers(last: ${userData.followers <= 80 ? userData.followers : 80}) {
-                        nodes {
-                            login
-                            name
-                            location
-                            company
-                            followers {
-                                totalCount
-                                }
-                            followings {
-                                totalCount
-                                }
-                            }
-                        totalCount 
-                        }
-                    }
-                }`;
-    const variables = { userName: userData.login };
-    const data = (await handleClientGithubGraphQLReq<string[]>(
-        { axiosInstance: githubInstance, query, variables },
-        async res => {
-            const result: string[] = []
-            const data = res.data.data.user.followers.nodes
-            data.forEach((follower: Followers) => follower.location ? result.push(follower.location) : null)
-            return result
-        }
-    ))!;
-    const processedData: string[] = [];
+// export const guessRegionFromFollowers = async (
+//     userData: UserDataProps,
+//     deepSeekInstance: AxiosInstanceForDeepSeek,
+//     githubInstance: AxiosInstanceForGithub
+// ): Promise<NationData> => {
+//     interface Followers {
+//         login: string;
+//         name: string;
+//         location: string;
+//         company: string;
+//         followers: {
+//             totalCount: number;
+//         };
+//     }
+//     const query = `
+//                 query($userName: String!) {
+//                     user(login: $userName) {
+//                         followers(last: ${userData.followers <= 80 ? userData.followers : 80}) {
+//                         nodes {
+//                             login
+//                             name
+//                             location
+//                             company
+//                             followers {
+//                                 totalCount
+//                                 }
+//                             followings {
+//                                 totalCount
+//                                 }
+//                             }
+//                         totalCount 
+//                         }
+//                     }
+//                 }`;
+//     const variables = { userName: userData.login };
+//     const data = (await handleClientGithubGraphQLReq<string[]>(
+//         { axiosInstance: githubInstance, query, variables },
+//         async res => {
+//             const result: string[] = []
+//             const data = res.data.data.user.followers.nodes
+//             data.forEach((follower: Followers) => follower.location ? result.push(follower.location) : null)
+//             return result
+//         }
+//     ))!;
+//     const processedData: string[] = [];
 
-    for (let i = 0; i < data.length; i++) {
-        const group = Math.floor(i / 5);
-        const repeatCount = group + 1;
+//     for (let i = 0; i < data.length; i++) {
+//         const group = Math.floor(i / 5);
+//         const repeatCount = group + 1;
 
-        for (let j = 0; j <= repeatCount; j++) {
-            processedData.push(data[i]);
-        }
-    }
+//         for (let j = 0; j <= repeatCount; j++) {
+//             processedData.push(data[i]);
+//         }
+//     }
 
-    let loopCount = 0
-    while (loopCount < 3) {
-        loopCount++;
-        const resultJSON = await syncChatForNationFromUserList(processedData.toString(), deepSeekInstance);
-        if (resultJSON.nationISO) return { ...resultJSON, confidence: data.length / (userData.followers > 80 ? 80 : userData.followers), login: userData.login, message: "user.info.from_followers_and_followings" };
-    }
-    return defaultValue
-};
+//     let loopCount = 0
+//     while (loopCount < 3) {
+//         loopCount++;
+//         const resultJSON = await syncChatForNationFromUserList(processedData.toString(), deepSeekInstance);
+//         if (resultJSON.nationISO) return { ...resultJSON, confidence: data.length / (userData.followers.totalCount > 80 ? 80 : userData.followers.totalCount), login: userData.login, message: "user.info.from_followers_and_followings" };
+//     }
+//     return defaultValue
+// };
 
 const prompt = `
 这是一个包含了位置信息或者 null 的一个数组。
@@ -94,56 +94,19 @@ const prompt = `
 export const guessRegionFromFollowersBetter = async (
     userData: UserDataProps,
     deepSeekInstance: AxiosInstanceForDeepSeek,
-    githubInstance: AxiosInstanceForGithub,
-    beUrl: string,
-    beToken: string,
 ): Promise<NationData> => {
-    interface Followers {
-        login: string;
-        name: string;
-        location: string;
-        company: string;
-        followers: {
-            totalCount: number;
-        };
-        following: {
-            totalCount: number;
-        };
-    }
-    const query = `
-                query($userName: String!) {
-                    user(login: $userName) {
-                        followers(last: 80) {
-                        nodes {
-                            login
-                            name
-                            location
-                            company
-                            followers {
-                                totalCount
-                                }
-                            following {
-                                totalCount
-                                }
-                            }
-                        totalCount
-                        }
-                    }
-                }`;
-    const variables = { userName: userData.login };
-    const locationList: User[] = (await handleClientGithubGraphQLReq<User[]>(
-        { axiosInstance: githubInstance, query, variables },
-        async res => {
-            return res.data.data.user.followers.nodes.map((node: Followers) => ({
-                location: node.location || null,
-                followers: node.followers.totalCount,
-                followings: node.following.totalCount
-            })).reverse()
-        }
-    ))!;
+    console.log("正在从 followers 和 followings 中猜测用户所在国家")
+    const time = new Date().getTime();
+    const locationList: User[] = userData.followers.nodes.map(node => ({
+        followers: node.followers.totalCount,
+        followings: node.following.totalCount,
+        location: node.location,
+    }))
 
-    const chatResult = await streamChat(`${locationList.map(node => node.location || "null")} ${prompt}`, beUrl, beToken)
-    const resultJSON: string[] = JSON.parse(parseStringToArrayLike(chatResult))
+    const chatResult = await syncChatFromDeepSeek(`[${locationList.map(node => node.location || "null")}] ${prompt}`, deepSeekInstance)
+    console.log('chatResult Data Time:', new Date().getTime() - time);
+    console.log(chatResult)
+    const resultJSON: string[] = JSON.parse(chatResult)
     const resAll = calculateNationPrediction(locationList.map((item, index) => ({
         ...item,
         location: resultJSON[index] === undefined ? null : resultJSON[index],
@@ -176,7 +139,7 @@ export const guessRegionFromFollowings = async (
     const query = `
         query($userName: String!) {
             user(login: $userName) {
-                following(last: ${userData.followings <= 80 ? userData.followings : 80}) {
+                following(last: 80) {
                     nodes {
                         login
                         name
@@ -224,7 +187,7 @@ export const guessRegionFromFollowings = async (
     while (loopCount < 3) {
         loopCount++;
         const resultJSON = await syncChatForNationFromUserList(processedData.toString(), deepSeekInstance);
-        if (resultJSON.nationISO) return { ...resultJSON, confidence: data.length / (userData.followings > 80 ? 80 : userData.followings), login: userData.login, message: "user.info.from_followers_and_followings" };
+        if (resultJSON.nationISO) return { ...resultJSON, confidence: data.length / (userData.followings.totalCount > 80 ? 80 : userData.followings.totalCount), login: userData.login, message: "user.info.from_followers_and_followings" };
     }
     return defaultValue
 };
@@ -234,32 +197,14 @@ export const guessRegionFromReadme = async (
     deepSeekInstance: AxiosInstanceForDeepSeek,
     githubInstance: AxiosInstanceForGithub,
 ): Promise<NationData> => {
-    const branchQuery = `
-    query($userName: String!) {
-        user(login: $userName) {
-            repository(name: $userName) {
-                    defaultBranchRef {
-                        name
-                    }
-                }
-            }
-        }
-    `;
-    const variables = { userName: userData.login };
-    const branchName = await handleClientGithubGraphQLReq<string | undefined>(
-        { axiosInstance: githubInstance, query: branchQuery, variables },
-        async res => {
-            return res.data.data.user?.repository?.defaultBranchRef?.name
-        }
-    );
 
-    if (!branchName) return defaultValue;
+    if (!userData.readme) return defaultValue;
 
     const readmeQuery = `
         query($userName: String!) {
         user(login: $userName) {
             repository(name: $userName) {
-                object(expression: "${branchName}:README.md") {
+                object(expression: "${userData.readme.defaultBranchRef}:README.md") {
                     ... on Blob {
                         text
                     }
@@ -270,7 +215,7 @@ export const guessRegionFromReadme = async (
         `
 
     const readme = await handleClientGithubGraphQLReq<string | undefined>(
-        { axiosInstance: githubInstance, query: readmeQuery, variables },
+        { axiosInstance: githubInstance, query: readmeQuery, variables: { userName: userData.login } },
         async res => res.data.data.user?.repository?.object?.text
     );
     if (!readme) return defaultValue;

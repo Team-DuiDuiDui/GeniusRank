@@ -25,8 +25,7 @@ export const syncChatForNationFromUserList = async (data: string, deepSeekInstan
     }
     `
     const result = await syncChatFromDeepSeek(message, deepSeekInstance)
-    console.log(result)
-    return JSON.parse(parseStringToJSONfy(result))
+    return JSON.parse(result)
 }
 
 /**
@@ -47,7 +46,7 @@ export const syncChatForNationFromReadme = async (data: string, deepSeekInstance
         "nationISO": [国家对应的 ISO 简写]
     }
     `
-    return JSON.parse(parseStringToJSONfy(await syncChatFromDeepSeek(message, deepSeekInstance)))
+    return JSON.parse(await syncChatFromDeepSeek(message, deepSeekInstance))
 }
 
 export const syncChatForNationFromGLM = async (userName: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
@@ -63,7 +62,7 @@ export const syncChatForNationFromGLM = async (userName: string, deepSeekInstanc
     }
     `
     const result = await syncChatFromDeepSeek(message, deepSeekInstance)
-    return JSON.parse(parseStringToJSONfy(result))
+    return JSON.parse(result)
 }
 
 /**

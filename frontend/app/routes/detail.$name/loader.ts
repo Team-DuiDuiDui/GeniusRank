@@ -13,6 +13,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
     const cookie = (await user.parse(cookieHeader)) || {};
     const locale = (await lng.parse(cookieHeader)) as string;
     if (!cookie.access_token) return redirect('/unauthorized');
+    const time = new Date().getTime();
     const t = await i18nServer.getFixedT(request);
     if (params.name) {
         try {
@@ -29,6 +30,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 githubInstance
             );
             const { data } = await user.getData();
+            console.log('User Data Time:', new Date().getTime() - time);
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
             const deepSeekInstance = createInstanceForDeepSeek(context.cloudflare.env.DEEPSEEK_API_KEY);
@@ -38,21 +40,22 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 confidence: 0.5,
             };
             try {
+                const time = new Date().getTime();
                 nationData = await guessRegion({
                     locale,
                     userData: {
                         t,
                         location: data.user.location as string | undefined,
-                        followers: data.user.followers.totalCount,
-                        followings: data.user.following.totalCount,
+                        followers: data.user.followers,
+                        followings: data.user.following,
+                        readme: data.user.repository,
                         login: data.user.login,
                     },
                     beInstance,
                     githubInstance,
                     deepSeekInstance,
-                    beUrl: context.cloudflare.env.BASE_URL,
-                    beToken: cookie.be_token,
                 });
+                console.log('Total Nation Data Time:', new Date().getTime() - time);
                 nationData = {
                     ...nationData,
                     confidence: parseFloat(nationData.confidence.toFixed(2)),
@@ -66,7 +69,10 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 };
             }
             try {
+                const localTime = new Date().getTime();
                 const scores = await user.getUserScores();
+                console.log('User Scores Time:', new Date().getTime() - localTime);
+                console.log('Total Time:', new Date().getTime() - time);
                 return json({
                     data,
                     title: `${params?.name ?? ''} | Genius Rank`,
