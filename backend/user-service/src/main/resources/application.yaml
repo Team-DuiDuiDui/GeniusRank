@@ -54,3 +54,9 @@ project:
     access-key-secret: ${project.alioss.access-key-secret}
     bucket-name: ${project.alioss.bucket-name}
     domain: ${project.alioss.domain}
+  qiniu:
+    access-key: ${project.qiniu.access-key}
+    secret-key: ${project.qiniu.secret-key}
+    bucket: ${project.qiniu.bucket}
+    directory: ${project.qiniu.directory}
+    domain: ${project.qiniu.domain}

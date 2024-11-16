@@ -26,3 +26,9 @@ project:
     access-key-secret:  #用于访问 OSS 的配对密钥
     bucket-name:  #OSS 中的存储空间名称
     domain: 127.0.0.1:9000 #本地存储空间域名，如不采用 alioss，则该存储空间为兜底
+  qiniu:
+    access-key: #请从七牛云工作台-个人中心-密钥管理获取
+    secret-key: #请从七牛云工作台-个人中心-密钥管理获取
+    bucket: #七牛云存储空间名称
+    directory: #自定义存储空间内目录
+    domain: #存储空间自定义域名，请提前在存储空间中进行配置

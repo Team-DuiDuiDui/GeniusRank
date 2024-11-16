@@ -17,11 +17,11 @@ import java.util.List;
 public interface GithubUserScoreService extends IService<GithubUserScoreDO> {
 
     /**
-     * 查询对于 githubUserId 的用户分数接口
-     * @param githubUserId GitHub 用户 ID
+     * 根据 login 查询用户分数和排名接口
+     * @param login GitHub 用户名
      * @return GithubUserScoreRespDTO 用户分数
      */
-    GithubUserScoreRespDTO getGithubUserScore(String githubUserId);
+    GithubUserScoreRespDTO getGithubUserScore(String login);
 
     /**
      * 简单创建用户分数接口

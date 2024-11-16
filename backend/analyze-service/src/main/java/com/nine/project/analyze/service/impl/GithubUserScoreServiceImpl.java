@@ -49,28 +49,27 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     private final SaveDetailedScoreAndTypeProducer saveDetailedScoreAndTypeProducer;
 
     @Override
-    public GithubUserScoreRespDTO getGithubUserScore(String githubUserId) {
-        String cacheKey = USER_SCORE_KEY + githubUserId;
+    public GithubUserScoreRespDTO getGithubUserScore(String login) {
+        if (login == null) throw new ClientException(USER_SCORE_NOT_FOUND);
 
-        UserRankRespDTO githubUserRank = getGithubUserRank(githubUserId);
-        Integer rank = githubUserRank.getRank();
-
-        // 从缓存中获取
+        // 从缓存中获取排名和用户分数，如果缓存中存在数据，则直接返回
+        String cacheKey = USER_SCORE_KEY + login;
         Map<Object, Object> cachedData = cacheUtil.getMapFromCacheHash(cacheKey);
         if (!cachedData.isEmpty()) {
-            cachedData.put("rank", rank);
             return BeanUtil.fillBeanWithMap(cachedData, GithubUserScoreRespDTO.builder().build(), true);
         }
 
-        // 如果缓存中不存在，从数据库中查询
+        // 查询用户分数
         LambdaQueryWrapper<GithubUserScoreDO> queryWrapper = Wrappers.lambdaQuery(GithubUserScoreDO.class)
-                .eq(GithubUserScoreDO::getLogin, githubUserId)
-                .eq(GithubUserScoreDO::getDelFlag, 0);
-
+                .eq(GithubUserScoreDO::getLogin, login);
         GithubUserScoreDO userScoreDO = this.getOne(queryWrapper);
         if (userScoreDO == null) {
             throw new ClientException(USER_SCORE_NOT_FOUND);
         }
+        double totalScore = userScoreDO.getTotalScore();
+
+        // 查询用户排名
+        Integer rank =  baseMapper.getGithubUserRank(totalScore);
 
         // 封装响应数据
         GithubUserScoreRespDTO respDTO = BeanUtil.copyProperties(userScoreDO, GithubUserScoreRespDTO.class);
@@ -140,14 +139,16 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
 
     @Override
     public UserRankRespDTO getGithubUserRank(String login) {
+        // 查询用户分数
         QueryWrapper<GithubUserScoreDO> queryWrapper = Wrappers.<GithubUserScoreDO>query()
                 .eq("login", login);
         GithubUserScoreDO userScoreDO = this.getOne(queryWrapper);
         if (userScoreDO == null) {
-            log.error("用户分数不存在");
             throw new ClientException(USER_SCORE_NOT_FOUND);
         }
         double totalScore = userScoreDO.getTotalScore();
+
+        // 查询用户排名
         Integer githubUserRank = baseMapper.getGithubUserRank(totalScore);
         return new UserRankRespDTO(githubUserRank,totalScore);
     }
