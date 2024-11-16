@@ -5,7 +5,7 @@ import {
     guessRegionFromGLM,
     guessRegionFromReadme,
 } from './nation';
-import { getUserNation, updateUserNation } from '~/api/backend/region';
+import { updateUserNation } from '~/api/backend/region';
 import { syncChatFromDeepSeek } from '~/api/backend/chat';
 import { SubUserDetail } from '~/api/github/graphql/typings/user';
 
@@ -15,6 +15,7 @@ export interface GuessNationProps {
     githubInstance: AxiosInstanceForGithub;
     deepSeekInstance: AxiosInstanceForDeepSeek;
     userData: UserDataProps;
+    dataFromBe: NationData | null;
 }
 
 interface NationData {
@@ -70,14 +71,10 @@ export const guessRegion = async ({
     beInstance,
     githubInstance,
     deepSeekInstance,
+    dataFromBe,
 }: GuessNationProps): Promise<NationData> => {
     // throw new Error('Not implemented');
     const time = new Date().getTime();
-    const dataFromBe = await getUserNation(userData.login, beInstance);
-    if (dataFromBe?.confidence === 1) {
-        // 已经经过无数验证非常确定的答案，直接返回
-        return dataFromBe
-    }
     console.log('BackEnd Data Time:', new Date().getTime() - time);
     try {
         if (userData.followers.totalCount > 50000) {

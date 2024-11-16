@@ -1,6 +1,7 @@
 import { LoaderFunctionArgs, redirect, json } from "@remix-run/cloudflare";
 import axios, { AxiosError } from "axios";
 import { createInstanceForBe, createInstanceForDeepSeek } from "~/api/backend/instance";
+import { getUserNation } from "~/api/backend/region";
 import { gqlUser } from "~/api/github/graphql/gqlUser.server";
 import { createInstanceForGithub } from "~/api/github/instance";
 import { user, lng } from "~/cookie";
@@ -15,6 +16,8 @@ export default async function loader({ request, params, context }: LoaderFunctio
     if (!cookie.access_token) return redirect('/unauthorized');
     const time = new Date().getTime();
     const t = await i18nServer.getFixedT(request);
+    let nationDataChecked = false;
+    let regionParamCopy = null;
     if (params.name) {
         try {
             const githubInstance = createInstanceForGithub(
@@ -32,6 +35,13 @@ export default async function loader({ request, params, context }: LoaderFunctio
             const { data } = await user.getData();
             console.log('User Data Time:', new Date().getTime() - time);
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
+            regionParamCopy = {
+                location: data.user.location as string | undefined,
+                followers: data.user.followers,
+                followings: data.user.following,
+                readme: data.user.repository,
+                login: data.user.login,
+            }
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
             const deepSeekInstance = createInstanceForDeepSeek(context.cloudflare.env.DEEPSEEK_API_KEY);
             let nationData = {
@@ -41,27 +51,33 @@ export default async function loader({ request, params, context }: LoaderFunctio
             };
             try {
                 const time = new Date().getTime();
-                nationData = await guessRegion({
-                    locale,
-                    userData: {
-                        t,
-                        location: data.user.location as string | undefined,
-                        followers: data.user.followers,
-                        followings: data.user.following,
-                        readme: data.user.repository,
-                        login: data.user.login,
-                    },
-                    beInstance,
-                    githubInstance,
-                    deepSeekInstance,
-                });
-                console.log('Total Nation Data Time:', new Date().getTime() - time);
-                nationData = {
-                    ...nationData,
-                    confidence: parseFloat(nationData.confidence.toFixed(2)),
-                    message: t(nationData.message),
-                };
-            } catch {
+                const localNationData = await getUserNation(params.name, beInstance);
+                if (!localNationData) {
+                    nationDataChecked = true;
+                    nationData = await guessRegion({
+                        locale,
+                        userData: {
+                            t,
+                            ...regionParamCopy
+                        },
+                        beInstance,
+                        githubInstance,
+                        deepSeekInstance,
+                        dataFromBe: localNationData,
+                    });
+                    console.log('Total Nation Data Time:', new Date().getTime() - time);
+                    nationData = {
+                        ...nationData,
+                        confidence: parseFloat(nationData.confidence.toFixed(2)),
+                        message: t(nationData.message),
+                    };
+                } else {
+                    nationData = localNationData;
+                    // 已经经过无数验证非常确定的答案，无需再去重新判断
+                    nationDataChecked = localNationData.confidence === 1;
+                }
+            } catch (e) {
+                console.log(e);
                 nationData = {
                     nationISO: '',
                     message: t('user.info.from_followers_and_followings'),
@@ -75,6 +91,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 console.log('Total Time:', new Date().getTime() - time);
                 return json({
                     data,
+                    regionParamCopy: nationDataChecked ? null : regionParamCopy,
                     title: `${params?.name ?? ''} | Genius Rank`,
                     description: t('user.description'),
                     beToken: cookie.be_token,
@@ -86,6 +103,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
             } catch (e) {
                 return json({
                     data,
+                    regionParamCopy: nationDataChecked ? null : regionParamCopy,
                     title: `${params?.name ?? ''} | Genius Rank`,
                     description: t('user.description'),
                     beToken: cookie.be_token,
