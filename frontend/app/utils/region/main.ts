@@ -1,5 +1,5 @@
 import { AxiosInstanceForGithub } from '../../api/github/instance';
-import { AxiosInstanceForBe } from '~/api/backend/instance';
+import { AxiosInstanceForBe, AxiosInstanceForDeepSeek } from '~/api/backend/instance';
 import {
     guessRegionFromFollowersBetter,
     guessRegionFromFollowings,
@@ -14,6 +14,7 @@ export interface GuessNationProps {
     locale: string;
     beInstance: AxiosInstanceForBe;
     githubInstance: AxiosInstanceForGithub;
+    deepSeekInstance: AxiosInstanceForDeepSeek;
     userData: UserDataProps;
     beUrl: string;
     beToken: string;
@@ -70,6 +71,7 @@ export const guessRegion = async ({
     userData,
     beInstance,
     githubInstance,
+    deepSeekInstance,
     beUrl,
     beToken,
 }: GuessNationProps): Promise<NationData> => {
@@ -81,15 +83,15 @@ export const guessRegion = async ({
     }
     try {
         if (userData.followers > 50000) {
-            const dataFromGLM = await guessRegionFromGLM(userData.login, beInstance);
+            const dataFromGLM = await guessRegionFromGLM(userData.login, deepSeekInstance);
             if (dataFromGLM?.nationISO) return await checkAndUpdateBeData(dataFromGLM, dataFromBe, beInstance);
         }
 
-        const dataFromReadme = await guessRegionFromReadme(userData, beInstance, githubInstance);
+        const dataFromReadme = await guessRegionFromReadme(userData, deepSeekInstance, githubInstance);
         if (dataFromReadme.nationISO) return await checkAndUpdateBeData(dataFromReadme, dataFromBe, beInstance);
 
         if (userData.followers < 40 && userData.location) {
-            const nationISO = parseStringToCodeBlockLike(await syncChatFromDeepSeek(`请你告诉我这个位置信息对应的国家在哪里${userData.location}，你只需要返回这个国家对应的 ISO 代码并将他包裹在一个代码块中即可，不需要多余返回任何内容`, beInstance));
+            const nationISO = parseStringToCodeBlockLike(await syncChatFromDeepSeek(`请你告诉我这个位置信息对应的国家在哪里${userData.location}，你只需要返回这个国家对应的 ISO 代码即可，不需要多余返回任何内容`, deepSeekInstance));
             console.log(nationISO)
             return await checkAndUpdateBeData({
                 nationISO: nationISO,
@@ -99,10 +101,10 @@ export const guessRegion = async ({
             }, dataFromBe, beInstance);
         }
 
-        const dataFromFollowers = await guessRegionFromFollowersBetter(userData, beInstance, githubInstance, beUrl, beToken);
+        const dataFromFollowers = await guessRegionFromFollowersBetter(userData, deepSeekInstance, githubInstance, beUrl, beToken);
         if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
 
-        const dataFromFollowings = await guessRegionFromFollowings(userData, beInstance, githubInstance);
+        const dataFromFollowings = await guessRegionFromFollowings(userData, deepSeekInstance, githubInstance);
         if (dataFromFollowings.nationISO) return await checkAndUpdateBeData(dataFromFollowings, dataFromBe, beInstance);
     } catch (error) {
         console.log(error)

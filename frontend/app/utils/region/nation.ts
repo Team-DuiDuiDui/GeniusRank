@@ -1,5 +1,5 @@
 import { streamChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList } from "~/api/backend/chat";
-import { AxiosInstanceForBe } from "~/api/backend/instance";
+import { AxiosInstanceForDeepSeek } from "~/api/backend/instance";
 import { AxiosInstanceForGithub } from "../../api/github/instance";
 import { handleClientGithubGraphQLReq } from "../request";
 import { UserDataProps } from "./main";
@@ -21,7 +21,7 @@ const defaultValue: NationData = {
  */
 export const guessRegionFromFollowers = async (
     userData: UserDataProps,
-    beInstance: AxiosInstanceForBe,
+    deepSeekInstance: AxiosInstanceForDeepSeek,
     githubInstance: AxiosInstanceForGithub
 ): Promise<NationData> => {
     interface Followers {
@@ -77,7 +77,7 @@ export const guessRegionFromFollowers = async (
     let loopCount = 0
     while (loopCount < 3) {
         loopCount++;
-        const resultJSON = await syncChatForNationFromUserList(processedData.toString(), beInstance);
+        const resultJSON = await syncChatForNationFromUserList(processedData.toString(), deepSeekInstance);
         if (resultJSON.nationISO) return { ...resultJSON, confidence: data.length / (userData.followers > 80 ? 80 : userData.followers), login: userData.login, message: "user.info.from_followers_and_followings" };
     }
     return defaultValue
@@ -93,7 +93,7 @@ const prompt = `
 
 export const guessRegionFromFollowersBetter = async (
     userData: UserDataProps,
-    beInstance: AxiosInstanceForBe,
+    deepSeekInstance: AxiosInstanceForDeepSeek,
     githubInstance: AxiosInstanceForGithub,
     beUrl: string,
     beToken: string,
@@ -160,7 +160,7 @@ export const guessRegionFromFollowersBetter = async (
  */
 export const guessRegionFromFollowings = async (
     userData: UserDataProps,
-    beInstance: AxiosInstanceForBe,
+    deepSeekInstance: AxiosInstanceForDeepSeek,
     githubInstance: AxiosInstanceForGithub,
 ): Promise<NationData> => {
     interface Following {
@@ -223,7 +223,7 @@ export const guessRegionFromFollowings = async (
     let loopCount = 0
     while (loopCount < 3) {
         loopCount++;
-        const resultJSON = await syncChatForNationFromUserList(processedData.toString(), beInstance);
+        const resultJSON = await syncChatForNationFromUserList(processedData.toString(), deepSeekInstance);
         if (resultJSON.nationISO) return { ...resultJSON, confidence: data.length / (userData.followings > 80 ? 80 : userData.followings), login: userData.login, message: "user.info.from_followers_and_followings" };
     }
     return defaultValue
@@ -231,7 +231,7 @@ export const guessRegionFromFollowings = async (
 
 export const guessRegionFromReadme = async (
     userData: UserDataProps,
-    beInstance: AxiosInstanceForBe,
+    deepSeekInstance: AxiosInstanceForDeepSeek,
     githubInstance: AxiosInstanceForGithub,
 ): Promise<NationData> => {
     const branchQuery = `
@@ -278,12 +278,12 @@ export const guessRegionFromReadme = async (
     let loopCount = 0
     while (loopCount < 3) {
         loopCount++;
-        const resultJSON = await syncChatForNationFromReadme(readme.toString(), beInstance);
+        const resultJSON = await syncChatForNationFromReadme(readme.toString(), deepSeekInstance);
         if (resultJSON.nationName) return { ...resultJSON, confidence: 0.99, login: userData.login, message: "user.info.from_readme" };
     }
     return defaultValue;
 }
 
-export const guessRegionFromGLM = async (userName: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
-    return { ...await syncChatForNationFromGLM(userName, beInstance), login: userName, confidence: 0.7, message: 'user.info.from_glm' };
+export const guessRegionFromGLM = async (userName: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
+    return { ...await syncChatForNationFromGLM(userName, deepSeekInstance), login: userName, confidence: 0.7, message: 'user.info.from_glm' };
 }

@@ -11,6 +11,7 @@ interface Env {
     GITHUB_CLIENT_ID: string;
     GITHUB_CLIENT_SECRET: string;
     GITHUB_ACCESS_TOKEN: string;
+    DEEPSEEK_API_KEY: string;
 }
 
 type Cloudflare = Omit<PlatformProxy<Env>, 'dispose'>;

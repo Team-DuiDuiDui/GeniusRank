@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs, redirect, json } from "@remix-run/cloudflare";
 import axios, { AxiosError } from "axios";
-import { createInstanceForBe } from "~/api/backend/instance";
+import { createInstanceForBe, createInstanceForDeepSeek } from "~/api/backend/instance";
 import { gqlUser } from "~/api/github/graphql/gqlUser.server";
 import { createInstanceForGithub } from "~/api/github/instance";
 import { user, lng } from "~/cookie";
@@ -31,6 +31,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
             const { data } = await user.getData();
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
+            const deepSeekInstance = createInstanceForDeepSeek(context.cloudflare.env.DEEPSEEK_API_KEY);
             let nationData = {
                 nationISO: '',
                 message: t('user.info.from_followers_and_followings'),
@@ -48,6 +49,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                     },
                     beInstance,
                     githubInstance,
+                    deepSeekInstance,
                     beUrl: context.cloudflare.env.BASE_URL,
                     beToken: cookie.be_token,
                 });
