@@ -64,12 +64,12 @@ public class CacheUtil<T> {
      * @param types   用户类型列表，如果为 null 或空列表则不根据类型筛选。
      * @return GitHub 用户分数排名响应 DTO 列表，如果缓存中不存在则返回 null。
      */
-    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRankFromCache(List<String> nations, List<String> types) {
+    public List<GithubUserScoreRankRespDTO> getGithubUserScoreRankFromCache(List<String> nations, List<String> types, Integer size, Integer page) {
         String key;
         if (types!= null &&!types.isEmpty()) {
-            key = String.format(SCORE_RANK_NATION_TYPE_KEY, nations, types);
+            key = String.format(SCORE_RANK_NATION_TYPE_KEY, nations, types, size, page);
         } else {
-            key = String.format(SCORE_RANK_NATION_KEY, nations);
+            key = String.format(SCORE_RANK_NATION_KEY, nations, size, page);
         }
 
         String json = redisTemplate.opsForValue().get(key);
@@ -85,12 +85,12 @@ public class CacheUtil<T> {
      * @param nations       国家名称列表，如果为 null 或空列表则不根据国家筛选。
      * @param types         用户类型列表，如果为 null 或空列表则不根据类型筛选。
      */
-    public void setGithubUserScoreRankToCache(List<GithubUserScoreRankRespDTO> scoreRankList, List<String> nations, List<String> types) {
+    public void setGithubUserScoreRankToCache(List<GithubUserScoreRankRespDTO> scoreRankList, List<String> nations, List<String> types, Integer size, Integer page) {
         String key;
         if (types!= null &&!types.isEmpty()) {
-            key = String.format(SCORE_RANK_NATION_TYPE_KEY, nations, types);
+            key = String.format(SCORE_RANK_NATION_TYPE_KEY, nations, types, size, page);
         } else {
-            key = String.format(SCORE_RANK_NATION_KEY, nations);
+            key = String.format(SCORE_RANK_NATION_KEY, nations, size, page);
         }
 
         redisTemplate.opsForValue().set(key, JSON.toJSONString(scoreRankList), USER_SCORE_RANK_EXPIRE_TIME, TimeUnit.SECONDS);

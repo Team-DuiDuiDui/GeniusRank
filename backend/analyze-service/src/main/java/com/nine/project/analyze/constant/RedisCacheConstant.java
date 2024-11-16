@@ -37,8 +37,8 @@ public class RedisCacheConstant {
      */
     public static final long USER_SCORE_RANK_EXPIRE_TIME = 10 * 60;
 
-    public static final String SCORE_RANK_NATION_KEY = "general-project:user-score-rank:nation:%s";
-    public static final String SCORE_RANK_NATION_TYPE_KEY = "general-project:user-score-rank:type:%s-%s";
+    public static final String SCORE_RANK_NATION_KEY = "general-project:user-score-rank:nation:%s-%s-%s";
+    public static final String SCORE_RANK_NATION_TYPE_KEY = "general-project:user-score-rank:type:%s-%s-%s-%s";
 
     /**
      * 用户类型统计
