@@ -15,7 +15,7 @@ GitHub 用户数据查看、分析、国籍猜测与信息卡片展示
 
 GeniusRank 是一个开发者评估应用，致力于为用户提供 GitHub 用户数据查看、分析、评价与国籍猜测等服务。
 
--   GeniusRank 专注于对 GitHub 上的开发者进行全面的能力评估和国籍猜测。在开发者能力评估方面，通过分析项目重要程度以及开发者在项目中的贡献度，采用类似 Google 搜索的 PageRank 机制，指数退避算法和 osu 的 pp 算法对开发者技术能力进行评价和评级。
+-   GeniusRank 专注于对 GitHub 上的开发者进行全面的能力评估和国籍猜测。在开发者能力评估方面，通过分析项目重要程度以及开发者在项目中的贡献度，采用类似 Google 搜索的 PageRank 机制，指数退避算法和 OSU 的 PP 算法对开发者技术能力进行评价和评级。
 -   GeniusRank 接入了 ChatGLM 大模型，对于开发者的国籍信息，若其 Profile 中未明确写明，可通过其关系网络进行猜测。
 -   GeniusRank 提供排行榜查看，可根据开发者的领域进行搜索匹配，并按 TalentRank 排序，Nation 可作为可选筛选项，方便用户仅查看特定国家 / 地区的开发者。
 -   GeniusRank 提供分数卡片导出，支持展示自己的分数和评级
@@ -160,8 +160,8 @@ GeniusRank 前端及其服务端使用 Remix.js，后端使用 Spring-Cloud 作�
 技术架构涵盖了 SpringBoot 3、SpringCloudAlibaba、Nacos、Sentinel、Skywalking、RocketMQ 5.x、Redis、MySQL、EasyExcel、Redisson 等技术。
 框架技术和版本号关系如下表格所示。
 
-| 序号 | 技术                | 名称               | 版本           | 官网                                            |
-| ---- | ------------------- | ------------------ | -------------- | ----------------------------------------------- |
+| 序号 | 技术                | 名称               | 版本           | 官网                                              |
+| ---- | ------------------- | ------------------ | -------------- |-------------------------------------------------|
 | 1    | Spring Boot         | 基础框架           | 3.0.7          | https://spring.io/projects/spring-boot          |
 | 2    | SpringCloud Alibaba | 分布式框架         | 2022.0.0.0-RC2 | https://github.com/alibaba/spring-cloud-alibaba |
 | 3    | SpringCloud Gateway | 网关框架           | 2022.0.3       | https://spring.io/projects/spring-cloud-gateway |
@@ -175,7 +175,7 @@ GeniusRank 前端及其服务端使用 Remix.js，后端使用 Spring-Cloud 作�
 | 11   | HuTool              | 小而全的工具集项目 | 5.8.27         | https://hutool.cn                               |
 | 12   | Maven               | 项目构建管理       | 3.9.1          | http://maven.apache.org                         |
 | 13   | Redisson            | Redis Java 客户端  | 3.27.2         | [https://redisson.org](https://redisson.org/)   |
-| 14   | Sentinel            | 流控防护框架       | 1.8.6          | https://github.com/alibaba/Sentine              |
+| 14   | Sentinel            | 流控防护框架       | 1.8.6          | https://github.com/alibaba/Sentinel             |
 
 # 🧑‍💻 贡献者
 
