@@ -25,6 +25,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
     const { t, i18n } = useTranslation();
     const fetcher = useFetcher();
+    const themeFetcher = useFetcher();
     const params = useLocation();
     const { toggleColorScheme } = useMantineColorScheme();
     const parentRef = useRef(null);
@@ -98,7 +99,7 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
                     method="post"
                     onClick={(e) => {
                         e.preventDefault();
-                        fetcher.submit({ doNotRedirect: true }, { method: 'post', action: '/theme' });
+                        themeFetcher.submit({ doNotRedirect: true }, { method: 'post', action: '/theme' });
                         toggleColorScheme();
                     }}>
                     <button
@@ -110,8 +111,14 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
                 </Form>
                 <div className="flex justify-center items-center gap-4">
                     <div className="md:flex flex-col items-end h-full hidden">
-                        <div className="text-md font-semibold">{userData.name || userData.login}</div>
-                        {userData.name ? <div className="text-xs text-gray-950">{userData.login}</div> : <></>}
+                        <div className="text-md font-semibold dark:text-gray-200">
+                            {userData.name || userData.login}
+                        </div>
+                        {userData.name ? (
+                            <div className="text-xs text-gray-950 dark:text-gray-300">{userData.login}</div>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                     <Button
                         unstyled

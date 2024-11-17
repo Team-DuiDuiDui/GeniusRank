@@ -76,12 +76,12 @@ export default function Index() {
                 <h2 className="text-2xl">{t('description')}</h2>
                 <div className="flex flex-row gap-7">
                     <Link to="/user">
-                        <Button size="md" className="mt-4">
+                        <Button size="md" className="mt-4 transition-all">
                             {t('lookup_docs')}
                         </Button>
                     </Link>
                     <Link to="/ranking">
-                        <Button variant="default" size="md" className="mt-4">
+                        <Button variant="default" size="md" className="mt-4 transition-all">
                             {t('see_ranking')}
                         </Button>
                     </Link>

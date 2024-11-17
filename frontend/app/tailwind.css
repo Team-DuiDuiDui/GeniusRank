@@ -9,6 +9,12 @@
     .btn-800 {
         @apply bg-white text-gray-800 hover:bg-gray-200 dark:bg-slate-700 dark:text-gray-200 dark:hover:bg-slate-500 dark:hover:text-gray-200 transition-all;
     }
+    .btn-transparent {
+        @apply bg-transparent text-gray-800 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-white/20 dark:hover:text-gray-200 transition-all;
+    }
+    .btn-infoLink {
+        @apply bg-transparent text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-white/20 dark:hover:text-gray-200 transition-all;
+    }
 }
 html,
 body {

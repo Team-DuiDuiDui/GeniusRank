@@ -24,7 +24,7 @@ const UserScoreDetail: React.FC<userRepositoriesProps> = ({ scores, data, error 
                 {scores && !error && (
                     <div className="flex justify-end items-center p-2 gap-2">
                         <p className="border border-gray-500 rounded-md overflow-hidden w-fit flex flex-row">
-                            <span className="bg-gray-200 px-4 flex items-center text-gray-700">
+                            <span className="bg-gray-200 px-4 flex items-center text-gray-700 dark:text-gray-300 ">
                                 {t('user.score.copy_card')}
                             </span>
                             <input
@@ -38,7 +38,7 @@ const UserScoreDetail: React.FC<userRepositoriesProps> = ({ scores, data, error 
                                     <Tooltip label={copied ? t('user.score.copied') : t('user.score.copy')}>
                                         <button
                                             onClick={copy}
-                                            className="text-lg px-3 aspect-square hover:bg-gray-200 active:bg-gray-300 transition-all rounded-md">
+                                            className="text-lg px-3 aspect-square btn-transparent transition-all rounded-md">
                                             {copied ? <CheckOutlined className="text-green-400" /> : <CopyOutlined />}
                                         </button>
                                     </Tooltip>
@@ -49,7 +49,7 @@ const UserScoreDetail: React.FC<userRepositoriesProps> = ({ scores, data, error 
                                     href={`https://geniusrank.heuluck.top/card/${data.login}`}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="text-lg px-3 aspect-square hover:bg-gray-200 active:bg-gray-300 transition-all flex items-center justify-center rounded-md">
+                                    className="text-lg px-3 aspect-square btn-transparent flex items-center justify-center rounded-md">
                                     <LinkOutlined />
                                 </a>
                             </Tooltip>

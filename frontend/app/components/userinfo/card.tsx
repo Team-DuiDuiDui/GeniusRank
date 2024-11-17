@@ -49,7 +49,7 @@ const CardScrollable = ({ title, children, data, error, reload, isBackendRequest
 export const Card = ({ title, children, data, error, isBackendRequest, reload }: CardProps) => {
     return (
         <CardWithNoShrink containerClass="pt-0">
-            <h2 className="text-lg font-bold top-0 my-4 bg-white py-1 transition-all flex-shrink">
+            <h2 className="text-lg font-bold top-0 my-4 bg-white dark:bg-slate-600 py-1 transition-all flex-shrink">
                 {title}
                 <span className="font-normal ml-4 text-base">
                     {!data && !error && <Loader size={16} />}

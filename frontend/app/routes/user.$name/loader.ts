@@ -15,7 +15,6 @@ export default async function loader({ request, params, context }: LoaderFunctio
         const user = new GithubUserServerOnly(params.name, context.cloudflare.env.GITHUB_ACCESS_TOKEN);
         try {
             const data = (await user.getUser())!;
-            console.log('LOAD1');
             return json(
                 {
                     baseUrl: context.cloudflare.env.BASE_URL,
