@@ -1,7 +1,7 @@
-import { GithubFilled } from '@ant-design/icons';
-import { Avatar, Button, Divider, Drawer, SegmentedControl } from '@mantine/core';
+import { GithubFilled, MoonOutlined, SunOutlined } from '@ant-design/icons';
+import { Avatar, Button, Divider, Drawer, SegmentedControl, useMantineColorScheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Link, useFetcher, useLocation, useNavigate } from '@remix-run/react';
+import { Form, Link, useFetcher, useLocation, useNavigate } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 
 interface DrawerProps {
@@ -27,6 +27,7 @@ const SettingDrawer: React.FC<DrawerProps> = ({
     const params = useLocation();
     const navigate = useNavigate();
     const [logOut, { toggle: toggleLogOut }] = useDisclosure();
+    const { toggleColorScheme } = useMantineColorScheme();
     const fetcher = useFetcher();
     return (
         <Drawer opened={opened} onClose={close} className="dark:bg-slate-900">
@@ -36,13 +37,31 @@ const SettingDrawer: React.FC<DrawerProps> = ({
                     <p className="text-lg font-bold">{username ?? userLogin ?? t('drawer.anonymous')}</p>
                     {userLogin && <p className="text-sm text-gray-500">{userEmail ?? userLogin}</p>}
                 </div>
+                <Form
+                    className="lg:hidden"
+                    action="/theme"
+                    method="post"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        fetcher.submit({ doNotRedirect: true }, { method: 'post', action: '/theme' });
+                        toggleColorScheme();
+                    }}>
+                    <button
+                        type="submit"
+                        className="inline-block align-bottom p-2 hover:bg-gray-200 rounded-md dark:bg-transparent dark:text-gray-300 dark:hover:bg-white/20 dark:hover:text-gray-300 transition-all">
+                        <SunOutlined className="block dark:hidden" />
+                        <MoonOutlined className="hidden dark:block" />
+                    </button>
+                </Form>
             </div>
             <div className="flex flex-col gap-5 h-full mt-8 z-50">
                 <div className="flex flex-col items-center gap-1 justify-evenly w-full md:hidden">
                     <Link
                         to="/"
                         className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center ${
-                            params.pathname === '/' ? 'bg-gray-200' : 'hover:text-gray-700 hover:bg-gray-200'
+                            params.pathname === '/'
+                                ? 'bg-gray-200 dark:bg-white/10'
+                                : 'hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-white/20'
                         }`}>
                         <span className="text-lg">{t('index')}</span>
                     </Link>
@@ -50,8 +69,8 @@ const SettingDrawer: React.FC<DrawerProps> = ({
                         to="/user"
                         className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center ${
                             params.pathname.startsWith('/user') || params.pathname.startsWith('/detail')
-                                ? 'bg-gray-200'
-                                : 'hover:text-gray-700 hover:bg-gray-200'
+                                ? 'bg-gray-200 dark:bg-white/10'
+                                : 'hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-white/20'
                         }`}>
                         <span className="text-lg">{t('searching')}</span>
                     </Link>
@@ -59,8 +78,8 @@ const SettingDrawer: React.FC<DrawerProps> = ({
                         to="/ranking"
                         className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center ${
                             params.pathname.startsWith('/ranking')
-                                ? 'bg-gray-200'
-                                : 'hover:text-gray-700 hover:bg-gray-200'
+                                ? 'bg-gray-200 dark:bg-white/10'
+                                : 'hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-white/20'
                         }`}>
                         <span className="text-lg">{t('ranking.title')}</span>
                     </Link>
