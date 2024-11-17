@@ -14,12 +14,15 @@ import { useDisclosure } from '@mantine/hooks';
 import { prefs, user } from './cookie';
 import SettingDrawer from './components/drawer';
 import Header from './components/header';
+import { useEffect } from 'react';
 
 export const handle = { i18n: ['translation'] };
 
 export function Layout({ children }: { children: React.ReactNode }) {
     const loaderData = useRouteLoaderData<typeof loader>('root');
-    console.log(loaderData?.prefersColorScheme);
+    useEffect(() => {
+        localStorage.setItem('mantine-color-scheme-value', loaderData?.prefersColorScheme ?? 'light');
+    }, [loaderData?.prefersColorScheme]);
 
     return (
         <html lang={loaderData?.locale ?? 'en'} className={loaderData?.prefersColorScheme ?? 'light'}>
@@ -31,9 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <ColorSchemeScript />
             </head>
             <body>
-                <MantineProvider
-                    theme={loaderData?.prefersColorScheme ?? 'light'}
-                    defaultColorScheme={loaderData?.prefersColorScheme ?? 'light'}>
+                <MantineProvider defaultColorScheme={loaderData?.prefersColorScheme ?? 'light'}>
                     {children}
                 </MantineProvider>
                 <ScrollRestoration />

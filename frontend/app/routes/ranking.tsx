@@ -192,9 +192,9 @@ export default function Ranking() {
                 </UserAccordion>
             </div>
             <div className="flex gap-2 items-center mt-20">
-                <span className="text-slate-600 text-base">{t('user.info.total_users_l1')}</span>
-                <span className="text-slate-900 text-xl">{loaderData.ranking.totalCount}</span>
-                <span className="text-slate-600 text-base">{t('user.info.total_users_l2')}</span>
+                <span className="text-slate-600 dark:text-gray-300 text-base">{t('user.info.total_users_l1')}</span>
+                <span className="text-slate-900 dark:text-gray-200 text-xl">{loaderData.ranking.totalCount}</span>
+                <span className="text-slate-600 dark:text-gray-300 text-base">{t('user.info.total_users_l2')}</span>
             </div>
         </div>
     );

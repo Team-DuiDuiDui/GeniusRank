@@ -70,7 +70,7 @@ export default function Index() {
 
     return (
         <>
-            <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2 relative">
+            <div className="px-8 py-12 bg-blue-400/70 dark:bg-slate-700 text-white flex flex-col justify-center items-center gap-2 relative">
                 <LoadingLayout />
                 <h1 className="text-6xl font-bold">Genius Rank</h1>
                 <h2 className="text-2xl">{t('description')}</h2>

@@ -87,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
                         value={t('opposite_lng')}
                         variant="default"
                         size="xs"
-                        className="bg-white text-gray-800 hover:bg-gray-200 dark:bg-slate-800 dark:border-blue-900 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-gray-300 transition-all">
+                        className="btn-900 dark:border-blue-900">
                         <TranslationOutlined className="mr-1 align-text-bottom" />
                         {t('opposite_lng_name')}
                     </Button>

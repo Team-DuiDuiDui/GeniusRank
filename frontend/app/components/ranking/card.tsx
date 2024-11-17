@@ -23,13 +23,20 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style, disabled })
     const { t } = useTranslation();
 
     return (
-        <Accordion.Item value={userInfo.login} className="bg-white opacity-100">
-            <Accordion.Control icon={<Avatar src={userInfo.avatar_url} />} disabled={disabled} className="opacity-100">
+        <Accordion.Item value={userInfo.login} className="bg-white dark:bg-slate-700 opacity-100">
+            <Accordion.Control
+                icon={<Avatar src={userInfo.avatar_url} />}
+                disabled={disabled}
+                className="opacity-100 dark:hover:bg-slate-600 ">
                 <div className="flex flex-row items-center justify-between" style={style}>
                     <div className="flex flex-row items-center h-12">
                         <div className="flex flex-col">
-                            <div className="text-xl font-bold">{userInfo.name ?? userInfo.login}</div>
-                            {userInfo.name && <div className="text-sm text-gray-500">{userInfo.login}</div>}
+                            <div className="text-xl font-bold dark:text-gray-100">
+                                {userInfo.name ?? userInfo.login}
+                            </div>
+                            {userInfo.name && (
+                                <div className="text-sm text-gray-500 dark:text-gray-300">{userInfo.login}</div>
+                            )}
                         </div>
                     </div>
                     <div className="ml-auto flex flex-row items-center justify-around mx-5 gap-4">
@@ -42,8 +49,8 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style, disabled })
                                 e.stopPropagation();
                             }}
                             to={`/user/${userInfo.login}`}
-                            className="hover:bg-gray-300 p-2 rounded-md transition-all">
-                            <LinkOutlined className="text-2xl text-gray-900" />
+                            className="p-2 rounded-md transition-all btn-800 bg-transparent">
+                            <LinkOutlined className="text-2xl text-gray-900 dark:text-gray-200" />
                         </Link>
                     </div>
                 </div>
@@ -54,15 +61,17 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style, disabled })
                         {score.totalScore}
                         <span className="text-xl font-normal ml-3">/100</span>
                     </p>
-                    <BarChart
-                        className="m-auto"
-                        h={180}
-                        w={300}
-                        series={[{ name: 'value', color: '#1e90ff' }]}
-                        data={parseScoreData(score, t)}
-                        withBarValueLabel
-                        dataKey="name"
-                    />
+                    {!disabled && (
+                        <BarChart
+                            className="m-auto"
+                            h={180}
+                            w={300}
+                            series={[{ name: 'value', color: '#1e90ff' }]}
+                            data={parseScoreData(score, t)}
+                            withBarValueLabel
+                            dataKey="name"
+                        />
+                    )}
                 </div>
             </Accordion.Panel>
         </Accordion.Item>
@@ -77,7 +86,7 @@ const UserAccordion: React.FC<{
 }> = ({ children, style, className, disabledChevron }) => {
     return (
         <Accordion
-            className={`w-10/12 min-w-[375px] md:min-w-[511px] md:w-1/2 lg:w-1/3 bg-white box-border ${className}`}
+            className={`w-10/12 min-w-[375px] md:min-w-[511px] md:w-1/2 lg:w-1/3 box-border ${className}`}
             variant="contained"
             radius="lg"
             classNames={disabledChevron ? { chevron: 'hidden w-0 h-0' } : {}}
