@@ -1,13 +1,13 @@
-import { LoaderFunctionArgs, redirect, json } from "@remix-run/cloudflare";
-import axios, { AxiosError } from "axios";
-import { createInstanceForBe, createInstanceForDeepSeek } from "~/api/backend/instance";
-import { getUserNation } from "~/api/backend/region";
-import { gqlUser } from "~/api/github/graphql/gqlUser.server";
-import { createInstanceForGithub } from "~/api/github/instance";
-import { user, lng } from "~/cookie";
-import i18nServer from "~/modules/i18n.server";
-import { cacheHeader } from "~/utils/cacheHeader";
-import { guessRegion } from "~/utils/region/main";
+import { LoaderFunctionArgs, redirect, json } from '@remix-run/cloudflare';
+import axios, { AxiosError } from 'axios';
+import { createInstanceForBe, createInstanceForDeepSeek } from '~/api/backend/instance';
+import { getUserNation } from '~/api/backend/region';
+import { gqlUser } from '~/api/github/graphql/gqlUser.server';
+import { createInstanceForGithub } from '~/api/github/instance';
+import { user, lng } from '~/cookie';
+import i18nServer from '~/modules/i18n.server';
+import { cacheHeader } from '~/utils/cacheHeader';
+import { guessRegion } from '~/utils/region/main';
 
 export default async function loader({ request, params, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
@@ -41,7 +41,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 followings: data.user.following,
                 readme: data.user.repository,
                 login: data.user.login,
-            }
+            };
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
             const deepSeekInstance = createInstanceForDeepSeek(context.cloudflare.env.DEEPSEEK_API_KEY);
             let nationData = {
@@ -58,7 +58,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                         locale,
                         userData: {
                             t,
-                            ...regionParamCopy
+                            ...regionParamCopy,
                         },
                         beInstance,
                         githubInstance,
@@ -89,29 +89,35 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 const scores = await user.getUserScores();
                 console.log('User Scores Time:', new Date().getTime() - localTime);
                 console.log('Total Time:', new Date().getTime() - time);
-                return json({
-                    data,
-                    regionParamCopy: nationDataChecked ? null : regionParamCopy,
-                    title: `${params?.name ?? ''} | Genius Rank`,
-                    description: t('user.description'),
-                    beToken: cookie.be_token,
-                    githubToken: cookie.access_token,
-                    nationData,
-                    scores,
-                    scoresError: null,
-                }, cacheHeader(300));
+                return json(
+                    {
+                        data,
+                        regionParamCopy: nationDataChecked ? null : regionParamCopy,
+                        title: `${params?.name ?? ''} | Genius Rank`,
+                        description: t('user.description'),
+                        beToken: cookie.be_token,
+                        githubToken: cookie.access_token,
+                        nationData,
+                        scores,
+                        scoresError: null,
+                    },
+                    cacheHeader(300)
+                );
             } catch (e) {
-                return json({
-                    data,
-                    regionParamCopy: nationDataChecked ? null : regionParamCopy,
-                    title: `${params?.name ?? ''} | Genius Rank`,
-                    description: t('user.description'),
-                    beToken: cookie.be_token,
-                    githubToken: cookie.access_token,
-                    nationData,
-                    scores: null,
-                    scoresError: e as AxiosError,
-                }, cacheHeader(300));
+                return json(
+                    {
+                        data,
+                        regionParamCopy: nationDataChecked ? null : regionParamCopy,
+                        title: `${params?.name ?? ''} | Genius Rank`,
+                        description: t('user.description'),
+                        beToken: cookie.be_token,
+                        githubToken: cookie.access_token,
+                        nationData,
+                        scores: null,
+                        scoresError: e as AxiosError,
+                    },
+                    cacheHeader(300)
+                );
             }
         } catch (e) {
             console.log(e);

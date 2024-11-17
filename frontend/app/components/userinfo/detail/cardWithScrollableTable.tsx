@@ -50,7 +50,7 @@ const CardWithScrollableTableDetail = <T,>({
             <div className="overflow-y-auto max-h-max flex-grow scrollbar" onScroll={handleScroll}>
                 <Table className="w-full dark:hidden" horizontalSpacing="sm" verticalSpacing="sm" striped>
                     <Table.Thead>
-                        <Table.Tr className="mb-6 sticky top-0 font-normal bg-white pb-3">
+                        <Table.Tr className="mb-6 sticky top-0 font-normal bg-white dark:bg-slate-600 pb-3">
                             {columns.map((column, index) => (
                                 <Table.Th key={index}>{column}</Table.Th>
                             ))}
@@ -73,7 +73,7 @@ const CardWithScrollableTableDetail = <T,>({
                     striped
                     stripedColor="rgb(51 65 85)">
                     <Table.Thead>
-                        <Table.Tr className="mb-6 sticky top-0 font-normal bg-white pb-3">
+                        <Table.Tr className="mb-6 sticky top-0 font-normal bg-white dark:bg-slate-600 pb-3">
                             {columns.map((column, index) => (
                                 <Table.Th key={index}>{column}</Table.Th>
                             ))}

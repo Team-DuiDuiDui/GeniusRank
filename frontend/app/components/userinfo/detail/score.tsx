@@ -24,7 +24,7 @@ const UserScoreDetail: React.FC<userRepositoriesProps> = ({ scores, data, error 
                 {scores && !error && (
                     <div className="flex justify-end items-center p-2 gap-2">
                         <p className="border border-gray-500 rounded-md overflow-hidden w-fit flex flex-row">
-                            <span className="bg-gray-200 px-4 flex items-center text-gray-700 dark:text-gray-300 ">
+                            <span className="bg-gray-200 dark:bg-slate-700 dark:text-gray-300 px-4 flex items-center text-gray-700">
                                 {t('user.score.copy_card')}
                             </span>
                             <input
