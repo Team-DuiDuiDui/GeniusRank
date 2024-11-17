@@ -1,6 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 
-export interface AxiosInstanceForBe extends AxiosInstance {}
+export interface AxiosInstanceForBe extends AxiosInstance { }
+
+export interface AxiosInstanceForDeepSeek extends AxiosInstance { }
 
 /**
  * 创建后端 axios 实例
@@ -12,8 +14,18 @@ export const createInstanceForBe = (baseUrl: string, token?: string): AxiosInsta
         baseURL: baseUrl,
         headers: token
             ? {
-                  Authorization: token,
-              }
-            : {},
+                Authorization: token,
+            }
+            :
+            {},
     });
 };
+
+export const createInstanceForDeepSeek = (token: string): AxiosInstanceForDeepSeek => {
+    return axios.create({
+        baseURL: "https://api.deepseek.com/",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+}

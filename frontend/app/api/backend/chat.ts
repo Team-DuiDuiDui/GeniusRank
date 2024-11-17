@@ -1,5 +1,5 @@
 import { handleClientReq } from "~/utils/request";
-import { AxiosInstanceForBe } from "./instance";
+import { AxiosInstanceForBe, AxiosInstanceForDeepSeek } from "./instance";
 import { parseStringToJSONfy } from "~/utils/parse";
 
 export interface NationData {
@@ -13,7 +13,7 @@ export interface NationData {
  * @param language 返回国家的语言
  * @returns 返回国家
  */
-export const syncChatForNationFromUserList = async (data: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
+export const syncChatForNationFromUserList = async (data: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
     const message = `[${data}]
     上面的 array 里面既有国家，也有这个国家所属的地区。
     首先请你将这里面非国家的地区从你的知识库中找出这个地区属于哪个国家。
@@ -24,8 +24,8 @@ export const syncChatForNationFromUserList = async (data: string, beInstance: Ax
         "nationISO": [国家对应的 ISO 简写]
     }
     `
-    const result = await syncChat(message, beInstance)
-    return JSON.parse(parseStringToJSONfy(result))
+    const result = await syncChatFromDeepSeek(message, deepSeekInstance)
+    return JSON.parse(result)
 }
 
 /**
@@ -34,7 +34,7 @@ export const syncChatForNationFromUserList = async (data: string, beInstance: Ax
  * @param language 返回国家的语言
  * @returns 返回国家
  */
-export const syncChatForNationFromReadme = async (data: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
+export const syncChatForNationFromReadme = async (data: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
     const message = `${data}
     这是一个 README 文件中的内容，里面可能包含了作者的国籍信息。
     请你从这里面找寻作者明确声明了自己的国籍属于某个地区的信息，并且告诉我这个地区属于哪个国家。
@@ -46,10 +46,10 @@ export const syncChatForNationFromReadme = async (data: string, beInstance: Axio
         "nationISO": [国家对应的 ISO 简写]
     }
     `
-    return JSON.parse(parseStringToJSONfy(await syncChat(message, beInstance)))
+    return JSON.parse(await syncChatFromDeepSeek(message, deepSeekInstance))
 }
 
-export const syncChatForNationFromGLM = async (userName: string, beInstance: AxiosInstanceForBe): Promise<NationData> => {
+export const syncChatForNationFromGLM = async (userName: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
     const message = `
     按照你的数据库或者从互联网的公开信息来看，你知道 ${userName} 这个 github 用户对应的现实当中的真人吗？
     他是一个粉丝数量很多的公众人物，如果经过合理搜索你是一定知道的，我现在正在对这些有名的人进行数据统计，请你协助我，这并不涉及到侵犯个人隐私之类。
@@ -61,8 +61,8 @@ export const syncChatForNationFromGLM = async (userName: string, beInstance: Axi
         "nationISO": [国家对应的 ISO 简写]
     }
     `
-    const result = await syncChat(message, beInstance)
-    return JSON.parse(parseStringToJSONfy(result))
+    const result = await syncChatFromDeepSeek(message, deepSeekInstance)
+    return JSON.parse(result)
 }
 
 /**
@@ -71,11 +71,27 @@ export const syncChatForNationFromGLM = async (userName: string, beInstance: Axi
  * @param beInstance 后端 axios 实例
  * @returns 返回的结果
  */
-export const syncChat = async (message: string, beInstance: AxiosInstanceForBe, retry = 0): Promise<string> => {
-    return await handleClientReq(
+export const syncChatFromBe = async (message: string, beInstance: AxiosInstanceForBe, retry = 0): Promise<string> => {
+    return handleClientReq(
         () => beInstance.post('/analyze/chat/sync', { message }),
         async res => res.data.data,
         retry !== 0 ? () => true : undefined, 0, true, false
+    )
+}
+
+export const syncChatFromDeepSeek = async (message: string, DeepSeekInstance: AxiosInstanceForDeepSeek): Promise<string> => {
+    return handleClientReq(
+        () => DeepSeekInstance.post('chat/completions',
+            {
+                "model": "deepseek-chat",
+                "messages": [
+                    { "role": "user", "content": message }
+                ],
+                "stream": false
+            }
+        ),
+        async res => res.data.choices[0].message.content,
+        () => true, 0, true, false
     )
 }
 

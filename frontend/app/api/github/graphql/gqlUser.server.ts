@@ -29,11 +29,32 @@ query($username:String!,$count:Int!){
         name
         login
         bio
-        followers{
+        followers(last: 80) {
+            nodes {
+                login
+                name
+                location
+                company
+                followers {
+                    totalCount
+                    }
+                following {
+                    totalCount
+                    }
+                }
             totalCount
         }
-        following{
-            totalCount
+        following(last: 80) {
+            nodes {
+                login
+                name
+                location
+                company
+                followers {
+                    totalCount
+                }
+            }
+            totalCount 
         }
         location
         company
@@ -163,7 +184,15 @@ query($username:String!,$count:Int!){
             totalCount
         }
     }
-}`,
+    user(login: $username) {
+    repository(name: $username) {
+            defaultBranchRef {
+                name
+            }
+        }
+    }
+}
+`,
             variables: { username: this.name, count: count },
         });
         this.dataDetail = res.data.data.user;
