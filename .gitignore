@@ -17,3 +17,5 @@ frontend/.wrangler/tmp
 *.iml
 /target/*
 /**/target/
+frontend/.vscode
+frontend/.yarn

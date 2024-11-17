@@ -1,18 +1,5 @@
 {
-    "react-i18n.i18nPaths": "app/locales",
-    "editor.formatOnSave": true,
-    "css.customData": [
-        ".vscode/tailwindcss.json"
-    ],
-    "cSpell.words": [
-        "countup",
-        "flowbite",
-        "geniusrank",
-        "loginbg",
-        "ratelimit",
-        "repoinfo",
-        "UTCZ"
-    ],
-    "svg.preview.background": "editor",
-    "references.preferredLocation": "view",
+    "i18n-ally.localesPaths": [
+        "app/locales"
+    ]
 }
