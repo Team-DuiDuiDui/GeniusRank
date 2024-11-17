@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, json } from "@remix-run/cloudflare";
-import { createInstanceForBe } from "~/api/backend/instance";
+import { createInstanceForBe, createInstanceForDeepSeek } from "~/api/backend/instance";
 import { UserDetail } from "~/api/github/graphql/typings/user";
 import { createInstanceForGithub } from "~/api/github/instance";
 import { user, lng } from "~/cookie";
@@ -7,11 +7,17 @@ import i18nServer from "~/modules/i18n.server";
 import { guessRegion } from "~/utils/region/main";
 
 export default async function action({ request, context }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const t = await i18nServer.getFixedT(request);
+    const userData = formData.get("userData")!;
+    const dataFromBe = formData.get("dataFromBe")!;
+    const deepSeekInstance = createInstanceForDeepSeek(
+        context.cloudflare.env.DEEPSEEK_API_KEY,
+    );
     const cookieHeader = request.headers.get('Cookie');
     const cookie = (await user.parse(cookieHeader)) || {};
     const githubInstance = createInstanceForGithub(cookie.access_token, 'Team-Duiduidui: Genius Rank', 'Bearer');
     const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
-    const t = await i18nServer.getFixedT(request);
     const body = await request.formData();
     const stringUserData = body.get('userData')?.toString();
     const locale = (await lng.parse(cookieHeader)) as string;

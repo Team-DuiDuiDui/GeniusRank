@@ -7,7 +7,8 @@ export const getRankings = (
     backEndInstance: AxiosInstanceForBe,
     nation: string | null,
     type: string | null,
-    size: number
+    size: number,
+    page: number | null,
 ): Promise<ScoreRankResp> => {
     return handleBackendReq(
         () =>
@@ -16,6 +17,7 @@ export const getRankings = (
                     ...(nation && { nation }),
                     ...(type && { type }),
                     ...(size && { size }),
+                    ...(page && { page }),
                 },
             }),
         (res) => res.data.data

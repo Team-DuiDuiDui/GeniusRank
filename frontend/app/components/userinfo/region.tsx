@@ -7,9 +7,11 @@ import { useTranslation } from "react-i18next";
 import { FetcherWithComponents } from "@remix-run/react";
 import { UserDetail } from "~/api/github/graphql/typings/user";
 import { useEffect, useState } from "react";
+import loader from "~/routes/detail.$name/loader";
 // import { interpolateColorsOfIcon } from '~/utils/chore';
 
 interface NationCardProps {
+    data: any;
     fetcher?: FetcherWithComponents<unknown>;
     userData?: Pick<UserDetail, "followers" | "following" | "login">;
     nationISO: string;
@@ -21,6 +23,7 @@ interface NationCardProps {
 }
 
 const UserNation: React.FC<NationCardProps> = ({
+    data,
     fetcher,
     userData,
     nationISO,
@@ -44,8 +47,11 @@ const UserNation: React.FC<NationCardProps> = ({
                 <fetcher.Form
                     method="post"
                     onSubmit={() => {
+                        const formData = new FormData();
+                        formData.append("userData", JSON.stringify(data.regionParamCopy));
+                        formData.append("dataFromBe", JSON.stringify(data.nationData));
                         fetcher.submit(
-                            {},
+                            formData,
                             {
                                 action: "/reset-fetcher",
                             },

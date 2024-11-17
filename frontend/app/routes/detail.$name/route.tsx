@@ -62,6 +62,7 @@ export default function User() {
                         <div className="flex gap-4 w-full h-40 items-start">
                             <UserInfoDetail data={user} />
                             <UserNation
+                                data={data}
                                 fetcher={fetcher}
                                 userData={{
                                     followers: user.followers,

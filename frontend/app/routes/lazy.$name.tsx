@@ -10,9 +10,8 @@ import i18nServer from "~/modules/i18n.server";
 import { guessRegion } from "~/utils/region/main";
 
 export const action = async (
-    { params, request, context }: ActionFunctionArgs,
+    { request, context }: ActionFunctionArgs,
 ) => {
-    console.log("params", params);
     const formData = await request.formData();
     const cookieHeader = request.headers.get("Cookie");
 

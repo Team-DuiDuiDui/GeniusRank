@@ -1,4 +1,4 @@
-import { Avatar, Select } from '@mantine/core';
+import { Avatar, Group, Pagination, Select } from '@mantine/core';
 import { json, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import { isRouteErrorResponse, Link, useLoaderData, useRouteError, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +17,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const nation = url.searchParams.get('nation');
     const cookieHeader = request.headers.get('Cookie');
+    const page = url.searchParams.get('page') ? parseInt(url.searchParams.get('page')!) : 1;
     const userCookie = (await user.parse(cookieHeader)) || {};
     const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL);
     const userInfo = {
@@ -34,7 +35,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     const type = url.searchParams.get('type');
     const t = await i18nServer.getFixedT(request);
     try {
-        const res = await getRankings(beInstance, nation, type, 20);
+        const res = await getRankings(beInstance, nation, type, 20, page);
         return json(
             {
                 userInfo,
@@ -43,6 +44,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                 description: t('ranking.description'),
                 type,
                 nation,
+                totalPage: Math.ceil(res.totalCount / 20),
             },
             { status: 200 }
         );
@@ -59,8 +61,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export default function Ranking() {
     const loaderData = useLoaderData<typeof loader>();
+    const totalPage = loaderData.totalPage;
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
+    const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
     const userInfo = loaderData.userInfo;
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.resp));
     const splicedData = (rankingData && rankingData.splice(0, Math.ceil(loaderData.ranking.resp.length / 2))) || '';
@@ -126,9 +130,8 @@ export default function Ranking() {
         <div className="my-12 mx-0 sm:mx-8 relative flex justify-center flex-col items-center">
             <LoadingLayout />
             <div
-                className={`flex ${
-                    loaderData.userInfo.login ? 'justify-between' : 'justify-center'
-                }  items-center relative w-full`}>
+                className={`flex ${loaderData.userInfo.login ? 'justify-between' : 'justify-center'
+                    }  items-center relative w-full`}>
                 {loaderData.userInfo.login && (
                     <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3"></div>
                 )}
@@ -184,7 +187,20 @@ export default function Ranking() {
                         rankingData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
                 </UserAccordion>
             </div>
-            <div className="flex gap-2 items-center mt-20">
+            {!(searchParams.get("nation") || searchParams.get("type")) &&
+                <div className="flex mt-8">
+                    <Pagination.Root total={totalPage} defaultValue={page} value={page}>
+                        <Group gap={5}>
+                            {Array.from({ length: totalPage }).map((_, index) => (
+                                <Pagination.Control key={index} value={index} component="a" href={`/ranking?page=${index+1}`} className={`${page === index + 1 ? "bg-slate-900 text-zinc-200 pointer-events-none" : ""}`}>
+                                    {index + 1}
+                                </Pagination.Control>
+                            ))}
+                        </Group>
+                    </Pagination.Root>
+                </div>
+            }
+            <div className="flex gap-2 items-center mt-12">
                 <span className="text-slate-600 text-base">{t('user.info.total_users_l1')}</span>
                 <span className="text-slate-900 text-xl">{loaderData.ranking.totalCount}</span>
                 <span className="text-slate-600 text-base">{t('user.info.total_users_l2')}</span>
