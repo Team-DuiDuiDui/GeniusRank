@@ -1,6 +1,16 @@
 spring:
   cloud:
     gateway:
+      # 网关全局跨域配置
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+        # 解决options请求被拦截的问题
+        add-to-simple-url-handler-mapping: true
       routes:
         - id: project-user
           uri: lb://project-user/api/user/**
@@ -17,6 +27,7 @@ spring:
                   - /api/user/loginByCode
                   - /api/user/login
                   - /api/user/forget-password
+                  - /api/user/loginByOAuth
 
         - id: project-common
           uri: lb://project-user/api/common/**
@@ -26,6 +37,7 @@ spring:
             - name: TokenValidate
               args:
                 whitePathList:
+                  - /api/common/time
                   - /api/common/ping
                   - /api/common/files/**
 
@@ -38,6 +50,13 @@ spring:
               args:
                 whitePathList:
                   - /api/analyze/ping
+                  - /api/analyze/score
+                  - /api/analyze/score/.*
+                  - /api/analyze/chat/sync
+                  - /api/analyze/chat/stream/question
+                  - /api/analyze/chat/stream/tech
+                  - /api/analyze/country/.*
+                  - /api/analyze/country
 
 project:
   nacos:

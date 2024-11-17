@@ -89,14 +89,13 @@ export const guessRegion = async ({
         if (userData.followers.totalCount < 40 && userData.location) {
             const nationISO = JSON.parse(await syncChatFromDeepSeek(`请你告诉我这个位置信息对应的国家在哪里${userData.location}，你只需要返回这个国家对应的 ISO 代码即可，不需要多余返回任何内容`, deepSeekInstance));
             console.log(nationISO)
-            return await checkAndUpdateBeData({
+            return await checkAndUpdateBeData(checkRegion({
                 nationISO: nationISO,
                 confidence: 0.5,
                 login: userData.login,
                 message: 'user.info.no_full_data',
-            }, dataFromBe, beInstance);
+            }), dataFromBe, beInstance);
         }
-
         const dataFromFollowers = await guessRegionFromFollowersBetter(userData, deepSeekInstance);
         if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
 
@@ -115,3 +114,11 @@ export const guessRegion = async ({
     }
 };
 
+// 我们严格遵守一个中国原则，就算有任何不确定因素，我们都会尽量进行进行处理
+export const checkRegion = (data: NationData): NationData => {
+    const result = data;
+    if (data.nationISO === "TW" || data.nationISO === "HK" || data.nationISO === "MO") {
+        result.nationISO = "CN";
+    }
+    return result;
+}

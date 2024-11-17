@@ -6,10 +6,11 @@ import { LoadingOverlay } from '@mantine/core';
 
 interface SearchProps extends InputHTMLAttributes<HTMLInputElement> {
     logo?: string;
+    logoWhite?: string;
     searchText?: string;
 }
 
-const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用户名...', ...props }) => {
+const Search: React.FC<SearchProps> = ({ logo, logoWhite, placeholder = '输入 GitHub 用户名...', ...props }) => {
     const fetcher = useFetcher();
     const navigation = useNavigation();
     const navigate = useNavigate();
@@ -23,15 +24,28 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用�
                 const { value: name } = getForm<HTMLInputElement>(e, 'name');
                 name.trim() ? navigate(`/user/${name}`) : pathname.includes('user/') && navigate('/user');
             }}>
-            <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all sticky top-0">
+            <div className="rounded-full flex flex-row overflow-hidden w-full border items-center bg-white dark:bg-slate-800 dark:border-blue-900 shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all sticky top-0">
                 <span className="relative flex items-center justify-center ml-1">
                     <LoadingOverlay
                         visible={navigation.state === 'loading'}
+                        className="dark:hidden"
                         zIndex={10}
                         overlayProps={{ radius: 'sm', blur: 1, center: false }}
                         loaderProps={{ size: 'sm' }}
                     />
-                    {logo && <img alt="logo" src={logo} className="m-2 h-8 w-8" />}
+                    <LoadingOverlay
+                        visible={navigation.state === 'loading'}
+                        className="dark:flex hidden"
+                        zIndex={10}
+                        overlayProps={{ radius: 'sm', blur: 1, center: false, color: 'rgb(30,41,59)' }}
+                        loaderProps={{ size: 'sm' }}
+                    />
+                    {logo && (
+                        <>
+                            <img alt="logo" src={logo} className="m-2 h-8 w-8 dark:hidden" />
+                            <img alt="logo" src={logoWhite} className="m-2 h-8 w-8 hidden dark:block" />
+                        </>
+                    )}
                 </span>
                 <input
                     {...props}
@@ -43,8 +57,9 @@ const Search: React.FC<SearchProps> = ({ logo, placeholder = '输入 GitHub 用�
                             : ''
                     }
                     placeholder={placeholder}
-                    className={`py-3 ${logo ? 'pl-1' : 'pl-5'
-                        } focus-visible:outline-none w-full pr-0 text-black dark:text-white`}
+                    className={`py-3 ${
+                        logo ? 'pl-1' : 'pl-5'
+                    } focus-visible:outline-none w-full pr-0 text-black dark:bg-slate-800 dark:text-white`}
                 />
                 <button
                     type="submit"

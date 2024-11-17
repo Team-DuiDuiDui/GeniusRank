@@ -7,6 +7,7 @@ import LoadingLayout from '~/components/loading';
 import { useTranslation } from 'react-i18next';
 import Search from '~/components/search';
 import octoCat from '~/assets/github.svg';
+import octoCatWhite from '~/assets/github_white.svg';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
@@ -39,7 +40,7 @@ export default function Index() {
                     <h1 className="text-6xl font-bold">Genius Rank</h1>
                     <h2 className="text-2xl">{t('description')}</h2>
                     <div className="w-full max-w-lg mt-12">
-                        <Search logo={octoCat} placeholder={t('search.placeholder')} />
+                        <Search logo={octoCat} logoWhite={octoCatWhite} placeholder={t('search.placeholder')} />
                     </div>
                 </div>
                 {pathname === '/user' ? <></> : <Outlet />}

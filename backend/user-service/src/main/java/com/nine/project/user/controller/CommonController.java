@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 
 
 /**
@@ -31,6 +32,14 @@ public class CommonController {
     @GetMapping("/api/common/ping")
     public String ping() {
         return "pong!";
+    }
+
+    /**
+     * time 接口
+     */
+    @GetMapping("/api/common/time")
+    public long time() {
+        return Instant.now().getEpochSecond();
     }
 
     /**

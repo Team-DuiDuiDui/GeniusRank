@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="502" height="187" fill="none" viewBox="0 0 1004 373">
+    <defs>
+        <clipPath id="clip0_187_281">
+            <rect width="497" height="73" fill="white" y="35.5" x="50" id="svg_1"/>
+        </clipPath>
+    </defs>
+    <g>
+        <rect x="0.5" y="0.5" width="1003" height="372" rx="23.5" fill="white" id="bg"/>
+        <rect x="0.5" y="0.5" width="1003" height="372" rx="23.5" stroke="#C7C7C7" id="svg_3"/>
+        <g clip-path="url(#clip0_187_281)" id="svg_4">
+            <text fill="black" xml:space="preserve" font-family="Inter" font-size="32" font-weight="600" letter-spacing="0em" id="name">
+                <tspan x="50" y="66.6364" id="svg_6">The Octocat</tspan>
+            </text>
+            <text fill="black" fill-opacity="0.66" xml:space="preserve" font-family="Inter" font-size="20" letter-spacing="0em" id="login" visibility="visible">
+                <tspan x="50" y="103.773" id="svg_8">octocat</tspan>
+            </text>
+        </g>
+        <text fill="rgb(12,183,193)" xml:space="preserve" font-family="Inter" font-size="64" letter-spacing="0em" id="ranking">
+            <tspan x="846" y="95.2727" id="svg_10">C</tspan>
+        </text>
+        <text fill="rgb(12,183,193)" xml:space="preserve" font-family="Inter" font-size="24" letter-spacing="0em" id="score">
+            <tspan x="890" y="56.7273" id="svg_12">41.59</tspan>
+        </text>
+        <text fill="black" xml:space="preserve" font-family="Inter" font-size="55" font-weight="bold" letter-spacing="0em" id="bg_score">
+            <tspan x="127" y="253.5" id="svg_17">41.59 <tspan id="svg_15" font-size="24" letter-spacing="0em" font-weight="400">/100</tspan></tspan>
+        </text>
+        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="22" letter-spacing="0em" id="base_title">
+            <tspan x="555" y="338" id="svg_23">BASE</tspan>
+        </text>
+        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="22" letter-spacing="0em" id="repo_title">
+            <tspan x="638" y="338" id="svg_25">REPO</tspan>
+        </text>
+        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="22" letter-spacing="0em" id="pr_title">
+            <tspan x="732" y="338" id="svg_27">PR</tspan>
+        </text>
+        <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="22" letter-spacing="0em" id="issue_title">
+            <tspan x="803" y="338" id="svg_29">ISSUE</tspan>
+        </text>
+        <line x1="531" y1="313.75" x2="875" y2="313.75" stroke="#8C8C8C" stroke-width="0.5" stroke-dasharray="1 1" id="svg_39"/>
+        <g id="base">
+            <rect x="547" y="257.0566967953985" width="67" height="56.943303204601484" fill="#1E90FF" id="svg_19"/>
+            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="20" letter-spacing="0em" id="svg_20">
+                <tspan x="547" y="248.05669679539852" id="svg_21">9</tspan>
+            </text>
+        </g>
+        <g id="repo">
+            <rect x="630" y="160" width="67" height="154" fill="#2ED573" stroke="null"/>
+            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="20" letter-spacing="0em" id="svg_31" stroke="null">
+                <tspan x="630" y="151" id="svg_32" stroke="null">24.34</tspan>
+            </text>
+        </g>
+        <g id="pr">
+            <rect x="713" y="308.24239934264585" width="67" height="5.75760065735415" fill="#FFA502" id="svg_33"/>
+            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="20" letter-spacing="0em" id="svg_34">
+                <tspan x="713" y="299.24239934264585" id="svg_35">0.91</tspan>
+            </text>
+        </g>
+        <g id="issue">
+            <rect x="796" y="267.5595727198028" width="67" height="46.440427280197206" fill="#FF4757" id="svg_36"/>
+            <text fill="#8C8C8C" xml:space="preserve" font-family="Inter" font-size="20" letter-spacing="0em" id="svg_37">
+                <tspan x="796" y="258.5595727198028" id="svg_38">7.34</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

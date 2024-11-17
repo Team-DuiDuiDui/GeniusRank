@@ -5,19 +5,18 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.nine.project.framework.errorcode.BaseErrorCode;
 import com.nine.project.framework.exception.ClientException;
 import com.nine.project.framework.exception.ServiceException;
+import com.nine.project.user.dao.entity.GithubUserDO;
 import com.nine.project.user.dao.entity.UserDO;
 import com.nine.project.user.dao.entity.UserInfoDO;
 import com.nine.project.user.dao.mapper.UserMapper;
-import com.nine.project.user.dto.req.UserForgetPwdReqDTO;
-import com.nine.project.user.dto.req.UserLoginByCodeReqDTO;
-import com.nine.project.user.dto.req.UserLoginReqDTO;
-import com.nine.project.user.dto.req.UserRegisterReqDTO;
+import com.nine.project.user.dto.req.*;
 import com.nine.project.user.dto.resp.UserLoginRespDTO;
 import com.nine.project.user.dto.resp.UserRegisterRespDTO;
 import com.nine.project.user.mq.event.VerificationCodeEvent;
@@ -33,8 +32,12 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +61,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserDO> implements
     private final RedissonClient redissonClient;
     private final StringRedisTemplate stringRedisTemplate;
     private final VerificationCodeProducer verificationCodeProducer;
+    private final RestTemplate restTemplateHttps;
 
     @Value("${spring.mail.enable}")
     private Boolean VerificationCodeEnable; // 是否开启邮箱验证码
@@ -207,6 +211,48 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, UserDO> implements
 
         // 返回token登录凭证
         return new UserLoginRespDTO(generateToken(userDO));
+    }
+
+    @Override
+    public UserLoginRespDTO loginByOAuth(UserLoginByOAuthDTO requestParam) {
+        // 封装请求到 Github 验证用户身份并得到用户信息
+        MultiValueMap<String, Object> headers = new LinkedMultiValueMap<>();
+        headers.add("Authorization", "Bearer " + requestParam.getAccessToken());
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(headers);
+
+        // 发送请求并验证用户身份
+        ResponseEntity<String> response = restTemplateHttps.exchange("https://api.github.com/users/" + requestParam.getLogin(), HttpMethod.GET, entity, String.class);
+        GithubUserDO userInfo = JSONUtil.toBean(response.getBody(), GithubUserDO.class);
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new ClientException(USER_OAUTH_ERROR);
+        }
+
+        // 查询用户信息
+        UserDO user = baseMapper.selectOne(Wrappers.lambdaQuery(UserDO.class).eq(UserDO::getId, requestParam.getGithubUserId()));
+        if (user != null) {
+            return new UserLoginRespDTO(generateToken(user));
+        }
+
+        // 执行注册逻辑
+        try {
+            UserDO userDO = UserDO.builder()
+                    .id(requestParam.getGithubUserId())
+                    .username(userInfo.getLogin())
+                    .avatar(userInfo.getAvatar_url())
+                    .email(userInfo.getEmail())
+                    .build();
+
+            // 注册
+            int inserted = baseMapper.insert(userDO);
+            if (inserted < 1) {
+                throw new ServiceException(USER_RECORD_ADD_ERROR);
+            }
+            if (userInfo.getLogin() != null) usernameCachePenetrationBloomFilter.add(userInfo.getLogin());
+            if (userInfo.getEmail() != null) userEmailCachePenetrationBloomFilter.add(userInfo.getEmail());
+            return new UserLoginRespDTO(generateToken(userDO));
+        } catch (DuplicateKeyException ex) {
+            throw new ClientException(USER_RECORD_ADD_ERROR);
+        }
     }
 
     private UserDO Verification4GetUser(String requestParam, String requestParam1) {

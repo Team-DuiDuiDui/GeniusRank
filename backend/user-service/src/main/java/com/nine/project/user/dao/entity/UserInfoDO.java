@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class UserInfoDO {
 
     /**
-     * 用户 ID
+     * id
      */
     private String id;
 
@@ -30,7 +30,7 @@ public class UserInfoDO {
     private String email;
 
     /**
-     * 用户头像
+     * 头像地址
      */
     private String avatar;
 }

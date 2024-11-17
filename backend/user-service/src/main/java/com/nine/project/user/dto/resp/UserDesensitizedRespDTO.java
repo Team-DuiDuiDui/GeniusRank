@@ -27,7 +27,7 @@ public class UserDesensitizedRespDTO {
     private String email;
 
     /**
-     * 用户头像
+     * 头像地址
      */
     private String avatar;
 }

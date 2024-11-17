@@ -23,6 +23,7 @@ public enum BaseErrorCode implements IErrorCode {
     USER_NAME_NOT_EXIST_ERROR("A0202", "用户名不存在"),
     USER_NOT_FOUND_ERROR("A0203", "用户不存在"),
     PASSWORD_VERIFY_ERROR("A0204", "密码校验失败"),
+    USER_OAUTH_ERROR("A0205", "用户 OAuth 验证失败"),
 
     // ========== 二级宏观错误码 验证码错误 ==========
     VERIFICATION_CODE_ERROR("A0300", "验证码错误"),
@@ -46,6 +47,10 @@ public enum BaseErrorCode implements IErrorCode {
 
     // ========== 二级宏观错误码 xxx服务系统执行出错 ==========
     XXX_SERVICE_ERROR("B0110", "xxx服务系统执行出错"),
+
+    // ========== 二级宏观错误码 邮箱服务系统执行出错 ==========
+    USER_COUNTRY_NOT_FOUND("B0200", "用户国家未查询到"),
+    USER_SCORE_NOT_FOUND("B0200", "用户分数未查询到"),
 
     // ========== 二级宏观错误码 系统执行超时 ==========
     SYSTEM_TIMEOUT_ERROR("B0300", "系统执行超时"),
