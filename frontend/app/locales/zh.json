@@ -43,7 +43,9 @@
         "reloading_after_2": "秒后重新尝试",
         "reloading": "重试中...",
         "reloadFailed": "重试失败",
-        "something_not_fetch": "部分数据加载失败，你仍然可以尝试重新加载"
+        "something_not_fetch": "部分数据加载失败，你仍然可以尝试重新加载",
+        "not_found_title": "未找到用户",
+        "not_found_no_org": "找不到用户（不能为组织）或后端内网穿透状态异常"
       },
       "info": {
         "from_readme": "来自 README",
@@ -100,7 +102,7 @@
       "userContributeRepos": "贡献的 50 个高人气仓库",
       "loading": "正在努力获取大量用户数据...",
       "score": {
-        "title": "最终得分（粗略）",
+        "title": "粗略得分（登录后更详细）",
         "title_detail": "最终得分",
         "commit_score": "用户得分",
         "repo_score": "仓库得分",
@@ -372,6 +374,11 @@
     },
     "searching": "用户",
     "see_ranking": "查看排名",
-    "index": "主页"
+    "index": "主页",
+    "err": {
+      "action": {
+        "reload": "刷新页面"
+      }
+    }
   }
 }
