@@ -1,5 +1,5 @@
 import { Form, Link, useFetcher, useLocation } from '@remix-run/react';
-import { ActionIcon, Avatar, Button } from '@mantine/core';
+import { ActionIcon, Avatar, Button, useMantineColorScheme } from '@mantine/core';
 import geniusRank from '~/assets/geniusRank.svg';
 import geniusRankWhite from '~/assets/geniusRank_white.svg';
 import octoCat from '~/assets/github.svg';
@@ -26,6 +26,7 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
     const { t, i18n } = useTranslation();
     const fetcher = useFetcher();
     const params = useLocation();
+    const { toggleColorScheme } = useMantineColorScheme();
     const parentRef = useRef(null);
     useEffect(() => {
         parentRef.current && autoAnimate(parentRef.current, scaleAnimate);
@@ -35,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
             <div className="flex items-center gap-4 w-1/6 md:w-1/3">
                 <ActionIcon
                     variant="default"
-                    className="dark:bg-slate-800 dark:border-blue-900 dark:hover:bg-slate-700 transition-all"
+                    className="bg-white dark:bg-slate-800 dark:border-blue-900 dark:hover:bg-slate-700 transition-all"
                     size="xl"
                     onClick={openDrawer}>
                     <MenuIcon />
@@ -86,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
                         value={t('opposite_lng')}
                         variant="default"
                         size="xs"
-                        className="text-gray-800 hover:bg-gray-200 dark:bg-slate-800 dark:border-blue-900 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-gray-300 transition-all">
+                        className="bg-white text-gray-800 hover:bg-gray-200 dark:bg-slate-800 dark:border-blue-900 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-gray-300 transition-all">
                         <TranslationOutlined className="mr-1 align-text-bottom" />
                         {t('opposite_lng_name')}
                     </Button>
@@ -98,6 +99,7 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
                     onClick={(e) => {
                         e.preventDefault();
                         fetcher.submit({ doNotRedirect: true }, { method: 'post', action: '/theme' });
+                        toggleColorScheme();
                     }}>
                     <button
                         type="submit"

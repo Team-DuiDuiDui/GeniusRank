@@ -19,12 +19,10 @@ export const handle = { i18n: ['translation'] };
 
 export function Layout({ children }: { children: React.ReactNode }) {
     const loaderData = useRouteLoaderData<typeof loader>('root');
+    console.log(loaderData?.prefersColorScheme);
 
     return (
-        <html
-            lang={loaderData?.locale ?? 'en'}
-            className={loaderData?.prefersColorScheme ?? 'light'}
-            data-mantine-color-scheme={loaderData?.prefersColorScheme ?? 'light'}>
+        <html lang={loaderData?.locale ?? 'en'} className={loaderData?.prefersColorScheme ?? 'light'}>
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,7 +31,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <ColorSchemeScript />
             </head>
             <body>
-                <MantineProvider>{children}</MantineProvider>
+                <MantineProvider
+                    theme={loaderData?.prefersColorScheme ?? 'light'}
+                    defaultColorScheme={loaderData?.prefersColorScheme ?? 'light'}>
+                    {children}
+                </MantineProvider>
                 <ScrollRestoration />
                 <Scripts />
             </body>
