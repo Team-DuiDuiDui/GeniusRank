@@ -42,6 +42,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 readme: data.user.repository,
                 login: data.user.login,
             }
+            console.log(data.user.login)
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
             const deepSeekInstance = createInstanceForDeepSeek(context.cloudflare.env.DEEPSEEK_API_KEY);
             let nationData = {
@@ -51,8 +52,9 @@ export default async function loader({ request, params, context }: LoaderFunctio
             };
             try {
                 const time = new Date().getTime();
-                const localNationData = await getUserNation(params.name, beInstance);
-                if (!localNationData) {
+                const localNationData = await getUserNation(regionParamCopy.login, beInstance);
+                console.log(localNationData)
+                if (!localNationData?.nationISO) {
                     nationDataChecked = true;
                     nationData = await guessRegion({
                         locale,

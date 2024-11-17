@@ -1,5 +1,5 @@
 // routes/lazy.$param.tsx
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, json } from "@remix-run/node";
 import {
     createInstanceForBe,
     createInstanceForDeepSeek,
@@ -18,7 +18,6 @@ export const action = async (
 
     const cookie = (await user.parse(cookieHeader)) || {};
     const locale = (await lng.parse(cookieHeader)) as string;
-    if (!cookie.access_token) return redirect("/unauthorized");
     const t = await i18nServer.getFixedT(request);
     const userData = formData.get("userData")!;
     const dataFromBe = formData.get("dataFromBe")!;

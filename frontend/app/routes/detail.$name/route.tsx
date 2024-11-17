@@ -17,6 +17,8 @@ import UserNation from "~/components/userinfo/region";
 import UserScoreDetail from "~/components/userinfo/detail/score";
 import loader from "./loader";
 import action from "./action";
+import lazyAction from "~/routes/lazy.$name";
+import { useEffect } from "react";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title ?? "Error | Genius Rank" }, {
@@ -32,18 +34,24 @@ export default function User() {
     const { t } = useTranslation();
     const { user } = data.data;
     const fetcher = useFetcher<typeof action>();
-    if (!data.regionParamCopy) {
-        const formData = new FormData();
-        formData.append("userData", JSON.stringify(data.regionParamCopy));
-        formData.append("dataFromBe", JSON.stringify(data.nationData));
-        fetcher.submit(
-            formData,
-            {
-                action: "/lazy/" + user.login,
-            },
-        );
-    }
+    const lazyFetcher = useFetcher<typeof lazyAction>();
     const isStillHim = fetcher.data?.login === user.login;
+
+    useEffect(() => {
+        if (data.regionParamCopy) {
+            const formData = new FormData();
+            formData.append("userData", JSON.stringify(data.regionParamCopy));
+            formData.append("dataFromBe", JSON.stringify(data.nationData));
+            lazyFetcher.submit(
+                formData,
+                {
+                    action: "/lazy/" + user.login,
+                },
+            );
+            console.log("fetcher submit");
+        }
+    }, [data.nationData, data.regionParamCopy, lazyFetcher, user.login]);
+
     return (
         <>
             <div className="flex items-center justify-center w-full mt-2 z-0">
