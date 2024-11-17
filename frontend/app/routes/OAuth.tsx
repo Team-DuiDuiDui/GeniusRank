@@ -64,30 +64,36 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                     'User-Agent': 'Team-Duiduidui: Genius Rank',
                 },
             });
-            //TODO 错误处理
-            const beLogin = await handleBackendReq<OAuthLogin>(
-                () =>
-                    axios.post(
-                        `${context.cloudflare.env.BASE_URL}/user/loginByOAuth`,
-                        {
-                            githubUserId: userData.data.id,
-                            login: userData.data.login,
-                            accessToken: access_token,
-                        },
-                        {
-                            headers: {
-                                'Content-Type': 'application/json',
+            try {
+                const beLogin = await handleBackendReq<OAuthLogin>(
+                    () =>
+                        axios.post(
+                            `${context.cloudflare.env.BASE_URL}/user/loginByOAuth`,
+                            {
+                                githubUserId: userData.data.id,
+                                login: userData.data.login,
+                                accessToken: access_token,
                             },
-                        }
-                    ),
-                (res) => res.data
-            );
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                            }
+                        ),
+                    (res) => res.data
+                );
+                cookie.be_token = beLogin?.data.token;
+            } catch (e) {
+                if (axios.isAxiosError(e)) {
+                    throw new BackEndError(e.response!, 'B0001');
+                }
+                throw e;
+            }
             cookie.userAvatar = userData.data.avatar_url;
             cookie.username = userData.data.name;
             cookie.userLogin = userData.data.login;
             cookie.userEmail = userData.data.email;
             cookie.access_token = access_token;
-            cookie.be_token = beLogin?.data.token;
             return redirect('/', {
                 headers: {
                     'Set-Cookie': await user.serialize(cookie, {
