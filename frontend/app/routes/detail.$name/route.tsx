@@ -46,11 +46,13 @@ export default function User() {
                 formData,
                 {
                     action: "/lazy/" + user.login,
+                    method: "POST",
                 },
             );
             console.log("fetcher submit");
         }
-    }, [data.nationData, data.regionParamCopy, lazyFetcher, user.login]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
@@ -84,7 +86,7 @@ export default function User() {
                                         <span>
                                             {(isStillHim &&
                                                 fetcher.data?.message) ||
-                                                data.nationData.message}
+                                                t(data.nationData.message)}
                                         </span>
                                         <span>
                                             {t("user.confidence")}:{" "}

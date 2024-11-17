@@ -12,7 +12,7 @@ import { guessRegion } from "~/utils/region/main";
 export const action = async (
     { params, request, context }: ActionFunctionArgs,
 ) => {
-    const param = params.name;
+    console.log("params", params);
     const formData = await request.formData();
     const cookieHeader = request.headers.get("Cookie");
 
@@ -47,11 +47,9 @@ export const action = async (
             dataFromBe: JSON.parse(dataFromBe as string),
         });
     } catch (error) {
-        return json({ error: "Invalid JSON" }, { status: 400 });
+        return json({ error });
     }
-
-    // 模拟一些逻辑
-    return json({ message: `Received param: ${param} with data: ${userData}` });
+    return json({});
 };
 
 export default function LazyRoute() {
