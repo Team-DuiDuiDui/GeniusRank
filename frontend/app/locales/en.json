@@ -105,7 +105,7 @@
       "score": {
         "ngrok_error": "Backend internal network tunneling status abnormal, please contact with the backend administrator",
         "backend_error": "Backend internal error, please contact with the backend administrator",
-        "title": "Final Score (Roughly calculated)",
+        "title": "Score (Login to get precise score)",
         "title_detail": "Final Score",
         "commit_score": "User",
         "repo_score": "Repos",

@@ -102,7 +102,7 @@
       "userContributeRepos": "贡献的 50 个高人气仓库",
       "loading": "正在努力获取大量用户数据...",
       "score": {
-        "title": "最终得分（粗略）",
+        "title": "粗略得分（登录后更详细）",
         "title_detail": "最终得分",
         "commit_score": "用户得分",
         "repo_score": "仓库得分",
