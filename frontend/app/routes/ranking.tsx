@@ -1,6 +1,13 @@
 import { Avatar, Select } from '@mantine/core';
 import { json, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { isRouteErrorResponse, Link, useLoaderData, useRouteError, useSearchParams } from '@remix-run/react';
+import {
+    isRouteErrorResponse,
+    Link,
+    ShouldRevalidateFunction,
+    useLoaderData,
+    useRouteError,
+    useSearchParams,
+} from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { createInstanceForBe } from '~/api/backend/instance';
 import { RankResp } from '~/api/backend/typings/beRes';
@@ -214,3 +221,10 @@ export function ErrorBoundary() {
         return <h1>Unknown Error</h1>;
     }
 }
+
+export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
+    if (actionResult?.donotLoad) {
+        return false;
+    }
+    return defaultShouldRevalidate;
+};

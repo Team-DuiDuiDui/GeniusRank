@@ -15,12 +15,16 @@ export default async function loader({ request, params, context }: LoaderFunctio
         const user = new GithubUserServerOnly(params.name, context.cloudflare.env.GITHUB_ACCESS_TOKEN);
         try {
             const data = (await user.getUser())!;
-            return json({
-                baseUrl: context.cloudflare.env.BASE_URL,
-                userData: data,
-                title: `${params?.name ?? ''} | Genius Rank`,
-                description: t('user.description'),
-            }, cacheHeader(300));
+            console.log('LOAD1');
+            return json(
+                {
+                    baseUrl: context.cloudflare.env.BASE_URL,
+                    userData: data,
+                    title: `${params?.name ?? ''} | Genius Rank`,
+                    description: t('user.description'),
+                },
+                cacheHeader(300)
+            );
         } catch (e) {
             // eslint-disable-next-line import/no-named-as-default-member
             if (axios.isAxiosError(e)) {

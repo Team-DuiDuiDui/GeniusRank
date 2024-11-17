@@ -97,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
                     method="post"
                     onClick={(e) => {
                         e.preventDefault();
-                        fetcher.submit({}, { method: 'post', action: '/theme' });
+                        fetcher.submit({ doNotRedirect: true }, { method: 'post', action: '/theme' });
                     }}>
                     <button
                         type="submit"
