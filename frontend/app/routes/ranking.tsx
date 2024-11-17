@@ -93,8 +93,12 @@ export default function Ranking() {
                         <Avatar src={userInfo.avatar_url} />
                         <div className="flex flex-row items-center h-12">
                             <div className="flex flex-col">
-                                <div className="text-xl font-bold">{userInfo.name ?? userInfo.login}</div>
-                                {userInfo.name && <div className="text-sm text-gray-500">{userInfo.login}</div>}
+                                <div className="text-xl font-bold dark:text-gray-200">
+                                    {userInfo.name ?? userInfo.login}
+                                </div>
+                                {userInfo.name && (
+                                    <div className="text-sm text-gray-500 dark:text-gray-300">{userInfo.login}</div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -115,8 +119,8 @@ export default function Ranking() {
                             e.stopPropagation();
                         }}
                         to={`/user/${userInfo.login}`}
-                        className="hover:bg-gray-300 p-2 rounded-md transition-all">
-                        <LinkOutlined className="text-2xl text-gray-900" />
+                        className="p-2 rounded-md transition-all btn-800 bg-transparent">
+                        <LinkOutlined className="text-2xl text-gray-900 dark:text-gray-200" />
                     </Link>
                 </div>
             </>
@@ -124,7 +128,7 @@ export default function Ranking() {
     };
 
     return (
-        <div className="my-12 mx-0 sm:mx-8 relative flex justify-center flex-col items-center">
+        <div className="py-12 mx-0 sm:px-8 relative flex justify-center flex-col items-center">
             <LoadingLayout />
             <div
                 className={`flex ${
@@ -170,7 +174,7 @@ export default function Ranking() {
                     />
                 </div>
                 {loaderData.userInfo.login && (
-                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 border relative rounded-2xl border-slate-300 p-3">
+                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 border relative rounded-2xl border-slate-300 dark:border-slate-800 p-3 dark:bg-slate-700 dark:hover:bg-slate-600">
                         {renderUserInfo()}
                     </div>
                 )}
