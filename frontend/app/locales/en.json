@@ -43,7 +43,9 @@
         "reloading_after_2": "seconds",
         "reloading": "Reloading...",
         "reloadFailed": "Reload failed",
-        "something_not_fetch": "Some data is not fetched, you can try to reload it yourself"
+        "something_not_fetch": "Some data is not fetched, you can try to reload it yourself",
+        "not_found_title": "Username invalid",
+        "not_found_no_org": "User Not Found (Do not search for organizations) or backend internal network tunneling status abnormal"
       },
       "info": {
         "from_readme": "From README",
@@ -370,6 +372,11 @@
     },
     "searching": "Searching",
     "see_ranking": "Rankings",
-    "index": "Home"
+    "index": "Home",
+    "err": {
+      "action": {
+        "reload": "Refresh"
+      }
+    }
   }
 }

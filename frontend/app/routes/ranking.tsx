@@ -1,13 +1,6 @@
 import { Avatar, Select } from '@mantine/core';
 import { json, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import {
-    isRouteErrorResponse,
-    Link,
-    ShouldRevalidateFunction,
-    useLoaderData,
-    useRouteError,
-    useSearchParams,
-} from '@remix-run/react';
+import { Link, ShouldRevalidateFunction, useLoaderData, useRouteError, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { createInstanceForBe } from '~/api/backend/instance';
 import { RankResp } from '~/api/backend/typings/beRes';
@@ -20,10 +13,12 @@ import axios from 'axios';
 import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
 import { LinkOutlined } from '@ant-design/icons';
 import { interpolateColorsOfScore } from '~/utils/color';
+import ErrorHandle from '~/components/errorHandle';
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const nation = url.searchParams.get('nation');
     const cookieHeader = request.headers.get('Cookie');
+    const t = await i18nServer.getFixedT(request);
     const userCookie = (await user.parse(cookieHeader)) || {};
     const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL);
     const userInfo = {
@@ -39,7 +34,6 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         rankingInfo: { rank: number; score: number } | undefined;
     };
     const type = url.searchParams.get('type');
-    const t = await i18nServer.getFixedT(request);
     try {
         const res = await getRankings(beInstance, nation, type, 20);
         return json(
@@ -202,24 +196,7 @@ export default function Ranking() {
 
 export function ErrorBoundary() {
     const error = useRouteError();
-    if (isRouteErrorResponse(error)) {
-        return (
-            <div className="flex justify-center items-center my-12">
-                <p>{error.data}</p>
-            </div>
-        );
-    } else if (error instanceof Error) {
-        return (
-            <div>
-                <h1>错误</h1>
-                <p>{error.message}</p>
-                <p>The stack trace is:</p>
-                <pre>{error.stack}</pre>
-            </div>
-        );
-    } else {
-        return <h1>Unknown Error</h1>;
-    }
+    return <ErrorHandle error={error} />;
 }
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {

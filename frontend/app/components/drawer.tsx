@@ -128,6 +128,14 @@ const SettingDrawer: React.FC<DrawerProps> = ({
                     </Button>
                 )}
             </div>
+            <a
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center"
+                href="https://github.com/Team-DuiDuiDui/GeniusRank"
+                target="_blank"
+                rel="noreferrer">
+                <p className="text-xs text-gray-400 dark:text-gray-300">Made with ❤️ by</p>
+                <p className="text-sm text-gray-500 dark:text-gray-200">Team-DuiDuiDui 2024</p>
+            </a>
         </Drawer>
     );
 };

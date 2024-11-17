@@ -1,10 +1,4 @@
-import {
-    isRouteErrorResponse,
-    ShouldRevalidateFunction,
-    useFetcher,
-    useLoaderData,
-    useRouteError,
-} from '@remix-run/react';
+import { ShouldRevalidateFunction, useFetcher, useLoaderData, useRouteError } from '@remix-run/react';
 import { MetaFunction } from '@remix-run/cloudflare';
 import UserBasic from '~/components/userinfo/basic';
 import UserInfoDetail from '~/components/userinfo/detail/info';
@@ -17,6 +11,7 @@ import UserNation from '~/components/userinfo/region';
 import UserScoreDetail from '~/components/userinfo/detail/score';
 import loader from './loader';
 import action from './action';
+import ErrorHandle from '~/components/errorHandle';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [
@@ -89,32 +84,7 @@ export default function User() {
 
 export function ErrorBoundary() {
     const error = useRouteError();
-    if (isRouteErrorResponse(error)) {
-        if (error.status === 404) {
-            return (
-                <div>
-                    <div>{error.data}</div>
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <p>{error.data}</p>
-                </div>
-            );
-        }
-    } else if (error instanceof Error) {
-        return (
-            <div>
-                <h1>错误</h1>
-                <p>{error.message}</p>
-                <p>The stack trace is:</p>
-                <pre>{error.stack}</pre>
-            </div>
-        );
-    } else {
-        return <h1>Unknown Error</h1>;
-    }
+    return <ErrorHandle error={error} isUser />;
 }
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
