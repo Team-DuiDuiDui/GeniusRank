@@ -40,6 +40,8 @@ const checkAndUpdateBeData = async (newData: NationData, beData: NationData | nu
         console.log("后端没有数据")
         return newData
     }
+    console.log("dataFromBe:", beData)
+    console.log("newData:", newData)
     if (beData.nationISO !== newData.nationISO) {
         if (beData.confidence > 0.5) {
             await updateUserNation({ ...beData, confidence: beData.confidence * 0.7 }, beInstance);
@@ -51,7 +53,7 @@ const checkAndUpdateBeData = async (newData: NationData, beData: NationData | nu
         return newData;
     }
     console.log("后端数据更好")
-    const result = { ...beData, confidence: Math.min(beData.confidence * 1.3, 0.99) }
+    const result = { ...beData, confidence: Math.min(Math.max(beData.confidence, newData.confidence) * 1.3, 0.99) }
     await updateUserNation(result, beInstance);
     return result;
 }
@@ -97,6 +99,7 @@ export const guessRegion = async ({
             }), dataFromBe, beInstance);
         }
         const dataFromFollowers = await guessRegionFromFollowersBetter(userData, deepSeekInstance);
+        console.log('dataFromFollowers:', dataFromFollowers);
         if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
 
     } catch (error) {
@@ -143,6 +146,7 @@ export const guessRegionCompletely = async ({
             }), dataFromBe, beInstance);
         }
         const dataFromFollowers = await guessRegionFromFollowersBetter(userData, deepSeekInstance);
+        console.log('dataFromFollowers:', dataFromFollowers);
         if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
 
     } catch (error) {

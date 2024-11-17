@@ -112,6 +112,7 @@ export const guessRegionFromFollowersBetter = async (
         location: resultJSON[index] === undefined ? null : resultJSON[index],
     })))
     const res = resAll[0]
+    console.log({ ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" })
     return { ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" }
 }
 
