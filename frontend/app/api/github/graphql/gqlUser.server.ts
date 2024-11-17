@@ -20,7 +20,7 @@ export class gqlUser {
     }
 
     async getData(count: number = 50): Promise<UserData> {
-        const query = `
+        const query = ` 
         query($username:String!,$count:Int!){
             user(login: $username){
                 avatarUrl
