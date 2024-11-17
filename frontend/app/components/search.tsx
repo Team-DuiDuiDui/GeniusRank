@@ -59,7 +59,7 @@ const Search: React.FC<SearchProps> = ({ logo, logoWhite, placeholder = '输入 
                     placeholder={placeholder}
                     className={`py-3 ${
                         logo ? 'pl-1' : 'pl-5'
-                    } focus-visible:outline-none w-full pr-0 text-black dark:bg-slate-800 dark:text-white`}
+                    } focus-visible:outline-none w-full pr-0 text-black bg-transparent dark:text-white`}
                 />
                 <button
                     type="submit"

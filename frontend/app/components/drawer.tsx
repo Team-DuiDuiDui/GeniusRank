@@ -29,7 +29,7 @@ const SettingDrawer: React.FC<DrawerProps> = ({
     const [logOut, { toggle: toggleLogOut }] = useDisclosure();
     const fetcher = useFetcher();
     return (
-        <Drawer opened={opened} onClose={close}>
+        <Drawer opened={opened} onClose={close} className="dark:bg-slate-900">
             <div className={`flex flex-row justify-center gap-5`}>
                 <Avatar size="lg" src={userAvatar ?? undefined} />
                 <div className="flex flex-col justify-center">
