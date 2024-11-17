@@ -45,7 +45,9 @@ const CardWithScrollableTable = <T,>({
 
     return (
         <CardWithScroll maxHeight="max-h-96">
-            <h2 className="text-lg font-bold top-0 my-4 bg-white py-1 transition-all flex-shrink" ref={headerRef}>
+            <h2
+                className="text-lg font-bold top-0 my-4 bg-white dark:bg-slate-600 py-1 transition-all flex-shrink"
+                ref={headerRef}>
                 {title}
                 <span className="font-normal ml-4 text-base">
                     {!data && !error ? <Loader size={16} /> : `${data?.length ?? '_'} / ${dataCount ?? '_'}`}
@@ -54,24 +56,49 @@ const CardWithScrollableTable = <T,>({
             </h2>
             <div className="overflow-y-auto max-h-max flex-grow scrollbar" onScroll={handleScroll}>
                 {data ? (
-                    <Table className="w-full" horizontalSpacing="sm" verticalSpacing="sm" striped>
-                        <Table.Thead>
-                            <Table.Tr className="mb-6 sticky top-0 font-normal bg-white pb-3">
-                                {columns.map((column, index) => (
-                                    <Table.Th key={index}>{column}</Table.Th>
-                                ))}
-                            </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                            {data.length > 0 ? (
-                                finalData!.map((item, index) => renderRow(item, index))
-                            ) : (
-                                <Table.Tr className="text-center text-gray-500">
-                                    <Table.Td colSpan={columns.length}>{t('user.no_data')}</Table.Td>
+                    <>
+                        <Table className="w-full dark:hidden" horizontalSpacing="sm" verticalSpacing="sm" striped>
+                            <Table.Thead>
+                                <Table.Tr className="mb-6 sticky top-0 font-normal bg-white dark:bg-slate-600 pb-3">
+                                    {columns.map((column, index) => (
+                                        <Table.Th key={index}>{column}</Table.Th>
+                                    ))}
                                 </Table.Tr>
-                            )}
-                        </Table.Tbody>
-                    </Table>
+                            </Table.Thead>
+                            <Table.Tbody>
+                                {data.length > 0 ? (
+                                    finalData!.map((item, index) => renderRow(item, index))
+                                ) : (
+                                    <Table.Tr className="text-center text-gray-500">
+                                        <Table.Td colSpan={columns.length}>{t('user.no_data')}</Table.Td>
+                                    </Table.Tr>
+                                )}
+                            </Table.Tbody>
+                        </Table>
+                        <Table
+                            className="w-full hidden dark:table"
+                            horizontalSpacing="sm"
+                            verticalSpacing="sm"
+                            striped
+                            stripedColor="rgb(51 65 85)">
+                            <Table.Thead>
+                                <Table.Tr className="mb-6 sticky top-0 font-normal bg-white dark:bg-slate-600 pb-3">
+                                    {columns.map((column, index) => (
+                                        <Table.Th key={index}>{column}</Table.Th>
+                                    ))}
+                                </Table.Tr>
+                            </Table.Thead>
+                            <Table.Tbody>
+                                {data.length > 0 ? (
+                                    finalData!.map((item, index) => renderRow(item, index))
+                                ) : (
+                                    <Table.Tr className="text-center text-gray-500">
+                                        <Table.Td colSpan={columns.length}>{t('user.no_data')}</Table.Td>
+                                    </Table.Tr>
+                                )}
+                            </Table.Tbody>
+                        </Table>
+                    </>
                 ) : (
                     <Skeleton height={208} animate={!error} />
                 )}

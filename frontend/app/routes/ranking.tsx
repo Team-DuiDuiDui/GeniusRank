@@ -1,6 +1,13 @@
 import { Avatar, Select } from '@mantine/core';
 import { json, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
-import { isRouteErrorResponse, Link, useLoaderData, useRouteError, useSearchParams } from '@remix-run/react';
+import {
+    isRouteErrorResponse,
+    Link,
+    ShouldRevalidateFunction,
+    useLoaderData,
+    useRouteError,
+    useSearchParams,
+} from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { createInstanceForBe } from '~/api/backend/instance';
 import { RankResp } from '~/api/backend/typings/beRes';
@@ -185,9 +192,9 @@ export default function Ranking() {
                 </UserAccordion>
             </div>
             <div className="flex gap-2 items-center mt-20">
-                <span className="text-slate-600 text-base">{t('user.info.total_users_l1')}</span>
-                <span className="text-slate-900 text-xl">{loaderData.ranking.totalCount}</span>
-                <span className="text-slate-600 text-base">{t('user.info.total_users_l2')}</span>
+                <span className="text-slate-600 dark:text-gray-300 text-base">{t('user.info.total_users_l1')}</span>
+                <span className="text-slate-900 dark:text-gray-200 text-xl">{loaderData.ranking.totalCount}</span>
+                <span className="text-slate-600 dark:text-gray-300 text-base">{t('user.info.total_users_l2')}</span>
             </div>
         </div>
     );
@@ -214,3 +221,10 @@ export function ErrorBoundary() {
         return <h1>Unknown Error</h1>;
     }
 }
+
+export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
+    if (actionResult?.donotLoad) {
+        return false;
+    }
+    return defaultShouldRevalidate;
+};

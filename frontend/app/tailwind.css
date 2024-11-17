@@ -2,85 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .btn-900 {
+        @apply bg-white text-gray-800 hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-gray-300 transition-all;
+    }
+    .btn-800 {
+        @apply bg-white text-gray-800 hover:bg-gray-200 dark:bg-slate-700 dark:text-gray-200 dark:hover:bg-slate-500 dark:hover:text-gray-200 transition-all;
+    }
+    .btn-transparent {
+        @apply bg-transparent text-gray-800 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-white/20 dark:hover:text-gray-200 transition-all;
+    }
+    .btn-infoLink {
+        @apply bg-transparent text-gray-600 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-white/20 dark:hover:text-gray-200 transition-all;
+    }
+}
 html,
 body {
-  @apply bg-white dark:bg-gray-950 box-border;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  min-height: 100vh;
+    @apply bg-white dark:bg-gray-950 box-border;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh;
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+    @media (prefers-color-scheme: dark) {
+        color-scheme: dark;
+    }
 }
 
-
 body::-webkit-scrollbar {
-  width: 0.25rem;
+    width: 0.25rem;
 }
 
 body::-webkit-scrollbar-thumb {
-  background-color: #a8a8a8;
-  border-radius: 0.25rem;
+    background-color: #a8a8a8;
+    border-radius: 0.25rem;
 }
 
 body::-webkit-scrollbar-track {
-  background-color: #e2e8f0;
+    background-color: #e2e8f0;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 @layer utilities {
-  .scrollbar::-webkit-scrollbar {
-    width: 0.125rem;
-    transform: translate(-1rem, 0.5rem);
-  }
+    .scrollbar::-webkit-scrollbar {
+        width: 0.125rem;
+        transform: translate(-1rem, 0.5rem);
+    }
 
-  .scrollbar::-webkit-scrollbar-thumb {
-    background-color: #a8a8a8;
-    border-radius: 0.125rem;
-  }
+    .scrollbar::-webkit-scrollbar-thumb {
+        background-color: #a8a8a8;
+        border-radius: 0.125rem;
+    }
 
-  .scrollbar::-webkit-scrollbar-track {
-    background-color: #e2e8f0;
-  }
+    .scrollbar::-webkit-scrollbar-track {
+        background-color: #e2e8f0;
+    }
 }
 
 .scrollbarHidden::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .scrollbarHidden::-webkit-scrollbar-thumb {
-  display: none;
+    display: none;
 }
 
 .scrollbarHidden::-webkit-scrollbar-track {
-  display: none;
+    display: none;
 }
 
 .mark {
-  @apply flex flex-row flex-nowrap gap-1
+    @apply flex flex-row flex-nowrap gap-1;
 }
 
 @keyframes scrollLineO {
-  0% {
-    transform: translateX(-50%);
-  }
+    0% {
+        transform: translateX(-50%);
+    }
 
-  100% {
-    transform: translateX(calc(-750% - 7.5rem));
-  }
+    100% {
+        transform: translateX(calc(-750% - 7.5rem));
+    }
 }
 
 @keyframes scrollLineI {
-  0% {
-    transform: translateX(0);
-  }
+    0% {
+        transform: translateX(0);
+    }
 
-  100% {
-    transform: translateX(calc(-700% - 7.5rem));
-  }
+    100% {
+        transform: translateX(calc(-700% - 7.5rem));
+    }
 }

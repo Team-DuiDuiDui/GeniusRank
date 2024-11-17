@@ -5,9 +5,11 @@ export type UserDetail = {
     login: string;
     bio: string | null;
     followers: {
+        nodes: SubUserDetail[];
         totalCount: number;
     };
     following: {
+        nodes: SubUserDetail[];
         totalCount: number;
     };
     location: string | null;
@@ -30,6 +32,20 @@ export type UserDetail = {
     };
     repositoriesContributedTo: {
         nodes: RepositoryDetail[] | [] | null[];
+        totalCount: number;
+    };
+    repository: { defaultBranchRef: { name: string } } | null;
+};
+
+export type SubUserDetail = {
+    login: string;
+    name: string | null;
+    location: string | null;
+    company: string | null;
+    followers: {
+        totalCount: number;
+    };
+    following: {
         totalCount: number;
     };
 };

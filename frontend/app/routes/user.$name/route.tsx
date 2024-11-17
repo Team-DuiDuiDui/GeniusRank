@@ -1,5 +1,12 @@
 import { type MetaFunction } from '@remix-run/cloudflare';
-import { isRouteErrorResponse, useLoaderData, useNavigation, useParams, useRouteError } from '@remix-run/react';
+import {
+    isRouteErrorResponse,
+    ShouldRevalidateFunction,
+    useLoaderData,
+    useNavigation,
+    useParams,
+    useRouteError,
+} from '@remix-run/react';
 import UserBasic from '~/components/userinfo/basic';
 import UserInfo from '~/components/userinfo/info';
 import { githubUser } from '~/api/github/rest/user';
@@ -99,3 +106,10 @@ export function ErrorBoundary() {
         return <h1>Unknown Error</h1>;
     }
 }
+
+export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
+    if (actionResult?.donotLoad) {
+        return false;
+    }
+    return defaultShouldRevalidate;
+};

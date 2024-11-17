@@ -18,18 +18,31 @@ import UserScoreDetail from '~/components/userinfo/detail/score';
 import loader from './loader';
 import action from './action';
 
-
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    return [{ title: data?.title ?? 'Error | Genius Rank' }, { name: 'description', content: data?.description }];
+    return [
+        { title: data?.title ?? 'Error | Genius Rank' },
+        {
+            name: 'description',
+            content: data?.description,
+        },
+    ];
 };
 
-export { loader, action }
+export { action, loader };
 
 export default function User() {
     const data = useLoaderData<typeof loader>();
     const { t } = useTranslation();
     const { user } = data.data;
     const fetcher = useFetcher<typeof action>();
+    if (!data.regionParamCopy) {
+        const formData = new FormData();
+        formData.append('userData', JSON.stringify(data.regionParamCopy));
+        formData.append('dataFromBe', JSON.stringify(data.nationData));
+        fetcher.submit(formData, {
+            action: '/lazy/' + user.login,
+        });
+    }
     const isStillHim = fetcher.data?.login === user.login;
     return (
         <>
@@ -40,7 +53,11 @@ export default function User() {
                             <UserInfoDetail data={user} />
                             <UserNation
                                 fetcher={fetcher}
-                                userData={{ followers: user.followers, following: user.following, login: user.login }}
+                                userData={{
+                                    followers: user.followers,
+                                    following: user.following,
+                                    login: user.login,
+                                }}
                                 nationISO={(isStillHim && fetcher.data?.nationISO) || data.nationData.nationISO}
                                 nationLocale={t(
                                     `country.${(isStillHim && fetcher.data?.nationISO) || data.nationData.nationISO}`
@@ -73,18 +90,19 @@ export default function User() {
 export function ErrorBoundary() {
     const error = useRouteError();
     if (isRouteErrorResponse(error)) {
-        if (error.status === 404)
+        if (error.status === 404) {
             return (
                 <div>
                     <div>{error.data}</div>
                 </div>
             );
-        else
+        } else {
             return (
                 <div>
                     <p>{error.data}</p>
                 </div>
             );
+        }
     } else if (error instanceof Error) {
         return (
             <div>
@@ -99,9 +117,6 @@ export function ErrorBoundary() {
     }
 }
 
-
-
-/** 阻止 Action 触发 Loader */
 export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
     if (actionResult?.donotLoad) {
         return false;

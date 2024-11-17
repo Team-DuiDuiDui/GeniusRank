@@ -1,19 +1,23 @@
-import { LoaderFunctionArgs, redirect, json } from "@remix-run/cloudflare";
-import axios, { AxiosError } from "axios";
-import { createInstanceForBe } from "~/api/backend/instance";
-import { gqlUser } from "~/api/github/graphql/gqlUser.server";
-import { createInstanceForGithub } from "~/api/github/instance";
-import { user, lng } from "~/cookie";
-import i18nServer from "~/modules/i18n.server";
-import { cacheHeader } from "~/utils/cacheHeader";
-import { guessRegion } from "~/utils/region/main";
+import { LoaderFunctionArgs, redirect, json } from '@remix-run/cloudflare';
+import axios, { AxiosError } from 'axios';
+import { createInstanceForBe, createInstanceForDeepSeek } from '~/api/backend/instance';
+import { getUserNation } from '~/api/backend/region';
+import { gqlUser } from '~/api/github/graphql/gqlUser.server';
+import { createInstanceForGithub } from '~/api/github/instance';
+import { user, lng } from '~/cookie';
+import i18nServer from '~/modules/i18n.server';
+import { cacheHeader } from '~/utils/cacheHeader';
+import { guessRegion } from '~/utils/region/main';
 
 export default async function loader({ request, params, context }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
     const cookie = (await user.parse(cookieHeader)) || {};
     const locale = (await lng.parse(cookieHeader)) as string;
     if (!cookie.access_token) return redirect('/unauthorized');
+    const time = new Date().getTime();
     const t = await i18nServer.getFixedT(request);
+    let nationDataChecked = false;
+    let regionParamCopy = null;
     if (params.name) {
         try {
             const githubInstance = createInstanceForGithub(
@@ -29,34 +33,51 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 githubInstance
             );
             const { data } = await user.getData();
+            console.log('User Data Time:', new Date().getTime() - time);
             if (!data.user) throw new Response(t('user.err.not_found'), { status: 404 });
+            regionParamCopy = {
+                location: data.user.location as string | undefined,
+                followers: data.user.followers,
+                followings: data.user.following,
+                readme: data.user.repository,
+                login: data.user.login,
+            };
             const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
+            const deepSeekInstance = createInstanceForDeepSeek(context.cloudflare.env.DEEPSEEK_API_KEY);
             let nationData = {
                 nationISO: '',
                 message: t('user.info.from_followers_and_followings'),
                 confidence: 0.5,
             };
             try {
-                nationData = await guessRegion({
-                    locale,
-                    userData: {
-                        t,
-                        location: data.user.location as string | undefined,
-                        followers: data.user.followers.totalCount,
-                        followings: data.user.following.totalCount,
-                        login: data.user.login,
-                    },
-                    beInstance,
-                    githubInstance,
-                    beUrl: context.cloudflare.env.BASE_URL,
-                    beToken: cookie.be_token,
-                });
-                nationData = {
-                    ...nationData,
-                    confidence: parseFloat(nationData.confidence.toFixed(2)),
-                    message: t(nationData.message),
-                };
-            } catch {
+                const time = new Date().getTime();
+                const localNationData = await getUserNation(params.name, beInstance);
+                if (!localNationData) {
+                    nationDataChecked = true;
+                    nationData = await guessRegion({
+                        locale,
+                        userData: {
+                            t,
+                            ...regionParamCopy,
+                        },
+                        beInstance,
+                        githubInstance,
+                        deepSeekInstance,
+                        dataFromBe: localNationData,
+                    });
+                    console.log('Total Nation Data Time:', new Date().getTime() - time);
+                    nationData = {
+                        ...nationData,
+                        confidence: parseFloat(nationData.confidence.toFixed(2)),
+                        message: t(nationData.message),
+                    };
+                } else {
+                    nationData = localNationData;
+                    // 已经经过无数验证非常确定的答案，无需再去重新判断
+                    nationDataChecked = localNationData.confidence === 1;
+                }
+            } catch (e) {
+                console.log(e);
                 nationData = {
                     nationISO: '',
                     message: t('user.info.from_followers_and_followings'),
@@ -64,28 +85,39 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 };
             }
             try {
+                const localTime = new Date().getTime();
                 const scores = await user.getUserScores();
-                return json({
-                    data,
-                    title: `${params?.name ?? ''} | Genius Rank`,
-                    description: t('user.description'),
-                    beToken: cookie.be_token,
-                    githubToken: cookie.access_token,
-                    nationData,
-                    scores,
-                    scoresError: null,
-                }, cacheHeader(300));
+                console.log('User Scores Time:', new Date().getTime() - localTime);
+                console.log('Total Time:', new Date().getTime() - time);
+                return json(
+                    {
+                        data,
+                        regionParamCopy: nationDataChecked ? null : regionParamCopy,
+                        title: `${params?.name ?? ''} | Genius Rank`,
+                        description: t('user.description'),
+                        beToken: cookie.be_token,
+                        githubToken: cookie.access_token,
+                        nationData,
+                        scores,
+                        scoresError: null,
+                    },
+                    cacheHeader(300)
+                );
             } catch (e) {
-                return json({
-                    data,
-                    title: `${params?.name ?? ''} | Genius Rank`,
-                    description: t('user.description'),
-                    beToken: cookie.be_token,
-                    githubToken: cookie.access_token,
-                    nationData,
-                    scores: null,
-                    scoresError: e as AxiosError,
-                }, cacheHeader(300));
+                return json(
+                    {
+                        data,
+                        regionParamCopy: nationDataChecked ? null : regionParamCopy,
+                        title: `${params?.name ?? ''} | Genius Rank`,
+                        description: t('user.description'),
+                        beToken: cookie.be_token,
+                        githubToken: cookie.access_token,
+                        nationData,
+                        scores: null,
+                        scoresError: e as AxiosError,
+                    },
+                    cacheHeader(300)
+                );
             }
         } catch (e) {
             console.log(e);

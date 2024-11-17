@@ -8,6 +8,7 @@ import LoadingLayout from '~/components/loading';
 import Search from '~/components/search';
 import octoCat from '~/assets/github.svg';
 import { useTranslation } from 'react-i18next';
+import octoCatWhite from '~/assets/github_white.svg';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
@@ -39,11 +40,11 @@ export default function Index() {
         <>
             <div className="flex flex-col items-center gap-1 relative" ref={parentRef}>
                 <LoadingLayout />
-                <div className="px-8 py-12 bg-blue-400/70 text-white flex flex-col justify-center items-center gap-2 w-full h-full">
+                <div className="px-8 py-12 bg-blue-400/70 dark:bg-slate-700 text-white flex flex-col justify-center items-center gap-2 w-full h-full">
                     <h1 className="text-6xl font-bold">Genius Rank</h1>
                     <h2 className="text-2xl">{t('description')}</h2>
                     <div className="w-full max-w-lg mt-12">
-                        <Search logo={octoCat} placeholder={t('search.placeholder')} />
+                        <Search logo={octoCat} logoWhite={octoCatWhite} placeholder={t('search.placeholder')} />
                     </div>
                 </div>
                 {pathname === '/detail' ? <></> : <Outlet />}

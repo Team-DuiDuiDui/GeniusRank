@@ -14,15 +14,19 @@ const UserInfoDetail: React.FC<userInfo> = ({ data }) => {
     return (
         <CardWithNoShrink containerClass="flex-shrink h-full w-full">
             <div className="flex flex-row items-center justify-left gap-8 w-full h-full">
-                <Avatar src={data.avatarUrl} style={{ width: '6rem', height: '6rem', flexShrink: "0" }} />
+                <Avatar src={data.avatarUrl} style={{ width: '6rem', height: '6rem', flexShrink: '0' }} />
                 <div className="flex flex-col h-full justify-between">
                     <div className="flex flex-col gap-0.25">
                         {/* data.login 是用户名，data.name 是用户昵称(可选) */}
                         <h2 className="text-2xl font-bold">{data.name ?? data.login}</h2>
-                        {data.name && <p className="text-sm text-gray-500">{data.login}</p>}
+                        {data.name && <p className="text-sm text-gray-500 dark:text-gray-300">{data.login}</p>}
                     </div>
                     <div className="flex flex-col gap-0.5">
-                        <p>{data.bio ?? <span className="text-gray-500"> {t('user.no_description')}</span>}</p>
+                        <p>
+                            {data.bio ?? (
+                                <span className="text-gray-500 dark:text-gray-300"> {t('user.no_description')}</span>
+                            )}
+                        </p>
                         <p className="text-sm">
                             {data.followers.totalCount} {t('user.followers')} · {data.following.totalCount}{' '}
                             {t('user.following')}

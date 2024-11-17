@@ -67,7 +67,6 @@ export function calculateNationPrediction(fansList: User[], followersList?: User
                 );
                 const priorProb = getPriorProbability(standardizedLocation, globalLocationDistribution);
                 const infoContent = calculateInformationContent(priorProb);
-                console.log("timeWeight:", timeWeight, "influenceWeight:", influenceWeight, "infoContent:", infoContent);
                 const weight = timeWeight * influenceWeight * infoContent;
 
                 locationWeights[standardizedLocation] = (locationWeights[standardizedLocation] || 0) + weight;
