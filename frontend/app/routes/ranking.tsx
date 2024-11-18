@@ -64,7 +64,8 @@ export default function Ranking() {
     const totalPage = loaderData.totalPage;
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
-    const urlWithoutPage = "/ranking" + `?type=${searchParams.get('type') ?? ''}&nation=${searchParams.get('nation') ?? ''}`;
+    const searchParamsWithoutPage = new URLSearchParams(searchParams.toString());
+    searchParamsWithoutPage.delete('page');
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
     const userInfo = loaderData.userInfo;
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.resp));
@@ -158,7 +159,7 @@ export default function Ranking() {
                         onChange={(value) => {
                             setSearchParams({
                                 ...(value !== null && { nation: value ?? '' }),
-                                ...(searchParams.get('nation') !== null && { type: searchParams.get('type') ?? '' }),
+                                ...(searchParams.get('type') !== null && { type: searchParams.get('type') ?? '' }),
                             });
                         }}
                         defaultValue={loaderData.nation}
@@ -199,7 +200,7 @@ export default function Ranking() {
                             // 忽略错误，本来这行是应该有 href 的属性的，但是 mantine 的 Pagination.Control 组件没有这个属性
                             // eslint-disable-next-line
                             // @ts-ignore
-                            <Pagination.Control key={index} value={index} component="a" href={urlWithoutPage + `&page=${index + 1}`} className={`${page === index + 1 ? "bg-slate-900 text-zinc-200 pointer-events-none" : ""}`}>
+                            <Pagination.Control key={index} value={index} component={Link} to={`?${searchParamsWithoutPage}&page=${index + 1}`} className={`${page === index + 1 ? "bg-slate-900 dark:bg-slate-600 text-zinc-200 pointer-events-none" : ""}`}>
                                 {index + 1}
                             </Pagination.Control>
                         ))}
@@ -207,9 +208,9 @@ export default function Ranking() {
                 </Pagination.Root>
             </div>
             <div className="flex gap-2 items-center mt-12">
-                <span className="text-slate-600 text-base">{t('user.info.total_users_l1')}</span>
-                <span className="text-slate-900 text-xl">{loaderData.ranking.totalScoredUser}</span>
-                <span className="text-slate-600 text-base">{t('user.info.total_users_l2')}</span>
+                <span className="text-slate-600 dark:text-slate-300 text-base">{t('user.info.total_users_l1')}</span>
+                <span className="text-slate-900 dark:text-slate-200 text-xl">{loaderData.ranking.totalScoredUser}</span>
+                <span className="text-slate-600 dark:text-slate-300 text-base">{t('user.info.total_users_l2')}</span>
             </div>
         </div>
     );
