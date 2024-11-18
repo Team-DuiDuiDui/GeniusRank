@@ -11,6 +11,7 @@ const defaultValue: NationData = {
     confidence: 0,
     login: "",
     message: "",
+    time: 0
 };
 
 /**
@@ -112,7 +113,7 @@ export const guessRegionFromFollowersBetter = async (
     })))
     const res = resAll[0]
     console.log({ ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" })
-    return { ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" }
+    return { ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings", time: new Date().getTime() }
 }
 
 

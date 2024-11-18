@@ -23,6 +23,7 @@ interface NationData {
     confidence: number;
     login: string;
     message: string;
+    time: number;
 }
 
 export interface UserDataProps {
@@ -95,6 +96,7 @@ export const guessRegion = async ({
                 confidence: 0.5,
                 login: userData.login,
                 message: 'user.info.no_full_data',
+                time: 0,
             }), dataFromBe, beInstance);
         }
         const dataFromFollowers = checkRegion(await guessRegionFromFollowersBetter(userData, deepSeekInstance));
@@ -111,6 +113,7 @@ export const guessRegion = async ({
         confidence: 0,
         login: userData.login,
         message: 'user.info.from_followers_and_followings',
+        time: 0,
     }
 };
 

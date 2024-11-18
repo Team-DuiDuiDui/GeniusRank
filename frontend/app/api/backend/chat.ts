@@ -4,6 +4,7 @@ import { AxiosInstanceForBe, AxiosInstanceForDeepSeek } from "./instance";
 export interface NationData {
     nationName: string;
     nationISO: string;
+    time: number
 }
 
 /**
@@ -24,7 +25,7 @@ export const syncChatForNationFromUserList = async (data: string, deepSeekInstan
     }
     `
     const result = await syncChatFromDeepSeek(message, deepSeekInstance)
-    return JSON.parse(result)
+    return {...JSON.parse(result), time: Date.now()}
 }
 
 /**
@@ -46,8 +47,7 @@ export const syncChatForNationFromReadme = async (data: string, deepSeekInstance
     }
     `
     const result = await syncChatFromDeepSeek(message, deepSeekInstance)
-    console.log(result)
-    return JSON.parse(result)
+    return {...JSON.parse(result), time: Date.now()}
 }
 
 export const syncChatForNationFromGLM = async (userName: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
@@ -64,7 +64,7 @@ export const syncChatForNationFromGLM = async (userName: string, deepSeekInstanc
     }
     `
     const result = await syncChatFromDeepSeek(message, deepSeekInstance)
-    return JSON.parse(result)
+    return {...JSON.parse(result), time: Date.now()}
 }
 
 /**

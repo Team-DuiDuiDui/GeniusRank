@@ -7,13 +7,14 @@ export interface NationData {
     nationISO: string;
     confidence: number;
     message: string;
+    time: number;
 }
 
 export const getUserNation = async (login: string, instance: AxiosInstanceForBe): Promise<NationData | null> => {
     console.log('getUserNation', login)
     const result = await handleRequest<NationData | null>(
         () => instance.get(`/analyze/country/${login}`),
-        async res => res.data.data ? { login: res.data.data.login, nationISO: res.data.data.country_iso, confidence: res.data.data.confidence, message: res.data.data.message } : null,
+        async res => res.data.data ? { login: res.data.data.login, nationISO: res.data.data.country_iso, confidence: res.data.data.confidence, message: res.data.data.message, time: res.data.data.updateTime } : null,
         undefined, 0, false, false
     );
     return result !== undefined ? result : null;
