@@ -8,6 +8,7 @@ import {
 import { updateUserNation } from '~/api/backend/region';
 import { syncChatFromDeepSeek } from '~/api/backend/chat';
 import { SubUserDetail } from '~/api/github/graphql/typings/user';
+import { updateDynamicConfidenceWithDecay } from './confidence';
 
 export interface GuessNationProps {
     locale: string;
@@ -16,6 +17,7 @@ export interface GuessNationProps {
     deepSeekInstance: AxiosInstanceForDeepSeek;
     userData: UserDataProps;
     dataFromBe: NationData | null;
+    time: number;
 }
 
 interface NationData {
@@ -23,6 +25,7 @@ interface NationData {
     confidence: number;
     login: string;
     message: string;
+    time: number;
 }
 
 export interface UserDataProps {
@@ -34,28 +37,60 @@ export interface UserDataProps {
     login: string;
 }
 
-const checkAndUpdateBeData = async (newData: NationData, beData: NationData | null, beInstance: AxiosInstanceForBe): Promise<NationData> => {
+// async function checkAndUpdateBeData(
+//     newData: NationData,
+//     beData: NationData | null,
+//     beInstance: AxiosInstanceForBe
+// ): Promise<NationData> {
+//     if (!beData) {
+//         // 如果后端没有数据，直接写入新数据
+//         await updateUserNation(newData, beInstance);
+//         console.log("后端没有数据");
+//         return newData;
+//     }
+
+//     // 使用动态置信度更新函数
+//     const updatedData = updateDynamicConfidenceWithDecay(beData, newData);
+//     await updateUserNation(updatedData, beInstance);
+//     return updatedData;
+// }
+
+async function checkAndUpdateBeData(
+    newData: NationData,
+    beData: NationData | null,
+    beInstance: AxiosInstanceForBe
+): Promise<NationData> {
     if (!beData) {
+        // 如果后端没有数据，直接写入新数据
         await updateUserNation(newData, beInstance);
-        console.log("后端没有数据")
-        return newData
-    }
-    console.log("dataFromBe:", beData)
-    console.log("newData:", newData)
-    if (beData.nationISO !== newData.nationISO) {
-        if (beData.confidence > 0.5) {
-            await updateUserNation({ ...beData, confidence: beData.confidence * 0.7 }, beInstance);
-            console.log("后端数据不够烂")
-            return newData;
-        }
-        await updateUserNation(newData, beInstance);
-        console.log("新数据更好")
+        console.log("后端没有数据");
         return newData;
     }
-    console.log("后端数据更好")
-    const result = { ...beData, confidence: Math.min(Math.max(beData.confidence, newData.confidence) * 1.3, 0.99) }
-    await updateUserNation(result, beInstance);
-    return result;
+
+    console.log("dataFromBe:", beData);
+    console.log("newData:", newData);
+
+    // 使用动态置信度更新函数
+    const updatedData = updateDynamicConfidenceWithDecay(beData, newData);
+
+    // 如果 nationISO 不同，处理置信度减少的逻辑已经在 `updateDynamicConfidenceWithDecay` 中实现
+    if (beData.nationISO !== newData.nationISO) {
+        if (updatedData.nationISO === beData.nationISO && updatedData.confidence > 0.5) {
+            // 如果置信度减少后仍然保留旧的 nationISO
+            await updateUserNation(updatedData, beInstance);
+            console.log("后端数据不够烂");
+            return newData;
+        }
+        // 否则直接用新数据替代
+        await updateUserNation(updatedData, beInstance);
+        console.log("新数据更好");
+        return updatedData;
+    }
+
+    // 如果 nationISO 相同
+    await updateUserNation(updatedData, beInstance);
+    console.log("后端数据更好");
+    return updatedData;
 }
 
 // TODO: 创建一个任务队列，用于存储非必要任务，但是可以执行的。
@@ -74,16 +109,16 @@ export const guessRegion = async ({
     githubInstance,
     deepSeekInstance,
     dataFromBe,
+    time,
 }: GuessNationProps): Promise<NationData> => {
     // throw new Error('Not implemented');
-    const time = new Date().getTime();
     try {
         if (userData.followers.totalCount > 50000) {
-            const dataFromGLM = checkRegion(await guessRegionFromGLM(userData.login, deepSeekInstance)) ;
+            const dataFromGLM = checkRegion(await guessRegionFromGLM(userData.login, deepSeekInstance, time));
             if (dataFromGLM?.nationISO) return await checkAndUpdateBeData(dataFromGLM, dataFromBe, beInstance);
         }
 
-        const dataFromReadme = checkRegion(await guessRegionFromReadme(userData, deepSeekInstance, githubInstance));
+        const dataFromReadme = checkRegion(await guessRegionFromReadme(userData, deepSeekInstance, githubInstance, time));
         if (dataFromReadme.nationISO) return await checkAndUpdateBeData(dataFromReadme, dataFromBe, beInstance);
         console.log('Readme Data Time:', new Date().getTime() - time);
 
@@ -95,9 +130,10 @@ export const guessRegion = async ({
                 confidence: 0.5,
                 login: userData.login,
                 message: 'user.info.no_full_data',
+                time: 0,
             }), dataFromBe, beInstance);
         }
-        const dataFromFollowers = checkRegion(await guessRegionFromFollowersBetter(userData, deepSeekInstance));
+        const dataFromFollowers = checkRegion(await guessRegionFromFollowersBetter(userData, deepSeekInstance, time));
         console.log('dataFromFollowers:', dataFromFollowers);
         if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
 
@@ -111,11 +147,12 @@ export const guessRegion = async ({
         confidence: 0,
         login: userData.login,
         message: 'user.info.from_followers_and_followings',
+        time: 0,
     }
 };
 
 export const checkRegion = (data: NationData): NationData => {
-    const result = {...data};
+    const result = { ...data };
     if (data.nationISO === "TW" || data.nationISO === "HK" || data.nationISO === "MO") {
         result.nationISO = "CN";
     }

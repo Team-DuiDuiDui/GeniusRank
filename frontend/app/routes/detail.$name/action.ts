@@ -19,6 +19,7 @@ export default async function action({ request, context }: ActionFunctionArgs) {
     const githubInstance = createInstanceForGithub(cookie.access_token, 'Team-Duiduidui: Genius Rank', 'Bearer');
     const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL, cookie.be_token);
     const locale = (await lng.parse(cookieHeader)) as string;
+    const time = Date.now();
     try {
         const nationData = await guessRegion({
             locale,
@@ -30,6 +31,7 @@ export default async function action({ request, context }: ActionFunctionArgs) {
             githubInstance,
             deepSeekInstance,
             dataFromBe: dataFromBe,
+            time
         });
         return json({ ...nationData, message: t(nationData.message), donotLoad: true });
     } catch {
