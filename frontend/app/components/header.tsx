@@ -25,7 +25,6 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
     const { t, i18n } = useTranslation();
     const fetcher = useFetcher();
-    const themeFetcher = useFetcher();
     const params = useLocation();
     const { toggleColorScheme } = useMantineColorScheme();
     const parentRef = useRef(null);
@@ -82,16 +81,13 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
                         fetcher.submit({ lng: t('opposite_lng') }, { method: 'get' });
                         i18n.changeLanguage(t('opposite_lng'));
                     }}>
-                    <Button
+                    <button
                         type="submit"
                         name="lng"
                         value={t('opposite_lng')}
-                        variant="default"
-                        size="xs"
-                        className="btn-900 dark:border-blue-900">
-                        <TranslationOutlined className="mr-1 align-text-bottom" />
-                        {t('opposite_lng_name')}
-                    </Button>
+                        className="py-1 px-2 hover:bg-gray-200 rounded-md dark:bg-slate-800 dark:border-blue-900 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-gray-300 transition-all aspect-square">
+                        <TranslationOutlined className="text-base" />
+                    </button>
                 </Form>
                 <Form
                     className="lg:block hidden"
@@ -99,7 +95,7 @@ const Header: React.FC<HeaderProps> = ({ client_id, openDrawer, userData }) => {
                     method="post"
                     onClick={(e) => {
                         e.preventDefault();
-                        themeFetcher.submit({ doNotRedirect: true }, { method: 'post', action: '/theme' });
+                        fetcher.submit({ doNotRedirect: true }, { method: 'post', action: '/theme' });
                         toggleColorScheme();
                     }}>
                     <button

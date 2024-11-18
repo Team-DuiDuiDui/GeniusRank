@@ -27,7 +27,7 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style, disabled })
             <Accordion.Control
                 icon={<Avatar src={userInfo.avatar_url} />}
                 disabled={disabled}
-                className="opacity-100 dark:hover:bg-slate-600 ">
+                className="opacity-100 dark:hover:bg-slate-600">
                 <div className="flex flex-row items-center justify-between" style={style}>
                     <div className="flex flex-row items-center h-12">
                         <div className="flex flex-col">
