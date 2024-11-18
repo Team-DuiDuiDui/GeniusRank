@@ -61,6 +61,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function Ranking() {
     const loaderData = useLoaderData<typeof loader>();
     const totalPage = loaderData.totalPage;
+    console.log(loaderData.ranking.nations)    
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
     const urlWithoutPage = "/ranking" + `?type=${searchParams.get('type') ?? ''}&nation=${searchParams.get('nation') ?? ''}`;
@@ -156,7 +157,7 @@ export default function Ranking() {
                                 ...(searchParams.get('nation') !== null && { type: searchParams.get('type') ?? '' }),
                             });
                         }}
-                        defaultValue={loaderData.type}
+                        defaultValue={loaderData.nation}
                         placeholder={t('ranking.nation')}
                         data={loaderData.ranking.nations
                             .map((item) => {
