@@ -28,7 +28,7 @@ const UserScoreDetail: React.FC<userRepositoriesProps> = ({ scores, data, error 
                                 {t('user.score.copy_card')}
                             </span>
                             <input
-                                className="px-4 py-2 focus-visible:outline-none w-80"
+                                className="px-4 py-2 focus-visible:outline-none w-80 bg-transparent"
                                 readOnly
                                 value={`[![Genius Rank](https://geniusrank.heuluck.top/card/${data.login})](https://geniusrank.heuluck.top/)`}
                             />
