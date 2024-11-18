@@ -51,6 +51,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 confidence: 0.5,
             };
             try {
+                throw new Error('Not implemented');
                 const time = new Date().getTime();
                 const localNationData = await getUserNation(regionParamCopy.login, beInstance);
                 console.log(localNationData)

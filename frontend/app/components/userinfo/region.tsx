@@ -7,10 +7,10 @@ import { useTranslation } from "react-i18next";
 import { FetcherWithComponents } from "@remix-run/react";
 import { UserDetail } from "~/api/github/graphql/typings/user";
 import { useEffect, useState } from "react";
-import loader from "~/routes/detail.$name/loader";
 // import { interpolateColorsOfIcon } from '~/utils/chore';
 
 interface NationCardProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any;
     fetcher?: FetcherWithComponents<unknown>;
     userData?: Pick<UserDetail, "followers" | "following" | "login">;
@@ -53,8 +53,8 @@ const UserNation: React.FC<NationCardProps> = ({
                         fetcher.submit(
                             formData,
                             {
-                                action: "/reset-fetcher",
-                            },
+                                method: "POST",
+                            }
                         );
                         setLoading(true);
                     }}
@@ -62,7 +62,12 @@ const UserNation: React.FC<NationCardProps> = ({
                     <input
                         type="hidden"
                         name="userData"
-                        value={JSON.stringify(userData)}
+                        value={JSON.stringify(data.regionParamCopy)}
+                    />
+                    <input
+                        type="hidden"
+                        name="dataFromBe"
+                        value={JSON.stringify(data.nationData)}
                     />
                     <Tooltip label={t("user.reload_nation")}>
                         <button
