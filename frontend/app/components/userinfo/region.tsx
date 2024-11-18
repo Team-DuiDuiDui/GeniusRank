@@ -25,7 +25,6 @@ interface NationCardProps {
 const UserNation: React.FC<NationCardProps> = ({
     data,
     fetcher,
-    userData,
     nationISO,
     nationLocale,
     isStillHim,
