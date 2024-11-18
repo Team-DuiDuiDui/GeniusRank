@@ -119,7 +119,16 @@
         "open": "预览"
       },
       "confidence": "置信度",
-      "reload_nation": "点击刷新国籍"
+      "reload_nation": "点击刷新国籍",
+      "card_description": "GitHub Stats 卡片生成，在 GitHub 上向其他用户自信展示自己的分数。",
+      "card_title": "Stats",
+      "graph_title": "图表",
+      "graph_description": "得分详细以图表展示，详细了解分数的分布。",
+      "list_title": "活动列表",
+      "list_description": "查看贡献的每一个仓库、PRs、Issues，了解每一分的来由。",
+      "rank_title": "排行榜",
+      "location_title": "国籍猜测",
+      "location_description": "猜测用户的国籍，获知他们的文化背景，更好地与贡献者们进行互动。"
     },
     "drawer": {
       "login": "登录",

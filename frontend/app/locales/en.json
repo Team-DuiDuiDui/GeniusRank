@@ -122,7 +122,16 @@
         "open": "Preview"
       },
       "confidence": "Confidence",
-      "reload_nation": "Click to reload"
+      "reload_nation": "Click to reload",
+      "card_description": "GitHub Stats Card Generation, Show your scores to visitors on GitHub.",
+      "card_title": "Stats",
+      "graph_title": "Graph",
+      "graph_description": "Charts and graphs are used to show the distribution of scores.",
+      "list_title": "Events",
+      "list_description": "See where each point came from by checking out every repository, PR, and issue.",
+      "rank_title": "Ranking",
+      "location_title": "Nationality",
+      "location_description": "Determine users' nationalities, grasp their cultural backgrounds, and connect with contributors."
     },
     "drawer": {
       "login": "Login",
