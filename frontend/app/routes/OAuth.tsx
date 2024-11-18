@@ -99,7 +99,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                     'Set-Cookie': await user.serialize(cookie, {
                         secure: true,
                         httpOnly: true,
-                        maxAge: 60 * 60 * 24,
+                        maxAge: 60 * 60 * 24 * 7,
                         sameSite: 'lax',
                     }),
                 },
@@ -187,7 +187,7 @@ export default function OAuth() {
             <ExclamationCircleTwoTone twoToneColor={'#ff4d4f'} className="text-6xl" />
             <div className="flex flex-col justify-center items-center gap-2">
                 <h1 className="text-2xl">{t('oauth.err.error')}</h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-300">
                     {error.title}: {error.message}
                 </p>
             </div>

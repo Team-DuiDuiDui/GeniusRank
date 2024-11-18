@@ -59,7 +59,7 @@ const UserIssues: React.FC<userIssuesProps> = ({ data, user }) => {
 
     return (
         <CardWithScrollableTable
-            title={t('user.userRecentIssues')}
+            title={t('user.userRecentIssues', { total: issues?.items.length ?? 80 })}
             columns={[t('user.number'), t('user.repo'), t('user.issue_title'), t('user.update_time')]}
             data={issues?.items}
             dataCount={issues?.total_count ?? 0}

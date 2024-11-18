@@ -60,7 +60,7 @@ const UserRepositories: React.FC<userRepositoriesProps> = ({ data, user }) => {
 
     return (
         <CardWithScrollableTable
-            title={t('user.userRepos')}
+            title={t('user.userRepos', { total: repos?.length ?? 80 })}
             columns={[
                 t('user.number'),
                 t('user.repo'),

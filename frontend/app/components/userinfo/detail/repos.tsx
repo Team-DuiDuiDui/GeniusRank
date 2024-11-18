@@ -28,7 +28,7 @@ const UserReposDetail: React.FC<userIssuesProps> = ({ data }) => {
     }, [titleRef]);
     return (
         <CardWithScrollableTableDetail
-            title={t('user.userRepos_50')}
+            title={t('user.userRepos_50', { total: issueNode?.length ?? 50 })}
             columns={[t('user.number'), t('user.repo'), t('user.lang'), t('user.repo_info')]}
             data={issueNode}
             dataCount={data?.repositories.totalCount ?? 0}

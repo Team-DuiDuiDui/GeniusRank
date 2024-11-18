@@ -93,8 +93,12 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         },
         {
             headers: [
-                ['Set-Cookie', await localeCookie.serialize(locale)],
-                ['Set-Cookie', await prefs.serialize(preferences)],
+                [
+                    'Set-Cookie',
+                    await localeCookie.serialize(locale, {
+                        maxAge: 60 * 60 * 24 * 7,
+                    }),
+                ],
             ],
         }
     );

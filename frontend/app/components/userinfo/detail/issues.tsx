@@ -25,7 +25,7 @@ const UserIssuesDetail: React.FC<userIssuesProps> = ({ data }) => {
     }, [titleRef]);
     return (
         <CardWithScrollableTableDetail
-            title={t('user.userRecentIssues_50')}
+            title={t('user.userRecentIssues_50', { total: issueNode?.length ?? 50 })}
             columns={[
                 t('user.number'),
                 t('user.issue_title'),

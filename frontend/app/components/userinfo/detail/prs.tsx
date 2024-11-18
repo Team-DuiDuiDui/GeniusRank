@@ -29,7 +29,7 @@ const UserPullRequestsDetail: React.FC<userIssuesProps> = ({ data }) => {
     }, [titleRef]);
     return (
         <CardWithScrollableTableDetail
-            title={t('user.userRecentPrs_all')}
+            title={t('user.userRecentPrs_all', { total: prNode?.length ?? 50 })}
             columns={[
                 t('user.number'),
                 t('user.pr_title'),
@@ -76,8 +76,8 @@ const Prs: React.FC<issueProps> = ({ item, index: key, t }) => {
                             item.state === 'OPEN'
                                 ? 'text-green-500'
                                 : item.state === 'MERGED'
-                                    ? 'text-purple-500'
-                                    : 'text-red-500',
+                                ? 'text-purple-500'
+                                : 'text-red-500',
                             'text-xl',
                         ].join(' ')}>
                         {item.state === 'OPEN' ? (

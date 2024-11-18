@@ -59,7 +59,7 @@ const UserPRs: React.FC<userPRsProps> = ({ data, user }) => {
 
     return (
         <CardWithScrollableTable
-            title={t('user.userRecentPrs')}
+            title={t('user.userRecentPrs', { total: prs?.items.length ?? 80 })}
             columns={[t('user.number'), t('user.repo'), t('user.pr_title'), t('user.update_time')]}
             data={prs?.items}
             dataCount={prs?.total_count ?? 0}

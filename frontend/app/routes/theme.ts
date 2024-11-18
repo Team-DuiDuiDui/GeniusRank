@@ -12,13 +12,17 @@ export async function action({ request }: ActionFunctionArgs) {
             { donotLoad: true },
             {
                 headers: {
-                    'Set-Cookie': await prefs.serialize(preferences),
+                    'Set-Cookie': await prefs.serialize(preferences, {
+                        maxAge: 60 * 60 * 24 * 7,
+                    }),
                 },
             }
         );
     return redirect(request.headers.get('referer') ?? '/', {
         headers: {
-            'Set-Cookie': await prefs.serialize(preferences),
+            'Set-Cookie': await prefs.serialize(preferences, {
+                maxAge: 60 * 60 * 24 * 7,
+            }),
         },
     });
 }
