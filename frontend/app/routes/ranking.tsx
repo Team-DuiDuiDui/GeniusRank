@@ -61,7 +61,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function Ranking() {
     const loaderData = useLoaderData<typeof loader>();
     const totalPage = loaderData.totalPage;
-    console.log(loaderData.ranking.nations)    
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
     const urlWithoutPage = "/ranking" + `?type=${searchParams.get('type') ?? ''}&nation=${searchParams.get('nation') ?? ''}`;
@@ -132,9 +131,9 @@ export default function Ranking() {
             <LoadingLayout />
             <div
                 className={`flex ${loaderData.userInfo.login ? 'justify-between' : 'justify-center'
-                    }  items-center relative w-full`}>
+                    }  items-center relative w-full sm:flex-col md:flex-col lg:flex-row gap-8`}>
                 {loaderData.userInfo.login && (
-                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3"></div>
+                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3 sm:hidden md:hidden lg:block"></div>
                 )}
                 <div className="flex flex-row justify-start gap-8">
                     <Select
