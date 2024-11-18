@@ -1,5 +1,4 @@
 import {
-    isRouteErrorResponse,
     ShouldRevalidateFunction,
     useFetcher,
     useLoaderData,
@@ -19,6 +18,7 @@ import loader from "./loader";
 import action from "./action";
 import lazyAction from "~/routes/lazy.$name";
 import { useEffect } from "react";
+import ErrorHandle from "~/components/errorHandle";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [
