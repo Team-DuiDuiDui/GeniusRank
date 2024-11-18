@@ -12,6 +12,8 @@ import { guessRegion } from "~/utils/region/main";
 export const action = async (
     { request, context }: ActionFunctionArgs,
 ) => {
+    
+    return json({});
     const formData = await request.formData();
     const cookieHeader = request.headers.get("Cookie");
 

@@ -46,7 +46,9 @@ export const syncChatForNationFromReadme = async (data: string, deepSeekInstance
         "nationISO": [国家对应的 ISO 简写]
     }
     `
-    return JSON.parse(await syncChatFromDeepSeek(message, deepSeekInstance))
+    const result = await syncChatFromDeepSeek(message, deepSeekInstance)
+    console.log(result)
+    return JSON.parse(result)
 }
 
 export const syncChatForNationFromGLM = async (userName: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
@@ -56,6 +58,7 @@ export const syncChatForNationFromGLM = async (userName: string, deepSeekInstanc
     你如果知道的话，请告诉我这个人来自哪个国家。如果你并不知道或者不确定，请再在返回值中的 nationISO 字段返回空字符串即可。
     如果他是混血儿，请告诉我他最主要的国籍。
     如果他是移居者或者双重国籍，请告诉我出生的时候的国家，比如 linus torvalds 在 wiki 上面是 Finnish-American 就取他的出生地 Finnish。
+    请按照以下格式返回你的答案，**注意：你的回答需要且只需要包含下面格式的 json 内容即可，不要有任何多余内容**
     {
         "nationName": [国家的英文全称],
         "nationISO": [国家对应的 ISO 简写]
@@ -83,15 +86,18 @@ export const syncChatFromDeepSeek = async (message: string, DeepSeekInstance: Ax
     return handleClientReq(
         () => DeepSeekInstance.post('chat/completions',
             {
-                "model": "deepseek-chat",
-                "messages": [
+                model: "deepseek-chat",
+                messages: [
                     { "role": "user", "content": message }
                 ],
-                "stream": false
+                response_format: {
+                    'type': 'json_object'
+                },
+                stream: false
             }
         ),
         async res => res.data.choices[0].message.content,
-        () => true, 0, true, false
+        undefined, 0, true, false
     )
 }
 
