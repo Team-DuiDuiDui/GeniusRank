@@ -1,4 +1,4 @@
-import { Avatar, Select } from '@mantine/core';
+import { Avatar, Group, Pagination, Select } from '@mantine/core';
 import { json, LoaderFunctionArgs, MetaFunction } from '@remix-run/cloudflare';
 import { Link, ShouldRevalidateFunction, useLoaderData, useRouteError, useSearchParams } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const nation = url.searchParams.get('nation');
     const cookieHeader = request.headers.get('Cookie');
+    const page = url.searchParams.get('page') ? parseInt(url.searchParams.get('page')!) : 1;
     const t = await i18nServer.getFixedT(request);
     const userCookie = (await user.parse(cookieHeader)) || {};
     const beInstance = createInstanceForBe(context.cloudflare.env.BASE_URL);
@@ -26,7 +27,6 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         name: userCookie.username,
         avatar_url: userCookie.userAvatar,
         rankingInfo: await getUserRanking(beInstance, userCookie.userLogin).catch(() => undefined),
-        // rankingInfo: { rank: 9, score: 17 },
     } as {
         login: string;
         avatar_url: string;
@@ -35,7 +35,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     };
     const type = url.searchParams.get('type');
     try {
-        const res = await getRankings(beInstance, nation, type, 20);
+        const res = await getRankings(beInstance, nation, type, 20, page);
         return json(
             {
                 userInfo,
@@ -44,6 +44,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                 description: t('ranking.description'),
                 type,
                 nation,
+                totalPage: Math.ceil(res.totalCount / 20),
             },
             { status: 200 }
         );
@@ -60,8 +61,11 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export default function Ranking() {
     const loaderData = useLoaderData<typeof loader>();
+    const totalPage = loaderData.totalPage;
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
+    const urlWithoutPage = "/ranking" + `?type=${searchParams.get('type') ?? ''}&nation=${searchParams.get('nation') ?? ''}`;
+    const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
     const userInfo = loaderData.userInfo;
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.resp));
     const splicedData = (rankingData && rankingData.splice(0, Math.ceil(loaderData.ranking.resp.length / 2))) || '';
@@ -131,11 +135,10 @@ export default function Ranking() {
         <div className="py-12 mx-0 sm:px-8 relative flex justify-center flex-col items-center">
             <LoadingLayout />
             <div
-                className={`flex ${
-                    loaderData.userInfo.login ? 'justify-between' : 'justify-center'
-                }  items-center relative w-full`}>
+                className={`flex ${loaderData.userInfo.login ? 'justify-between' : 'justify-center'
+                    }  items-center relative w-full sm:flex-col md:flex-col lg:flex-row gap-8`}>
                 {loaderData.userInfo.login && (
-                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3"></div>
+                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3 sm:hidden md:hidden lg:block"></div>
                 )}
                 <div className="flex flex-row justify-start gap-8">
                     <Select
@@ -158,7 +161,7 @@ export default function Ranking() {
                                 ...(searchParams.get('nation') !== null && { type: searchParams.get('type') ?? '' }),
                             });
                         }}
-                        defaultValue={loaderData.type}
+                        defaultValue={loaderData.nation}
                         placeholder={t('ranking.nation')}
                         data={loaderData.ranking.nations
                             .map((item) => {
@@ -189,10 +192,24 @@ export default function Ranking() {
                         rankingData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
                 </UserAccordion>
             </div>
-            <div className="flex gap-2 items-center mt-20">
-                <span className="text-slate-600 dark:text-gray-300 text-base">{t('user.info.total_users_l1')}</span>
-                <span className="text-slate-900 dark:text-gray-200 text-xl">{loaderData.ranking.totalCount}</span>
-                <span className="text-slate-600 dark:text-gray-300 text-base">{t('user.info.total_users_l2')}</span>
+            <div className="flex mt-8">
+                <Pagination.Root total={totalPage} defaultValue={page} value={page}>
+                    <Group gap={5}>
+                        {Array.from({ length: totalPage }).map((_, index) => (
+                            // 忽略错误，本来这行是应该有 href 的属性的，但是 mantine 的 Pagination.Control 组件没有这个属性
+                            // eslint-disable-next-line
+                            // @ts-ignore
+                            <Pagination.Control key={index} value={index} component="a" href={urlWithoutPage + `&page=${index + 1}`} className={`${page === index + 1 ? "bg-slate-900 text-zinc-200 pointer-events-none" : ""}`}>
+                                {index + 1}
+                            </Pagination.Control>
+                        ))}
+                    </Group>
+                </Pagination.Root>
+            </div>
+            <div className="flex gap-2 items-center mt-12">
+                <span className="text-slate-600 text-base">{t('user.info.total_users_l1')}</span>
+                <span className="text-slate-900 text-xl">{loaderData.ranking.totalScoredUser}</span>
+                <span className="text-slate-600 text-base">{t('user.info.total_users_l2')}</span>
             </div>
         </div>
     );

@@ -94,6 +94,9 @@ export function calculateNationPrediction(fansList: User[], followersList?: User
 
     // 计算置信度
     function calculateConfidence(probabilities: { [location: string]: number }): number {
+        if (Object.keys(probabilities).length === 1) {
+            return 1; // 如果只有一个位置，直接返回 1
+        }
         const entropy = -Object.values(probabilities).reduce(
             (sum, p) => {
                 if (p > 0 && !isNaN(p)) {
@@ -122,6 +125,7 @@ export function calculateNationPrediction(fansList: User[], followersList?: User
             isFollowerList,
             globalLocationDistribution
         );
+        console.log("probabilities:", probabilities)
         const confidence = calculateConfidence(probabilities);
 
         return Object.keys(probabilities).map((location) => ({

@@ -1,19 +1,22 @@
 // routes/lazy.$param.tsx
-import { ActionFunctionArgs, json, redirect } from '@remix-run/cloudflare';
-import { createInstanceForBe, createInstanceForDeepSeek } from '~/api/backend/instance';
-import { createInstanceForGithub } from '~/api/github/instance';
-import { lng, user } from '~/cookie';
-import i18nServer from '~/modules/i18n.server';
-import { guessRegion } from '~/utils/region/main';
+import { ActionFunctionArgs, json } from "@remix-run/node";
+import {
+    createInstanceForBe,
+    createInstanceForDeepSeek,
+} from "~/api/backend/instance";
+import { createInstanceForGithub } from "~/api/github/instance";
+import { lng, user } from "~/cookie";
+import i18nServer from "~/modules/i18n.server";
+import { guessRegion } from "~/utils/region/main";
 
-export const action = async ({ params, request, context }: ActionFunctionArgs) => {
-    const param = params.name;
+export const action = async (
+    { request, context }: ActionFunctionArgs,
+) => {
     const formData = await request.formData();
     const cookieHeader = request.headers.get('Cookie');
 
     const cookie = (await user.parse(cookieHeader)) || {};
     const locale = (await lng.parse(cookieHeader)) as string;
-    if (!cookie.access_token) return redirect('/unauthorized');
     const t = await i18nServer.getFixedT(request);
     const userData = formData.get('userData')!;
     const dataFromBe = formData.get('dataFromBe')!;
@@ -34,11 +37,9 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
             dataFromBe: JSON.parse(dataFromBe as string),
         });
     } catch (error) {
-        return json({ error: 'Invalid JSON' }, { status: 400 });
+        return json({ error });
     }
-
-    // 模拟一些逻辑
-    return json({ message: `Received param: ${param} with data: ${userData}` });
+    return json({});
 };
 
 export default function LazyRoute() {

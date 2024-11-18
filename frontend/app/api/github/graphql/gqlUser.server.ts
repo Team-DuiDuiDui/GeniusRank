@@ -20,183 +20,195 @@ export class gqlUser {
     }
 
     async getData(count: number = 50): Promise<UserData> {
-        const res = await this.githubInstance.post('/graphql', {
-            query: `
-query($username:String!,$count:Int!){
-    user(login: $username){
-        avatarUrl
-        databaseId
-        name
-        login
-        bio
-        followers(last: 80) {
-            nodes {
-                login
+        const query = ` 
+        query($username:String!,$count:Int!){
+            user(login: $username){
+                avatarUrl
+                databaseId
                 name
+                login
+                bio
+                followers(last: 80) {
+                    nodes {
+                        login
+                        name
+                        location
+                        company
+                        followers {
+                            totalCount
+                            }
+                        following {
+                            totalCount
+                            }
+                        }
+                    totalCount
+                }
+                following(last: 80) {
+                    nodes {
+                        login
+                        name
+                        location
+                        company
+                        followers {
+                            totalCount
+                        }
+                    }
+                    totalCount 
+                }
                 location
                 company
-                followers {
+                twitterUsername
+                lifetimeReceivedSponsorshipValues{
                     totalCount
-                    }
-                following {
-                    totalCount
-                    }
                 }
-            totalCount
-        }
-        following(last: 80) {
-            nodes {
-                login
-                name
-                location
-                company
-                followers {
+                pullRequests(last:$count,orderBy:{direction:ASC,field:UPDATED_AT}){
+                    nodes{
+                        title
+                        url
+                        # CLOSED / MERGED / OPEN
+                        state
+                        # pr 编号
+                        number
+                        baseRepository{
+                            url
+                            isFork
+                            stargazerCount
+                            forkCount
+                            issues{
+                                totalCount
+                            }
+                            pullRequests{
+                                totalCount
+                            }
+                            discussions{
+                                totalCount
+                            }
+                            primaryLanguage{
+                                name
+                            }
+                            watchers{
+                                totalCount
+                            }
+                        }
+                        commits{
+                            totalCount
+                        }
+                        totalCommentsCount
+                        updatedAt
+                    }
+                    totalCount
+                }
+                issues(last:$count,orderBy:{direction:ASC,field:UPDATED_AT}){
+                    nodes{
+                        title
+                        url
+                        # CLOSED / OPEN
+                        state
+                        # issue 编号
+                        number
+                        repository{
+                            url
+                            isFork
+                            stargazerCount
+                            forkCount
+                            issues{
+                                totalCount
+                            }
+                            pullRequests{
+                                totalCount
+                            }
+                            discussions{
+                                totalCount
+                            }
+                            primaryLanguage{
+                                name
+                            }
+                            watchers{
+                                totalCount
+                            }
+                        }
+                        comments{
+                            totalCount
+                        }
+                        updatedAt
+                    }
+                    totalCount
+                }
+                repositories(last:$count,orderBy:{direction:ASC,field:STARGAZERS},ownerAffiliations:[OWNER]){
+                    nodes{
+                        url
+                        isFork
+                        stargazerCount
+                        forkCount
+                        issues{
+                            totalCount
+                        }
+                        pullRequests{
+                                totalCount
+                            }
+                        discussions{
+                            totalCount
+                        }
+                        primaryLanguage{
+                            name
+                        }
+                        watchers{
+                            totalCount
+                        }
+                    }
+                    totalCount
+                }
+                repositoriesContributedTo(last:$count,orderBy:{direction:ASC,field:STARGAZERS},contributionTypes:[PULL_REQUEST,COMMIT,REPOSITORY]){
+                    nodes{
+                        url
+                        isFork
+                        stargazerCount
+                        forkCount
+                        issues{
+                            totalCount
+                        }
+                        pullRequests{
+                                totalCount
+                            }
+                        discussions{
+                            totalCount
+                        }
+                        primaryLanguage{
+                            name
+                        }
+                        watchers{
+                            totalCount
+                        }
+                    }
                     totalCount
                 }
             }
-            totalCount 
-        }
-        location
-        company
-        twitterUsername
-        lifetimeReceivedSponsorshipValues{
-            totalCount
-        }
-        pullRequests(last:$count,orderBy:{direction:ASC,field:UPDATED_AT}){
-            nodes{
-                title
-                url
-                # CLOSED / MERGED / OPEN
-                state
-                # pr 编号
-                number
-                baseRepository{
-                    url
-                    isFork
-                    stargazerCount
-                    forkCount
-                    issues{
-                        totalCount
-                    }
-                    pullRequests{
-                        totalCount
-                    }
-                    discussions{
-                        totalCount
-                    }
-                    primaryLanguage{
+            user(login: $username) {
+            repository(name: $username) {
+                    defaultBranchRef {
                         name
                     }
-                    watchers{
-                        totalCount
-                    }
-                }
-                commits{
-                    totalCount
-                }
-                totalCommentsCount
-                updatedAt
-            }
-            totalCount
-        }
-        issues(last:$count,orderBy:{direction:ASC,field:UPDATED_AT}){
-            nodes{
-                title
-                url
-                # CLOSED / OPEN
-                state
-                # issue 编号
-                number
-                repository{
-                    url
-                    isFork
-                    stargazerCount
-                    forkCount
-                    issues{
-                        totalCount
-                    }
-                    pullRequests{
-                        totalCount
-                    }
-                    discussions{
-                        totalCount
-                    }
-                    primaryLanguage{
-                        name
-                    }
-                    watchers{
-                        totalCount
-                    }
-                }
-                comments{
-                    totalCount
-                }
-                updatedAt
-            }
-            totalCount
-        }
-        repositories(last:$count,orderBy:{direction:ASC,field:STARGAZERS},ownerAffiliations:[OWNER]){
-            nodes{
-                url
-                isFork
-                stargazerCount
-                forkCount
-                issues{
-                    totalCount
-                }
-                pullRequests{
-                        totalCount
-                    }
-                discussions{
-                    totalCount
-                }
-                primaryLanguage{
-                    name
-                }
-                watchers{
-                    totalCount
                 }
             }
-            totalCount
         }
-        repositoriesContributedTo(last:$count,orderBy:{direction:ASC,field:STARGAZERS},contributionTypes:[PULL_REQUEST,COMMIT,REPOSITORY]){
-            nodes{
-                url
-                isFork
-                stargazerCount
-                forkCount
-                issues{
-                    totalCount
-                }
-                pullRequests{
-                        totalCount
-                    }
-                discussions{
-                    totalCount
-                }
-                primaryLanguage{
-                    name
-                }
-                watchers{
-                    totalCount
-                }
-            }
-            totalCount
+        `
+        try {
+            const res = await this.githubInstance.post('/graphql', {
+                query
+                ,
+                variables: { username: this.name, count: count },
+            });
+            this.dataDetail = res.data.data.user;
+            return res.data;
+        } catch (e) {
+            const res = await this.githubInstance.post('/graphql', {
+                query
+                ,
+                variables: { username: this.name, count: 20 },
+            });
+            this.dataDetail = res.data.data.user;
+            return res.data;
         }
-    }
-    user(login: $username) {
-    repository(name: $username) {
-            defaultBranchRef {
-                name
-            }
-        }
-    }
-}
-`,
-            variables: { username: this.name, count: count },
-        });
-        this.dataDetail = res.data.data.user;
-        return res.data;
     }
 
     async getUserScores(): Promise<GithubScoreRes> {

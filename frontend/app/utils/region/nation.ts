@@ -1,10 +1,9 @@
-import { streamChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList, syncChatFromDeepSeek } from "~/api/backend/chat";
+import { syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList, syncChatFromDeepSeek } from "~/api/backend/chat";
 import { AxiosInstanceForDeepSeek } from "~/api/backend/instance";
 import { AxiosInstanceForGithub } from "../../api/github/instance";
 import { handleClientGithubGraphQLReq } from "../request";
 import { UserDataProps } from "./main";
 import { NationData } from "~/api/backend/region";
-import { parseStringToArrayLike } from "../parse";
 import { calculateNationPrediction, User } from "./betterRegion";
 
 const defaultValue: NationData = {
@@ -112,6 +111,7 @@ export const guessRegionFromFollowersBetter = async (
         location: resultJSON[index] === undefined ? null : resultJSON[index],
     })))
     const res = resAll[0]
+    console.log({ ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" })
     return { ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" }
 }
 

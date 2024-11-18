@@ -40,6 +40,8 @@ const checkAndUpdateBeData = async (newData: NationData, beData: NationData | nu
         console.log("后端没有数据")
         return newData
     }
+    console.log("dataFromBe:", beData)
+    console.log("newData:", newData)
     if (beData.nationISO !== newData.nationISO) {
         if (beData.confidence > 0.5) {
             await updateUserNation({ ...beData, confidence: beData.confidence * 0.7 }, beInstance);
@@ -51,7 +53,7 @@ const checkAndUpdateBeData = async (newData: NationData, beData: NationData | nu
         return newData;
     }
     console.log("后端数据更好")
-    const result = { ...beData, confidence: Math.min(beData.confidence * 1.3, 0.99) }
+    const result = { ...beData, confidence: Math.min(Math.max(beData.confidence, newData.confidence) * 1.3, 0.99) }
     await updateUserNation(result, beInstance);
     return result;
 }
@@ -75,19 +77,18 @@ export const guessRegion = async ({
 }: GuessNationProps): Promise<NationData> => {
     // throw new Error('Not implemented');
     const time = new Date().getTime();
-    console.log('BackEnd Data Time:', new Date().getTime() - time);
     try {
         if (userData.followers.totalCount > 50000) {
-            const dataFromGLM = await guessRegionFromGLM(userData.login, deepSeekInstance);
+            const dataFromGLM = checkRegion(await guessRegionFromGLM(userData.login, deepSeekInstance)) ;
             if (dataFromGLM?.nationISO) return await checkAndUpdateBeData(dataFromGLM, dataFromBe, beInstance);
         }
 
-        const dataFromReadme = await guessRegionFromReadme(userData, deepSeekInstance, githubInstance);
+        const dataFromReadme = checkRegion(await guessRegionFromReadme(userData, deepSeekInstance, githubInstance));
         if (dataFromReadme.nationISO) return await checkAndUpdateBeData(dataFromReadme, dataFromBe, beInstance);
         console.log('Readme Data Time:', new Date().getTime() - time);
 
         if (userData.followers.totalCount < 40 && userData.location) {
-            const nationISO = JSON.parse(await syncChatFromDeepSeek(`请你告诉我这个位置信息对应的国家在哪里${userData.location}，你只需要返回这个国家对应的 ISO 代码即可，不需要多余返回任何内容`, deepSeekInstance));
+            const nationISO = await syncChatFromDeepSeek(`请你告诉我这个位置信息对应的国家在哪里${userData.location}，你只需要返回这个国家对应的 ISO 代码即可，不需要多余返回任何内容`, deepSeekInstance);
             console.log(nationISO)
             return await checkAndUpdateBeData(checkRegion({
                 nationISO: nationISO,
@@ -96,11 +97,10 @@ export const guessRegion = async ({
                 message: 'user.info.no_full_data',
             }), dataFromBe, beInstance);
         }
-        const dataFromFollowers = await guessRegionFromFollowersBetter(userData, deepSeekInstance);
+        const dataFromFollowers = checkRegion(await guessRegionFromFollowersBetter(userData, deepSeekInstance));
+        console.log('dataFromFollowers:', dataFromFollowers);
         if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
 
-        // const dataFromFollowings = await guessRegionFromFollowings(userData, deepSeekInstance, githubInstance);
-        // if (dataFromFollowings.nationISO) return await checkAndUpdateBeData(dataFromFollowings, dataFromBe, beInstance);
     } catch (error) {
         console.log(error)
         if (dataFromBe) return dataFromBe;
@@ -114,9 +114,8 @@ export const guessRegion = async ({
     }
 };
 
-// 我们严格遵守一个中国原则，就算有任何不确定因素，我们都会尽量进行进行处理
 export const checkRegion = (data: NationData): NationData => {
-    const result = data;
+    const result = {...data};
     if (data.nationISO === "TW" || data.nationISO === "HK" || data.nationISO === "MO") {
         result.nationISO = "CN";
     }

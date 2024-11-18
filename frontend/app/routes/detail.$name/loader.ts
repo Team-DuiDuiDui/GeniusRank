@@ -51,26 +51,26 @@ export default async function loader({ request, params, context }: LoaderFunctio
             };
             try {
                 const time = new Date().getTime();
-                const localNationData = await getUserNation(params.name, beInstance);
-                if (!localNationData) {
+                const localNationData = await getUserNation(regionParamCopy.login, beInstance);
+                console.log(localNationData)
+                if (!localNationData?.nationISO || !localNationData?.confidence) {
                     nationDataChecked = true;
-                    nationData = await guessRegion({
-                        locale,
-                        userData: {
-                            t,
-                            ...regionParamCopy,
-                        },
-                        beInstance,
-                        githubInstance,
-                        deepSeekInstance,
-                        dataFromBe: localNationData,
-                    });
-                    console.log('Total Nation Data Time:', new Date().getTime() - time);
                     nationData = {
-                        ...nationData,
+                        ...await guessRegion({
+                            locale,
+                            userData: {
+                                t,
+                                ...regionParamCopy
+                            },
+                            beInstance,
+                            githubInstance,
+                            deepSeekInstance,
+                            dataFromBe: localNationData,
+                        }),
                         confidence: parseFloat(nationData.confidence.toFixed(2)),
                         message: t(nationData.message),
                     };
+                    console.log('Total Nation Data Time:', new Date().getTime() - time);
                 } else {
                     nationData = localNationData;
                     // 已经经过无数验证非常确定的答案，无需再去重新判断

@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 // import { interpolateColorsOfIcon } from '~/utils/chore';
 
 interface NationCardProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: any;
     fetcher?: FetcherWithComponents<unknown>;
     userData?: Pick<UserDetail, "followers" | "following" | "login">;
     nationISO: string;
@@ -21,8 +23,8 @@ interface NationCardProps {
 }
 
 const UserNation: React.FC<NationCardProps> = ({
+    data,
     fetcher,
-    userData,
     nationISO,
     nationLocale,
     isStillHim,
@@ -44,11 +46,14 @@ const UserNation: React.FC<NationCardProps> = ({
                 <fetcher.Form
                     method="post"
                     onSubmit={() => {
+                        const formData = new FormData();
+                        formData.append("userData", JSON.stringify(data.regionParamCopy));
+                        formData.append("dataFromBe", JSON.stringify(data.nationData));
                         fetcher.submit(
-                            {},
+                            formData,
                             {
-                                action: "/reset-fetcher",
-                            },
+                                method: "POST",
+                            }
                         );
                         setLoading(true);
                     }}
@@ -56,7 +61,12 @@ const UserNation: React.FC<NationCardProps> = ({
                     <input
                         type="hidden"
                         name="userData"
-                        value={JSON.stringify(userData)}
+                        value={JSON.stringify(data.regionParamCopy)}
+                    />
+                    <input
+                        type="hidden"
+                        name="dataFromBe"
+                        value={JSON.stringify(data.nationData)}
                     />
                     <Tooltip label={t("user.reload_nation")}>
                         <button
