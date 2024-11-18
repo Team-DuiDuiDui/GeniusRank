@@ -44,6 +44,7 @@ export const action = async (
             githubInstance,
             deepSeekInstance,
             dataFromBe: JSON.parse(dataFromBe as string),
+            time: Date.now(),
         });
     } catch (error) {
         return json({ error });

@@ -17,6 +17,7 @@ export interface GuessNationProps {
     deepSeekInstance: AxiosInstanceForDeepSeek;
     userData: UserDataProps;
     dataFromBe: NationData | null;
+    time: number;
 }
 
 interface NationData {
@@ -35,6 +36,24 @@ export interface UserDataProps {
     readme: { defaultBranchRef: { name: string } } | null;
     login: string;
 }
+
+// async function checkAndUpdateBeData(
+//     newData: NationData,
+//     beData: NationData | null,
+//     beInstance: AxiosInstanceForBe
+// ): Promise<NationData> {
+//     if (!beData) {
+//         // 如果后端没有数据，直接写入新数据
+//         await updateUserNation(newData, beInstance);
+//         console.log("后端没有数据");
+//         return newData;
+//     }
+
+//     // 使用动态置信度更新函数
+//     const updatedData = updateDynamicConfidenceWithDecay(beData, newData);
+//     await updateUserNation(updatedData, beInstance);
+//     return updatedData;
+// }
 
 async function checkAndUpdateBeData(
     newData: NationData,
@@ -90,16 +109,16 @@ export const guessRegion = async ({
     githubInstance,
     deepSeekInstance,
     dataFromBe,
+    time,
 }: GuessNationProps): Promise<NationData> => {
     // throw new Error('Not implemented');
-    const time = new Date().getTime();
     try {
         if (userData.followers.totalCount > 50000) {
-            const dataFromGLM = checkRegion(await guessRegionFromGLM(userData.login, deepSeekInstance));
+            const dataFromGLM = checkRegion(await guessRegionFromGLM(userData.login, deepSeekInstance, time));
             if (dataFromGLM?.nationISO) return await checkAndUpdateBeData(dataFromGLM, dataFromBe, beInstance);
         }
 
-        const dataFromReadme = checkRegion(await guessRegionFromReadme(userData, deepSeekInstance, githubInstance));
+        const dataFromReadme = checkRegion(await guessRegionFromReadme(userData, deepSeekInstance, githubInstance, time));
         if (dataFromReadme.nationISO) return await checkAndUpdateBeData(dataFromReadme, dataFromBe, beInstance);
         console.log('Readme Data Time:', new Date().getTime() - time);
 
@@ -114,7 +133,7 @@ export const guessRegion = async ({
                 time: 0,
             }), dataFromBe, beInstance);
         }
-        const dataFromFollowers = checkRegion(await guessRegionFromFollowersBetter(userData, deepSeekInstance));
+        const dataFromFollowers = checkRegion(await guessRegionFromFollowersBetter(userData, deepSeekInstance, time));
         console.log('dataFromFollowers:', dataFromFollowers);
         if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
 

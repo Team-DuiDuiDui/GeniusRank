@@ -67,6 +67,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                             githubInstance,
                             deepSeekInstance,
                             dataFromBe: localNationData,
+                            time
                         }),
                         confidence: parseFloat(nationData.confidence.toFixed(2)),
                         message: t(nationData.message),

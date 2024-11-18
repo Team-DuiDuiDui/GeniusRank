@@ -27,6 +27,9 @@ export const updateDynamicConfidenceWithDecay = (beData: NationData, newData: Na
         return prior * (1 - gammaDecay * timeWeight);
     }
 
+    console.log("beData", beData);
+    console.log("newData", newData);
+
     // 处理 nationISO 不同的情况
     if (beData.nationISO !== newData.nationISO) {
         // 如果置信度较高，动态衰减置信度
@@ -35,9 +38,11 @@ export const updateDynamicConfidenceWithDecay = (beData: NationData, newData: Na
                 beData.confidence,
                 timeWeightDecay
             );
+            console.log("后端数据不够烂");
             return { ...beData, confidence: Math.max(decayedConfidence, minConfidence) };
         }
         // 如果置信度较低，直接更新为新数据
+        console.log("新数据更好");
         return newData;
     }
 
@@ -47,6 +52,7 @@ export const updateDynamicConfidenceWithDecay = (beData: NationData, newData: Na
         newData.confidence,
         timeWeightIncrease
     );
+    console.log("都挺好");
 
     // 确保置信度在 [minConfidence, maxConfidence] 范围内
     return {

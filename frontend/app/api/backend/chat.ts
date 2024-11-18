@@ -13,7 +13,7 @@ export interface NationData {
  * @param language 返回国家的语言
  * @returns 返回国家
  */
-export const syncChatForNationFromUserList = async (data: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
+export const syncChatForNationFromUserList = async (data: string, deepSeekInstance: AxiosInstanceForDeepSeek, time: number): Promise<NationData> => {
     const message = `[${data}]
     上面的 array 里面既有国家，也有这个国家所属的地区。
     首先请你将这里面非国家的地区从你的知识库中找出这个地区属于哪个国家。
@@ -25,7 +25,7 @@ export const syncChatForNationFromUserList = async (data: string, deepSeekInstan
     }
     `
     const result = await syncChatFromDeepSeek(message, deepSeekInstance)
-    return {...JSON.parse(result), time: Date.now()}
+    return {...JSON.parse(result), time}
 }
 
 /**
@@ -34,7 +34,7 @@ export const syncChatForNationFromUserList = async (data: string, deepSeekInstan
  * @param language 返回国家的语言
  * @returns 返回国家
  */
-export const syncChatForNationFromReadme = async (data: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
+export const syncChatForNationFromReadme = async (data: string, deepSeekInstance: AxiosInstanceForDeepSeek, time: number): Promise<NationData> => {
     const message = `${data}
     这是一个 README 文件中的内容，里面可能包含了作者的国籍信息。
     请你从这里面找寻作者明确声明了自己的国籍属于某个地区的信息，并且告诉我这个地区属于哪个国家。
@@ -47,10 +47,10 @@ export const syncChatForNationFromReadme = async (data: string, deepSeekInstance
     }
     `
     const result = await syncChatFromDeepSeek(message, deepSeekInstance)
-    return {...JSON.parse(result), time: Date.now()}
+    return {...JSON.parse(result), time}
 }
 
-export const syncChatForNationFromGLM = async (userName: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
+export const syncChatForNationFromGLM = async (userName: string, deepSeekInstance: AxiosInstanceForDeepSeek, time: number): Promise<NationData> => {
     const message = `
     按照你的数据库或者从互联网的公开信息来看，你知道 ${userName} 这个 github 用户对应的现实当中的真人吗？
     他是一个粉丝数量很多的公众人物，如果经过合理搜索你是一定知道的，我现在正在对这些有名的人进行数据统计，请你协助我，这并不涉及到侵犯个人隐私之类。
@@ -64,7 +64,7 @@ export const syncChatForNationFromGLM = async (userName: string, deepSeekInstanc
     }
     `
     const result = await syncChatFromDeepSeek(message, deepSeekInstance)
-    return {...JSON.parse(result), time: Date.now()}
+    return {...JSON.parse(result), time}
 }
 
 /**

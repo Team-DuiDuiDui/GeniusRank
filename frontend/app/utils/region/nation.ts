@@ -88,15 +88,18 @@ const prompt = `
 请你根据你的知识库，判断一下这里面的位置信息都属于哪个国家，并找到对应的 ISO 两个字母的简写形式。
 如果是标准国家名称，比如 China ，就返回 CN 。如果不标准，是这个国家中的某个地方，比如 California ，就返回 US 。
 需要你返回一个数组，这里面的值是 null 或者将这个不确定格式的位置信息替换为双引号包裹的字符串形式的对应国家的 ISO 简写。
-注意：你只需要返回同样的数组即可，不要有任何多余内容，我需要直接将你的答案用到JSON.parse中
+注意：你只需要返回如下结构的 JSON 即可，不要有任何多余内容，我需要直接将你的答案用到JSON.parse中
+{
+    "response": [结果列表]
+}
 `
 
 export const guessRegionFromFollowersBetter = async (
     userData: UserDataProps,
     deepSeekInstance: AxiosInstanceForDeepSeek,
+    time: number,
 ): Promise<NationData> => {
     console.log("正在从 followers 和 followings 中猜测用户所在国家")
-    const time = new Date().getTime();
     const locationList: User[] = userData.followers.nodes.map(node => ({
         followers: node.followers.totalCount,
         followings: node.following.totalCount,
@@ -106,14 +109,14 @@ export const guessRegionFromFollowersBetter = async (
     const chatResult = await syncChatFromDeepSeek(`[${locationList.map(node => node.location || "null")}] ${prompt}`, deepSeekInstance)
     console.log('chatResult Data Time:', new Date().getTime() - time);
     console.log(chatResult)
-    const resultJSON: string[] = JSON.parse(chatResult)
+    const resultJSON: string[] = JSON.parse(chatResult).response
     const resAll = calculateNationPrediction(locationList.map((item, index) => ({
         ...item,
         location: resultJSON[index] === undefined ? null : resultJSON[index],
     })))
+    console.log(resAll)
     const res = resAll[0]
-    console.log({ ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings" })
-    return { ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings", time: new Date().getTime() }
+    return { ...res, confidence: parseFloat(res.confidence.toFixed(2)), nationISO: res.nation, login: userData.login, message: "user.info.from_followers_and_followings", time }
 }
 
 
@@ -126,6 +129,7 @@ export const guessRegionFromFollowings = async (
     userData: UserDataProps,
     deepSeekInstance: AxiosInstanceForDeepSeek,
     githubInstance: AxiosInstanceForGithub,
+    time: number
 ): Promise<NationData> => {
     interface Following {
         login: string;
@@ -187,7 +191,7 @@ export const guessRegionFromFollowings = async (
     let loopCount = 0
     while (loopCount < 3) {
         loopCount++;
-        const resultJSON = await syncChatForNationFromUserList(processedData.toString(), deepSeekInstance);
+        const resultJSON = await syncChatForNationFromUserList(processedData.toString(), deepSeekInstance, time);
         if (resultJSON.nationISO) return { ...resultJSON, confidence: data.length / (userData.followings.totalCount > 80 ? 80 : userData.followings.totalCount), login: userData.login, message: "user.info.from_followers_and_followings" };
     }
     return defaultValue
@@ -197,6 +201,7 @@ export const guessRegionFromReadme = async (
     userData: UserDataProps,
     deepSeekInstance: AxiosInstanceForDeepSeek,
     githubInstance: AxiosInstanceForGithub,
+    time: number
 ): Promise<NationData> => {
 
     if (!userData.readme) return defaultValue;
@@ -224,12 +229,12 @@ export const guessRegionFromReadme = async (
     let loopCount = 0
     while (loopCount < 3) {
         loopCount++;
-        const resultJSON = await syncChatForNationFromReadme(readme.toString(), deepSeekInstance);
+        const resultJSON = await syncChatForNationFromReadme(readme.toString(), deepSeekInstance, time);
         if (resultJSON.nationName) return { ...resultJSON, confidence: 0.99, login: userData.login, message: "user.info.from_readme" };
     }
     return defaultValue;
 }
 
-export const guessRegionFromGLM = async (userName: string, deepSeekInstance: AxiosInstanceForDeepSeek): Promise<NationData> => {
-    return { ...await syncChatForNationFromGLM(userName, deepSeekInstance), login: userName, confidence: 0.7, message: 'user.info.from_glm' };
+export const guessRegionFromGLM = async (userName: string, deepSeekInstance: AxiosInstanceForDeepSeek, time: number): Promise<NationData> => {
+    return { ...await syncChatForNationFromGLM(userName, deepSeekInstance, time), login: userName, confidence: 0.7, message: 'user.info.from_glm' };
 }
