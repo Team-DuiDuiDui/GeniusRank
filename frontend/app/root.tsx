@@ -5,7 +5,7 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData, useRout
 import i18nServer, { localeCookie } from './modules/i18n.server';
 import { useChangeLanguage } from 'remix-i18next/react';
 import { Toaster } from 'react-hot-toast';
-import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { ColorSchemeScript, MantineProvider, useMantineColorScheme } from '@mantine/core';
 import { ClientOnly } from 'remix-utils/client-only';
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
@@ -20,9 +20,6 @@ export const handle = { i18n: ['translation'] };
 
 export function Layout({ children }: { children: React.ReactNode }) {
     const loaderData = useRouteLoaderData<typeof loader>('root');
-    useEffect(() => {
-        localStorage.setItem('mantine-color-scheme-value', loaderData?.prefersColorScheme ?? 'light');
-    }, [loaderData?.prefersColorScheme]);
 
     return (
         <html lang={loaderData?.locale ?? 'en'} className={loaderData?.prefersColorScheme ?? 'light'}>
@@ -48,7 +45,15 @@ export default function App() {
     const loaderData = useLoaderData<typeof loader>();
     const { locale, client_id, userAvatar, userLogin, username, userEmail } = loaderData;
     const [drawerOpened, { open: openDrawer, close: closeDrawer }] = useDisclosure(false);
+    const { toggleColorScheme } = useMantineColorScheme();
     useChangeLanguage(locale);
+    useEffect(() => {
+        if (localStorage.getItem('mantine-color-scheme-value') !== (loaderData?.prefersColorScheme ?? 'light')) {
+            toggleColorScheme();
+        }
+        localStorage.setItem('mantine-color-scheme-value', loaderData?.prefersColorScheme ?? 'light');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loaderData?.prefersColorScheme]);
     return (
         <>
             <ClientOnly>{() => <Toaster />}</ClientOnly>
