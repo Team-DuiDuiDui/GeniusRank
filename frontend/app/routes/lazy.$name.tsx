@@ -1,5 +1,5 @@
 // routes/lazy.$param.tsx
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, json } from "@remix-run/cloudflare";
 import {
     createInstanceForBe,
     createInstanceForDeepSeek,
