@@ -1,10 +1,9 @@
-import { streamChat, syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList, syncChatFromDeepSeek } from "~/api/backend/chat";
+import { syncChatForNationFromGLM, syncChatForNationFromReadme, syncChatForNationFromUserList, syncChatFromDeepSeek } from "~/api/backend/chat";
 import { AxiosInstanceForDeepSeek } from "~/api/backend/instance";
 import { AxiosInstanceForGithub } from "../../api/github/instance";
 import { handleClientGithubGraphQLReq } from "../request";
 import { UserDataProps } from "./main";
 import { NationData } from "~/api/backend/region";
-import { parseStringToArrayLike } from "../parse";
 import { calculateNationPrediction, User } from "./betterRegion";
 
 const defaultValue: NationData = {

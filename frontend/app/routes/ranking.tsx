@@ -25,7 +25,6 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
         name: userCookie.username,
         avatar_url: userCookie.userAvatar,
         rankingInfo: await getUserRanking(beInstance, userCookie.userLogin).catch(() => undefined),
-        // rankingInfo: { rank: 9, score: 17 },
     } as {
         login: string;
         avatar_url: string;
@@ -64,6 +63,7 @@ export default function Ranking() {
     const totalPage = loaderData.totalPage;
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
+    const urlWithoutPage = "/ranking" + `?type=${searchParams.get('type') ?? ''}&nation=${searchParams.get('nation') ?? ''}`;
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
     const userInfo = loaderData.userInfo;
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.resp));
@@ -187,22 +187,23 @@ export default function Ranking() {
                         rankingData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
                 </UserAccordion>
             </div>
-            {!(searchParams.get("nation") || searchParams.get("type")) &&
-                <div className="flex mt-8">
-                    <Pagination.Root total={totalPage} defaultValue={page} value={page}>
-                        <Group gap={5}>
-                            {Array.from({ length: totalPage }).map((_, index) => (
-                                <Pagination.Control key={index} value={index} component="a" href={`/ranking?page=${index+1}`} className={`${page === index + 1 ? "bg-slate-900 text-zinc-200 pointer-events-none" : ""}`}>
-                                    {index + 1}
-                                </Pagination.Control>
-                            ))}
-                        </Group>
-                    </Pagination.Root>
-                </div>
-            }
+            <div className="flex mt-8">
+                <Pagination.Root total={totalPage} defaultValue={page} value={page}>
+                    <Group gap={5}>
+                        {Array.from({ length: totalPage }).map((_, index) => (
+                            // 忽略错误，本来这行是应该有 href 的属性的，但是 mantine 的 Pagination.Control 组件没有这个属性
+                            // eslint-disable-next-line
+                            // @ts-ignore
+                            <Pagination.Control key={index} value={index} component="a" href={urlWithoutPage + `&page=${index + 1}`} className={`${page === index + 1 ? "bg-slate-900 text-zinc-200 pointer-events-none" : ""}`}>
+                                {index + 1}
+                            </Pagination.Control>
+                        ))}
+                    </Group>
+                </Pagination.Root>
+            </div>
             <div className="flex gap-2 items-center mt-12">
                 <span className="text-slate-600 text-base">{t('user.info.total_users_l1')}</span>
-                <span className="text-slate-900 text-xl">{loaderData.ranking.totalCount}</span>
+                <span className="text-slate-900 text-xl">{loaderData.ranking.totalScoredUser}</span>
                 <span className="text-slate-600 text-base">{t('user.info.total_users_l2')}</span>
             </div>
         </div>

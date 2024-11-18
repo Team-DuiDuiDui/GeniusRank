@@ -1,6 +1,5 @@
 import { handleClientReq } from "~/utils/request";
 import { AxiosInstanceForBe, AxiosInstanceForDeepSeek } from "./instance";
-import { parseStringToJSONfy } from "~/utils/parse";
 
 export interface NationData {
     nationName: string;

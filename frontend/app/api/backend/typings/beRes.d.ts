@@ -59,6 +59,7 @@ export type ScoreRankResp = {
     resp: RankResp[];
     types: string[];
     totalCount: number
+    totalScoredUser: number
 };
 
 export type RankResp = {
