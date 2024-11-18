@@ -59,7 +59,7 @@ const UserCommits: React.FC<userCommitsProps> = ({ data, user }) => {
 
     return (
         <CardWithScrollableTable
-            title={t('user.userRecentCommits')}
+            title={t('user.userRecentCommits', { total: commits?.items.length ?? 80 })}
             columns={[
                 t('user.number'),
                 t('user.repo'),

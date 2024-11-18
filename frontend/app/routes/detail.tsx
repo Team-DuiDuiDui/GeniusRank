@@ -9,6 +9,7 @@ import Search from '~/components/search';
 import octoCat from '~/assets/github.svg';
 import { useTranslation } from 'react-i18next';
 import octoCatWhite from '~/assets/github_white.svg';
+import UserDescription from '~/components/userDescription';
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const cookieHeader = request.headers.get('Cookie');
@@ -47,7 +48,7 @@ export default function Index() {
                         <Search logo={octoCat} logoWhite={octoCatWhite} placeholder={t('search.placeholder')} />
                     </div>
                 </div>
-                {pathname === '/detail' ? <></> : <Outlet />}
+                {pathname === '/detail' ? <UserDescription /> : <Outlet />}
             </div>
         </>
     );

@@ -79,7 +79,6 @@ export default function User() {
                                 confidence={(isStillHim && fetcher.data?.confidence) || data.nationData.confidence}
                                 message={
                                     <div className="flex flex-col items-center justify-center">
-                                        <span>{(isStillHim && fetcher.data?.message) || data.nationData.message}</span>
                                         <span>
                                             {(isStillHim &&
                                                 fetcher.data?.message) ||

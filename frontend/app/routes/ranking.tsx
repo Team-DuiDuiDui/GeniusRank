@@ -64,7 +64,8 @@ export default function Ranking() {
     const totalPage = loaderData.totalPage;
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
-    const urlWithoutPage = "/ranking" + `?type=${searchParams.get('type') ?? ''}&nation=${searchParams.get('nation') ?? ''}`;
+    const searchParamsWithoutPage = new URLSearchParams(searchParams.toString());
+    searchParamsWithoutPage.delete('page');
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
     const userInfo = loaderData.userInfo;
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(loaderData.ranking.resp));
@@ -132,13 +133,14 @@ export default function Ranking() {
     };
 
     return (
-        <div className="py-12 mx-0 sm:px-8 relative flex justify-center flex-col items-center">
+        <div className="py-12 mx-0 px-8 relative flex justify-center flex-col items-center">
             <LoadingLayout />
             <div
-                className={`flex ${loaderData.userInfo.login ? 'justify-between' : 'justify-center'
-                    }  items-center relative w-full sm:flex-col md:flex-col lg:flex-row gap-8`}>
+                className={`flex ${
+                    loaderData.userInfo.login ? 'justify-between' : 'justify-center'
+                }  items-center relative w-full flex-col md:flex-col lg:flex-row gap-8`}>
                 {loaderData.userInfo.login && (
-                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3 sm:hidden md:hidden lg:block"></div>
+                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3 hidden md:hidden lg:block"></div>
                 )}
                 <div className="flex flex-row justify-start gap-8">
                     <Select
@@ -158,7 +160,7 @@ export default function Ranking() {
                         onChange={(value) => {
                             setSearchParams({
                                 ...(value !== null && { nation: value ?? '' }),
-                                ...(searchParams.get('nation') !== null && { type: searchParams.get('type') ?? '' }),
+                                ...(searchParams.get('type') !== null && { type: searchParams.get('type') ?? '' }),
                             });
                         }}
                         defaultValue={loaderData.nation}
@@ -182,24 +184,41 @@ export default function Ranking() {
                     </div>
                 )}
             </div>
-            <div className="flex w-full flex-col lg:flex-row justify-around items-center lg:items-start mt-8">
-                <UserAccordion>
-                    {splicedData &&
-                        splicedData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
-                </UserAccordion>
-                <UserAccordion>
-                    {rankingData &&
-                        rankingData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
-                </UserAccordion>
+            <div
+                className={`flex w-full flex-col lg:flex-row ${
+                    loaderData.ranking.resp.length === 0 ? 'justify-center' : 'justify-around'
+                } items-center lg:items-start mt-8`}>
+                {loaderData.ranking.resp.length === 0 ? (
+                    <span className="text-center text-lg">{t('ranking.no_data')}</span>
+                ) : (
+                    <>
+                        <UserAccordion>
+                            {splicedData &&
+                                splicedData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
+                        </UserAccordion>
+                        <UserAccordion>
+                            {rankingData &&
+                                rankingData.map((item, index) => <UserCard key={index} userInfo={item} score={item} />)}
+                        </UserAccordion>
+                    </>
+                )}
             </div>
             <div className="flex mt-8">
                 <Pagination.Root total={totalPage} defaultValue={page} value={page}>
                     <Group gap={5}>
                         {Array.from({ length: totalPage }).map((_, index) => (
-                            // 忽略错误，本来这行是应该有 href 的属性的，但是 mantine 的 Pagination.Control 组件没有这个属性
-                            // eslint-disable-next-line
-                            // @ts-ignore
-                            <Pagination.Control key={index} value={index} component="a" href={urlWithoutPage + `&page=${index + 1}`} className={`${page === index + 1 ? "bg-slate-900 text-zinc-200 pointer-events-none" : ""}`}>
+                            <Pagination.Control
+                                key={index}
+                                value={index}
+                                component={Link}
+                                // 忽略错误，本来这行是应该有 to 的属性的，但是 mantine 的 Pagination.Control 组件没有这个属性
+                                // @ts-expect-error eslint-disable-next-line
+                                to={`?${searchParamsWithoutPage}&page=${index + 1}`}
+                                className={`${
+                                    page === index + 1
+                                        ? 'bg-slate-900 dark:bg-slate-600 text-zinc-200 pointer-events-none'
+                                        : ''
+                                }`}>
                                 {index + 1}
                             </Pagination.Control>
                         ))}
@@ -207,9 +226,9 @@ export default function Ranking() {
                 </Pagination.Root>
             </div>
             <div className="flex gap-2 items-center mt-12">
-                <span className="text-slate-600 text-base">{t('user.info.total_users_l1')}</span>
-                <span className="text-slate-900 text-xl">{loaderData.ranking.totalScoredUser}</span>
-                <span className="text-slate-600 text-base">{t('user.info.total_users_l2')}</span>
+                <span className="text-slate-600 dark:text-slate-300 text-base">{t('user.info.total_users_l1')}</span>
+                <span className="text-slate-900 dark:text-slate-200 text-xl">{loaderData.ranking.totalScoredUser}</span>
+                <span className="text-slate-600 dark:text-slate-300 text-base">{t('user.info.total_users_l2')}</span>
             </div>
         </div>
     );

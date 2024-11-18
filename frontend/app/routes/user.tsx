@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Search from '~/components/search';
 import octoCat from '~/assets/github.svg';
 import octoCatWhite from '~/assets/github_white.svg';
+import UserDescription from '~/components/userDescription';
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: data?.title }, { name: 'description', content: data?.description }];
@@ -43,7 +44,7 @@ export default function Index() {
                         <Search logo={octoCat} logoWhite={octoCatWhite} placeholder={t('search.placeholder')} />
                     </div>
                 </div>
-                {pathname === '/user' ? <></> : <Outlet />}
+                {pathname === '/user' ? <UserDescription /> : <Outlet />}
             </div>
         </>
     );

@@ -55,10 +55,10 @@ const SettingDrawer: React.FC<DrawerProps> = ({
                 </Form>
             </div>
             <div className="flex flex-col gap-5 h-full mt-8 z-50">
-                <div className="flex flex-col items-center gap-1 justify-evenly w-full md:hidden">
+                <div className="flex flex-col items-center gap-1 justify-evenly w-full">
                     <Link
                         to="/"
-                        className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center ${
+                        className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center lg:hidden ${
                             params.pathname === '/'
                                 ? 'bg-gray-200 dark:bg-white/10'
                                 : 'hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-white/20'
@@ -67,7 +67,7 @@ const SettingDrawer: React.FC<DrawerProps> = ({
                     </Link>
                     <Link
                         to="/user"
-                        className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center ${
+                        className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center md:hidden ${
                             params.pathname.startsWith('/user') || params.pathname.startsWith('/detail')
                                 ? 'bg-gray-200 dark:bg-white/10'
                                 : 'hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-white/20'
@@ -76,7 +76,7 @@ const SettingDrawer: React.FC<DrawerProps> = ({
                     </Link>
                     <Link
                         to="/ranking"
-                        className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center ${
+                        className={`text-nowrap transition-all py-1 px-2 rounded-lg w-full text-center md:hidden ${
                             params.pathname.startsWith('/ranking')
                                 ? 'bg-gray-200 dark:bg-white/10'
                                 : 'hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-white/20'
