@@ -29,5 +29,5 @@ public class RankRespDTO {
     /**
      * 总数
      */
-    private Long totalCount;
+    private Integer totalCount;
 }

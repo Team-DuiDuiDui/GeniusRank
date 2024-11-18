@@ -91,9 +91,52 @@
             LIMIT #{size} OFFSET #{pageOffset}
         </select>
 
+    <!-- 获取用户分数接口排名（无需登录） -->
     <select id="getGithubUserRank" resultType="Integer">
         SELECT COUNT(*) + 1
         FROM t_github_user_score
         WHERE total_score > #{totalScore}
+    </select>
+
+    <!-- 新增查询总数的 SQL -->
+    <select id="countTopScoresByCountryName" resultType="int">
+        SELECT COUNT(*)
+        FROM t_github_user_score gus
+        LEFT JOIN t_github_user_country_guess gusc ON gus.login = gusc.login
+        <where>
+            <if test="nations != null and nations.size > 0">
+                AND gusc.country_iso IN
+                <foreach item="nation" collection="nations" open="(" separator="," close=")">
+                    #{nation}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <!-- 新增查询总数的 SQL -->
+    <select id="countTopScoresByCountryNameAndType" resultType="int">
+        SELECT COUNT(*)
+        FROM (
+        SELECT gus.login
+        FROM t_github_user_score gus
+        LEFT JOIN t_github_user_country_guess gusc ON gus.login = gusc.login
+        <where>
+            <if test="nations != null and nations.size > 0">
+                AND gusc.country_iso IN
+                <foreach item="nation" collection="nations" open="(" separator="," close=")">
+                    #{nation}
+                </foreach>
+            </if>
+        </where>
+        ) AS temp
+        LEFT JOIN t_github_user_developer_type gudt ON temp.login = gudt.login
+        <where>
+            <if test="types != null and types.size > 0">
+                AND gudt.developer_type IN
+                <foreach item="type" collection="types" open="(" separator="," close=")">
+                    #{type}
+                </foreach>
+            </if>
+        </where>
     </select>
 </mapper>

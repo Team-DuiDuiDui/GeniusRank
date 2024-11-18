@@ -37,4 +37,20 @@ public interface GithubUserScoreMapper extends BaseMapper<GithubUserScoreDO> {
      * @return 排名
      */
     Integer getGithubUserRank(@Param("totalScore") Double totalScore);
+
+    /**
+     * 查询根据国家名称过滤后的用户总数（排行榜）
+     * @param nations 国家列表
+     * @return 用户总数
+     */
+    Integer countTopScoresByCountryName(@Param("nations") List<String> nations);
+
+    /**
+     * 查询根据国家名称和开发者领域过滤后的用户总数（排行榜）
+     * @param nations 国家列表
+     * @param types 开发者类型列表
+     * @return 用户总数
+     */
+    Integer countTopScoresByCountryNameAndType(@Param("nations") List<String> nations,
+                                               @Param("types") List<String> types);
 }

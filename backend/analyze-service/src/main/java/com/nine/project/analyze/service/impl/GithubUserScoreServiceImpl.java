@@ -113,15 +113,17 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     @Override
     public RankRespDTO getGithubUserScoreRank(Integer size, Integer page, List<String> nation, List<String> type) {
         List<GithubUserScoreRankRespDTO> scoreRankList;
-        Long count = baseMapper.selectCount(Wrappers.lambdaQuery(GithubUserScoreDO.class).eq(GithubUserScoreDO::getDelFlag, 0));
+        Integer count;
 
-        if (type!= null) {
+        if (type != null) {
+            count = baseMapper.countTopScoresByCountryNameAndType(nation, type);
             scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, type, size, page);
             if (scoreRankList == null) {
                 scoreRankList = baseMapper.findTopScoresByCountryNameAndType(size,(page - 1) * size, nation, type);
                 cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, type, size, page);
             }
         } else {
+            count = baseMapper.countTopScoresByCountryName(nation);
             scoreRankList = cacheUtil.getGithubUserScoreRankFromCache(nation, null, size, page);
             if (scoreRankList == null) {
                 scoreRankList = baseMapper.findTopScoresByCountryName(size,(page - 1) * size, nation);
