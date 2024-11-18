@@ -17,7 +17,8 @@
       "err": {
         "ngrok_error": "Backend internal network tunneling status abnormal, please contact with the backend administrator",
         "error": "Error"
-      }
+      },
+      "no_data": "No eligible users"
     },
     "user": {
       "description": "GitHub User Analysis",

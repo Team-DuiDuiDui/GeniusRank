@@ -17,7 +17,8 @@
       "err": {
         "ngrok_error": "后端内网穿透状态异常，请联系后端管理员",
         "error": "错误"
-      }
+      },
+      "no_data": "没有符合条件的用户"
     },
     "user": {
       "description": "GitHub 用户分析",
