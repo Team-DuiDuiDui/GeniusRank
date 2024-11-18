@@ -47,13 +47,19 @@ const UserNation: React.FC<NationCardProps> = ({
                     method="post"
                     onSubmit={() => {
                         const formData = new FormData();
-                        formData.append("userData", JSON.stringify(data.regionParamCopy));
-                        formData.append("dataFromBe", JSON.stringify(data.nationData));
+                        formData.append(
+                            "userData",
+                            JSON.stringify(data.regionParamCopy),
+                        );
+                        formData.append(
+                            "dataFromBe",
+                            JSON.stringify(data.nationData),
+                        );
                         fetcher.submit(
                             formData,
                             {
                                 method: "POST",
-                            }
+                            },
                         );
                         setLoading(true);
                     }}
@@ -141,7 +147,7 @@ const UserNation: React.FC<NationCardProps> = ({
                     <span
                         className={`w-8 h-6 bg-no-repeat bg-center rounded-sm border fi-${nationISO.toLocaleLowerCase()}`}
                     />
-                    <div className=" text-base drop-shadow-md font-bold">
+                    <div className=" text-base drop-shadow-md font-bold dark:text-slate-800">
                         {nationLocale}
                     </div>
                 </div>

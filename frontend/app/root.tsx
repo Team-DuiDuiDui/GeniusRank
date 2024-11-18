@@ -13,11 +13,7 @@ import {
 import i18nServer, { localeCookie } from "./modules/i18n.server";
 import { useChangeLanguage } from "remix-i18next/react";
 import { Toaster } from "react-hot-toast";
-import {
-    ColorSchemeScript,
-    MantineProvider,
-    useMantineColorScheme,
-} from "@mantine/core";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { ClientOnly } from "remix-utils/client-only";
 import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
@@ -26,7 +22,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { prefs, user } from "./cookie";
 import SettingDrawer from "./components/drawer";
 import Header from "./components/header";
-import { useEffect } from "react";
 
 export const handle = { i18n: ["translation"] };
 
@@ -83,7 +78,6 @@ export default function App() {
         loaderData;
     const [drawerOpened, { open: openDrawer, close: closeDrawer }] =
         useDisclosure(false);
-    const { toggleColorScheme } = useMantineColorScheme();
     useChangeLanguage(locale);
     return (
         <>
