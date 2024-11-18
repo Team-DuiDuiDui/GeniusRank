@@ -56,7 +56,7 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style, disabled })
                 </div>
             </Accordion.Control>
             <Accordion.Panel>
-                <div className="flex flex-col md:flex-row gap-6 py-7">
+                <div className="flex flex-col md:flex-row gap-6 py-7 h-fit w-fit">
                     <p className="text-4xl font-bold m-auto">
                         {score.totalScore}
                         <span className="text-xl font-normal ml-3">/100</span>

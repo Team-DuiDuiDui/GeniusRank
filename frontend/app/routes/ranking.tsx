@@ -133,14 +133,14 @@ export default function Ranking() {
     };
 
     return (
-        <div className="py-12 mx-0 sm:px-8 relative flex justify-center flex-col items-center">
+        <div className="py-12 mx-0 px-8 relative flex justify-center flex-col items-center">
             <LoadingLayout />
             <div
                 className={`flex ${
                     loaderData.userInfo.login ? 'justify-between' : 'justify-center'
-                }  items-center relative w-full sm:flex-col md:flex-col lg:flex-row gap-8`}>
+                }  items-center relative w-full flex-col md:flex-col lg:flex-row gap-8`}>
                 {loaderData.userInfo.login && (
-                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3 sm:hidden md:hidden lg:block"></div>
+                    <div className="max-w-2/5 w-auto min-w-[200px] md:min-w-[300px] md:w-1/6 lg:w-1/4 gap-4 right-4 relative p-3 hidden md:hidden lg:block"></div>
                 )}
                 <div className="flex flex-row justify-start gap-8">
                     <Select
