@@ -132,6 +132,7 @@ public class SaveDetailedDevelopTypeConsumer implements RocketMQListener<General
         if (existsInDatabase) {
             githubUserScoreMapper.update(userScoreDO, queryWrapper);
         } else{
+            cacheUtil.addTotalScoredUser();  // 更新用户总数
             githubUserScoreMapper.insert(userScoreDO);
         }
 

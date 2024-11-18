@@ -126,6 +126,7 @@ public class SaveDevelopTypeConsumer implements RocketMQListener<GeneralMessageE
             githubUserScoreMapper.update(userScoreDO, queryWrapper);
         } else{
             githubUserScoreMapper.insert(userScoreDO);
+            cacheUtil.addTotalScoredUser();  // 更新用户总数
         }
 
         // 封装响应数据

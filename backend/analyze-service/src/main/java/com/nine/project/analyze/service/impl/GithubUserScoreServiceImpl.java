@@ -114,6 +114,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
     public RankRespDTO getGithubUserScoreRank(Integer size, Integer page, List<String> nation, List<String> type) {
         List<GithubUserScoreRankRespDTO> scoreRankList;
         Integer count;
+        Long totalScoreCount = cacheUtil.getTotalScoredUser();
 
         if (type != null) {
             count = baseMapper.countTopScoresByCountryNameAndType(nation, type);
@@ -130,8 +131,9 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
                 cacheUtil.setGithubUserScoreRankToCache(scoreRankList, nation, null, size, page);
             }
         }
+
         // 返回结果
-        return new RankRespDTO(scoreRankList, new ArrayList<>(cacheUtil.getCountries()), new ArrayList<>(cacheUtil.getTypes()),count);
+        return new RankRespDTO(scoreRankList, new ArrayList<>(cacheUtil.getCountries()), new ArrayList<>(cacheUtil.getTypes()), count, totalScoreCount);
     }
 
     @Override
