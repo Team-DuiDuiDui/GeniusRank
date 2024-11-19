@@ -43,11 +43,11 @@ export default function Index() {
     const { t } = useTranslation();
     const data = useLoaderData<typeof loader>();
     const rankingData: RankResp[] = JSON.parse(JSON.stringify(data.rankingData.resp));
-    const rankingDataList: RankResp[][] = [];
+    let rankingDataList: RankResp[][] = [];
     const length = rankingData.length;
     for (let i = 0; i < length; i += length / 3) {
         const data = rankingData.slice(i, i + length / 3);
-        rankingDataList.push([...data, ...data]);
+        rankingDataList = [...rankingDataList, [...data, ...data]];
     }
     useEffect(() => {
         const scrollContentLine1 = Array.from(document.querySelectorAll('.scrollLineO'));
@@ -96,9 +96,8 @@ export default function Index() {
                                 userInfo={item}
                                 score={item}
                                 style={{
-                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 60s linear infinite ${
-                                        lineIndex % 2 ? 'reverse' : ''
-                                    }`,
+                                    animation: `${lineIndex % 2 ? 'scrollLineO' : 'scrollLineI'} 60s linear infinite ${lineIndex % 2 ? 'reverse' : ''
+                                        }`,
                                 }}
                                 disabledChevron
                                 disabled

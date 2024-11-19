@@ -11,11 +11,14 @@ frontend/wrangler
 frontend/.env
 frontend/.dev.vars
 frontend/.wrangler/tmp
+frontend/.vscode/
+frontend/.yarn/
 
 ### IntelliJ project files
 .idea/
 *.iml
 /target/*
 /**/target/
-frontend/.vscode
-frontend/.yarn
+
+### VSCode
+.vscode/
