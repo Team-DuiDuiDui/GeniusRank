@@ -1,7 +1,0 @@
-{
-    "i18n-ally.localesPaths": [
-        "app/locales"
-    ],
-    "editor.formatOnSave": true,
-    "react-i18n.i18nPaths": "app\\locales"
-}
