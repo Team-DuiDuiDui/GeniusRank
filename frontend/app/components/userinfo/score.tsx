@@ -120,7 +120,7 @@ export const UserScoreCharts: React.FC<{
             <div className="flex flex-col gap-8 text-center">
                 <h3 className="text-xl font-bold">{t('user.score.score')}</h3>
                 <p className="text-4xl font-bold m-auto">
-                    {scores.data.totalScore}
+                    {scores.data.totalScore.toFixed(2)}
                     <span className="text-xl font-normal ml-3">/100</span>
                 </p>
             </div>
