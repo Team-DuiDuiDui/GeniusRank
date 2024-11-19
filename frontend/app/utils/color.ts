@@ -28,6 +28,11 @@ export const interpolateColors = (colors: RGB[], percentage: number): RGB => {
     const scaledPercentage = percentage * (n - 1);
     const index = Math.floor(scaledPercentage);
     const t = scaledPercentage - index;
+    console.log("n:", n);
+    console.log("index:", index);
+    console.log("t:", t);
+    console.log("color1:", colors[index]);
+    console.log("color2:", colors[Math.min(index + 1, n - 1)]);
 
     const color1 = colors[index];
     const color2 = colors[Math.min(index + 1, n - 1)];

@@ -1,4 +1,4 @@
-import { LoadingOverlay, Tooltip } from "@mantine/core";
+import { LoadingOverlay, Tooltip, useMantineColorScheme } from "@mantine/core";
 import CardWithNoShrink from "../constant/cardWithNoShrink";
 import "../../../node_modules/flag-icons/css/flag-icons.min.css";
 import { InfoIcon } from "../constant/info";
@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { FetcherWithComponents } from "@remix-run/react";
 import { UserDetail } from "~/api/github/graphql/typings/user";
 import { useEffect, useState } from "react";
+import { hexToRgb, interpolateColors, RGBToHex } from "~/utils/color";
 // import { interpolateColorsOfIcon } from '~/utils/chore';
 
 interface NationCardProps {
@@ -26,6 +27,7 @@ const UserNation: React.FC<NationCardProps> = ({
     data,
     fetcher,
     nationISO,
+    confidence,
     nationLocale,
     isStillHim,
     disable,
@@ -33,7 +35,11 @@ const UserNation: React.FC<NationCardProps> = ({
 }) => {
     const noData = nationISO === "";
     const isCN = nationISO === "CN";
+    const { colorScheme } = useMantineColorScheme() as unknown as { colorScheme: string };
     const [loading, setLoading] = useState(isStillHim);
+    const infoColor = confidence ? RGBToHex(interpolateColors(colorScheme === "dark" ? ["#f87171", "#e7e5e4"].map(hexToRgb) : ["#991b1b", "#f5f5f4"].map(hexToRgb), confidence))
+        : "";
+    console.log(infoColor)
     useEffect(() => {
         if (isStillHim && fetcher?.data && loading) setLoading(false);
     }, [fetcher?.data, isStillHim, loading]);
@@ -90,8 +96,8 @@ const UserNation: React.FC<NationCardProps> = ({
 
         return (
             <Tooltip label={message}>
-                <div className="absolute w-6 h-6 top-3 right-3 bg-white/90 dark:bg-slate-800 dark:text-gray-200 backdrop-blur-md rounded-full shadow-md flex justify-center items-center">
-                    <InfoCircleOutlined />
+                <div className="absolute w-6 h-6 top-3 right-3 bg-white/90 dark:bg-slate-800 backdrop-blur-md rounded-full shadow-md flex justify-center items-center">
+                    <InfoCircleOutlined style={{ color: infoColor }} />
                 </div>
             </Tooltip>
         );
@@ -157,9 +163,8 @@ const UserNation: React.FC<NationCardProps> = ({
 
     const renderFlag = () => (
         <span
-            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${
-                disable ? "blur-xl" : ""
-            } p-0 h-full w-full ${nationISO !== "CN" ? "blur scale-95" : ""}`}
+            className={` bg-no-repeat bg-center absolute top-0 left-0 fi-${nationISO.toLocaleLowerCase()} ${disable ? "blur-xl" : ""
+                } p-0 h-full w-full ${nationISO !== "CN" ? "blur scale-95" : ""}`}
         >
         </span>
     );
