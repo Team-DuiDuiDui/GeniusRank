@@ -1,6 +1,8 @@
 import { NationData } from "~/api/backend/region";
 
 export const updateDynamicConfidenceWithDecay = (beData: NationData, newData: NationData): NationData => {
+    if (!beData.nationISO || !beData.confidence) return newData;
+
     const maxConfidence = 0.99;
     const minConfidence = 0.5;
     const alpha = 0.05; // 时间衰减系数（增加用）

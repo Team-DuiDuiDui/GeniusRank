@@ -53,7 +53,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
             try {
                 const time = Date.now();
                 const localNationData = await getUserNation(regionParamCopy.login, beInstance);
-                console.log(localNationData)
+                console.log("localNationData:", localNationData)
                 if (!localNationData?.nationISO || !localNationData?.confidence) {
                     nationDataChecked = true;
                     nationData = {
