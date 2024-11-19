@@ -19,7 +19,7 @@ const UserScoreDetail: React.FC<userRepositoriesProps> = ({ scores, data, error 
         <>
             <Card title={t('user.score.title_detail')} error={error} isBackendRequest>
                 <div className="flex justify-center">
-                    {scores && !error && <UserScoreCharts scores={scores} t={t} />}
+                    {scores && !error && <UserScoreCharts scores={scores} t={t} isGraphql />}
                 </div>
                 {scores && !error && (
                     <div className="flex justify-end items-center p-2 gap-2">

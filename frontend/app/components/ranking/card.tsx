@@ -42,7 +42,7 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style, disabled })
                     <div className="ml-auto flex flex-row items-center justify-around mx-5 gap-4">
                         <span style={{ color: `rgb(${r}, ${g}, ${b})` }} className="text-3xl w-14">
                             {rankIt(score.totalScore)}
-                            <sup className="text-base align-top">{score.totalScore}</sup>
+                            <sup className="text-base align-top">{score.totalScore.toFixed(2)}</sup>
                         </span>
                         <Link
                             onClick={(e) => {
@@ -58,7 +58,7 @@ const UserCard: React.FC<UserCardProps> = ({ userInfo, score, style, disabled })
             <Accordion.Panel>
                 <div className="flex flex-col md:flex-row gap-6 py-7">
                     <p className="text-4xl font-bold m-auto">
-                        {score.totalScore}
+                        {score.totalScore.toFixed(2)}
                         <span className="text-xl font-normal ml-3">/100</span>
                     </p>
                     {!disabled && (
