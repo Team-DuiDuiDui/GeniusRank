@@ -31,7 +31,7 @@ export default async function action({ request, context }: ActionFunctionArgs) {
             githubInstance,
             deepSeekInstance,
             dataFromBe: dataFromBe,
-            time
+            time: Math.floor(time / 1000),
         });
         return json({ ...nationData, message: t(nationData.message), donotLoad: true });
     } catch {
