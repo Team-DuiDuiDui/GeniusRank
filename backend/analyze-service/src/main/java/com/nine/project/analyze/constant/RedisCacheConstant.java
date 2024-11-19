@@ -45,4 +45,9 @@ public class RedisCacheConstant {
      */
     public static final String TYPE_COUNTER_KEY = "general-project:counter-types:";
     public static final String TYPE_KEY = "general-project:user-types";
+
+    /**
+     * 评分用户数量总计
+     */
+    public static final String TOTAL_SCORED_USER_KEY = "general-project:total-scored-user";
 }

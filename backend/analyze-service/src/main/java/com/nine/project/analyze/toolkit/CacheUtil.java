@@ -9,10 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.nine.project.analyze.constant.RedisCacheConstant.*;
@@ -138,5 +135,20 @@ public class CacheUtil<T> {
      */
     public Set<String> getTypes() {
         return redisTemplate.opsForZSet().reverseRange(TYPE_KEY, 0, -1);
+    }
+
+    /**
+     * 添加评分用户总数
+     */
+    public void addTotalScoredUser() {
+        redisTemplate.opsForValue().increment(TOTAL_SCORED_USER_KEY);
+    }
+
+    /**
+     * 获取评分用户总数
+     * @return 总评分用户数
+     */
+    public Long getTotalScoredUser() {
+        return Long.valueOf(Objects.requireNonNull(redisTemplate.opsForValue().get(TOTAL_SCORED_USER_KEY)));
     }
 }

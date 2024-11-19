@@ -30,4 +30,9 @@ public class RankRespDTO {
      * 总数
      */
     private Integer totalCount;
+
+    /**
+     * 已计算用户总数
+     */
+    private Long totalScoredUser;
 }
