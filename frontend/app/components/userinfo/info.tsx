@@ -24,16 +24,22 @@ const UserInfo: React.FC<userInfo> = ({ data }) => {
                     <div className="flex flex-col gap-0.25">
                         {/* data.login 是用户名，data.name 是用户昵称(可选) */}
                         <h2 className="text-2xl font-bold">
-                            {data.name ?? data.login}
+                            <a
+                                href={`https://github.com/${data.login}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="bg-transparent hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-white/20 transition-all px-1 rounded-md">
+                                {data.name ?? data.login}
+                            </a>
                             {data.type !== 'User' && (
                                 <span className="ml-2 text-gray-400 dark:text-gray-300 text-xs font-normal">
                                     {t('user.not_a_user')}
                                 </span>
                             )}
                         </h2>
-                        {data.name && <p className="text-sm text-gray-500 dark:text-gray-300">{data.login}</p>}
+                        {data.name && <p className="text-sm text-gray-500 dark:text-gray-300 px-1">{data.login}</p>}
                     </div>
-                    <div className="flex flex-col gap-0.5">
+                    <div className="flex flex-col gap-0.5 px-1">
                         <p>
                             {data.bio ?? (
                                 <span className="text-gray-500 dark:text-gray-300"> {t('user.no_description')}</span>
