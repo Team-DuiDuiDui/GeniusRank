@@ -61,7 +61,10 @@ export default function App() {
     const { toggleColorScheme } = useMantineColorScheme();
     useChangeLanguage(locale);
     useEffect(() => {
-        if (localStorage.getItem('mantine-color-scheme-value') !== (loaderData?.prefersColorScheme ?? 'light')) {
+        if (
+            localStorage.getItem('mantine-color-scheme-value') &&
+            localStorage.getItem('mantine-color-scheme-value') !== (loaderData?.prefersColorScheme ?? 'light')
+        ) {
             toggleColorScheme();
         }
         localStorage.setItem('mantine-color-scheme-value', loaderData?.prefersColorScheme ?? 'light');
