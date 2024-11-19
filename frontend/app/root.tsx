@@ -15,6 +15,7 @@ import { prefs, user } from './cookie';
 import SettingDrawer from './components/drawer';
 import Header from './components/header';
 import { useEffect } from 'react';
+import Footer from './components/footer';
 
 export const handle = { i18n: ['translation'] };
 
@@ -42,7 +43,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <ColorSchemeScript />
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
             </head>
-            <body>
+            <body className="relative">
                 <MantineProvider defaultColorScheme={loaderData?.prefersColorScheme ?? 'light'}>
                     {children}
                 </MantineProvider>
@@ -88,6 +89,7 @@ export default function App() {
                 client_id={client_id}
             />
             <Outlet />
+            <Footer />
         </>
     );
 }
