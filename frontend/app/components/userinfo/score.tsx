@@ -107,10 +107,11 @@ const UserScore: React.FC<userRepositoriesProps> = ({ data, user }) => {
 
 export default UserScore;
 
-export const UserScoreCharts: React.FC<{ scores: GithubScoreRes; t: TFunction<'translation', undefined> }> = ({
-    scores,
-    t,
-}) => {
+export const UserScoreCharts: React.FC<{
+    scores: GithubScoreRes;
+    t: TFunction<'translation', undefined>;
+    isGraphql?: boolean;
+}> = ({ scores, t, isGraphql = false }) => {
     const data = useMemo(() => {
         return parseScoreData(scores, t);
     }, [scores, t]);
@@ -125,7 +126,7 @@ export const UserScoreCharts: React.FC<{ scores: GithubScoreRes; t: TFunction<'t
             </div>
             <div className="flex flex-col gap-8 text-center">
                 <h3 className="text-xl font-bold">{t('user.score.score_detail')}</h3>
-                <ClientOnly>
+                <ClientOnly fallback={<Loading />}>
                     {() => (
                         <BarChart
                             className="m-auto"
@@ -141,7 +142,7 @@ export const UserScoreCharts: React.FC<{ scores: GithubScoreRes; t: TFunction<'t
             </div>
             <div className="flex flex-col gap-8 text-center overflow-visible">
                 <h3 className="text-xl font-bold">{t('user.score.score_proportion')}</h3>
-                <ClientOnly>
+                <ClientOnly fallback={<Loading />}>
                     {() => (
                         <PieChart
                             w={260}
@@ -159,15 +160,14 @@ export const UserScoreCharts: React.FC<{ scores: GithubScoreRes; t: TFunction<'t
             </div>
             <div className="flex flex-col gap-8 text-center overflow-visible">
                 <h3 className="text-xl font-bold">{t('user.score.score_radar')}</h3>
-                <ClientOnly>
+                <ClientOnly fallback={<Loading />}>
                     {() => (
                         <RadarChart
                             h={250}
                             w={350}
-                            data={data}
+                            data={parseScoreData(scores, t, false, true, isGraphql)}
                             dataKey="name"
                             series={[{ name: 'value', color: 'blue.4', opacity: 0.2 }]}
-                            withPolarRadiusAxis
                             withPolarAngleAxis
                         />
                     )}
@@ -180,9 +180,37 @@ export const UserScoreCharts: React.FC<{ scores: GithubScoreRes; t: TFunction<'t
 export const parseScoreData = (
     res: GithubScoreRes,
     t: TFunction<'translation', undefined>,
-    ignoreZero: boolean = false
+    ignoreZero: boolean = false,
+    byPercent: boolean = false,
+    isGraphql: boolean = false
 ) => {
     const { data } = res;
+    if (byPercent) {
+        const scores = [
+            {
+                name: t('user.score.commit_score'),
+                value: isGraphql ? (data.userScore / 0.1) * 0.25 : (data.userScore / 0.3) * 0.25,
+                color: '#1e90ff',
+            },
+            { name: t('user.score.repo_score'), value: (data.reposScore / 0.5) * 0.25, color: '#2ed573' },
+            {
+                name: t('user.score.prs_score'),
+                value: isGraphql ? (data.prsScore / 0.3) * 0.25 : (data.prsScore / 0.15) * 0.25,
+                color: '#ffa502',
+            },
+            {
+                name: t('user.score.issues_score'),
+                value: isGraphql ? (data.issuesScore / 0.1) * 0.25 : (data.issuesScore / 0.05) * 0.25,
+                color: '#ff4757',
+            },
+        ];
+
+        if (ignoreZero) {
+            return scores.filter((score) => score.value !== 0);
+        }
+
+        return scores;
+    }
     const scores = [
         { name: t('user.score.commit_score'), value: data.userScore, color: '#1e90ff' },
         { name: t('user.score.repo_score'), value: data.reposScore, color: '#2ed573' },
@@ -195,4 +223,14 @@ export const parseScoreData = (
     }
 
     return scores;
+};
+
+const Loading = () => {
+    const { t } = useTranslation();
+    return (
+        <div className="flex flex-col justify-center items-center h-[250px]">
+            <p>{t('loading.common')}</p>
+            <p>{t('loading.no-js')}</p>
+        </div>
+    );
 };
