@@ -86,13 +86,13 @@ export default function User() {
                                         <span>
                                             {(isStillHim &&
                                                 fetcher.data?.message) ||
-                                                t(data.nationData.message)}
+                                                data.nationData.confidence <= 0.2 ? t("user.info.confidence_low") : t(data.nationData.message)}
                                         </span>
                                         <span>
                                             {t("user.confidence")}:{" "}
                                             {(isStillHim &&
                                                 fetcher.data?.confidence) ||
-                                                data.nationData.confidence < 0.2 ? NaN : data.nationData.confidence}
+                                                data.nationData.confidence <= 0.2 ? NaN : data.nationData.confidence}
                                         </span>
                                     </div>
                                 }
