@@ -8,7 +8,6 @@ import { FetcherWithComponents } from "@remix-run/react";
 import { UserDetail } from "~/api/github/graphql/typings/user";
 import { useEffect, useState } from "react";
 import { hexToRgb, interpolateColors, RGBToHex } from "~/utils/color";
-// import { interpolateColorsOfIcon } from '~/utils/chore';
 
 interface NationCardProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
