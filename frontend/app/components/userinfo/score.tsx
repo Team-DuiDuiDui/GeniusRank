@@ -229,8 +229,8 @@ const Loading = () => {
     const { t } = useTranslation();
     return (
         <div className="flex flex-col justify-center items-center h-[250px]">
-            <p>{t('loading.common')}</p>
-            <p>{t('loading.no-js')}</p>
+            <p className="text-md">{t('loading.common')}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-300">{t('loading.no-js')}</p>
         </div>
     );
 };
