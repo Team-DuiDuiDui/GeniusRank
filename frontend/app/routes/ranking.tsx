@@ -117,7 +117,7 @@ export default function Ranking() {
                     </div>
                     <span style={{ color: `rgb(${color.r}, ${color.g}, ${color.b})` }} className="text-3xl w-14">
                         {rankIt(userData.score)}
-                        <sup className="text-base align-top">{userData.score}</sup>
+                        <sup className="text-base align-top">{userData.score.toFixed(2)}</sup>
                     </span>
                     <Link
                         onClick={(e) => {
