@@ -89,6 +89,7 @@ const prompt = `
 如果是标准国家名称，比如 China ，就返回 CN 。如果不标准，是这个国家中的某个地方，比如 California ，就返回 US 。
 需要你返回一个数组，这里面的值是 null 或者将这个不确定格式的位置信息替换为双引号包裹的字符串形式的对应国家的 ISO 简写。
 注意：你只需要返回如下结构的 JSON 即可，不要有任何多余内容，我需要直接将你的答案用到JSON.parse中
+在下面列出的 [结果列表中] ，每个项的长度一定要刚刚好 2 个字符，不要有任何多余的空格或者其他格式。 
 {
     "response": [结果列表]
 }
@@ -109,7 +110,9 @@ export const guessRegionFromFollowersBetter = async (
     const chatResult = await syncChatFromDeepSeek(`[${locationList.map(node => node.location || "null")}] ${prompt}`, deepSeekInstance)
     console.log('chatResult Data Time:', new Date().getTime() - time);
     console.log(chatResult)
-    const resultJSON: string[] = JSON.parse(chatResult).response
+    const resultJSON: (string | null)[] = (JSON.parse(chatResult).response as string[]).map(
+        (value, _) => value === null ? null : value.slice(0, 2)
+    )
     const resAll = calculateNationPrediction(locationList.map((item, index) => ({
         ...item,
         location: resultJSON[index] === undefined ? null : resultJSON[index],
