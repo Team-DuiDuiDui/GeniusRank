@@ -42,6 +42,10 @@ export default function User() {
 
     useEffect(() => {
         if (data.regionParamCopy) {
+            if (!(data.nationData.time === 0 && Date.now() / 1000 - data.nationData.time > 86400)) {
+                console.log("时间跨度不足以重新判断");
+                return;
+            };
             const formData = new FormData();
             formData.append("userData", JSON.stringify(data.regionParamCopy));
             formData.append("dataFromBe", JSON.stringify(data.nationData));

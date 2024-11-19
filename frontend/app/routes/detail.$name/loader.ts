@@ -48,6 +48,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 nationISO: '',
                 message: t('user.info.from_followers_and_followings'),
                 confidence: 0.5,
+                time: 0,
             };
             try {
                 const time = Date.now();
@@ -83,6 +84,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                     nationISO: '',
                     message: t('user.info.from_followers_and_followings'),
                     confidence: 0,
+                    time: 0,
                 };
             }
             try {
