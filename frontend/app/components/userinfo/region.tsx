@@ -20,6 +20,7 @@ interface NationCardProps {
     message: string | React.ReactNode;
     confidence: number;
     disable?: boolean;
+    className?: string;
 }
 
 const UserNation: React.FC<NationCardProps> = ({
@@ -31,6 +32,7 @@ const UserNation: React.FC<NationCardProps> = ({
     isStillHim,
     disable,
     message,
+    className,
 }) => {
     const noData = nationISO === "";
     const isCN = nationISO === "CN";
@@ -114,10 +116,10 @@ const UserNation: React.FC<NationCardProps> = ({
                         style={{ borderColor: "#39c5bb" }}
                     >
                         <InfoIcon color="red" />
-                        <div className=" text-base drop-shadow-md font-bold text-red-600">
+                        <div className=" md:text-base drop-shadow-md font-bold text-red-600 text-sm ">
                             {t("user.err.something_wrong_shorter")}
                         </div>
-                        <div className=" text-base drop-shadow-md font-bold text-red-600 text-center">
+                        <div className=" md:text-base drop-shadow-md font-bold text-red-600 text-center text-sm">
                             {t("user.err.click_to_reload")}
                         </div>
                     </div>
@@ -133,10 +135,13 @@ const UserNation: React.FC<NationCardProps> = ({
                         style={{ borderColor: "#39c5bb" }}
                     >
                         <InfoIcon color="red" />
-                        <div className=" text-base drop-shadow-md font-bold text-red-600">
+                        <div className="md:hidden block text-sm whitespace-nowrap">
+                            {t("user.err.please_login")}
+                        </div>
+                        <div className="md:block hidden drop-shadow-md font-bold text-red-600 text-sm">
                             {t("user.info.login_to_see_l1")}
                         </div>
-                        <div className=" text-base drop-shadow-md font-bold text-red-600">
+                        <div className="md:block hidden drop-shadow-md font-bold text-red-600 text-sm">
                             {t("user.info.login_to_see_l2")}
                         </div>
                     </div>
@@ -182,7 +187,7 @@ const UserNation: React.FC<NationCardProps> = ({
 
     return (
         <CardWithNoShrink
-            containerClass={`overflow-hidden h-full max-h-40 aspect-[4/3] shrink-0`}
+            containerClass={`overflow-hidden h-full max-h-40 aspect-[4/3] shrink-0 ${className}`}
             containerClassDelete={["p-8"]}
         >
             {loading && (

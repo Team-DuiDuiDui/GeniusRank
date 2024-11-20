@@ -24,7 +24,7 @@ const UserInfo: React.FC<userInfo> = ({ data }) => {
                         radius={data.type !== 'User' ? 'sm' : undefined}
                         style={{ width: '6rem', height: '6rem' }}
                     />
-                    <div className="block sm:hidden">
+                    <div className="block md:hidden">
                         <UserNation
                             data={null}
                             nationISO="US"
@@ -65,7 +65,7 @@ const UserInfo: React.FC<userInfo> = ({ data }) => {
                         </p>
                     </div>
                 </div>
-                <div className="ml-auto flex flex-col">
+                <div className="ml-auto flex flex-row md:flex-col">
                     {data.location && (
                         <InfoIcon icon={<EnvironmentOutlined />}>
                             {data.location
