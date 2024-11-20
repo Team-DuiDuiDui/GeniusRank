@@ -14,7 +14,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
     const cookie = (await user.parse(cookieHeader)) || {};
     const locale = (await lng.parse(cookieHeader)) as string;
     if (!cookie.access_token) return redirect('/unauthorized');
-    const time = new Date().getTime();
+    const time = Date.now();
     const t = await i18nServer.getFixedT(request);
     let nationDataChecked = false;
     let regionParamCopy = null;
@@ -48,11 +48,12 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 nationISO: '',
                 message: t('user.info.from_followers_and_followings'),
                 confidence: 0.5,
+                time: 0,
             };
             try {
-                const time = new Date().getTime();
+                const time = Date.now();
                 const localNationData = await getUserNation(regionParamCopy.login, beInstance);
-                console.log(localNationData)
+                console.log("localNationData:", localNationData)
                 if (!localNationData?.nationISO || !localNationData?.confidence) {
                     nationDataChecked = true;
                     nationData = {
@@ -66,7 +67,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                             githubInstance,
                             deepSeekInstance,
                             dataFromBe: localNationData,
-                            time
+                            time: Math.floor(time / 1000),
                         }),
                         confidence: parseFloat(nationData.confidence.toFixed(2)),
                         message: t(nationData.message),
@@ -83,6 +84,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                     nationISO: '',
                     message: t('user.info.from_followers_and_followings'),
                     confidence: 0,
+                    time: 0,
                 };
             }
             try {

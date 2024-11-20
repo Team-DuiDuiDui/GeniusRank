@@ -32,12 +32,23 @@ export const interpolateColors = (colors: RGB[], percentage: number): RGB => {
     const color1 = colors[index];
     const color2 = colors[Math.min(index + 1, n - 1)];
 
-    const r = Math.round(color1.r + (color2.r - color1.r) * t);
-    const g = Math.round(color1.g + (color2.g - color1.g) * t);
-    const b = Math.round(color1.b + (color2.b - color1.b) * t);
+    const P0 = color1;
+    const P1 = { r: (color1.r + color2.r) / 2, g: (color1.g + color2.g) / 2, b: (color1.b + color2.b) / 2 };  // 调整为适合的控制点
+    const P2 = color2;
+
+    const r = Math.round(
+        (1 - t) * (1 - t) * P0.r + 2 * (1 - t) * t * P1.r + t * t * P2.r
+    );
+    const g = Math.round(
+        (1 - t) * (1 - t) * P0.g + 2 * (1 - t) * t * P1.g + t * t * P2.g
+    );
+    const b = Math.round(
+        (1 - t) * (1 - t) * P0.b + 2 * (1 - t) * t * P1.b + t * t * P2.b
+    );
 
     return { r, g, b };
 }
+
 
 export const interpolateColorsOfScore = (score: number): RGB => {
     const colors = scoreHexColors.map(hexToRgb)

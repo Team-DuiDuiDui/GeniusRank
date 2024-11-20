@@ -37,24 +37,6 @@ export interface UserDataProps {
     login: string;
 }
 
-// async function checkAndUpdateBeData(
-//     newData: NationData,
-//     beData: NationData | null,
-//     beInstance: AxiosInstanceForBe
-// ): Promise<NationData> {
-//     if (!beData) {
-//         // 如果后端没有数据，直接写入新数据
-//         await updateUserNation(newData, beInstance);
-//         console.log("后端没有数据");
-//         return newData;
-//     }
-
-//     // 使用动态置信度更新函数
-//     const updatedData = updateDynamicConfidenceWithDecay(beData, newData);
-//     await updateUserNation(updatedData, beInstance);
-//     return updatedData;
-// }
-
 async function checkAndUpdateBeData(
     newData: NationData,
     beData: NationData | null,
@@ -67,31 +49,49 @@ async function checkAndUpdateBeData(
         return newData;
     }
 
-    console.log("dataFromBe:", beData);
-    console.log("newData:", newData);
-
     // 使用动态置信度更新函数
     const updatedData = updateDynamicConfidenceWithDecay(beData, newData);
-
-    // 如果 nationISO 不同，处理置信度减少的逻辑已经在 `updateDynamicConfidenceWithDecay` 中实现
-    if (beData.nationISO !== newData.nationISO) {
-        if (updatedData.nationISO === beData.nationISO && updatedData.confidence > 0.5) {
-            // 如果置信度减少后仍然保留旧的 nationISO
-            await updateUserNation(updatedData, beInstance);
-            console.log("后端数据不够烂");
-            return newData;
-        }
-        // 否则直接用新数据替代
-        await updateUserNation(updatedData, beInstance);
-        console.log("新数据更好");
-        return updatedData;
-    }
-
-    // 如果 nationISO 相同
     await updateUserNation(updatedData, beInstance);
-    console.log("后端数据更好");
     return updatedData;
 }
+
+// async function checkAndUpdateBeData(
+//     newData: NationData,
+//     beData: NationData | null,
+//     beInstance: AxiosInstanceForBe
+// ): Promise<NationData> {
+//     if (!beData) {
+//         // 如果后端没有数据，直接写入新数据
+//         await updateUserNation(newData, beInstance);
+//         console.log("后端没有数据");
+//         return newData;
+//     }
+
+//     console.log("dataFromBe:", beData);
+//     console.log("newData:", newData);
+
+//     // 使用动态置信度更新函数
+//     const updatedData = updateDynamicConfidenceWithDecay(beData, newData);
+
+//     // 如果 nationISO 不同，处理置信度减少的逻辑已经在 `updateDynamicConfidenceWithDecay` 中实现
+//     if (beData.nationISO !== newData.nationISO) {
+//         if (updatedData.nationISO === beData.nationISO && updatedData.confidence > 0.5) {
+//             // 如果置信度减少后仍然保留旧的 nationISO
+//             await updateUserNation(updatedData, beInstance);
+//             console.log("后端数据不够烂");
+//             return newData;
+//         }
+//         // 否则直接用新数据替代
+//         await updateUserNation(updatedData, beInstance);
+//         console.log("新数据更好");
+//         return updatedData;
+//     }
+
+//     // 如果 nationISO 相同
+//     await updateUserNation(updatedData, beInstance);
+//     console.log("后端数据更好");
+//     return updatedData;
+// }
 
 // TODO: 创建一个任务队列，用于存储非必要任务，但是可以执行的。
 // TODO: 比如在有条件的情况下重新获取当前用户的 nation 并且做出比较，并且做出置信度更新
