@@ -182,7 +182,7 @@ const UserNation: React.FC<NationCardProps> = ({
 
     return (
         <CardWithNoShrink
-            containerClass={`overflow-hidden h-full aspect-[4/3] shrink-0`}
+            containerClass={`overflow-hidden h-full max-h-40 aspect-[4/3] shrink-0`}
             containerClassDelete={["p-8"]}
         >
             {loading && (

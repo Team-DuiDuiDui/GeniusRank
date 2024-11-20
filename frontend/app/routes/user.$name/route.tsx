@@ -49,15 +49,18 @@ export default function User() {
                         loaderProps={{ type: 'dots' }}
                     />
                     <UserBasic>
-                        <div className="flex gap-4 w-full h-40 items-start">
+                        <div className="md:flex md:gap-4 md:h-80 w-full h-auto items-start flex-col gap-3">
                             <UserInfo data={data.userData} />
-                            <UserNation
-                                nationISO="US"
-                                nationLocale={t(`country.US.${locale}`)}
-                                disable={true}
-                                confidence={0}
-                                message=""
-                            />
+                            <div className="hidden sm:block">
+                                <UserNation
+                                    data={null}
+                                    nationISO="US"
+                                    nationLocale={t(`country.US.${locale}`)}
+                                    disable={true}
+                                    confidence={0}
+                                    message=""
+                                />
+                            </div>
                         </div>
                         <UserScore data={data.userData} user={user} />
                         <UserRepositories data={data.userData} user={user} />
