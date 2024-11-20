@@ -104,7 +104,7 @@ const UserNation: React.FC<NationCardProps> = ({
     };
 
     const renderMiddleInfo = () => {
-        if (isCN || confidence <= 0.2) return;
+        if (isCN || (confidence <= 0.2 && confidence > 0)) return;
 
         if (noData) {
             return (
@@ -162,7 +162,7 @@ const UserNation: React.FC<NationCardProps> = ({
     };
 
     const renderFlag = () => {
-        if (confidence <= 0.2) {
+        if (confidence <= 0.2 && confidence > 0) {
             return (
                 <div className="w-full h-full flex justify-center items-center absolute">
                     <span className="text-9xl">🌏</span>
