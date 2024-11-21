@@ -38,7 +38,7 @@ const UserNation: React.FC<NationCardProps> = ({
     const isCN = nationISO === "CN";
     const { colorScheme } = useMantineColorScheme() as unknown as { colorScheme: string };
     const [loading, setLoading] = useState(isStillHim);
-    const infoColor = confidence ? RGBToHex(interpolateColors(colorScheme === "dark" ? ["#f87171", "#e7e5e4"].map(hexToRgb) : ["#991b1b", "#f5f5f4"].map(hexToRgb), confidence))
+    const infoColor = confidence ? RGBToHex(interpolateColors(colorScheme === "dark" ? ["#f87171", "#e7e5e4"].map(hexToRgb) : ["#991b1b", "#222222"].map(hexToRgb), confidence))
         : "";
     console.log(infoColor)
     useEffect(() => {
