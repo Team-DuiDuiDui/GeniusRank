@@ -8,18 +8,14 @@ import {
 } from "@ant-design/icons";
 import CardWithNoShrink from "../../constant/cardWithNoShrink";
 import { UserDetail } from "~/api/github/graphql/typings/user";
-import UserNation from "../region";
-import { useLocale } from "remix-i18next/react";
 
 interface userInfo {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    nationData: any
     data: UserDetail;
+    children?: React.ReactNode;
 }
 
-const UserInfoDetail: React.FC<userInfo> = ({ data, nationData }) => {
+const UserInfoDetail: React.FC<userInfo> = ({ children, data }) => {
     const { t } = useTranslation();
-    const locale = useLocale();
     return (
         <CardWithNoShrink containerClass="flex-shrink h-full w-full">
             <div className="flex flex-row items-center justify-left gap-8 w-full h-full">
@@ -30,14 +26,7 @@ const UserInfoDetail: React.FC<userInfo> = ({ data, nationData }) => {
                         style={{ width: "6rem", height: "6rem" }}
                     />
                     <div className="block md:hidden">
-                        <UserNation
-                            data={nationData.data}
-                            nationISO="US"
-                            nationLocale={t(`country.US.${locale}`)}
-                            disable={true}
-                            confidence={0}
-                            message=""
-                        />
+                        {children}
                     </div>
                 </div>
                 <div className="flex flex-col h-full justify-between">
