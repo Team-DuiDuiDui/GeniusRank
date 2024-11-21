@@ -11,7 +11,7 @@ export interface NationData {
 }
 
 export const getUserNation = async (login: string, instance: AxiosInstanceForBe): Promise<NationData | null> => {
-    console.log('getUserNation', login)
+    // console.log('getUserNation', login)
     const result = await handleRequest<NationData | null>(
         () => instance.get(`/analyze/country/${login}`),
         async res => res.data.data ? { login: res.data.data.login, nationISO: res.data.data.country_iso, confidence: res.data.data.confidence, message: res.data.data.message, time: res.data.data.updateTime } : null,

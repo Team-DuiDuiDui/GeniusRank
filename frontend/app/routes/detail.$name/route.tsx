@@ -59,7 +59,6 @@ export default function User() {
                     method: "POST",
                 },
             );
-            console.log("fetcher submit");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

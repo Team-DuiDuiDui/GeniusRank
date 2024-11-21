@@ -43,7 +43,6 @@ const UserRepositories: React.FC<userRepositoriesProps> = ({ data, user }) => {
 
     useEffect(() => {
         setRepos(null);
-        console.log('LOAD2');
         if (!effectCache.current) {
             effectCache.current = true;
             getAndSetUserInfos();

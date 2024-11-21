@@ -152,6 +152,7 @@ GITHUB_ACCESS_TOKEN = # 生成的 GitHub Fine-grained personal access tokens
 GITHUB_CLIENT_ID = # 生成的 GitHub OAuth Client ID
 GITHUB_CLIENT_SECRET = # 生成的 GitHub OAuth Client Secret
 BASE_URL = # 后端 BASE_URL
+DEEPSEEK_API_KEY = # glm 的 api_key
 ```
 
 ### 启动项目
