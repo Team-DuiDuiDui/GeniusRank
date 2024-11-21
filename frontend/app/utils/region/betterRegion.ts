@@ -168,7 +168,7 @@ export function calculateNationPrediction(fansList: User[], followersList?: User
         });
     }
 
-    combinedResults.sort((a, b) => b.confidence - a.confidence);
+    combinedResults.sort((a, b) => b.probability - a.probability);
 
     return combinedResults;
 }
