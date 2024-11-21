@@ -22,9 +22,10 @@ GeniusRank 是一个开发者评估应用，致力于为用户提供 GitHub 用�
 -   前端使用了 Remix 和 TS 语言开发，除了 OAuth 登录，对开发者技术能力进行评价和评级，搜索 Github 用户分析数据，排行榜等众多基础功能之外，GeniusRank 还提供了卡片导出，ChatGLM 特色评估等特色功能，提高了功能的完备性。
 -   后端部分使用 Java 语言微服务框架 SpringCloud，以 MyBatis-Plus 作为 ORM 框架，Nacos 作为服务的注册和发现，Redis 作为缓存，MySQL 进行持久化。使用 XXL-JOB 进行定时任务分配。使用 RocketMQ 作为消息队列，实现服务之间的解耦和流量削峰。
 -   系统可观测性上，GeniusRank 引入 Sentinel 进行服务熔断和限流。使用 SkyWalking，实现对服务性能和资源的实时监控和可视化展示
-    项目详细介绍请看 docs
+
 - [🖥️ 架构设计](./docs/架构设计.md)
 - [✨ 国籍判断算法设计](./docs/Nation%20算法设计.md)
+- [🎨 Dynamic Confidence 算法设计](./docs/Dynamic%20Confidence%20算法设计.md)
 
 # 🚀 功能演示
 - [👀 仓库地址](https://github.com/Team-DuiDuiDui/GeniusRank)
