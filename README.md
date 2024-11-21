@@ -18,8 +18,8 @@ GeniusRank 是一个开发者评估应用，致力于为用户提供 GitHub 用�
 -   GeniusRank 专注于对 GitHub 上的开发者进行全面的能力评估和国籍猜测。在开发者能力评估方面，通过分析项目重要程度以及开发者在项目中的贡献度，采用类似 Google 搜索的 PageRank 机制，指数退避算法和 OSU 的 PP 算法对开发者技术能力进行评价和评级。
 -   GeniusRank 接入了 ChatGLM 大模型，对于开发者的国籍信息，若其 Profile 中未明确写明，可通过其关系网络进行猜测。
 -   GeniusRank 提供排行榜查看，可根据开发者的领域进行搜索匹配，并按 TalentRank 排序，Nation 可作为可选筛选项，方便用户仅查看特定国家 / 地区的开发者。
--   GeniusRank 提供分数卡片导出，支持展示自己的分数和评级
--   前端使用了 Remix 和 TS 语言开发，除了 OAuth 登录，对开发者技术能力进行评价和评级，搜索 Github 用户分析数据，排行榜等众多基础功能之外，GeniusRank 还提供了卡片导出，ChatGLM 特色评估等特色功能，提高了功能的完备性。
+-   GeniusRank 提供分数卡片导出，支持在 Github 个人页面展示自己的分数和评级
+-   前端使用了 Remix 和 TS 语言开发，除了实现 OAuth 登录，对开发者技术能力进行评价和评级，搜索 Github 用户分析数据，排行榜等众多基础功能之外，GeniusRank 还提供了卡片导出，ChatGLM 特色评估等特色功能，提高了功能的完备性。
 -   后端部分使用 Java 语言微服务框架 SpringCloud，以 MyBatis-Plus 作为 ORM 框架，Nacos 作为服务的注册和发现，Redis 作为缓存，MySQL 进行持久化。使用 XXL-JOB 进行定时任务分配。使用 RocketMQ 作为消息队列，实现服务之间的解耦和流量削峰。
 -   系统可观测性上，GeniusRank 引入 Sentinel 进行服务熔断和限流。使用 SkyWalking，实现对服务性能和资源的实时监控和可视化展示
 
@@ -52,7 +52,7 @@ GeniusRank 前端及其服务端使用 Remix.js，后端使用 Spring-Cloud 作�
 ![后端架构图](./.github/image/Framwork_be.png)
 
 选择了基于 Spring Boot 3 和 JDK17 进行底层建设，同时组件库的版本大多也是最新的。这样做既能享受新技术带来的性能提升，也能体验到新特性带来的惊喜。
-技术架构涵盖了 SpringBoot 3、SpringCloudAlibaba、Nacos、Sentinel、Skywalking、RocketMQ 5.x、Redis、MySQL、EasyExcel、Redisson 等技术。
+技术架构涵盖了 SpringBoot 3、SpringCloudAlibaba、Nacos、Sentinel、Skywalking、RocketMQ 5.x、Redis、MySQL、EasyExcel、Redisson、XXL-JOB 等技术。
 
 ## 前后端技术选型
 ![前后端技术选型图](./.github/image/TechnologySelection.png)
@@ -108,7 +108,7 @@ mail:
     host: smtp.qq.com #邮箱服务器地址
     username: #发送者邮箱
     password: #发送者邮箱授权码
-    project-name: General-Project #项目名称
+    project-name: GeniusRank #项目名称
 ```
 
 #### 配置七牛云 OSS 服务
