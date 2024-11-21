@@ -14,7 +14,7 @@
     * 如果粉丝数量少于 50 但声明了自己的 location，则判断为没有足够数据量，沿用 github 中自己设置的 location。如果无法判断，则继续下一步。
     * 基于粉丝的国籍推测：从用户的粉丝列表中获取信息，使用高级算法进行国籍推测，详见下文。
 
-# 基于 followers 的 nation 推测
+# 基于 followers & followings 的 nation 推测
 
 ## 算法整体思路
 
