@@ -53,25 +53,9 @@ GeniusRank 前端及其服务端使用 Remix.js，后端使用 Spring-Cloud 作�
 
 选择了基于 Spring Boot 3 和 JDK17 进行底层建设，同时组件库的版本大多也是最新的。这样做既能享受新技术带来的性能提升，也能体验到新特性带来的惊喜。
 技术架构涵盖了 SpringBoot 3、SpringCloudAlibaba、Nacos、Sentinel、Skywalking、RocketMQ 5.x、Redis、MySQL、EasyExcel、Redisson 等技术。
-框架技术和版本号关系如下表格所示。
 
-| 序号 | 技术                | 名称               | 版本           | 官网                                              |
-| ---- | ------------------- | ------------------ | -------------- |-------------------------------------------------|
-| 1    | Spring Boot         | 基础框架           | 3.0.7          | https://spring.io/projects/spring-boot          |
-| 2    | SpringCloud Alibaba | 分布式框架         | 2022.0.0.0-RC2 | https://github.com/alibaba/spring-cloud-alibaba |
-| 3    | SpringCloud Gateway | 网关框架           | 2022.0.3       | https://spring.io/projects/spring-cloud-gateway |
-| 4    | MyBatis-Plus        | 持久层框架         | 3.5.7          | https://baomidou.com                            |
-| 5    | MySQL               | OLTP 关系型数据库  | 5.7.36         | https://www.mysql.com/cn                        |
-| 6    | Redis               | 分布式缓存数据库   | Latest         | https://redis.io                                |
-| 7    | RocketMQ            | 消息队列           | 2.3.0          | https://rocketmq.apache.org                     |
-| 8    | ShardingSphere      | 数据库生态系统     | 5.3.2          | https://shardingsphere.apache.org               |
-| 9    | FastJson2           | JSON 序列化工具    | 2.0.36         | https://github.com/alibaba/fastjson2            |
-| 10   | Canal               | BinLog 订阅组件    | 1.1.6          | https://github.com/alibaba/canal                |
-| 11   | HuTool              | 小而全的工具集项目 | 5.8.27         | https://hutool.cn                               |
-| 12   | Maven               | 项目构建管理       | 3.9.1          | http://maven.apache.org                         |
-| 13   | Redisson            | Redis Java 客户端  | 3.27.2         | [https://redisson.org](https://redisson.org/)   |
-| 14   | Sentinel            | 流控防护框架       | 1.8.6          | https://github.com/alibaba/Sentinel             |
-
+## 前后端技术选型
+![前后端技术选型图](./.github/image/TechnologySelection.png)
 
 # 📦 使用方法
 
