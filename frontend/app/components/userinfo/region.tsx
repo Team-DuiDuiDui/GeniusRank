@@ -98,7 +98,7 @@ const UserNation: React.FC<NationCardProps> = ({
 
         return (
             <Tooltip label={message}>
-                <div className="absolute w-6 h-6 top-3 right-3 bg-white/90 dark:bg-slate-800 backdrop-blur-md rounded-full shadow-md flex justify-center items-center">
+                <div className="absolute w-6 h-6 top-3 right-3 bg-white/90 dark:bg-slate-800 backdrop-blur-md rounded-full shadow-md md:flex justify-center items-center hidden">
                     <InfoCircleOutlined style={{ color: infoColor }} />
                 </div>
             </Tooltip>

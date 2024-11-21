@@ -48,9 +48,9 @@ const UserInfoDetail: React.FC<userInfo> = ({ children, data }) => {
                             </p>
                         )}
                     </div>
-                    <div className="flex flex-col gap-0.5 px-1">
-                        <p>
-                            {data.bio ?? (
+                    <div className="flex flex-col gap-0.5 px-1 text-wrap">
+                        <p className="text-wrap">
+                            {data.bio || (
                                 <span className="text-gray-500 dark:text-gray-300">
                                     {t("user.no_description")}
                                 </span>
