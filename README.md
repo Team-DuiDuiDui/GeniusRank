@@ -24,7 +24,7 @@ GeniusRank 是一个开发者评估应用，致力于为用户提供 GitHub 用�
 -   系统可观测性上，GeniusRank 引入 Sentinel 进行服务熔断和限流。使用 SkyWalking，实现对服务性能和资源的实时监控和可视化展示
 
 - [🖥️ 详细架构设计](./docs/详细架构设计)
-- [💎技术能力评级算法设计](./docs/Nation%20算法设计.md)
+- [💎 技术能力评级算法设计](./docs/Score%20算法设计.md)
 - [✨ 国籍判断算法设计](./docs/Nation%20算法设计.md)
 - [🎨 Dynamic Confidence 算法设计](./docs/Dynamic%20Confidence%20算法设计.md)
 
