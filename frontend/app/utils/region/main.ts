@@ -9,6 +9,7 @@ import { updateUserNation } from '~/api/backend/region';
 import { syncChatFromDeepSeek } from '~/api/backend/chat';
 import { SubUserDetail } from '~/api/github/graphql/typings/user';
 import { updateDynamicConfidenceWithDecay } from './confidence';
+import axios from 'axios';
 
 export interface GuessNationProps {
     locale: string;
@@ -138,8 +139,13 @@ export const guessRegion = async ({
         if (dataFromFollowers.nationISO) return await checkAndUpdateBeData(dataFromFollowers, dataFromBe, beInstance);
 
     } catch (error) {
-        console.log(error)
-        if (dataFromBe) return dataFromBe;
+        if (axios.isAxiosError(error)) {
+            console.log(error.response?.data);
+        } else {
+            console.log(error)
+        }
+        if (dataFromBe?.nationISO) return dataFromBe;
+        throw new Error('无法判断');
     }
 
     return {

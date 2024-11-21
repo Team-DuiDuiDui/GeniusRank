@@ -19,13 +19,13 @@ const UserInfoDetail: React.FC<userInfo> = ({ children, data }) => {
     return (
         <CardWithNoShrink containerClass="flex-shrink h-full w-full">
             <div className="flex flex-row items-center justify-left gap-8 w-full h-full">
-                <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-col items-center justify-center relative">
                     <Avatar
                         src={data.avatarUrl}
                         className="flex-shrink-0 rounded-full"
                         style={{ width: "6rem", height: "6rem" }}
                     />
-                    <div className="block md:hidden">
+                    <div className="block md:hidden h-8 absolute bottom-0 right-0">
                         {children}
                     </div>
                 </div>
@@ -63,7 +63,7 @@ const UserInfoDetail: React.FC<userInfo> = ({ children, data }) => {
                         </p>
                     </div>
                 </div>
-                <div className="ml-auto flex flex-col">
+                <div className="ml-auto flex flex-row md:flex-col">
                     {data.location && (
                         <InfoIcon icon={<EnvironmentOutlined />}>
                             {data.location

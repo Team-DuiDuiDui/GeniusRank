@@ -198,7 +198,7 @@ const UserNation: React.FC<NationCardProps> = ({
             )}
             {renderFlag()}
             <div
-                className={`h-full w-full flex items-center justify-center p-4`}
+                className={`h-full w-full items-center justify-center p-4 hidden md:flex`}
             >
                 {renderIcon()}
                 {!isCN && renderMiddleInfo()}

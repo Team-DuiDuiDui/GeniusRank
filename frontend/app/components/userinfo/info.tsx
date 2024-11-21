@@ -17,14 +17,14 @@ const UserInfo: React.FC<userInfo> = ({ data }) => {
     return (
         <CardWithNoShrink containerClass="flex-shrink h-full w-full">
             <div className="flex flex-row items-center justify-left gap-8 w-full h-full">
-                <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-col items-center justify-center relative">
                     <Avatar
                         src={data.avatar_url}
                         className="flex-shrink-0"
                         radius={data.type !== 'User' ? 'sm' : undefined}
                         style={{ width: '6rem', height: '6rem' }}
                     />
-                    <div className="block md:hidden">
+                    <div className="block md:hidden h-8 absolute bottom-0 right-0">
                         <UserNation
                             data={null}
                             nationISO="US"
