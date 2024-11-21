@@ -55,6 +55,7 @@ export default async function loader({ request, params, context }: LoaderFunctio
                 const localNationData = await getUserNation(regionParamCopy.login, beInstance);
                 console.log("localNationData:", localNationData)
                 if (!localNationData?.nationISO || !localNationData?.confidence) {
+                    console.log("INPROGRESS");
                     nationDataChecked = true;
                     nationData = {
                         ...await guessRegion({
