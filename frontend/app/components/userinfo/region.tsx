@@ -20,6 +20,7 @@ interface NationCardProps {
     message: string | React.ReactNode;
     confidence: number;
     disable?: boolean;
+    className?: string;
 }
 
 const UserNation: React.FC<NationCardProps> = ({
@@ -31,12 +32,13 @@ const UserNation: React.FC<NationCardProps> = ({
     isStillHim,
     disable,
     message,
+    className,
 }) => {
     const noData = nationISO === "";
     const isCN = nationISO === "CN";
     const { colorScheme } = useMantineColorScheme() as unknown as { colorScheme: string };
     const [loading, setLoading] = useState(isStillHim);
-    const infoColor = confidence ? RGBToHex(interpolateColors(colorScheme === "dark" ? ["#f87171", "#e7e5e4"].map(hexToRgb) : ["#991b1b", "#f5f5f4"].map(hexToRgb), confidence))
+    const infoColor = confidence ? RGBToHex(interpolateColors(colorScheme === "dark" ? ["#f87171", "#e7e5e4"].map(hexToRgb) : ["#991b1b", "#222222"].map(hexToRgb), confidence))
         : "";
     console.log(infoColor)
     useEffect(() => {
@@ -96,7 +98,7 @@ const UserNation: React.FC<NationCardProps> = ({
 
         return (
             <Tooltip label={message}>
-                <div className="absolute w-6 h-6 top-3 right-3 bg-white/90 dark:bg-slate-800 backdrop-blur-md rounded-full shadow-md flex justify-center items-center">
+                <div className="absolute w-6 h-6 top-3 right-3 bg-white/90 dark:bg-slate-800 backdrop-blur-md rounded-full shadow-md md:flex justify-center items-center hidden">
                     <InfoCircleOutlined style={{ color: infoColor }} />
                 </div>
             </Tooltip>
@@ -114,10 +116,10 @@ const UserNation: React.FC<NationCardProps> = ({
                         style={{ borderColor: "#39c5bb" }}
                     >
                         <InfoIcon color="red" />
-                        <div className=" text-base drop-shadow-md font-bold text-red-600">
+                        <div className=" md:text-base drop-shadow-md font-bold text-red-600 text-sm ">
                             {t("user.err.something_wrong_shorter")}
                         </div>
-                        <div className=" text-base drop-shadow-md font-bold text-red-600 text-center">
+                        <div className=" md:text-base drop-shadow-md font-bold text-red-600 text-center text-sm">
                             {t("user.err.click_to_reload")}
                         </div>
                     </div>
@@ -133,10 +135,13 @@ const UserNation: React.FC<NationCardProps> = ({
                         style={{ borderColor: "#39c5bb" }}
                     >
                         <InfoIcon color="red" />
-                        <div className=" text-base drop-shadow-md font-bold text-red-600">
+                        <div className="md:hidden block text-sm whitespace-nowrap">
+                            {t("user.err.please_login")}
+                        </div>
+                        <div className="md:block hidden drop-shadow-md font-bold text-red-600 text-sm">
                             {t("user.info.login_to_see_l1")}
                         </div>
-                        <div className=" text-base drop-shadow-md font-bold text-red-600">
+                        <div className="md:block hidden drop-shadow-md font-bold text-red-600 text-sm">
                             {t("user.info.login_to_see_l2")}
                         </div>
                     </div>
@@ -182,7 +187,7 @@ const UserNation: React.FC<NationCardProps> = ({
 
     return (
         <CardWithNoShrink
-            containerClass={`overflow-hidden h-full aspect-[4/3] shrink-0`}
+            containerClass={`overflow-hidden h-full max-h-40 aspect-[4/3] shrink-0 ${className}`}
             containerClassDelete={["p-8"]}
         >
             {loading && (
@@ -193,7 +198,7 @@ const UserNation: React.FC<NationCardProps> = ({
             )}
             {renderFlag()}
             <div
-                className={`h-full w-full flex items-center justify-center p-4`}
+                className={`h-full w-full items-center justify-center p-4 hidden md:flex`}
             >
                 {renderIcon()}
                 {!isCN && renderMiddleInfo()}

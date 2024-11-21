@@ -6,9 +6,9 @@ interface linkProps {
 
 const InfoLink: React.FC<linkProps> = ({ children }) => {
     return (
-        <div className="flex items-center">
+        <div className="flex items-center flex-col md:flex-row">
             <LinkOutlined className="text-gray-600 dark:text-gray-300 text-sm" />
-            <a href={children} className="text-sm btn-infoLink px-1 rounded-md" target="_blank" rel="noreferrer">
+            <a href={children} className="text-sm btn-infoLink px-1 rounded-md vertical-text md:horizontal-text" target="_blank" rel="noreferrer">
                 {children}
             </a>
         </div>
@@ -23,14 +23,14 @@ interface infoIconProps {
 
 export const InfoIcon: React.FC<infoIconProps> = ({ children, icon, href }) => {
     return (
-        <div className="flex items-center">
+        <div className="flex items-center flex-col md:flex-row">
             <span className="text-gray-600 dark:text-gray-300 text-sm">{icon}</span>
             {href ? (
-                <a href={href} className="text-sm btn-infoLink px-1 rounded-md" target="_blank" rel="noreferrer">
+                <a href={href} className="text-sm btn-infoLink px-1 rounded-md vertical-text md:horizontal-text" target="_blank" rel="noreferrer">
                     {children}
                 </a>
             ) : (
-                <p className="ml-1 text-sm text-gray-600 dark:text-gray-300">{children}</p>
+                <p className="ml-1 text-sm text-gray-600 dark:text-gray-300 vertical-text md:horizontal-text">{children}</p>
             )}
         </div>
     );

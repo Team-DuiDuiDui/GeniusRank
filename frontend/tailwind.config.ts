@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import plugin from 'tailwindcss/plugin';
 
 export default {
     content: ['./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}'],
@@ -56,5 +57,20 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        plugin(function ({ addUtilities }) {
+            const newUtilities = {
+                '.vertical-text': {
+                    writingMode: 'vertical-rl',
+                    textOrientation: 'upright',
+                },
+                '.horizontal-text': {
+                    writingMode: 'horizontal-tb',
+                    textOrientation: 'mixed',
+                },
+            };
+
+            addUtilities(newUtilities);
+        }),
+    ],
 } satisfies Config;

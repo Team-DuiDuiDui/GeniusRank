@@ -1,4 +1,4 @@
-import { Loader, Table } from '@mantine/core';
+import { Loader, Table, useMantineColorScheme } from '@mantine/core';
 import { ReactNode, useRef } from 'react';
 import CardWithScroll from '../../constant/cardWithScroll';
 import { throttleWithDeepClone } from '~/utils/perform';
@@ -23,6 +23,7 @@ const CardWithScrollableTableDetail = <T,>({
 }: DataTableProps<T>) => {
     const titleRef = useRef(null);
     const headerRef = useRef<HTMLHeadingElement>(null);
+    const { colorScheme } = useMantineColorScheme() as unknown as { colorScheme: string };
     const { t } = useTranslation();
     const finalData = reverse ? [...data].reverse() : data;
 
@@ -48,47 +49,50 @@ const CardWithScrollableTableDetail = <T,>({
                 </span>
             </h2>
             <div className="overflow-y-auto max-h-max flex-grow scrollbar" onScroll={handleScroll}>
-                <Table className="w-full dark:hidden" horizontalSpacing="sm" verticalSpacing="sm" striped>
-                    <Table.Thead>
-                        <Table.Tr className="mb-6 sticky top-0 font-normal bg-white dark:bg-slate-600 pb-3">
-                            {columns.map((column, index) => (
-                                <Table.Th key={index}>{column}</Table.Th>
-                            ))}
-                        </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
-                        {data.length > 0 ? (
-                            finalData.map((item, index) => renderRow(item, index))
-                        ) : (
-                            <Table.Tr className="text-center text-gray-500">
-                                <Table.Td colSpan={columns.length}>{t('user.no_data')}</Table.Td>
+                {colorScheme === 'light' ? (
+                    <Table className="w-full" horizontalSpacing="sm" verticalSpacing="sm" striped>
+                        <Table.Thead>
+                            <Table.Tr className="mb-6 sticky top-0 font-normal bg-white dark:bg-slate-600 pb-3">
+                                {columns.map((column, index) => (
+                                    <Table.Th key={index}>{column}</Table.Th>
+                                ))}
                             </Table.Tr>
-                        )}
-                    </Table.Tbody>
-                </Table>
-                <Table
-                    className="w-full hidden dark:table"
-                    horizontalSpacing="sm"
-                    verticalSpacing="sm"
-                    striped
-                    stripedColor="rgb(51 65 85)">
-                    <Table.Thead>
-                        <Table.Tr className="mb-6 sticky top-0 font-normal bg-white dark:bg-slate-600 pb-3">
-                            {columns.map((column, index) => (
-                                <Table.Th key={index}>{column}</Table.Th>
-                            ))}
-                        </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
-                        {data.length > 0 ? (
-                            finalData.map((item, index) => renderRow(item, index))
-                        ) : (
-                            <Table.Tr className="text-center text-gray-500">
-                                <Table.Td colSpan={columns.length}>{t('user.no_data')}</Table.Td>
+                        </Table.Thead>
+                        <Table.Tbody>
+                            {data.length > 0 ? (
+                                finalData.map((item, index) => renderRow(item, index))
+                            ) : (
+                                <Table.Tr className="text-center text-gray-500">
+                                    <Table.Td colSpan={columns.length}>{t('user.no_data')}</Table.Td>
+                                </Table.Tr>
+                            )}
+                        </Table.Tbody>
+                    </Table>
+                ) : (
+                    <Table
+                        className="w-full"
+                        horizontalSpacing="sm"
+                        verticalSpacing="sm"
+                        striped
+                        stripedColor="rgb(51 65 85)">
+                        <Table.Thead>
+                            <Table.Tr className="mb-6 sticky top-0 font-normal bg-white dark:bg-slate-600 pb-3">
+                                {columns.map((column, index) => (
+                                    <Table.Th key={index}>{column}</Table.Th>
+                                ))}
                             </Table.Tr>
-                        )}
-                    </Table.Tbody>
-                </Table>
+                        </Table.Thead>
+                        <Table.Tbody>
+                            {data.length > 0 ? (
+                                finalData.map((item, index) => renderRow(item, index))
+                            ) : (
+                                <Table.Tr className="text-center text-gray-500">
+                                    <Table.Td colSpan={columns.length}>{t('user.no_data')}</Table.Td>
+                                </Table.Tr>
+                            )}
+                        </Table.Tbody>
+                    </Table>
+                )}
             </div>
         </CardWithScroll>
     );

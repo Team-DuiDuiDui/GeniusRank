@@ -22,9 +22,9 @@ import ErrorHandle from "~/components/errorHandle";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [
-        { title: data?.title ?? 'Error | Genius Rank' },
+        { title: data?.title ?? "Error | Genius Rank" },
         {
-            name: 'description',
+            name: "description",
             content: data?.description,
         },
     ];
@@ -42,7 +42,10 @@ export default function User() {
 
     useEffect(() => {
         if (data.regionParamCopy) {
-            if (!(data.nationData.time === 0 && Date.now() / 1000 - data.nationData.time > 86400)) {
+            if (
+                !(data.nationData.time === 0 &&
+                    Date.now() / 1000 - data.nationData.time > 86400)
+            ) {
                 console.log("时间跨度不足以重新判断");
                 return;
             }
@@ -61,45 +64,77 @@ export default function User() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const generateNationCard = (className = "hidden md:block") => (
+        <UserNation
+        data={data}
+        fetcher={fetcher}
+        userData={{
+            followers: user.followers,
+            following: user.following,
+            login: user.login,
+        }}
+        nationISO={(isStillHim &&
+            fetcher.data?.nationISO) ||
+            data.nationData.nationISO}
+        nationLocale={t(
+            `country.${
+                (isStillHim &&
+                    fetcher.data?.nationISO) ||
+                data.nationData.nationISO
+            }`,
+        )}
+        confidence={(isStillHim &&
+            fetcher.data?.confidence) ||
+            data.nationData.confidence}
+        message={
+            <div className="flex flex-col items-center justify-center">
+                <span>
+                    {(isStillHim &&
+                            fetcher.data
+                                ?.message) ||
+                            data.nationData
+                                    .confidence <=
+                                0.2
+                        ? t("user.info.confidence_low")
+                        : t(
+                            data.nationData.message,
+                        )}
+                </span>
+                <span>
+                    {t("user.confidence")}:{" "}
+                    {(isStillHim &&
+                            fetcher.data
+                                ?.confidence) ||
+                            data.nationData
+                                    .confidence <=
+                                0.2
+                        ? NaN
+                        : data.nationData
+                            .confidence}
+                </span>
+            </div>
+        }
+        isStillHim={isStillHim}
+        className={className}
+    />
+    );
+
     return (
         <>
             <div className="flex items-center justify-center w-full mt-2 z-0">
                 <div className="flex flex-row items-center gap-16 w-full h-full justify-center relative">
                     <UserBasic>
-                        <div className="flex gap-4 w-full h-40 items-start">
-                            <UserInfoDetail data={user} />
-                            <UserNation
-                                data={data}
-                                fetcher={fetcher}
-                                userData={{
-                                    followers: user.followers,
-                                    following: user.following,
-                                    login: user.login,
-                                }}
-                                nationISO={(isStillHim && fetcher.data?.nationISO) || data.nationData.nationISO}
-                                nationLocale={t(
-                                    `country.${(isStillHim && fetcher.data?.nationISO) || data.nationData.nationISO}`
-                                )}
-                                confidence={(isStillHim && fetcher.data?.confidence) || data.nationData.confidence}
-                                message={
-                                    <div className="flex flex-col items-center justify-center">
-                                        <span>
-                                            {(isStillHim &&
-                                                fetcher.data?.message) ||
-                                                data.nationData.confidence <= 0.2 ? t("user.info.confidence_low") : t(data.nationData.message)}
-                                        </span>
-                                        <span>
-                                            {t("user.confidence")}:{" "}
-                                            {(isStillHim &&
-                                                fetcher.data?.confidence) ||
-                                                data.nationData.confidence <= 0.2 ? NaN : data.nationData.confidence}
-                                        </span>
-                                    </div>
-                                }
-                                isStillHim={isStillHim}
-                            />
+                        <div className="md:flex md:gap-4 md:h-40 w-full h-auto items-start md:flex-row whitespace-nowrap flex-col gap-3">
+                            <UserInfoDetail data={user}>
+                                {generateNationCard("block md:hidden h-8 absolute bottom-0 right-0 shadow-md")}
+                            </UserInfoDetail>
+                            {generateNationCard()}
                         </div>
-                        <UserScoreDetail scores={data.scores} data={user} error={data.scoresError} />
+                        <UserScoreDetail
+                            scores={data.scores}
+                            data={user}
+                            error={data.scoresError}
+                        />
                         <UserReposDetail data={user} />
                         <UserReposContributeDetail data={user} />
                         <UserPullRequestsDetail data={user} />
@@ -116,7 +151,9 @@ export function ErrorBoundary() {
     return <ErrorHandle error={error} isUser />;
 }
 
-export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
+export const shouldRevalidate: ShouldRevalidateFunction = (
+    { actionResult, defaultShouldRevalidate },
+) => {
     if (actionResult?.donotLoad) {
         return false;
     }

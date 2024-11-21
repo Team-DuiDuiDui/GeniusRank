@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .vertical-text {
+        writing-mode: 'vertical-rl';
+        text-orientation: mixed;
+    }
+    .horizontal-text {
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+    }
+}
+
 @layer components {
     .btn-900 {
         @apply bg-white text-gray-800 hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-gray-300 transition-all;

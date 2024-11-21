@@ -23,9 +23,12 @@ export const createInstanceForBe = (baseUrl: string, token?: string): AxiosInsta
 
 export const createInstanceForDeepSeek = (token: string): AxiosInstanceForDeepSeek => {
     return axios.create({
-        baseURL: "https://api.deepseek.com/",
+        baseURL: "https://api.deepseek.com/v1/",
         headers: {
             Authorization: `Bearer ${token}`,
-        }
+        },
+        timeout: 30000,
+        maxContentLength: 1024 * 1024 * 50,
+        maxBodyLength: 1024 * 1024,
     });
 }

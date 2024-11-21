@@ -4,6 +4,8 @@ import { User } from '~/api/github/rest/typings/user';
 import InfoLink, { InfoIcon } from '../infoLink';
 import { EnvironmentOutlined, ShopOutlined, XOutlined } from '@ant-design/icons';
 import CardWithNoShrink from '../constant/cardWithNoShrink';
+import UserNation from './region';
+import { useLocale } from 'remix-i18next/react';
 
 interface userInfo {
     data: User;
@@ -11,15 +13,29 @@ interface userInfo {
 
 const UserInfo: React.FC<userInfo> = ({ data }) => {
     const { t } = useTranslation();
+    const locale = useLocale();
     return (
         <CardWithNoShrink containerClass="flex-shrink h-full w-full">
             <div className="flex flex-row items-center justify-left gap-8 w-full h-full">
-                <Avatar
-                    src={data.avatar_url}
-                    className="flex-shrink-0"
-                    radius={data.type !== 'User' ? 'sm' : undefined}
-                    style={{ width: '6rem', height: '6rem' }}
-                />
+                <div className="flex flex-col items-center justify-center relative">
+                    <Avatar
+                        src={data.avatar_url}
+                        className="flex-shrink-0"
+                        radius={data.type !== 'User' ? 'sm' : undefined}
+                        style={{ width: '6rem', height: '6rem' }}
+                    />
+                    <div className="block md:hidden h-8 absolute bottom-0 right-0">
+                        <UserNation
+                            data={null}
+                            nationISO="US"
+                            nationLocale={t(`country.US.${locale}`)}
+                            disable={true}
+                            confidence={0}
+                            message=""
+                            className="block md:hidden h-8 absolute bottom-0 right-0 shadow-md"
+                        />
+                    </div>
+                </div>
                 <div className="flex flex-col h-full justify-between">
                     <div className="flex flex-col gap-0.25">
                         {/* data.login 是用户名，data.name 是用户昵称(可选) */}
@@ -50,7 +66,7 @@ const UserInfo: React.FC<userInfo> = ({ data }) => {
                         </p>
                     </div>
                 </div>
-                <div className="ml-auto flex flex-col">
+                <div className="ml-auto flex flex-row md:flex-col">
                     {data.location && (
                         <InfoIcon icon={<EnvironmentOutlined />}>
                             {data.location

@@ -14,6 +14,7 @@ import { BackEndError } from '~/hooks/useAxiosInstanceForBe';
 import { LinkOutlined } from '@ant-design/icons';
 import { interpolateColorsOfScore } from '~/utils/color';
 import ErrorHandle from '~/components/errorHandle';
+import { cacheHeader } from '~/utils/cacheHeader';
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const url = new URL(request.url);
     const nation = url.searchParams.get('nation');
@@ -46,7 +47,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                 nation,
                 totalPage: Math.ceil(res.totalCount / 20),
             },
-            { status: 200 }
+            { status: 200 , ...cacheHeader(300)}
         );
     } catch (e) {
         if (axios.isAxiosError(e)) throw new Response(t('ranking.err.ngrok_error'), { status: e.status });
