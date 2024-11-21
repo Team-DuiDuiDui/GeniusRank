@@ -126,7 +126,7 @@ export default function User() {
                     <UserBasic>
                         <div className="md:flex md:gap-4 md:h-40 w-full h-auto items-start md:flex-row whitespace-nowrap flex-col gap-3">
                             <UserInfoDetail data={user}>
-                                {generateNationCard("block md:hidden h-8 absolute bottom-0 right-0")}
+                                {generateNationCard("block md:hidden h-8 absolute bottom-0 right-0 shadow-md")}
                             </UserInfoDetail>
                             {generateNationCard()}
                         </div>

@@ -32,6 +32,7 @@ const UserInfo: React.FC<userInfo> = ({ data }) => {
                             disable={true}
                             confidence={0}
                             message=""
+                            className="block md:hidden h-8 absolute bottom-0 right-0 shadow-md"
                         />
                     </div>
                 </div>
