@@ -15,7 +15,7 @@ import java.util.List;
 public class GithubDetailedScoreCalculator {
 
     /**
-     * 普通计算计算用户总得分并保留两位小数，无需登录
+     * 详细计算计算用户总得分并保留两位小数，需要登录
      * @param githubUserScoreReqDTO Github 用户全部数据
      * @return 总得分
      */
@@ -60,7 +60,7 @@ public class GithubDetailedScoreCalculator {
     }
 
     /**
-     * 计算 Github 用户基础数据得分
+     * 计算 Github 用户详细数据得分
      * @param followersNum Github 用户粉丝数
      * @param lifetimeReceivedSponsorshipValues Github 用户赞助数据
      * @return 用户基础数据得分

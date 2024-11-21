@@ -86,7 +86,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         GithubUserScoreRespDTO scores = GithubUserScoreCalculator.calculate(requestParams);
 
         // 使用 RocketMQ 异步持久化用户分数和开发者领域
-        // saveScoreAndTypeProducer.sendMessage(new SaveScoreAndTypeEvent(requestParams, scores));
+        saveScoreAndTypeProducer.sendMessage(new SaveScoreAndTypeEvent(requestParams, scores));
 
         // 封装并返回分数
         scores.setName(requestParams.getUser().getName());
@@ -101,7 +101,7 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         GithubUserScoreRespDTO scores = GithubDetailedScoreCalculator.calculate(requestParams);
 
         // 使用 RocketMQ 异步持久化用户分数和开发者领域
-        // saveDetailedScoreAndTypeProducer.sendMessage(new SaveDetailedScoreAndTypeEvent(requestParams, scores));
+        saveDetailedScoreAndTypeProducer.sendMessage(new SaveDetailedScoreAndTypeEvent(requestParams, scores));
 
         // 封装并返回分数
         scores.setName(requestParams.getName());
