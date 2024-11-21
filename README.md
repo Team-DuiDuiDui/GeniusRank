@@ -85,6 +85,7 @@ IDEA 导入 Maven 项目，等待依赖下载完成。( jdk 版本要求为 17�
 
 ```yaml
 rocketmq:
+    enable: false #是否开启 RocketMQ 服务
     name-server: # RocketMQ name-server
     producer:
         group: # RocketMQ producer-group
