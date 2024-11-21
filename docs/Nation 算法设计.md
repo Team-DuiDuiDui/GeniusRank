@@ -29,51 +29,28 @@
 ---
 ## 算法主要内容
 $$
-\text{NationPrediction}( \text{fansList}, \text{followersList} ) = 
-\frac{\text{sort} \left(\sum_{i \in \text{fansList}} \sum_{j \in \text{followersList}} 
-\Big( 
-    \text{Confidence}(\text{fansList}_i, \text{followersList}_j) \cdot
-    \text{PosteriorProbability}(\text{fansList}_i, \text{followersList}_j) 
-\Big) \right)}{\sum_{k=1}^N \text{totalProbability}}
+\text{Result} = \left\{ \left( L,\, P_{\text{norm}}(L),\, c \cdot P_{\text{norm}}(L) \right) \,\bigg|\, L \in \mathcal{L} \right\}
 $$
-**其中：**
+**完整公式（使用原始变量）：**
 
 $$
-1. \quad \text{时间衰减权重} : \quad T(t_i) = e^{-\alpha t_i}, \quad \alpha = \frac{\ln(2)}{N / 2} 
+P_{\text{norm}}(L) = \dfrac{
+    \displaystyle\sum_{U \in \{ U_{\text{fans}}, U_{\text{followers}} \}} \sum_{i=0}^{N_U - 1} \delta(L_i, L) \cdot e^{ -\alpha_U t_i } \cdot \dfrac{1}{1 + \ln(1 + \min(n_i + 1, n_{\text{max}}))} \cdot \left( -\ln\left( \max\left( P(L_i), 1 \times 10^{-6} \right) \right) \right)
+}{
+    \displaystyle\sum_{U \in \{ U_{\text{fans}}, U_{\text{followers}} \}} \sum_{i=0}^{N_U - 1} e^{ -\alpha_U t_i } \cdot \dfrac{1}{1 + \ln(1 + \min(n_i + 1, n_{\text{max}}))} \cdot \left( -\ln\left( \max\left( P(L_i), 1 \times 10^{-6} \right) \right) \right)
+}
 $$
 
-$$
-2. \quad \text{社交影响力权重} : \quad W_{\text{social}}(n_i) = \frac{1}{1 + \log(1 + \text{min}(n_i + 1, n_{\text{max}}))}
-$$
+**简化公式（使用下面的标号部分）：**
 
 $$
-3. \quad \text{信息量计算} : \quad I(c_k) = -\log \max(P(c_k), 1 \times 10^{-6})
+P_{\text{norm}}(L) = \dfrac{
+    \displaystyle\sum_{U} \sum_{i=0}^{N_U - 1} \delta(L_i, L) \cdot T(t_i) \cdot W_{\text{social}}(n_i) \cdot I(c_k)
+}{
+    \displaystyle\sum_{U} \sum_{i=0}^{N_U - 1} T(t_i) \cdot W_{\text{social}}(n_i) \cdot I(c_k)
+}
 $$
-
-$$
-4. \quad \text{先验概率} : \quad P(c_k) = \frac{\text{globalLocationDistribution}[c_k]}{\sum \text{globalLocationDistribution}}
-$$
-
-$$
-5. \quad \text{后验概率} : \quad P(c_k | D) = \frac{W(c_k)}{\sum_j W(c_j)}, \quad W(c_k) = \sum_{i \in c_k} \Big(T(t_i) \cdot W_{\text{social}}(n_i) \cdot I(c_k)\Big)
-$$
-
-$$
-6. \quad \text{熵计算} : \quad H = -\sum_k P(c_k | D) \log P(c_k | D), \quad H_{\text{normalized}} = \frac{H}{\log N}
-$$
-
-$$
-7. \quad \text{置信度} : \quad \text{Confidence} = \max\left(0, \min\left(1, 1 - H_{\text{normalized}}\right)\right)
-$$
-
-$$
-8. \quad \text{总权重} : \quad \text{TotalWeight} = \sum_{i=1}^N W(c_i)
-$$
-
-$$
-9. \quad \text{归一化概率} : \quad \text{Normalized Probability} = \frac{\text{weight}_i}{\text{TotalWeight}}, \quad i \in \text{combinedResults}
-$$
----
+里面包含了下面主要的 11 个部分
 
 ## 详细说明
 
@@ -94,7 +71,10 @@ $$
 - **时间衰减系数 $\alpha$**：
 
   $$
-  \alpha = \frac{\ln(2)}{N/2}
+  \alpha = \begin{cases}
+  \dfrac{2 \ln 2}{N} & \text{如果 } N > 0 \\
+  0.01 & \text{如果 } N \leq 0
+  \end{cases}
   $$
 
   其中，$N$ 为列表长度。这样确保在列表中间位置，时间权重减半。
@@ -149,10 +129,18 @@ $$
 - **信息量计算**：
 
   $$
-  I(c_k) = -\log P(c_k)
+  P_i = P(L_i)
   $$
 
-  其中，$P(c_k)$ 为地理位置 $c_k$ 的先验概率。
+  $$
+  p'_i = \max(p_i, 10^{-6})
+  $$
+
+  $$
+  I_i = -\ln(p'_i)
+  $$
+
+  其中，$P(i)$ 为地理位置 $i$ 的先验概率。
 
 **解决的问题**：因为本来用户数量就少的国家的人出现在被调查者的关系网中的概率就低，所以需要增加来自全球用户比例较小的国家或地区的粉丝对预测的权重。
 
@@ -213,7 +201,7 @@ $$
 
 ---
 
-### 8. 置信度的计算
+### 8. 预测结果熵的计算
 
 **目的**：衡量预测结果的可靠性，置信度越高，预测结果越可信。
 
@@ -222,21 +210,25 @@ $$
 - **熵的计算**：
 
   $$
-  H = -\sum_k P(c_k | D) \log P(c_k | D)
+  H = -\sum_{L \in \mathcal{L}} P_{\text{posterior}}(L) \ln P_{\text{posterior}}(L)
   $$
 
 - **熵的归一化**：
 
   $$
-  H_{\text{normalized}} = \frac{H}{\log N}
+  H_{\text{max}} = \ln |\mathcal{L}|
   $$
 
-  其中，$N$ 为不同地理位置的数量。
+  $$
+  H_{\text{norm}} = \dfrac{H}{H_{\text{max}}}
+  $$
+
+  其中，$\mathcal{L}$ 为不同地理位置的数量。
 
 - **置信度**：
 
   $$
-  \text{Confidence} = 1 - H_{\text{normalized}}
+  \text{Confidence} = 1 - H_{\text{norm}}
   $$
 
 - **置信度范围约束**：
@@ -249,8 +241,43 @@ $$
 
 ---
 
+### 9.合并粉丝和关注者列表的结果
+
+在分别处理两个列表以获得 $P_{\text{fans}}(L)$、$c_{\text{fans}}$ 和 $P_{\text{followers}}(L)$、$c_{\text{followers}}$ 后，合并结果：
+
+a. **每个位置的综合概率**：
+
+$$
+P_{\text{combined}}(L) = P_{\text{fans}}(L) + P_{\text{followers}}(L)
+$$
+
+b. **每个位置的综合置信度**：
+
+$$
+c_{\text{combined}}(L) = c_{\text{fans}}(L) + c_{\text{followers}}(L)
+$$
+
+---
+
+### 10.归一化综合概率和置信度
+
+a. **综合概率总和**：
+
+$$ 
+P_{\text{total}} = \sum_{L \in \mathcal{L}} P_{\text{combined}}(L)
+$$
+
+b. **每个位置的归一化概率**：
+
+$$
+P_{\text{normalized}}(L) = \begin{cases}
+\dfrac{P_{\text{combined}}(L)}{P_{\text{total}}} & \text{如果 } P_{\text{total}} > 0 \\
+\dfrac{1}{|\mathcal{L}|} & \text{如果 } P_{\text{total}} = 0
+\end{cases}
+$$
+
+---
 ## 注意事项
 
 - ~~**地理位置标准化**：由于 glm 的不确定性，可能会导致构造返回的国家信息并不是标准 ISO~~ **已修复**
 - **数据质量**：算法的准确性依赖于早期关注者 location 的完整性
-
