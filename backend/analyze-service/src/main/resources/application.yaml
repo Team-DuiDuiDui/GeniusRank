@@ -30,6 +30,7 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 rocketmq:
+  enable: ${project.rocketmq.enable}
   name-server: ${project.rocketmq.name-server}
   producer:
     group: ${project.rocketmq.producer.group}
@@ -39,3 +40,15 @@ rocketmq:
 
 ai:
   apiKey: ${project.ai.apiKey}
+
+async:
+  executor:
+    thread:
+      # 配置核心线程数
+      core_pool_size: 10
+      # 配置最大线程数
+      max_pool_size: 20
+      # 配置队列大小
+      queue_capacity: 999
+      name:
+        prefix: async-service-
