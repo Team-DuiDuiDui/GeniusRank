@@ -8,6 +8,7 @@ project:
     password: 123456
     database: 0
   rocketmq:
+    enable: false
     name-server: 127.0.0.1:9876
     producer:
       group: common-message-execute_pg

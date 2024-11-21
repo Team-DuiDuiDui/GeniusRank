@@ -21,9 +21,11 @@ import com.nine.project.analyze.service.GithubUserScoreService;
 import com.nine.project.analyze.toolkit.CacheUtil;
 import com.nine.project.analyze.toolkit.GithubDetailedScoreCalculator;
 import com.nine.project.analyze.toolkit.GithubUserScoreCalculator;
+import com.nine.project.analyze.toolkit.ThreadPoolUtil;
 import com.nine.project.framework.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -44,9 +46,13 @@ import static com.nine.project.framework.errorcode.BaseErrorCode.USER_SCORE_NOT_
 @RequiredArgsConstructor
 public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMapper, GithubUserScoreDO> implements GithubUserScoreService {
 
+    @Value("${rocketmq.enable}")
+    private Boolean RocketmqEnable;
+
     private final CacheUtil<GithubUserScoreRespDTO> cacheUtil;
     private final SaveScoreAndTypeProducer saveScoreAndTypeProducer;
     private final SaveDetailedScoreAndTypeProducer saveDetailedScoreAndTypeProducer;
+    private final ThreadPoolUtil threadPoolUtil;
 
     @Override
     public GithubUserScoreRespDTO getGithubUserScore(String login) {
@@ -85,8 +91,12 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         // 计算分数
         GithubUserScoreRespDTO scores = GithubUserScoreCalculator.calculate(requestParams);
 
-        // 使用 RocketMQ 异步持久化用户分数和开发者领域
-        saveScoreAndTypeProducer.sendMessage(new SaveScoreAndTypeEvent(requestParams, scores));
+        // 使用 RocketMQ 异步持久化用户分数和开发者领域，否则使用线程池
+        if(RocketmqEnable) {
+            saveScoreAndTypeProducer.sendMessage(new SaveScoreAndTypeEvent(requestParams, scores));
+        } else {
+            threadPoolUtil.runCommonUserTaskAsync(requestParams, scores);
+        }
 
         // 封装并返回分数
         scores.setName(requestParams.getUser().getName());
@@ -100,8 +110,12 @@ public class GithubUserScoreServiceImpl extends ServiceImpl<GithubUserScoreMappe
         // 计算分数
         GithubUserScoreRespDTO scores = GithubDetailedScoreCalculator.calculate(requestParams);
 
-        // 使用 RocketMQ 异步持久化用户分数和开发者领域
-        saveDetailedScoreAndTypeProducer.sendMessage(new SaveDetailedScoreAndTypeEvent(requestParams, scores));
+        // 使用 RocketMQ 异步持久化用户分数和开发者领域，否则使用线程池
+        if (RocketmqEnable) {
+            saveDetailedScoreAndTypeProducer.sendMessage(new SaveDetailedScoreAndTypeEvent(requestParams, scores));
+        } else {
+            threadPoolUtil.runDetailedUserTaskAsync(requestParams, scores);
+        }
 
         // 封装并返回分数
         scores.setName(requestParams.getName());

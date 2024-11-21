@@ -31,7 +31,7 @@ GeniusRank 是一个开发者评估应用，致力于为用户提供 GitHub 用�
 # 🚀 功能演示
 - [👀 仓库地址](https://github.com/Team-DuiDuiDui/GeniusRank)
 - [📚 接口文档](https://apifox.com/apidoc/shared-9686d680-3909-4a99-af4c-41c6120c169e)
-- [🎬 视频演示](./.github/video/1024.mp4) · [Bilibili](https://www.bilibili.com/video/BV18FDQYaEoq)
+- [🎬 Bilibili 在线演示](https://www.bilibili.com/video/BV18FDQYaEoq)
 
 
 # 🖥️ 技术架构
@@ -85,6 +85,7 @@ IDEA 导入 Maven 项目，等待依赖下载完成。( jdk 版本要求为 17�
 
 ```yaml
 rocketmq:
+    enable: false #是否开启 RocketMQ 服务
     name-server: # RocketMQ name-server
     producer:
         group: # RocketMQ producer-group
