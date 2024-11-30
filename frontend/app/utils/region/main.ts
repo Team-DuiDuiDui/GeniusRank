@@ -124,7 +124,7 @@ export const guessRegion = async ({
         console.log('Readme Data Time:', new Date().getTime() - time);
 
         if (userData.followers.totalCount < 40 && userData.location) {
-            const nationISO = await syncChatFromDeepSeek(`请你告诉我这个位置信息对应的国家在哪里${userData.location}，你只需要返回这个国家对应的 ISO 代码即可，不需要多余返回任何内容`, deepSeekInstance);
+            const nationISO = JSON.parse(await syncChatFromDeepSeek(`请你告诉我这个位置信息对应的国家在哪里${userData.location}，你只需要返回这样的json数据结构 { response : ISO 代码 }即可，不需要返回任何多余内容`, deepSeekInstance)).response;
             console.log(nationISO)
             return await checkAndUpdateBeData(checkRegion({
                 nationISO: nationISO,
