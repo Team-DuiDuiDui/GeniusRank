@@ -7,8 +7,8 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -16,6 +16,7 @@ import java.io.IOException;
 /**
  * 七牛云对象存储文件服务
  */
+@Lazy
 @Slf4j
 @AllArgsConstructor
 public class QiniuUtil {

@@ -2,11 +2,13 @@ package com.nine.project.user.dao.entity;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
  * 阿里云 OSS 配置信息实体
  */
+@Lazy
 @Data
 @Component
 @ConfigurationProperties(prefix = "project.alioss")

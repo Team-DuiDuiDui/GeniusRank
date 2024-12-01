@@ -13,6 +13,7 @@ import com.nine.project.user.dto.resp.UploadFileRespDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,7 @@ import static com.nine.project.framework.errorcode.BaseErrorCode.OSS_SERVICE_ERR
 /**
  * 阿里云 OSS 工具类
  */
+@Lazy
 @Slf4j
 @Data
 @AllArgsConstructor
