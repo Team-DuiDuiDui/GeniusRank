@@ -34,7 +34,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <html lang={loaderData?.locale ?? 'en'} className={loaderData?.prefersColorScheme ?? 'light'}>
+        <html
+            lang={loaderData?.locale ?? 'en'}
+            className={loaderData?.prefersColorScheme ?? 'light'}
+            data-mantine-color-scheme={loaderData?.prefersColorScheme ?? 'light'}>
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
