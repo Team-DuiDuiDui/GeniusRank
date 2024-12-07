@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -36,6 +37,7 @@ import static com.nine.project.framework.errorcode.BaseErrorCode.MESSAGE_QUEUE_E
 /**
  * 持久化分数和开发者领域消费者
  */
+@Lazy
 @Slf4j
 @Component
 @RequiredArgsConstructor
